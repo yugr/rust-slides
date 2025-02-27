@@ -45,9 +45,10 @@ Some Rust's abstractions are NOT zero-cost (or at least less zero-cost than in C
 Rust performance overheads:
   - overflow is not UB in release => no signed overflow loop optimizations
   - all index accesses are checked
-    * LLVM may not always remove them
+    * LLVM may not always remove them which will break autovec
     * need to investigate several common cases: LICM for index checks in loops, support for [inclusive](https://github.com/rust-lang/rust/issues/45222)/exclusive ranges, const/non-const bounds
     * fat slices
+    * reslicing needed (see https://users.rust-lang.org/t/understanding-rusts-auto-vectorization-and-methods-for-speed-increase/84891/5)
   - UTF-8 strings
   - slower library defaults: [PRNG](https://users.rust-lang.org/t/julia-outperforms-rust-in-generating-a-vector-of-random-numbers/101624), [unbuffered IO](https://users.rust-lang.org/t/in-my-benchmark-i-found-rust-slower-than-c/71944/6) (need to use BufWriter)
   - no `alloca`
@@ -62,8 +63,10 @@ Rust performance overheads:
       + `borrow_mut` checks may not be reliably LICM-ed from loops
       + graphs, what other important data structues ?
     * unable to take two mutable refs to different elements of std collections / slices
+    * have to use indices (with runtime index checks penalty) instead of iterators
     * as a result, ALL high-performance data structures use unsafe code to skip borrow checker
   - `Option`/`Result` may be more expensive than `nullptr`
+  - no `-ffast-math` (https://www.reddit.com/r/rust/comments/e5ge5k/rust_and_ffastmath/)
 
 How much performance can be regained using unsafe code ?
   - check what optimizations we can't express even with unsafe blocks
@@ -91,22 +94,37 @@ How to deal with unsafe ?
 
 For each link need to
   * read/watch
-  * categorize each reported problem and update our overheads list
+  * categorize each reported problem / optimization suggestion and update our lists
   * extract useful examples
-  * for blogposts also be sure to check comments, links and other Rust-relevant posts
+  * for blogposts also be sure to check comments, links and other Rust-performance-relevant posts on blog
 
 Blog posts:
-  * C++ faster and safer by Rust: benchmarked by Yandex: https://habr.com/ru/articles/492410/
-  * Learn Rust With Entirely Too Many Linked Lists: https://rust-unofficial.github.io/too-many-lists/
-  * The relative performance of C and Rust: https://bcantrill.dtrace.org/2018/09/28/the-relative-performance-of-c-and-rust/
-  * Speed of Rust vs C: https://kornel.ski/rust-c-speed
-  * Unwind considered harmful? https://smallcultfollowing.com/babysteps/blog/2024/05/02/unwind-considered-harmful/
-  * Leaving Rust gamedev after 3 years: https://loglog.games/blog/leaving-rust-gamedev/ (also comments in https://news.ycombinator.com/item?id=40172033)
-  * Rust loves LLVM: https://www.youtube.com/watch?v=Kqz-umsAnk8
-  * Aliasing in Rust: https://www.reddit.com/r/rust/comments/1ery9dy/aliasing_in_rust/
-  * https://news.ycombinator.com/item?id=40172033
+  - C++ comparisons:
+    * C++ faster and safer by Rust: benchmarked by Yandex: https://habr.com/ru/articles/492410/
+    * The relative performance of C and Rust: https://bcantrill.dtrace.org/2018/09/28/the-relative-performance-of-c-and-rust/
+    * Speed of Rust vs C: https://kornel.ski/rust-c-speed
+    * An Optimization That’s Impossible in Rust! https://tunglevo.com/note/an-optimization-thats-impossible-in-rust/
+  - Compiler:
+    * Rust loves LLVM: https://www.youtube.com/watch?v=Kqz-umsAnk8 (https://llvm.org/devmtg/2024-10/slides/keynote/Popov-Rust_Heart_LLVM.pdf)
+    * Rust and LLVM in 2021: https://llvm.org/devmtg/2021-02-28/slides/Patrick-rust-llvm.pdf
+    * Unleash the Power of Auto-Vectorization in Rust with LLVM: https://www.luiscardoso.dev/blog/auto-vectorization/
+    * Taking Advantage of Auto-Vectorization in Rust: https://www.nickwilcox.com/blog/autovec/ (also comments in https://www.reddit.com/r/rust/comments/gkq0op/taking_advantage_of_autovectorization_in_rust/)
+    * Inspecting rustc LLVM optimization remarks using cargo-remark: https://kobzol.github.io/rust/cargo/2023/08/12/rust-llvm-optimization-remarks.html
+      + need to run `cargo remark` on real projects
+    * Improving crypto code in Rust using LLVM’s optnone: https://blog.trailofbits.com/2022/02/01/part-2-rusty-crypto/
+    * Why Rust doesn't need a standard div_rem: An LLVM tale: https://codspeed.io/blog/why-rust-doesnt-need-a-standard-divrem (also comments in https://www.reddit.com/r/rust/comments/173wr86/why_rust_doesnt_need_a_standard_div_rem_an_llvm)
+  - data structures:
+    * Learn Rust With Entirely Too Many Linked Lists: https://rust-unofficial.github.io/too-many-lists/
+  - Optimizations:
+    * Aliasing in Rust: https://www.reddit.com/r/rust/comments/1ery9dy/aliasing_in_rust/
+    * Unwind considered harmful? https://smallcultfollowing.com/babysteps/blog/2024/05/02/unwind-considered-harmful/
+    * Rust’s iterators are inefficient, and here’s what we can do about it: https://medium.com/@veedrac/rust-is-slow-and-i-am-the-cure-32facc0fdcb
+    * Nethercote's posts (!!!): https://blog.mozilla.org/nnethercote/category/rust/
+    * http://troubles.md/abusing-rustc/
+  - Field reports:
+    * Leaving Rust gamedev after 3 years: https://loglog.games/blog/leaving-rust-gamedev/ (also comments in https://news.ycombinator.com/item?id=40172033)
 
-Forum discussions:
+User forum:
   * Rust vs C++ Theoretical Performance: https://users.rust-lang.org/t/rust-vs-c-theoretical-performance/4069/8
   * Rust-specific code optimisations vs other languages: https://users.rust-lang.org/t/rust-specific-code-optimisations-vs-other-languages/49663
   * Looking for help understanding Rust’s performance vs C++: https://users.rust-lang.org/t/looking-for-help-understanding-rusts-performance-vs-c/30469/27
@@ -131,18 +149,38 @@ Forum discussions:
   * Rust vs. C++: Fine-grained Performance: https://users.rust-lang.org/t/rust-vs-c-fine-grained-performance/4407
   * A good performance comparision C and Rust: https://users.rust-lang.org/t/a-good-performance-comparision-c-and-rust/5901/7
   * What kind of performance rust is trying to achieve? https://users.rust-lang.org/t/what-kind-of-performance-rust-is-trying-to-achieve/1674/4
+  * Non-aliasing guarantees of &mut T and rustc optimization: https://users.rust-lang.org/t/non-aliasing-guarantees-of-mut-t-and-rustc-optimization/34386
+  * Possible Rust-specific optimizations: https://users.rust-lang.org/t/possible-rust-specific-optimizations/79895/2
+  * Auto-vectorization in Rust: https://users.rust-lang.org/t/auto-vectorization-in-rust/24379/14
+  * Understanding Rusts Auto-Vectorization and Methods for speed: https://users.rust-lang.org/t/understanding-rusts-auto-vectorization-and-methods-for-speed-increase/84891/5 (reslicing technique)
+
+Developer forum:
+  * TODO: https://internals.rust-lang.org/c/compiler
+
+This week in Rust:
+  * TODO: https://this-week-in-rust.org/
+
+Relevant Github issues:
+  - Inefficient codegen when accessing a vector with literal indices: https://github.com/rust-lang/rust/issues/50759
 
 # Where to find more materials
 
+Google for
+  - Rust gamedev problems
+  - Rust inefficient data structures
+  - Rust performance issues
+
 Coding guidelines for big Rust projects
   - e.g. rustc dev guide
+  - https://softwarepatternslexicon.com/patterns-rust/
+  - The Rust Performance Book: https://nnethercote.github.io/perf-book/
 
 Survey Github for innate (unfixable, by design) performance issues:
-  - wontfix for "I-slow" tag
-  - RFCs for "T-compiler" tag
+  - rejected opts: https://github.com/rust-lang/rust/issues?q=is%3Aissue%20state%3Aclosed%20reason%3Anot-planned%20label%3AI-slow
+  - compiler RFCs: https://github.com/rust-lang/rust/issues?q=is%3Aissue%20label%3AT-compiler%20rfc
   - what else ?
 
-Look at real code 
+Look at real code:
   - microbenchmarks
     * easy to analyze and demonstrate issues
     * do not show how common issue is in real code
@@ -152,15 +190,10 @@ Look at real code
     * relatively easy to collect ([benchmarks game](https://benchmarksgame-team.pages.debian.net/benchmarksgame/measurements/rust.html))
   - real production code
     * very hard to analyze
-      + need methodology
+      + need methodology (e.g. first profile and study only hotspots)
     * concrete examples:
       * Eigen vs nalgebra
       * rustc (read dev guide)
       * regex
       * Servo, Parity, Redox, Rusoto, Firefox
       * what else ?
-
-Google for
-  - Rust gamedev problems
-  - Rust inefficient data structures
-  - Rust performance issues
