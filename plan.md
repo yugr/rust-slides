@@ -20,13 +20,12 @@ This talk is NOT about:
     * need to compare "standard" Rust against C++
   - just comparing few random programs
     * not enough to draw conclusions
-  - just look at asm code
+  - just looking at asm code
     * inefficiencies may be due to bug / NYI feature in LLVM
     * should check what is NYI and can never be implemented in LLVM optimizer
-  - missing features which are not perf-related:
-    * custom allocators, placement new
+  - important missing features which are not directly perf-related:
+    * custom allocators and placement new
     * ABI
-    * `constexpr`
 
 Rust is similar to C++ :
   - system programming language
@@ -135,32 +134,33 @@ Forum discussions:
 
 # Where to find more materials
 
-Where to look for examples of overheads/improvements:
-  - coding guidelines for big Rust projects (e.g. rustc dev guide)
-  - survey Github for innate (unfixable, by design) performance issues:
-    * wontfix for "I-slow" tag
-    * RFCs for "T-compiler" tag
-    * what else ?
-  - look at real code 
-    * microbenchmarks
-      + easy to analyze and demonstrate issues
-      + do not show how common issue is in real code
-    * algorithms
-      + CS 101 e.g. sorts/trees
-      + math e.g. matmul/FFT
-      + relatively easy to collect ([benchmarks game](https://benchmarksgame-team.pages.debian.net/benchmarksgame/measurements/rust.html))
-    * real production code
-      + very hard to analyze
-        - need methodology
-      + concrete examples:
-        - Eigen vs nalgebra
-        - rustc (read dev guide)
-        - regex
-        - Servo, Parity, Redox, Rusoto, Firefox
-        - what else ?
-  - google for
-    * Rust gamedev problems
-    * Rust inefficient data structures
-    * Rust performance issues
+Coding guidelines for big Rust projects
+  - e.g. rustc dev guide
 
+Survey Github for innate (unfixable, by design) performance issues:
+  - wontfix for "I-slow" tag
+  - RFCs for "T-compiler" tag
+  - what else ?
 
+Look at real code 
+  - microbenchmarks
+    * easy to analyze and demonstrate issues
+    * do not show how common issue is in real code
+  - algorithms
+    * CS 101 e.g. sorts/trees
+    * math e.g. matmul/FFT
+    * relatively easy to collect ([benchmarks game](https://benchmarksgame-team.pages.debian.net/benchmarksgame/measurements/rust.html))
+  - real production code
+    * very hard to analyze
+      + need methodology
+    * concrete examples:
+      * Eigen vs nalgebra
+      * rustc (read dev guide)
+      * regex
+      * Servo, Parity, Redox, Rusoto, Firefox
+      * what else ?
+
+Google for
+  - Rust gamedev problems
+  - Rust inefficient data structures
+  - Rust performance issues
