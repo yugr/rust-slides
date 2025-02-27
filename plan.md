@@ -67,6 +67,7 @@ Rust performance overheads:
     * as a result, ALL high-performance data structures use unsafe code to skip borrow checker
   - `Option`/`Result` may be more expensive than `nullptr`
   - no `-ffast-math` (https://www.reddit.com/r/rust/comments/e5ge5k/rust_and_ffastmath/)
+  - error codes vs. exceptions
 
 How much performance can be regained using unsafe code ?
   - check what optimizations we can't express even with unsafe blocks
@@ -85,6 +86,7 @@ Rust performance improvements:
     * do not need EBO like C++
   - fearless concurrency
   - copy/move elision (?)
+  - `Box` is more performant than `unique_ptr` (https://www.youtube.com/watch?v=rHIkrotSwcc&t=1261s)
 
 How to deal with unsafe ?
   - idiomatic (safe) should still be main topic
@@ -104,6 +106,9 @@ Blog posts:
     * The relative performance of C and Rust: https://bcantrill.dtrace.org/2018/09/28/the-relative-performance-of-c-and-rust/
     * Speed of Rust vs C: https://kornel.ski/rust-c-speed
     * An Optimization That’s Impossible in Rust! https://tunglevo.com/note/an-optimization-thats-impossible-in-rust/
+    * Rust превосходит по производительности C++ согласно результатам Benchmarks Game: https://habr.com/ru/articles/480608/
+    * Rust vs. C++ на алгоритмических задачах: https://habr.com/ru/articles/344282/
+    * Небезопасный Rust сложнее C: https://habr.com/ru/companies/ruvds/articles/858246/
   - Compiler:
     * Rust loves LLVM: https://www.youtube.com/watch?v=Kqz-umsAnk8 (https://llvm.org/devmtg/2024-10/slides/keynote/Popov-Rust_Heart_LLVM.pdf)
     * Rust and LLVM in 2021: https://llvm.org/devmtg/2021-02-28/slides/Patrick-rust-llvm.pdf
@@ -121,8 +126,13 @@ Blog posts:
     * Rust’s iterators are inefficient, and here’s what we can do about it: https://medium.com/@veedrac/rust-is-slow-and-i-am-the-cure-32facc0fdcb
     * Nethercote's posts (!!!): https://blog.mozilla.org/nnethercote/category/rust/
     * http://troubles.md/abusing-rustc/
+    * Можно ли доверить компилятору оптимизацию вашего кода? https://habr.com/ru/companies/timeweb/articles/759326/
+    * Как избавиться от проверок выхода за границы: https://habr.com/ru/companies/otus/articles/718012/
+    * Портируем декодер AV1 с С на Rust: https://habr.com/ru/companies/ruvds/articles/842970
+    * Как я ускорила парсинг строк в serde_json на 20%: https://habr.com/ru/articles/838404/
+    * Пошаговое повышение производительности алгоритма: https://habr.com/ru/articles/852974/
   - Field reports:
-    * Leaving Rust gamedev after 3 years: https://loglog.games/blog/leaving-rust-gamedev/ (also comments in https://news.ycombinator.com/item?id=40172033)
+    * Leaving Rust gamedev after 3 years: https://loglog.games/blog/leaving-rust-gamedev/ (also comments in https://news.ycombinator.com/item?id=40172033 and https://habr.com/ru/articles/813597/)
 
 User forum:
   * Rust vs C++ Theoretical Performance: https://users.rust-lang.org/t/rust-vs-c-theoretical-performance/4069/8
@@ -150,7 +160,7 @@ User forum:
   * A good performance comparision C and Rust: https://users.rust-lang.org/t/a-good-performance-comparision-c-and-rust/5901/7
   * What kind of performance rust is trying to achieve? https://users.rust-lang.org/t/what-kind-of-performance-rust-is-trying-to-achieve/1674/4
   * Non-aliasing guarantees of &mut T and rustc optimization: https://users.rust-lang.org/t/non-aliasing-guarantees-of-mut-t-and-rustc-optimization/34386
-  * Possible Rust-specific optimizations: https://users.rust-lang.org/t/possible-rust-specific-optimizations/79895/2
+  * Possible Rust-specific optimizations: https://users.rust-lang.org/t/possible-rust-specific-optimizations/79895/2 (also https://habr.com/ru/companies/beget/articles/842868/)
   * Auto-vectorization in Rust: https://users.rust-lang.org/t/auto-vectorization-in-rust/24379/14
   * Understanding Rusts Auto-Vectorization and Methods for speed: https://users.rust-lang.org/t/understanding-rusts-auto-vectorization-and-methods-for-speed-increase/84891/5 (reslicing technique)
 
@@ -193,7 +203,8 @@ Look at real code:
       + need methodology (e.g. first profile and study only hotspots)
     * concrete examples:
       * Eigen vs nalgebra
-      * rustc (read dev guide)
+      * rustc
+        + https://habr.com/ru/articles/539796/
       * regex
-      * Servo, Parity, Redox, Rusoto, Firefox
+      * Servo (https://habr.com/ru/articles/274815/), Parity, Redox, Rusoto, Firefox
       * what else ?
