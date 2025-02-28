@@ -96,7 +96,7 @@ How to deal with unsafe ?
 
 For each link need to
   * read/watch
-  * categorize each reported problem / optimization suggestion and update our lists
+  * categorize each reported problem and/or optimization/tuning approach (e.g. unsafe, rewrite-for-SIMD, `assert!` to get rid of index checks, etc.) and update our lists
   * extract useful examples
   * for blogposts also be sure to check comments, links and other Rust-performance-relevant posts on blog
 
@@ -109,20 +109,30 @@ Blog posts:
     * Rust превосходит по производительности C++ согласно результатам Benchmarks Game: https://habr.com/ru/articles/480608/
     * Rust vs. C++ на алгоритмических задачах: https://habr.com/ru/articles/344282/
     * Небезопасный Rust сложнее C: https://habr.com/ru/companies/ruvds/articles/858246/
+    * Safety vs Performance. A case study of C, C++ and Rust sort implementations: https://github.com/Voultapher/sort-research-rs/blob/main/writeup/sort_safety/text.md
   - Compiler:
     * Rust loves LLVM: https://www.youtube.com/watch?v=Kqz-umsAnk8 (https://llvm.org/devmtg/2024-10/slides/keynote/Popov-Rust_Heart_LLVM.pdf)
     * Rust and LLVM in 2021: https://llvm.org/devmtg/2021-02-28/slides/Patrick-rust-llvm.pdf
-    * Unleash the Power of Auto-Vectorization in Rust with LLVM: https://www.luiscardoso.dev/blog/auto-vectorization/
-    * Taking Advantage of Auto-Vectorization in Rust: https://www.nickwilcox.com/blog/autovec/ (also comments in https://www.reddit.com/r/rust/comments/gkq0op/taking_advantage_of_autovectorization_in_rust/)
     * Inspecting rustc LLVM optimization remarks using cargo-remark: https://kobzol.github.io/rust/cargo/2023/08/12/rust-llvm-optimization-remarks.html
       + need to run `cargo remark` on real projects
     * Improving crypto code in Rust using LLVM’s optnone: https://blog.trailofbits.com/2022/02/01/part-2-rusty-crypto/
     * Why Rust doesn't need a standard div_rem: An LLVM tale: https://codspeed.io/blog/why-rust-doesnt-need-a-standard-divrem (also comments in https://www.reddit.com/r/rust/comments/173wr86/why_rust_doesnt_need_a_standard_div_rem_an_llvm)
-  - data structures:
+    * Asm snippets: https://www.eventhelix.com/rust/
+    * Battle Of The Backends: Rust vs. Go vs. C# vs. Kotlin - inovex GmbH: https://www.inovex.de/de/blog/rust-vs-go-vs-c-vs-kotlin
+  - Data structures:
     * Learn Rust With Entirely Too Many Linked Lists: https://rust-unofficial.github.io/too-many-lists/
+    * Nine Rules for Creating Fast, Safe, and Compatible Data Structures in Rust:
+      + https://towardsdatascience.com/nine-rules-for-creating-fast-safe-and-compatible-data-structures-in-rust-part-1-c0973092e0a3
+      + https://towardsdatascience.com/nine-rules-for-creating-fast-safe-and-compatible-data-structures-in-rust-part-2-da5e6961a0b7
+  - Autovec:
+    * Unleash the Power of Auto-Vectorization in Rust with LLVM: https://www.luiscardoso.dev/blog/auto-vectorization/
+    * Taking Advantage of Auto-Vectorization in Rust: https://www.nickwilcox.com/blog/autovec/ (also comments in https://www.reddit.com/r/rust/comments/gkq0op/taking_advantage_of_autovectorization_in_rust/)
+    * Nine Rules for SIMD Acceleration of Your Rust Code:
+      + https://towardsdatascience.com/nine-rules-for-simd-acceleration-of-your-rust-code-part-1-c16fe639ce21
+      + https://medium.com/towards-data-science/nine-rules-for-simd-acceleration-of-your-rust-code-part-2-6a104b3be6f3
+    * Taming Floating-Point Sums: https://orlp.net/blog/taming-float-sums/
   - Optimizations:
     * Aliasing in Rust: https://www.reddit.com/r/rust/comments/1ery9dy/aliasing_in_rust/
-    * Unwind considered harmful? https://smallcultfollowing.com/babysteps/blog/2024/05/02/unwind-considered-harmful/
     * Rust’s iterators are inefficient, and here’s what we can do about it: https://medium.com/@veedrac/rust-is-slow-and-i-am-the-cure-32facc0fdcb
     * Nethercote's posts (!!!): https://blog.mozilla.org/nnethercote/category/rust/
     * http://troubles.md/abusing-rustc/
@@ -131,8 +141,14 @@ Blog posts:
     * Портируем декодер AV1 с С на Rust: https://habr.com/ru/companies/ruvds/articles/842970
     * Как я ускорила парсинг строк в serde_json на 20%: https://habr.com/ru/articles/838404/
     * Пошаговое повышение производительности алгоритма: https://habr.com/ru/articles/852974/
+    * Unnecessary Optimization in Rust: https://emschwartz.me/unnecessary-optimization-in-rust-hamming-distances-simd-and-auto-vectorization/
+    * Improve an algorithm performance step by step: https://blog.mapotofu.org/blogs/rabitq-bench/
+    * Bringing runtime checks to compile time in Rust: https://ktkaufman03.github.io/blog/2023/04/20/rust-compile-time-checks
   - Field reports:
     * Leaving Rust gamedev after 3 years: https://loglog.games/blog/leaving-rust-gamedev/ (also comments in https://news.ycombinator.com/item?id=40172033 and https://habr.com/ru/articles/813597/)
+  - Panics:
+    * Rust panics under the hood: https://fractalfir.github.io/generated_html/rustc_codegen_clr_v0_2_1.html
+    * Unwind considered harmful? https://smallcultfollowing.com/babysteps/blog/2024/05/02/unwind-considered-harmful/
 
 User forum:
   * Rust vs C++ Theoretical Performance: https://users.rust-lang.org/t/rust-vs-c-theoretical-performance/4069/8
@@ -168,7 +184,8 @@ Developer forum:
   * TODO: https://internals.rust-lang.org/c/compiler
 
 This week in Rust:
-  * TODO: https://this-week-in-rust.org/
+  * https://github.com/rust-lang/this-week-in-rust
+  * searched for `/performance\|optimiz\|degradation\|slow\|inefficient\|compiler\|code *gen/i` in last 3 years
 
 Relevant Github issues:
   - Inefficient codegen when accessing a vector with literal indices: https://github.com/rust-lang/rust/issues/50759
@@ -208,3 +225,4 @@ Look at real code:
       * regex
       * Servo (https://habr.com/ru/articles/274815/), Parity, Redox, Rusoto, Firefox
       * what else ?
+
