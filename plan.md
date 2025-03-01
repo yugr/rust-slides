@@ -62,20 +62,23 @@ Rust performance overheads:
       + `Rc<RefCell<T>>`
       + `borrow_mut` checks may not be reliably LICM-ed from loops
       + graphs, what other important data structues ?
+      + "self-ref structs are not 0-cost" (https://www.youtube.com/watch?v=UrDhMWISR3w)
     * unable to take two mutable refs to different elements of std collections / slices
     * have to use indices (with runtime index checks penalty) instead of iterators
     * as a result, ALL high-performance data structures use unsafe code to skip borrow checker
   - `Option`/`Result` may be more expensive than `nullptr`
   - no `-ffast-math` (https://www.reddit.com/r/rust/comments/e5ge5k/rust_and_ffastmath/)
   - error codes vs. exceptions
+  - forced array initialization (https://blog.logrocket.com/understanding-inheritance-other-limitations-rust/)
 
 How much performance can be regained using unsafe code ?
   - check what optimizations we can't express even with unsafe blocks
 
 Rust performance improvements:
   - in some cases Rust allows more aggressive optimizations
-  - move by default
-    * also `Vec` is moved on `resize` at once, rather than by element
+  - move by default (https://www.thecodedmessage.com/posts/cpp-move/ and https://mcyoung.xyz/2021/04/26/move-ctors/)
+    * also `Vec` is moved on `resize` at once, rather than by element as in STL
+      + is this correct ? `std::vector` should be optimized for trivial types !
   - `restrict` by default
     * currently only applied at func boundaries
   - enum tag embegging and struct optimizations
@@ -96,9 +99,11 @@ How to deal with unsafe ?
 
 For each link need to
   * read/watch
+  * write short summary: what was the problem, solution and results, whether it's relevant for us (1-2 sentences)
   * categorize each reported problem and/or optimization/tuning approach (e.g. unsafe, rewrite-for-SIMD, `assert!` to get rid of index checks, etc.) and update our lists
   * extract useful examples
-  * for blogposts also be sure to check comments, links and other Rust-performance-relevant posts on blog
+  * mark very high quality posts (e.g. with useful methodology, info, etc.)
+  * for blogposts also be sure to check comments (in blog itself and on Reddit/Hackernews), links and other Rust-performance-relevant posts on blog
 
 Blog posts:
   - C++ comparisons:
@@ -119,11 +124,14 @@ Blog posts:
     * Why Rust doesn't need a standard div_rem: An LLVM tale: https://codspeed.io/blog/why-rust-doesnt-need-a-standard-divrem (also comments in https://www.reddit.com/r/rust/comments/173wr86/why_rust_doesnt_need_a_standard_div_rem_an_llvm)
     * Asm snippets: https://www.eventhelix.com/rust/
     * Battle Of The Backends: Rust vs. Go vs. C# vs. Kotlin - inovex GmbH: https://www.inovex.de/de/blog/rust-vs-go-vs-c-vs-kotlin
+    * How much does Rust's bounds checking actually cost?: https://blog.readyset.io/bounds-checks/
+    * A cool Rust optimization story: https://quickwit.io/blog/search-a-sorted-block
   - Data structures:
     * Learn Rust With Entirely Too Many Linked Lists: https://rust-unofficial.github.io/too-many-lists/
     * Nine Rules for Creating Fast, Safe, and Compatible Data Structures in Rust:
       + https://towardsdatascience.com/nine-rules-for-creating-fast-safe-and-compatible-data-structures-in-rust-part-1-c0973092e0a3
       + https://towardsdatascience.com/nine-rules-for-creating-fast-safe-and-compatible-data-structures-in-rust-part-2-da5e6961a0b7
+    * https://dev.to/arunanshub/self-referential-structs-in-rust-33cm
   - Autovec:
     * Unleash the Power of Auto-Vectorization in Rust with LLVM: https://www.luiscardoso.dev/blog/auto-vectorization/
     * Taking Advantage of Auto-Vectorization in Rust: https://www.nickwilcox.com/blog/autovec/ (also comments in https://www.reddit.com/r/rust/comments/gkq0op/taking_advantage_of_autovectorization_in_rust/)
@@ -144,11 +152,14 @@ Blog posts:
     * Unnecessary Optimization in Rust: https://emschwartz.me/unnecessary-optimization-in-rust-hamming-distances-simd-and-auto-vectorization/
     * Improve an algorithm performance step by step: https://blog.mapotofu.org/blogs/rabitq-bench/
     * Bringing runtime checks to compile time in Rust: https://ktkaufman03.github.io/blog/2023/04/20/rust-compile-time-checks
+    * Optimization story - quantum mechanics simulation speedup: https://tinkering.xyz/fmo-optimization-story
   - Field reports:
     * Leaving Rust gamedev after 3 years: https://loglog.games/blog/leaving-rust-gamedev/ (also comments in https://news.ycombinator.com/item?id=40172033 and https://habr.com/ru/articles/813597/)
   - Panics:
     * Rust panics under the hood: https://fractalfir.github.io/generated_html/rustc_codegen_clr_v0_2_1.html
     * Unwind considered harmful? https://smallcultfollowing.com/babysteps/blog/2024/05/02/unwind-considered-harmful/
+  - Unsafe:
+    * Being Fair about Memory Safety and Performance (!!!): https://www.thecodedmessage.com/posts/unsafe/
 
 User forum:
   * Rust vs C++ Theoretical Performance: https://users.rust-lang.org/t/rust-vs-c-theoretical-performance/4069/8
@@ -185,7 +196,7 @@ Developer forum:
 
 This week in Rust:
   * https://github.com/rust-lang/this-week-in-rust
-  * searched for `/performance\|optimiz\|degradation\|slow\|inefficient\|compiler\|code *gen/i` in last 3 years
+  * searched for `/performance\|optimiz\|degradation\|slow\|inefficient\|compiler\|code *gen/i` in last 4 years
 
 Relevant Github issues:
   - Inefficient codegen when accessing a vector with literal indices: https://github.com/rust-lang/rust/issues/50759
@@ -209,6 +220,7 @@ Survey Github for innate (unfixable, by design) performance issues:
 
 Look at real code:
   - microbenchmarks
+    * based on known language limitations and GH/discourse reports
     * easy to analyze and demonstrate issues
     * do not show how common issue is in real code
   - algorithms
@@ -225,4 +237,3 @@ Look at real code:
       * regex
       * Servo (https://habr.com/ru/articles/274815/), Parity, Redox, Rusoto, Firefox
       * what else ?
-
