@@ -23,6 +23,8 @@ This talk is NOT about:
   - just looking at asm code
     * inefficiencies may be due to bug / NYI feature in LLVM
     * should check what is NYI and can never be implemented in LLVM optimizer
+  - performance of parallel code
+    * maybe next time
   - important missing features which are not directly perf-related:
     * custom allocators and placement new
     * ABI
@@ -81,6 +83,7 @@ Rust performance improvements:
   - move by default (https://www.thecodedmessage.com/posts/cpp-move/ and https://mcyoung.xyz/2021/04/26/move-ctors/)
     * also `Vec` is moved on `resize` at once, rather than by element as in STL
       + is this correct ? `std::vector` should be optimized for trivial types !
+    * are issues from https://www.youtube.com/watch?v=rHIkrotSwcc fixed in Rust ?
   - `restrict` by default
     * currently only applied at func boundaries
   - enum tag embegging and struct optimizations
@@ -117,6 +120,7 @@ Blog posts:
     * Rust vs. C++ на алгоритмических задачах: https://habr.com/ru/articles/344282/
     * Небезопасный Rust сложнее C: https://habr.com/ru/companies/ruvds/articles/858246/
     * Safety vs Performance. A case study of C, C++ and Rust sort implementations: https://github.com/Voultapher/sort-research-rs/blob/main/writeup/sort_safety/text.md
+    * Loop Performance in Rust: https://www.youtube.com/watch?v=E37rSIhWjso
   - Compiler:
     * Rust loves LLVM: https://www.youtube.com/watch?v=Kqz-umsAnk8 (https://llvm.org/devmtg/2024-10/slides/keynote/Popov-Rust_Heart_LLVM.pdf)
     * Rust and LLVM in 2021: https://llvm.org/devmtg/2021-02-28/slides/Patrick-rust-llvm.pdf
@@ -155,6 +159,7 @@ Blog posts:
     * Improve an algorithm performance step by step: https://blog.mapotofu.org/blogs/rabitq-bench/
     * Bringing runtime checks to compile time in Rust: https://ktkaufman03.github.io/blog/2023/04/20/rust-compile-time-checks
     * Optimization story - quantum mechanics simulation speedup: https://tinkering.xyz/fmo-optimization-story
+    * Benchmarking and Optimization of Rust Libraries by Paul Mason: https://www.youtube.com/watch?v=d2ZQ9-4ZJmQ&t=749s
   - Field reports:
     * Leaving Rust gamedev after 3 years: https://loglog.games/blog/leaving-rust-gamedev/ (also comments in https://news.ycombinator.com/item?id=40172033 and https://habr.com/ru/articles/813597/)
   - Panics:
