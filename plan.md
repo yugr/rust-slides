@@ -70,6 +70,7 @@ Rust performance overheads:
   - no `-ffast-math` (https://www.reddit.com/r/rust/comments/e5ge5k/rust_and_ffastmath/)
   - error codes vs. exceptions
   - forced array initialization (https://blog.logrocket.com/understanding-inheritance-other-limitations-rust/)
+  - no per-class/per-container allocators (https://github.com/rust-lang/rust/issues/32838)
 
 How much performance can be regained using unsafe code ?
   - check what optimizations we can't express even with unsafe blocks
