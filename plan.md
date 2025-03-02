@@ -71,6 +71,7 @@ Rust performance overheads:
   - error codes vs. exceptions
   - forced array initialization (https://blog.logrocket.com/understanding-inheritance-other-limitations-rust/)
   - no per-class/per-container allocators (https://github.com/rust-lang/rust/issues/32838)
+  - safer but slower sort implementation (https://github.com/Voultapher/sort-research-rs/blob/main/writeup/sort_safety/text.md and https://www.youtube.com/watch?v=rZ7QQWKP8Rk)
 
 How much performance can be regained using unsafe code ?
   - check what optimizations we can't express even with unsafe blocks
