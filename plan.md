@@ -103,12 +103,12 @@ How to deal with unsafe ?
 # Materials
 
 For each link need to
-  * read/watch
-  * write short summary: what was the problem, solution and results, whether it's relevant for us (1-2 sentences)
-  * categorize each reported problem and/or optimization/tuning approach (e.g. unsafe, rewrite-for-SIMD, `assert!` to get rid of index checks, etc.) and update our lists
-  * extract useful examples
-  * mark very high quality posts (e.g. with useful methodology, info, etc.)
-  * for blogposts also be sure to check comments (in blog itself and on Reddit/Hackernews), links and other Rust-performance-relevant posts on blog
+  - read/watch
+    * for blogposts also be sure to check comments (in blog itself and on Reddit/Hackernews), links and other Rust-performance-relevant posts on blog
+  - write short summary: what was the problem, solution and results, whether it's relevant for us (1-2 sentences)
+  - attribute it to one of the overheads or improvements listed above (create new entries if necessary)
+  - extract useful examples
+  - mark very high quality/influential posts (e.g. with useful methodology, additional suggestions, good explanation of some subject, etc.)
 
 Blog posts:
   - C++ comparisons:
