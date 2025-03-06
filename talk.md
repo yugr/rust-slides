@@ -1,3 +1,5 @@
+This is the plan of the talk.
+
 # What this talk is NOT about
 
 - Non-idiomatic code (SIMD, intrinsics, inline asm, `wrapping_add`, too many `unsafe`s, etc.)

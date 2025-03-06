@@ -1,4 +1,6 @@
-The work will be split in two major phases:
+This is the plan for our work on talk.
+
+Project will be split to 3 phases:
   - analysis of [collected materials](materials/materials.md)
   - analysis of Rust performance features (issues and opportunities)
   - (if we have time in future) analysis of real-world projects
