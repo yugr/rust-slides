@@ -1,0 +1,12 @@
+Large perf-sensitive projects written in Rust:
+  - rustc
+  - Servo (https://habr.com/ru/articles/274815/)
+  - Firefox
+  - Veloren (game)
+  - Bevy (game engine)
+  - Polars (data processing)
+  - Tokio (asynch framework)
+  - Deno (runtime)
+  - Parity
+  - Redox
+  - Rusoto

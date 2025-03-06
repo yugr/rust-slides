@@ -1,4 +1,4 @@
-Materials have been collected according to instructions in method.md.
+Materials have been collected according to [collection methodology](materials/method.md).
 
 Note that section split below is rather crude and may do more harm than good.
 Refactor structure if you think it makes sense.
@@ -14,15 +14,7 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Rustc development guide: https://rustc-dev-guide.rust-lang.org/
 - Rust design patterns: https://softwarepatternslexicon.com/patterns-rust/
 - Rust Performance Book (by Nethercote): https://nnethercote.github.io/perf-book/
-- TODO survey other large and perf-sensitive projects
-  * rustc
-  * Servo
-  * Firefox
-  * Veloren (game)
-  * Bevy (game engine)
-  * Polars (data processing)
-  * Tokio (asynch framework)
-  * Deno (runtime)
+- TODO survey [other projects](real-projects.md)
 
 # C++ comparison
 
