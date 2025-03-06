@@ -39,11 +39,12 @@ Main source of performance overhead: UB avoidance
 - Runtime checks:
   * index accesses:
     + LLVM may not always remove them which will break autovec
+    + prefer iterators to indexing
     + need to investigate several common cases: LICM for index checks in loops, support for [inclusive](https://github.com/rust-lang/rust/issues/45222)/exclusive ranges, const/non-const bounds
     + slices have to be fat (so take up two registers in function call)
     + explicit reslicing needed (see https://users.rust-lang.org/t/understanding-rusts-auto-vectorization-and-methods-for-speed-increase/84891/5)
   * strings
-    + UTF-8 invariants checked during operations
+    + UTF-8 invariants checked during operations (see e.g. https://users.rust-lang.org/t/performance-comparison/56041/5)
 - Inefficient data structures due to borrow checker limitations:
   * self-referential structs require refcounting
     + `Rc<RefCell<T>>`

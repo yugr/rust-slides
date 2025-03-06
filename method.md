@@ -1,26 +1,5 @@
 Methods and checklists for standard activities
 
-# How to search materials
-
-Queries:
-  - Rust performance issues
-  - Rust compiler optimization
-  - Rust inefficient data structures
-  - Rust gamedev problems
-
-Look for any mentions of `/performance|optimizations|compiler|inefficient|code ?gen/i` in
-  - coding guidelines for big and/or performance-critical projects
-  - weeklies
-    * https://github.com/rust-lang/this-week-in-rust
-    * blogs below have mainly been extracted from last 4 years of weeklies (starting Dec 2020)
-  - forums
-    * https://users.rust-lang.org
-    * https://internals.rust-lang.org/c/compiler/20/l/hot
-
-Check Github for innate (unfixable, by design) performance issues :
-  - rejected opts: https://github.com/rust-lang/rust/issues?q=is%3Aissue%20state%3Aclosed%20reason%3Anot-planned%20label%3AI-slow
-  - compiler RFCs: https://github.com/rust-lang/rust/issues?q=is%3Aissue%20label%3AT-compiler%20rfc
-
 # How to analyze a material
 
 For each blog/forum post in materials.md we need to
@@ -30,6 +9,8 @@ For each blog/forum post in materials.md we need to
     * comments (in blog itself and on its Reddit/Hackernews announcements if present)
     * relevant links in text (need to be added to materials)
     * other Rust-performance-relevant posts on blog (posts which look relevant need to be added to materials)
+  - for forum posts be sure to check
+    * suggested posts (need to be added to materials)
   - write short summary (in materials.md):
     * what was the problem(s) (e.g. "autovectorization breaks if indexing is too complex")
     * solution (e.g. "use unsafe" or "explicit SIMD")
@@ -77,3 +58,5 @@ But in some cases we will need to make our own analysis.
       * regex
       * Servo (https://habr.com/ru/articles/274815/), Parity, Redox, Rusoto, Firefox
       * what else ?
+
+http://benchmarksgame.alioth.debian.org
