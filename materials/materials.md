@@ -4,8 +4,8 @@ Note that section split below is rather crude and may do more harm than good.
 Refactor structure if you think it makes sense.
 On the other hand, once all materials are analyzed we won't care about this file.
 
-- TODO scan https://internals.rust-lang.org/c/compiler for relevant posts and add them to above sections
-- TODO add more interesting issues from
+- TODO(gh-1) scan https://internals.rust-lang.org/c/compiler for relevant posts and add them to above sections
+- TODO(gh-2) add more interesting issues from
   * rejected opts: https://github.com/rust-lang/rust/issues?q=is%3Aissue%20state%3Aclosed%20reason%3Anot-planned%20label%3AI-slow
   * compiler RFCs: https://github.com/rust-lang/rust/issues?q=is%3Aissue%20label%3AT-compiler%20rfc
 
@@ -14,7 +14,7 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Rustc development guide: https://rustc-dev-guide.rust-lang.org/
 - Rust design patterns: https://softwarepatternslexicon.com/patterns-rust/
 - Rust Performance Book (by Nethercote): https://nnethercote.github.io/perf-book/
-- TODO survey [other projects](real-projects.md)
+- TODO(gh-3) survey [other projects](real-projects.md)
 
 # C++ comparison
 
