@@ -7,7 +7,7 @@ Project will be split to 3 phases:
 
 # Analysis of materials
 
-For each blog/forum post in [materials.md](materials/materials.md) we need to
+For each blog/forum post in [materials](materials/materials.md) we need to
   - carefully read/watch it
   - if material is in wrong section - move appropriately
   - for blogposts be sure to check
@@ -16,14 +16,14 @@ For each blog/forum post in [materials.md](materials/materials.md) we need to
     * other Rust-performance-relevant posts on blog (posts which look relevant need to be added to materials)
   - for forum posts be sure to check
     * suggested posts (need to be added to materials)
-  - write short summary (in materials.md):
+  - write short summary (in [materials](materials/materials.md)):
     * what was the problem(s) (e.g. "autovectorization breaks if indexing is too complex")
     * solution (e.g. "use unsafe" or "explicit SIMD")
     * results (e.g. "problem fully solved")
     * non-trivial conclusions (e.g. "never use XXX when YYY")
     * conclusion: is it relevant for us and how (good code examples, good analysis, important optimization method/workaround, etc.) ?
   - if material is relevant:
-    * add it to relevant issue(s)/opportunity(ies) in plan.md
+    * add it to relevant issue(s)/opportunity(ies) in [talk text](talk.md)
     * create new issue/opportunity if necessary
   - mark very high quality/influential posts
     * e.g. with useful methodology, additional suggestions, good explanation of some subject, etc.
