@@ -1,9 +1,15 @@
 This is the plan for our work on talk.
 
 Project will be split to 3 phases:
+  - collection of materials
   - analysis of [collected materials](materials/materials.md)
   - analysis of Rust performance features (issues and opportunities)
   - (if we have time in future) analysis of real-world projects
+
+# Survey of materials
+
+Methodology is available [here](materials/method.md) and
+final results [here](materials/materials.md).
 
 # Analysis of materials
 
@@ -60,6 +66,6 @@ We could analyze
   - real production code
     * very hard to analyze
       + need methodology (e.g. first profile and study only hotspots)
-    * concrete examples:
-      * Eigen vs nalgebra
-      * [other projects](real-projects.md)
+    * candidates:
+      + small but high-performant and important projects (std, tokio, nalgebra vs Eigen)
+      * [large projects](real-projects.md)
