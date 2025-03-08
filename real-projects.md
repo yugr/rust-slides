@@ -10,3 +10,4 @@ Large perf-sensitive projects written in Rust:
   - Parity
   - Redox
   - Rusoto
+  - Revolt chat (backend)
