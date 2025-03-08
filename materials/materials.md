@@ -117,6 +117,7 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Performance question: https://users.rust-lang.org/t/performance-question/54977/8
 - Rust performance help (convolution): https://users.rust-lang.org/t/rust-performance-help-convolution/44075
 - Optimization comparison: Vec vs array and for vs while: https://internals.rust-lang.org/t/optimization-comparison-vec-vs-array-and-for-vs-while/16410
+- Performance optimization, and how to do it wrong: https://genna.win/blog/convolution-simd/
 
 # Panics
 
