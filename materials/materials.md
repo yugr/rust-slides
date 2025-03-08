@@ -42,6 +42,7 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Rust-specific code optimisations vs other languages: https://users.rust-lang.org/t/rust-specific-code-optimisations-vs-other-languages/49663/9
 - How to speed up this rust code? I’m measuring a 30% slowdown versus the C++ version: https://users.rust-lang.org/t/how-to-speed-up-this-rust-code-im-measuring-a-30-slowdown-versus-the-c-version/1488
 - Goals and priorities for C++: https://internals.rust-lang.org/t/goals-and-priorities-for-c/12031/32 (some points on Rust perf features like lack of fast-math or move semantics)
+- Zero cost abstractions: Rust vs C++: https://www.rottedfrog.co.uk/?p=24
 
 # Rust-specific opts
 
@@ -63,6 +64,8 @@ On the other hand, once all materials are analyzed we won't care about this file
 - How much does Rust's bounds checking actually cost?: https://blog.readyset.io/bounds-checks/
 - A cool Rust optimization story: https://quickwit.io/blog/search-a-sorted-block
 - Inefficient codegen when accessing a vector with literal indices: https://github.com/rust-lang/rust/issues/50759
+- Costs of iterators and Zero Cost Abstractions in Rust: https://github.com/mike-barber/rust-zero-cost-abstractions
+  * pay attention to this post, it directly intersects with our topic
 
 # Data structures performance
 

@@ -7,7 +7,7 @@ This is the plan of the talk.
 - Just comparing few random programs
   * not enough to draw conclusions
 - Just looking at asm code
-  * inefficiencies may be due to bug / NYI feature in LLVM
+  * inefficiencies may be due to bug / NYI feature in LLVM ("Sufficiently Smart Compiler")
   * should check what is NYI and can never be implemented in LLVM optimizer
 - Performance of parallel code
   * maybe next time
@@ -25,6 +25,7 @@ Rust targets same problem area:
     * no (or minimal) runtime overhead
     * don't pay for what you don't use
     * no GC
+    * "What you don’t use, you don’t pay for. And further: What you do use, you couldn’t hand code any better" (Stroustrup "Abstraction and the C++ machine model")
   - supports low-level tuning
     * SIMD, inline asm, intrinsics (e.g. `__builtin_assume`, `__builtin_expect`)
   - same optimizer (LLVM)
@@ -68,6 +69,7 @@ Main source of performance overhead: UB avoidance
 - Panic unwinding overhead
   * panics involve stack unwinding and destructors so are definitely not free
   * need to check if items from Roman's talk apply: "Исключения C++ через призму компиляторных оптимизаций" (https://www.youtube.com/watch?v=ItemByR4PRg)
+  * see also https://devblogs.microsoft.com/oldnewthing/20220228-00/?p=106296
   * C++ has `-fno-exceptions`, is `panic=abort` same ?
 - Lack of type-based aliasing like in C (`-fstrict-aliasing`)
   * not considered important due to reference aliasing rules
