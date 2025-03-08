@@ -62,6 +62,7 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Asm snippets: https://www.eventhelix.com/rust/
 - Battle Of The Backends: Rust vs. Go vs. C# vs. Kotlin - inovex GmbH: https://www.inovex.de/de/blog/rust-vs-go-vs-c-vs-kotlin
 - How much does Rust's bounds checking actually cost?: https://blog.readyset.io/bounds-checks/
+  * comments in https://news.ycombinator.com/item?id=33805419
 - A cool Rust optimization story: https://quickwit.io/blog/search-a-sorted-block
 - Inefficient codegen when accessing a vector with literal indices: https://github.com/rust-lang/rust/issues/50759
 - Costs of iterators and Zero Cost Abstractions in Rust: https://github.com/mike-barber/rust-zero-cost-abstractions
@@ -87,6 +88,7 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Understanding Rusts Auto-Vectorization and Methods for speed: https://users.rust-lang.org/t/understanding-rusts-auto-vectorization-and-methods-for-speed-increase/84891/5 (reslicing technique)
 - We need to do better in the benchmarks game: https://users.rust-lang.org/t/we-need-to-do-better-in-the-benchmarks-game/7317/5
 - Performance questions: https://users.rust-lang.org/t/performance-questions/45265
+- bounds-check-cost: https://github.com/matklad/bounds-check-cost
 
 # Manual optimizations
 
