@@ -20,7 +20,7 @@ This is the plan of the talk.
 # Is it fair to compare with C++ ?
 
 Rust targets same problem area:
-  - system programming language
+  - [system programming language](https://willcrichton.net/notes/systems-programming/)
   - zero-cost abstractions
     * no (or minimal) runtime overhead
     * don't pay for what you don't use
@@ -80,6 +80,7 @@ Main source of performance overhead: UB avoidance
   * is discriminator in `Option<T&>` (`Result<T&, E>`) always optimized out ?
 - No per-class/container allocators
   * https://github.com/rust-lang/rust/issues/32838
+  * Why “bring your own allocator” APIs are not more popular in Rust? https://internals.rust-lang.org/t/why-bring-your-own-allocator-apis-are-not-more-popular-in-rust/14494
 - Forced variable initializations (especially large arrays)
   * https://blog.logrocket.com/understanding-inheritance-other-limitations-rust/
 

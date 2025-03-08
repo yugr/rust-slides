@@ -41,6 +41,7 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Rust-specific code optimisations vs other languages: https://users.rust-lang.org/t/rust-specific-code-optimisations-vs-other-languages/49663
 - Rust-specific code optimisations vs other languages: https://users.rust-lang.org/t/rust-specific-code-optimisations-vs-other-languages/49663/9
 - How to speed up this rust code? I’m measuring a 30% slowdown versus the C++ version: https://users.rust-lang.org/t/how-to-speed-up-this-rust-code-im-measuring-a-30-slowdown-versus-the-c-version/1488
+- Goals and priorities for C++: https://internals.rust-lang.org/t/goals-and-priorities-for-c/12031/32 (some points on Rust perf features like lack of fast-math or move semantics)
 
 # Rust-specific opts
 
@@ -110,6 +111,7 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Performance issue - High complexity code: https://users.rust-lang.org/t/performance-issue-high-complexity-code/40241/17
 - Performance question: https://users.rust-lang.org/t/performance-question/54977/8
 - Rust performance help (convolution): https://users.rust-lang.org/t/rust-performance-help-convolution/44075
+- Optimization comparison: Vec vs array and for vs while: https://internals.rust-lang.org/t/optimization-comparison-vec-vs-array-and-for-vs-while/16410
 
 # Panics
 

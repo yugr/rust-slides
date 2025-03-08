@@ -5,6 +5,7 @@ Queries:
   - Rust compiler optimization
   - Rust inefficient data structures
   - Rust gamedev problems
+  - Rust zero-cost abstractions
 
 Look for any mentions of `/performance|optimizations|compiler|inefficient|code ?gen/i` in
   - coding guidelines for big and/or performance-critical projects
