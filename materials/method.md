@@ -17,7 +17,7 @@ Look for any mentions of `/performance|optimizations|compiler|inefficient|code ?
     * https://internals.rust-lang.org/c/compiler/20/l/hot
   - Reddit
     * general:
-      + https://www.reddit.com/r/rust/search/?q=optimize and https://www.reddit.com/r/rust/search/?q=performance
+      + https://www.reddit.com/r/rust/search/?q=optimize&type=posts and https://www.reddit.com/r/rust/search/?q=performance&type=posts
     * burntsushi (regex):
       + https://www.reddit.com/user/burntsushi/search/?q=optimize&type=comments and https://www.reddit.com/user/burntsushi/search/?q=performance&type=comments
 

@@ -43,6 +43,8 @@ On the other hand, once all materials are analyzed we won't care about this file
 - How to speed up this rust code? I’m measuring a 30% slowdown versus the C++ version: https://users.rust-lang.org/t/how-to-speed-up-this-rust-code-im-measuring-a-30-slowdown-versus-the-c-version/1488
 - Goals and priorities for C++: https://internals.rust-lang.org/t/goals-and-priorities-for-c/12031/32 (some points on Rust perf features like lack of fast-math or move semantics)
 - Zero cost abstractions: Rust vs C++: https://www.rottedfrog.co.uk/?p=24
+- Evaluating Languages for Bioinformatics: https://github.com/rjray/mscs-thesis-project
+- Rust is now overall faster than C in benchmarks: https://www.reddit.com/r/rust/comments/kpqmrh/rust_is_now_overall_faster_than_c_in_benchmarks/
 
 # Rust-specific opts
 
@@ -89,6 +91,9 @@ On the other hand, once all materials are analyzed we won't care about this file
 - We need to do better in the benchmarks game: https://users.rust-lang.org/t/we-need-to-do-better-in-the-benchmarks-game/7317/5
 - Performance questions: https://users.rust-lang.org/t/performance-questions/45265
 - bounds-check-cost: https://github.com/matklad/bounds-check-cost
+- Nine Rules for SIMD Acceleration of Your Rust Code (Part 1): https://www.reddit.com/r/rust/comments/18hj1m6/nine_rules_for_simd_acceleration_of_your_rust/
+- Taking Advantage of Auto-Vectorization in Rust: https://www.nickwilcox.com/blog/autovec/
+- Auto-Vectorization for Newer Instruction Sets in Rust: https://www.nickwilcox.com/blog/autovec2/
 
 # Manual optimizations
 
@@ -118,6 +123,8 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Rust performance help (convolution): https://users.rust-lang.org/t/rust-performance-help-convolution/44075
 - Optimization comparison: Vec vs array and for vs while: https://internals.rust-lang.org/t/optimization-comparison-vec-vs-array-and-for-vs-while/16410
 - Performance optimization, and how to do it wrong: https://genna.win/blog/convolution-simd/
+- Code critique/review request: https://www.reddit.com/r/learnrust/comments/xllzqm/code_critiquereview_request/ (comments)
+- When Zero Cost Abstractions Aren’t Zero Cost: https://www.reddit.com/r/rust/comments/p0ul6b/when_zero_cost_abstractions_arent_zero_cost/
 
 # Panics
 
@@ -128,7 +135,10 @@ On the other hand, once all materials are analyzed we won't care about this file
 
 - Being Fair about Memory Safety and Performance: https://www.thecodedmessage.com/posts/unsafe/
   * need to be super-attentive to this post, this may be key to how we treat unsafe in our talk
+- Implementing a VM: how unsafe should I go? https://www.reddit.com/r/rust/comments/n8yy7z/implementing_a_vm_how_unsafe_should_i_go/
+- Good example of high performance Rust project without unsafe code? https://www.reddit.com/r/rust/comments/we91es/good_example_of_high_performance_rust_project/
 
 # Other
 
 - Leaving Rust gamedev after 3 years: https://loglog.games/blog/leaving-rust-gamedev/ (also comments in https://news.ycombinator.com/item?id=40172033 and https://habr.com/ru/articles/813597/)
+- Why I hate Rust programming language? https://www.reddit.com/r/programming/comments/n9l68o/why_i_hate_rust_programming_language/ (comments)
