@@ -14,6 +14,7 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Rustc development guide: https://rustc-dev-guide.rust-lang.org/
 - Rust design patterns: https://softwarepatternslexicon.com/patterns-rust/
 - Rust Performance Book (by Nethercote): https://nnethercote.github.io/perf-book/
+  * pay attention to links at https://nnethercote.github.io/perf-book/bounds-checks.html
 - TODO(gh-3) survey [other projects](real-projects.md)
 
 # C++ comparison
@@ -22,6 +23,7 @@ On the other hand, once all materials are analyzed we won't care about this file
 - The relative performance of C and Rust: https://bcantrill.dtrace.org/2018/09/28/the-relative-performance-of-c-and-rust/
 - Speed of Rust vs C: https://kornel.ski/rust-c-speed
 - An Optimization That’s Impossible in Rust! https://tunglevo.com/note/an-optimization-thats-impossible-in-rust/
+  * Comments: https://www.reddit.com/r/rust/comments/1f87siw/an_optimization_thats_impossible_in_rust/
 - Rust превосходит по производительности C++ согласно результатам Benchmarks Game: https://habr.com/ru/articles/480608/
 - Rust vs. C++ на алгоритмических задачах: https://habr.com/ru/articles/344282/
 - Небезопасный Rust сложнее C: https://habr.com/ru/companies/ruvds/articles/858246/
@@ -45,6 +47,10 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Zero cost abstractions: Rust vs C++: https://www.rottedfrog.co.uk/?p=24
 - Evaluating Languages for Bioinformatics: https://github.com/rjray/mscs-thesis-project
 - Rust is now overall faster than C in benchmarks: https://www.reddit.com/r/rust/comments/kpqmrh/rust_is_now_overall_faster_than_c_in_benchmarks/
+- Rust Optimizations That C++ Can't Do: https://robert.ocallahan.org/2017/04/rust-optimizations-that-c-cant-do_5.html
+- What makes Rust faster than C/C++? https://www.reddit.com/r/rust/comments/px72r1/what_makes_rust_faster_than_cc/
+- Why ISN'T Rust faster than C? https://www.reddit.com/r/rust/comments/1at3r6d/why_isnt_rust_faster_than_c_given_it_can_leverage/
+- Why is Rust not able to optimize this? https://www.reddit.com/r/rust/comments/181tp1a/why_is_rust_not_able_to_optimize_this/ (signed overflow)
 
 # Rust-specific opts
 
@@ -69,6 +75,13 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Inefficient codegen when accessing a vector with literal indices: https://github.com/rust-lang/rust/issues/50759
 - Costs of iterators and Zero Cost Abstractions in Rust: https://github.com/mike-barber/rust-zero-cost-abstractions
   * pay attention to this post, it directly intersects with our topic
+- Addressing Rust optimization failures in LLVM: http://www.khei4.com/gsoc2023/
+- Why does the Rust compiler not optimize code assuming that two mutable references cannot alias? https://stackoverflow.com/questions/57259126/why-does-the-rust-compiler-not-optimize-code-assuming-that-two-mutable-reference
+- Square powers not being fully optimized? https://www.reddit.com/r/rust/comments/exojhk/square_powers_not_being_fully_optimized/
+- Why isn't the for loop optimized better (in this one example)? https://www.reddit.com/r/rust/comments/15tvuio/why_isnt_the_for_loop_optimized_better_in_this/
+- Assembly examples of missed Rust compiler optimizations: https://www.reddit.com/r/rust/comments/14zhb0s/assembly_examples_of_missed_rust_compiler/
+- Does the compiler optimize moves? https://www.reddit.com/r/rust/comments/ykku69/does_the_compiler_optimize_moves/
+  * this should be a dedicated perf issue
 
 # Data structures performance
 
@@ -94,6 +107,9 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Nine Rules for SIMD Acceleration of Your Rust Code (Part 1): https://www.reddit.com/r/rust/comments/18hj1m6/nine_rules_for_simd_acceleration_of_your_rust/
 - Taking Advantage of Auto-Vectorization in Rust: https://www.nickwilcox.com/blog/autovec/
 - Auto-Vectorization for Newer Instruction Sets in Rust: https://www.nickwilcox.com/blog/autovec2/
+- Can You Trust a Compiler to Optimize Your Code? https://matklad.github.io/2023/04/09/can-you-trust-a-compiler-to-optimize-your-code.html
+  * Comments in https://www.reddit.com/r/rust/comments/15f5p94/can_you_trust_a_compiler_to_optimize_your_code/
+- Iterator::max with reference-type items cannot leverage SIMD instructions: https://github.com/rust-lang/rust/issues/106539
 
 # Manual optimizations
 
@@ -125,6 +141,19 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Performance optimization, and how to do it wrong: https://genna.win/blog/convolution-simd/
 - Code critique/review request: https://www.reddit.com/r/learnrust/comments/xllzqm/code_critiquereview_request/ (comments)
 - When Zero Cost Abstractions Aren’t Zero Cost: https://www.reddit.com/r/rust/comments/p0ul6b/when_zero_cost_abstractions_arent_zero_cost/
+- Achieving warp speed with Rust: https://gist.github.com/jFransham/369a86eff00e5f280ed25121454acec1
+  * pay attention to `assert` hint
+- From 48s to 5s - optimizing a 350 line raytracer in Rust: https://medium.com/@cfsamson/from-48s-to-5s-optimizing-a-350-line-pathtracer-in-rust-191ab4a1a412
+- Using break in for loop takes even 100ms in release mode: https://www.reddit.com/r/rust/comments/1738kd7/using_break_in_for_loop_takes_even_100ms_in/
+  * overhead of consuming iterators
+- 5x Slower than Go? Optimizing Rust Protobuf Decoding Performance: https://www.greptime.com/blogs/2024-04-09-rust-protobuf-performance
+- Rust Performance Pitfalls: https://llogiq.github.io/2017/06/01/perf-pitfalls.html
+- Where should I start if I want to squeeze out as much performance as I can from my rust code? https://www.reddit.com/r/rust/comments/bb5lnj/where_should_i_start_if_i_want_to_squeeze_out_as/
+- How to avoid bounds checks in Rust: https://shnatsel.medium.com/how-to-avoid-bounds-checks-in-rust-without-unsafe-f65e618b4c1e
+- Unnecessary Optimization in Rust: https://www.reddit.com/r/rust/comments/1hk0bry/unnecessary_optimization_in_rust_hamming/
+  * check comments
+- From 'Very Fast' to '~Fastest': Helping rust unleash compiler optimizations: https://blog.anubhab.me/tech/optimizing-diff-match-patch/
+  * comments in https://www.reddit.com/r/rust/comments/1hsnnat/40_boost_in_text_diff_flow_just_by_facilitating/
 
 # Panics
 
@@ -142,3 +171,5 @@ On the other hand, once all materials are analyzed we won't care about this file
 
 - Leaving Rust gamedev after 3 years: https://loglog.games/blog/leaving-rust-gamedev/ (also comments in https://news.ycombinator.com/item?id=40172033 and https://habr.com/ru/articles/813597/)
 - Why I hate Rust programming language? https://www.reddit.com/r/programming/comments/n9l68o/why_i_hate_rust_programming_language/ (comments)
+- Rust inadequate for text compression codecs? https://news.ycombinator.com/item?id=43295908
+- Rust: Not So Great For Codec Implementing: https://news.ycombinator.com/item?id=14901443

@@ -2,7 +2,7 @@ This is the plan of the talk.
 
 # What this talk is NOT about
 
-- Non-idiomatic code (SIMD, intrinsics, inline asm, `wrapping_add`, too many `unsafe`s, etc.)
+- Non-idiomatic code (SIMD, intrinsics, inline asm, `wrapping_add`, too many `unsafe`s, `restrict` in C++, etc.)
   * would like to compare "standard" Rust and C++
 - Just comparing few random programs
   * not enough to draw conclusions
@@ -42,6 +42,7 @@ Main source of performance overhead: UB avoidance
 - Runtime checks:
   * index accesses:
     + LLVM may not always remove them which will break autovec
+      - TODO: we need to collect statistics on autovec improvements if checking is disabled
     + prefer iterators to indexing
     + need to investigate several common cases: LICM for index checks in loops, support for [inclusive](https://github.com/rust-lang/rust/issues/45222)/exclusive ranges, const/non-const bounds
     + slices have to be fat (so take up two registers in function call)

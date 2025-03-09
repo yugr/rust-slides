@@ -26,7 +26,7 @@ For each piece of [materials](materials/materials.md) (blog/forum post) we need 
     * solution (e.g. "use unsafe" or "explicit SIMD")
     * results (e.g. "problem fully solved")
     * non-trivial conclusions (e.g. "never use XXX when YYY")
-    * conclusion: is it relevant for us and how (good code examples, good analysis, important optimization method/workaround, etc.) ?
+    * is it relevant for us and how (good code examples, good analysis, important optimization method/workaround, etc.) ?
   - if material is relevant:
     * add it to relevant feature file in [features/](features)
     * (create new file if necessary)
@@ -48,4 +48,5 @@ Each performance feature neeeds to contain
 Hopefully in many cases all above will be obtained from collected materials.
 But in some cases we will need to make our own analysis:
   - prepare reasonable microbenchmarks
+  - collect statistics for real-world code (via LLVM/asm analysis) if some safety feature is disabled
   - TODO
