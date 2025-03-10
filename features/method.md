@@ -33,7 +33,7 @@ For each piece of [materials](materials/materials.md) (blog/forum post) we need 
   - write short summary (in [materials](materials/materials.md)):
     * what was the problem(s) (e.g. "autovectorization breaks if indexing is too complex")
     * solution (e.g. "use unsafe" or "explicit SIMD")
-    * results (e.g. "problem fully solved")
+    * results (e.g. "problem fully solved", "can not be solved in compiler", "should be worked around by user")
     * non-trivial conclusions (e.g. "never use XXX when YYY")
     * is it relevant for us and how (good code examples, good analysis, important optimization method/workaround, etc.) ?
   - if material is relevant:
