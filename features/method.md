@@ -12,6 +12,15 @@ The work consists of 2 parts:
 
 # Materials analysis
 
+Before starting analysis of some material YOU MUST LOCK IT:
+  * add annotation at particular item in [materials.md](../materials.md):
+```
+Assignee: your-id
+Status: in progress
+```
+  * commit and push this change (resolving conflicts if necessary)
+(change Status to DONE afterwards).
+
 For each piece of [materials](materials/materials.md) (blog/forum post) we need to
   - carefully read/watch it
   - if material is in wrong section - move appropriately
