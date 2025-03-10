@@ -107,6 +107,7 @@ Rust language also enables new, more aggressive optimizations.
 - Fearless concurrency
 - Copy/move elision (?)
 - `Box` is more performant than `unique_ptr` (https://www.youtube.com/watch?v=rHIkrotSwcc&t=1261s)
+- local function visibility by default
 
 # Conclusions
 
