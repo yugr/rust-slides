@@ -38,7 +38,7 @@ For each piece of [materials](../materials/materials.md) (blog/forum post) we ne
     * is it relevant for us and how (good code examples, good analysis, important optimization method/workaround, etc.) ?
   - if material is relevant:
     * add it to relevant feature file in [features/](/features)
-    * (create new file if necessary)
+    * (create new directory if necessary)
   - mark very high quality/influential posts in dedicated section in [gems.md](../materials/gems.md)
     * e.g. with useful methodology, important ideas, good explanation of some subject, etc.
     * such posts MUST be read by all team members
