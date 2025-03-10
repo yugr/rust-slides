@@ -73,6 +73,7 @@ On the other hand, once all materials are analyzed we won't care about this file
   * comments in https://news.ycombinator.com/item?id=33805419
 - A cool Rust optimization story: https://quickwit.io/blog/search-a-sorted-block
 - Inefficient codegen when accessing a vector with literal indices: https://github.com/rust-lang/rust/issues/50759
+  * @yugr
 - Costs of iterators and Zero Cost Abstractions in Rust: https://github.com/mike-barber/rust-zero-cost-abstractions
   * pay attention to this post, it directly intersects with our topic
 - Addressing Rust optimization failures in LLVM: http://www.khei4.com/gsoc2023/
