@@ -13,7 +13,7 @@ The work consists of 2 parts:
 # Materials analysis
 
 Before starting analysis of some material YOU MUST LOCK IT:
-  * add annotation at particular item in [materials.md](../materials.md):
+  * add annotation at particular item in [materials](../materials/materials.md):
 ```
 Assignee: your-id
 Status: in progress
@@ -21,7 +21,7 @@ Status: in progress
   * commit and push this change (resolving conflicts if necessary)
 (change Status to DONE afterwards).
 
-For each piece of [materials](materials/materials.md) (blog/forum post) we need to
+For each piece of [materials](../materials/materials.md) (blog/forum post) we need to
   - carefully read/watch it
   - if material is in wrong section - move appropriately
   - for blogposts be sure to check
@@ -30,16 +30,16 @@ For each piece of [materials](materials/materials.md) (blog/forum post) we need 
     * other Rust-performance-relevant posts on blog (posts which look relevant need to be added to materials)
   - for forum posts be sure to check
     * suggested posts (need to be added to materials)
-  - write short summary (in [materials](materials/materials.md)):
+  - write short summary (in [materials](../materials/materials.md)):
     * what was the problem(s) (e.g. "autovectorization breaks if indexing is too complex")
     * solution (e.g. "use unsafe" or "explicit SIMD")
     * results (e.g. "problem fully solved", "can not be solved in compiler", "should be worked around by user")
     * non-trivial conclusions (e.g. "never use XXX when YYY")
     * is it relevant for us and how (good code examples, good analysis, important optimization method/workaround, etc.) ?
   - if material is relevant:
-    * add it to relevant feature file in [features/](features)
+    * add it to relevant feature file in [features/](/features)
     * (create new file if necessary)
-  - mark very high quality/influential posts in dedicated section in [gems.md](materials/gems.md)
+  - mark very high quality/influential posts in dedicated section in [gems.md](../materials/gems.md)
     * e.g. with useful methodology, important ideas, good explanation of some subject, etc.
     * such posts MUST be read by all team members
 
