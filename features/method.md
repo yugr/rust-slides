@@ -19,7 +19,6 @@ Assignee: your-id
 Status: in progress
 ```
   * commit and push this change (resolving conflicts if necessary)
-(change Status to DONE afterwards).
 
 For each piece of [materials](../materials/materials.md) (blog/forum post) we need to
   - carefully read/watch it
@@ -42,6 +41,10 @@ For each piece of [materials](../materials/materials.md) (blog/forum post) we ne
   - mark very high quality/influential posts in dedicated section in [gems.md](../materials/gems.md)
     * e.g. with useful methodology, important ideas, good explanation of some subject, etc.
     * such posts MUST be read by all team members
+
+When commiting changes
+  - change Status to DONE
+  - try to specify how long analysis took (to help with future planning)
 
 # Research
 
