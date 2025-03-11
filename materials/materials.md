@@ -75,9 +75,10 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Inefficient codegen when accessing a vector with literal indices: https://github.com/rust-lang/rust/issues/50759
   * Assignee: yugr
   * Status: DONE
-  * Problem with repetative indexing checks when Vec/slice is accessed multiple times
-  * No good/generic way to solve this in LLVM
-  * Can be worked around via `assert!` hint (looks like generic solution for such situations)
+  * Problem: repetative indexing checks when Vec/slice is accessed multiple times
+  * Root cause: Rust has to preserve order of checks (for not so clear reason)
+  * Solution: can be worked around via `assert!` hint (looks like generic solution for such situations)
+  * LLVM: no good/generic way to solve this in LLVM
 - Costs of iterators and Zero Cost Abstractions in Rust: https://github.com/mike-barber/rust-zero-cost-abstractions
   * pay attention to this post, it directly intersects with our topic
 - Addressing Rust optimization failures in LLVM: http://www.khei4.com/gsoc2023/
@@ -86,6 +87,10 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Why isn't the for loop optimized better (in this one example)? https://www.reddit.com/r/rust/comments/15tvuio/why_isnt_the_for_loop_optimized_better_in_this/
   * Assignee: yugr
   * Status: in progress
+  * Problem: loop slowdown when using inclusive ranges
+  * Root cause: inclusive ranges are slower by design (explained in comments)
+  * Solution: replace with exclusive range with explicit addition
+  * LLVM: one of commenters suggest how it can be fixed in LLVM (via loop splitting)
 - Assembly examples of missed Rust compiler optimizations: https://www.reddit.com/r/rust/comments/14zhb0s/assembly_examples_of_missed_rust_compiler/
 - Does the compiler optimize moves? https://www.reddit.com/r/rust/comments/ykku69/does_the_compiler_optimize_moves/
   * this should be a dedicated perf issue

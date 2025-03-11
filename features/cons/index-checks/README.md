@@ -1,4 +1,4 @@
-All info about problems indexing checks.
+All info about problems with indexing checks at runtime.
 
 # Combining multiple checks not optimized
 
