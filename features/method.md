@@ -43,8 +43,7 @@ For each piece of [materials](../materials/materials.md) (blog/forum post) we ne
     * such posts MUST be read by all team members
 
 When commiting changes
-  - change Status to DONE
-  - try to specify how long analysis took (to help with future planning)
+  - change Status to DONE and add how much time you spent on it (to help with future planning)
 
 # Research
 

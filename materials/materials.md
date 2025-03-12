@@ -74,28 +74,31 @@ On the other hand, once all materials are analyzed we won't care about this file
 - A cool Rust optimization story: https://quickwit.io/blog/search-a-sorted-block
 - Inefficient codegen when accessing a vector with literal indices: https://github.com/rust-lang/rust/issues/50759
   * Assignee: yugr
-  * Status: DONE
+  * Status: DONE (20-30m)
   * Problem: repetative indexing checks when Vec/slice is accessed multiple times
   * Root cause: Rust has to preserve order of checks (for not so clear reason)
   * Solution: can be worked around via `assert!` hint (looks like generic solution for such situations)
   * LLVM: no good/generic way to solve this in LLVM
+  * More materials: NA
 - Costs of iterators and Zero Cost Abstractions in Rust: https://github.com/mike-barber/rust-zero-cost-abstractions
   * pay attention to this post, it directly intersects with our topic
 - Addressing Rust optimization failures in LLVM: http://www.khei4.com/gsoc2023/
 - Why does the Rust compiler not optimize code assuming that two mutable references cannot alias? https://stackoverflow.com/questions/57259126/why-does-the-rust-compiler-not-optimize-code-assuming-that-two-mutable-reference
 - Square powers not being fully optimized? https://www.reddit.com/r/rust/comments/exojhk/square_powers_not_being_fully_optimized/
   * Assignee: yugr
-  * Status: postponed (awaiting response)
+  * Status: postponed (awaiting response, 20m)
   * Problem: `2.pow(n)` not optimized to `1 << n`
   * Root cause: missing optimization in LLVM
   * Solution: was fixed in LLVM in [upstream #47234](https://github.com/rust-lang/rust/issues/47234) but the reverted due to [upstream #120537](https://github.com/rust-lang/rust/issues/120537); current status unclear so I asked in first issue
+  * More materials: no interesting mats in suggestions
 - Why isn't the for loop optimized better (in this one example)? https://www.reddit.com/r/rust/comments/15tvuio/why_isnt_the_for_loop_optimized_better_in_this/
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (30m)
   * Problem: loop slowdown when using inclusive ranges
   * Root cause: inclusive ranges are slower by design (explained in comments)
   * Solution: replace with exclusive range with explicit addition
   * LLVM: one of commenters suggest how it can be fixed in LLVM (via loop splitting)
+  * More materials: no new mats in suggestions
 - Assembly examples of missed Rust compiler optimizations: https://www.reddit.com/r/rust/comments/14zhb0s/assembly_examples_of_missed_rust_compiler/
 - Does the compiler optimize moves? https://www.reddit.com/r/rust/comments/ykku69/does_the_compiler_optimize_moves/
   * this should be a dedicated perf issue
@@ -112,7 +115,9 @@ On the other hand, once all materials are analyzed we won't care about this file
 
 - Unleash the Power of Auto-Vectorization in Rust with LLVM: https://www.luiscardoso.dev/blog/auto-vectorization/
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (10m)
+  * Problem: there is not problem actually, the article just illustrates how autovec works, etc.
+  * More materials: no more interesting mats on this blog
 - Taking Advantage of Auto-Vectorization in Rust: https://www.nickwilcox.com/blog/autovec/ (also comments in https://www.reddit.com/r/rust/comments/gkq0op/taking_advantage_of_autovectorization_in_rust/)
 - Nine Rules for SIMD Acceleration of Your Rust Code:
   * https://towardsdatascience.com/nine-rules-for-simd-acceleration-of-your-rust-code-part-1-c16fe639ce21
