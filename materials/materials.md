@@ -111,6 +111,8 @@ On the other hand, once all materials are analyzed we won't care about this file
 # Vectorization
 
 - Unleash the Power of Auto-Vectorization in Rust with LLVM: https://www.luiscardoso.dev/blog/auto-vectorization/
+  * Assignee: yugr
+  * Status: in progress
 - Taking Advantage of Auto-Vectorization in Rust: https://www.nickwilcox.com/blog/autovec/ (also comments in https://www.reddit.com/r/rust/comments/gkq0op/taking_advantage_of_autovectorization_in_rust/)
 - Nine Rules for SIMD Acceleration of Your Rust Code:
   * https://towardsdatascience.com/nine-rules-for-simd-acceleration-of-your-rust-code-part-1-c16fe639ce21
