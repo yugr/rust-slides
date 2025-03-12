@@ -84,6 +84,8 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Addressing Rust optimization failures in LLVM: http://www.khei4.com/gsoc2023/
 - Why does the Rust compiler not optimize code assuming that two mutable references cannot alias? https://stackoverflow.com/questions/57259126/why-does-the-rust-compiler-not-optimize-code-assuming-that-two-mutable-reference
 - Square powers not being fully optimized? https://www.reddit.com/r/rust/comments/exojhk/square_powers_not_being_fully_optimized/
+  * Assignee: yugr
+  * Status: in progress
 - Why isn't the for loop optimized better (in this one example)? https://www.reddit.com/r/rust/comments/15tvuio/why_isnt_the_for_loop_optimized_better_in_this/
   * Assignee: yugr
   * Status: in progress
