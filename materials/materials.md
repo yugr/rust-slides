@@ -15,6 +15,7 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Rust design patterns: https://softwarepatternslexicon.com/patterns-rust/
 - Rust Performance Book (by Nethercote): https://nnethercote.github.io/perf-book/
   * pay attention to links at https://nnethercote.github.io/perf-book/bounds-checks.html
+- Some general guidelines from Redox OS https://doc.redox-os.org/book/rusting-properly.html
 - TODO(gh-3) survey [other projects](real-projects.md)
 
 # C++ comparison
@@ -102,6 +103,7 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Assembly examples of missed Rust compiler optimizations: https://www.reddit.com/r/rust/comments/14zhb0s/assembly_examples_of_missed_rust_compiler/
 - Does the compiler optimize moves? https://www.reddit.com/r/rust/comments/ykku69/does_the_compiler_optimize_moves/
   * this should be a dedicated perf issue
+- Rust `[#inline]` annotations discussion https://github.com/rust-lang/hashbrown/pull/119
 
 # Data structures performance
 
