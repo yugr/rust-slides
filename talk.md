@@ -32,6 +32,9 @@ Rust targets same problem area:
 
 # Rust performance issues
 
+Rust puts safety ahead of performance:
+  - "Rust is a modern systems programming language focusing on safety, speed, and concurrency" ([Rust by Example](https://doc.rust-lang.org/rust-by-example/))
+
 Some Rust's abstractions are NOT zero-cost (or at least less zero-cost than in C++) :
   - are by design more expensive than C++ equivalents
   - can not be fixed by more sophisticated optimizations
@@ -86,6 +89,7 @@ Main source of performance overhead: UB avoidance
   * Why “bring your own allocator” APIs are not more popular in Rust? https://internals.rust-lang.org/t/why-bring-your-own-allocator-apis-are-not-more-popular-in-rust/14494
 - Forced variable initializations (especially large arrays)
   * https://blog.logrocket.com/understanding-inheritance-other-limitations-rust/
+- Code size
 
 # Rust-specific optimization opportunities
 

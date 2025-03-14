@@ -193,6 +193,10 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Implementing a VM: how unsafe should I go? https://www.reddit.com/r/rust/comments/n8yy7z/implementing_a_vm_how_unsafe_should_i_go/
 - Good example of high performance Rust project without unsafe code? https://www.reddit.com/r/rust/comments/we91es/good_example_of_high_performance_rust_project/
 
+# Code size
+
+- Minimizing Rust Binary Size: https://github.com/johnthagen/min-sized-rust
+
 # Other
 
 - Leaving Rust gamedev after 3 years: https://loglog.games/blog/leaving-rust-gamedev/ (also comments in https://news.ycombinator.com/item?id=40172033 and https://habr.com/ru/articles/813597/)
