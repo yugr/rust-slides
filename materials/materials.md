@@ -197,7 +197,13 @@ On the other hand, once all materials are analyzed we won't care about this file
 
 - Minimizing Rust Binary Size: https://github.com/johnthagen/min-sized-rust
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (30m)
+  * Problem: Rust binaries are significantly larger
+  * Root cause: there is a set of known causes (lack of ABI being the main)
+  * Solution: all workarounds are known, added them to feature
+  * LLVM: N/A
+  * More materials: surveyed all links dating back to 2020 (incl.) and addded them to feature
+- Tighten Rust’s Belt: Shrinking Embedded Rust Binaries: https://dl.acm.org/doi/pdf/10.1145/3519941.3535075
 
 # Other
 
