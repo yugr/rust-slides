@@ -196,6 +196,8 @@ On the other hand, once all materials are analyzed we won't care about this file
 # Code size
 
 - Minimizing Rust Binary Size: https://github.com/johnthagen/min-sized-rust
+  * Assignee: yugr
+  * Status: in progress
 
 # Other
 
