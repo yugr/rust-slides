@@ -1,4 +1,9 @@
-All info about problems with overflow checks at runtime.
+Rust does not check overflows in release (so I'm not sure we need this directory).
+On the other hand it does not assign `nsw`s to signed integer computations like C/C++.
+
+# TODO
+
+- Add `nsw` to signed integers and compare perf of large and/or performance sensitive projects
 
 # Inclusive ranges are slower than exclusive ones
 

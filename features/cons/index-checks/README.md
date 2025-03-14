@@ -1,5 +1,9 @@
 All info about problems with indexing checks at runtime.
 
+# TODO
+
+- Disable index checks in compiler and compare perf of large and/or performance sensitive projects
+
 # Combining multiple checks not optimized
 
 Compiler does not combine multiple related index checks to same slice within same scope into one.
