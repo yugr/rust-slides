@@ -27,6 +27,7 @@ For each piece of [materials](../materials/materials.md) (blog/forum post) we ne
     * comments (in blog itself and on its Reddit/Hackernews announcements if present)
     * relevant links in text (need to be added to materials)
     * other Rust-performance-relevant posts on blog (posts which look relevant need to be added to materials)
+    * for articles check "Related work"
   - for forum posts be sure to check
     * suggested posts (need to be added to materials)
   - write short summary (in [materials](../materials/materials.md)):
