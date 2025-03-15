@@ -204,6 +204,8 @@ On the other hand, once all materials are analyzed we won't care about this file
   * LLVM: N/A
   * More materials: surveyed all links dating back to 2020 (incl.) and addded them to feature
 - Tighten Rust’s Belt: Shrinking Embedded Rust Binaries: https://dl.acm.org/doi/pdf/10.1145/3519941.3535075
+  * Assignee: yugr
+  * Status: in progress
 
 # Other
 
