@@ -9,6 +9,7 @@ This is the plan of the talk.
 - Just looking at asm code
   * inefficiencies may be due to bug / NYI feature in LLVM ("Sufficiently Smart Compiler")
   * should check what is NYI and can never be implemented in LLVM optimizer
+  * do not expect "heroic compiler"
 - Performance of parallel code
   * maybe next time
 - Container performance
@@ -32,8 +33,10 @@ Rust targets same problem area:
 
 # Rust performance issues
 
-Rust puts safety ahead of performance:
+Rust seems to put safety ahead of performance:
   - "Rust is a modern systems programming language focusing on safety, speed, and concurrency" ([Rust by Example](https://doc.rust-lang.org/rust-by-example/))
+  - but at the same time things which would have incurred too much overhead are allowed
+    * e.g. integer overflows not checked in release
 
 Some Rust's abstractions are NOT zero-cost (or at least less zero-cost than in C++) :
   - are by design more expensive than C++ equivalents
