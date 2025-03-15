@@ -135,6 +135,9 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Performance questions: https://users.rust-lang.org/t/performance-questions/45265
   * Assignee: yugr
   * Status: in progress
+  * Problem: C++ version was significantly faster
+  * Root cause: not determined (OP didn't continue on thread)
+  * More materials: nothing generic enough in suggested articles
 - bounds-check-cost: https://github.com/matklad/bounds-check-cost
   * Assignee: yugr
   * Status: DONE (10m)
