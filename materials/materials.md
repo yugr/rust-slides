@@ -135,7 +135,12 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Performance questions: https://users.rust-lang.org/t/performance-questions/45265
 - bounds-check-cost: https://github.com/matklad/bounds-check-cost
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (10m)
+  * Problem: studies influence of bounds checks on performance
+  * Root cause: matklad concludes that main cost is due to blocked autovec and checks themselves are cheap
+  * Solution: N/A (pure analysis)
+  * LLVM: N/A (pure analysis)
+  * More materials: not checked (~100 non-fork Rust repos)
 - Nine Rules for SIMD Acceleration of Your Rust Code (Part 1): https://www.reddit.com/r/rust/comments/18hj1m6/nine_rules_for_simd_acceleration_of_your_rust/
 - Taking Advantage of Auto-Vectorization in Rust: https://www.nickwilcox.com/blog/autovec/
 - Auto-Vectorization for Newer Instruction Sets in Rust: https://www.nickwilcox.com/blog/autovec2/
