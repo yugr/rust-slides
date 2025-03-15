@@ -184,7 +184,11 @@ On the other hand, once all materials are analyzed we won't care about this file
 # Panics
 
 - Rust panics under the hood: https://fractalfir.github.io/generated_html/rustc_codegen_clr_v0_2_1.html
+  * Assignee: yugr
+  * Status: in progress
 - Unwind considered harmful? https://smallcultfollowing.com/babysteps/blog/2024/05/02/unwind-considered-harmful/
+  * Assignee: yugr
+  * Status: in progress
 
 # Unsafe
 
