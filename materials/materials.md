@@ -216,9 +216,11 @@ On the other hand, once all materials are analyzed we won't care about this file
   * LLVM: N/A
   * More materials: no perf-related materials in past years (mainly async Rust)
 - "Исключения C++ через призму компиляторных оптимизаций" (https://www.youtube.com/watch?v=ItemByR4PRg)
-  * check if applicable
+  * Assignee: yugr
+  * Status: in progress
 - https://devblogs.microsoft.com/oldnewthing/20220228-00/?p=106296
-  * check if applicable
+  * Assignee: yugr
+  * Status: in progress
 
 # Unsafe
 
