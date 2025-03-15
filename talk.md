@@ -71,10 +71,6 @@ Main source of performance overhead: UB avoidance
     + https://www.youtube.com/watch?v=rZ7QQWKP8Rk
 - No dynamic stack allocation (`alloca`, VLAs)
 - Panic unwinding overhead
-  * panics involve stack unwinding and destructors so are definitely not free
-  * need to check if items from Roman's talk apply: "Исключения C++ через призму компиляторных оптимизаций" (https://www.youtube.com/watch?v=ItemByR4PRg)
-  * see also https://devblogs.microsoft.com/oldnewthing/20220228-00/?p=106296
-  * C++ has `-fno-exceptions`, is `panic=abort` same ?
 - Lack of type-based aliasing like in C (`-fstrict-aliasing`)
   * not considered important due to reference aliasing rules
   * but may be important for pointer operations in unsafe blocks
