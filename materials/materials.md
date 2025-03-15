@@ -185,10 +185,24 @@ On the other hand, once all materials are analyzed we won't care about this file
 
 - Rust panics under the hood: https://fractalfir.github.io/generated_html/rustc_codegen_clr_v0_2_1.html
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (15m)
+  * Problem: just explanation of how panics were implemented in Rust CLR
+  * Root cause: N/A
+  * Solution: N/A
+  * LLVM: N/A
+  * More materials: no perf-relevant materials on blog (author mainly concerned with codegen for CLR)
 - Unwind considered harmful? https://smallcultfollowing.com/babysteps/blog/2024/05/02/unwind-considered-harmful/
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (15m)
+  * Problem: panics introduce perf/size overheads and complicate some aspects of Rust programming
+  * Root cause: for perf/size they list landing pads and complicating compiler analyses
+  * Solution: suggest to (partially) remove panics from language
+  * LLVM: N/A
+  * More materials: no perf-related materials in past years (mainly async Rust)
+- "Исключения C++ через призму компиляторных оптимизаций" (https://www.youtube.com/watch?v=ItemByR4PRg)
+  * check if applicable
+- https://devblogs.microsoft.com/oldnewthing/20220228-00/?p=106296
+  * check if applicable
 
 # Unsafe
 
