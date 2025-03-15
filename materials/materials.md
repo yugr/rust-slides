@@ -133,6 +133,8 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Understanding Rusts Auto-Vectorization and Methods for speed: https://users.rust-lang.org/t/understanding-rusts-auto-vectorization-and-methods-for-speed-increase/84891/5 (reslicing technique)
 - We need to do better in the benchmarks game: https://users.rust-lang.org/t/we-need-to-do-better-in-the-benchmarks-game/7317/5
 - Performance questions: https://users.rust-lang.org/t/performance-questions/45265
+  * Assignee: yugr
+  * Status: in progress
 - bounds-check-cost: https://github.com/matklad/bounds-check-cost
   * Assignee: yugr
   * Status: DONE (10m)
