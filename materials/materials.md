@@ -215,12 +215,29 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Solution: suggest to (partially) remove panics from language
   * LLVM: N/A
   * More materials: no perf-related materials in past years (mainly async Rust)
-- "Исключения C++ через призму компиляторных оптимизаций" (https://www.youtube.com/watch?v=ItemByR4PRg)
+- Исключения C++ через призму компиляторных оптимизаций: https://www.youtube.com/watch?v=ItemByR4PRg
   * Assignee: yugr
-  * Status: in progress
-- https://devblogs.microsoft.com/oldnewthing/20220228-00/?p=106296
+  * Status: DONE (50m)
+  * Problem: C++ code is less performant than C even if exceptions are not thrown
+  * Root cause:
+    + discussion starts at 16:20
+    + more complex CFGs
+    + fewer peephole opportunities
+    + a lot of optimizations are (simplistically) disabled (this is also relevant for Rust !)
+  * Solution: `noexcept`, `-fno-exceptions`
+  * LLVM:
+    + PruneEH pass already exists and should be enabled for Rust
+    + ideally need to improve exceptions support in common opts (this would benefit C++ as well)
+  * More materials: no links in video
+- Zero-cost exceptions aren’t actually zero cost: https://devblogs.microsoft.com/oldnewthing/20220228-00/?p=106296
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (15m)
+  * Problem: ditto
+  * Root cause: article is too vague, it gives some ideas about what optimizations are disabled but then author retracts them in comments
+  * Solution: N/A
+  * LLVM: N/A
+  * More materials: added P2544R0 link
+- C++ exceptions are becoming more and more problematic: https://open-std.org/JTC1/SC22/WG21/docs/papers/2022/p2544r0.html
 
 # Unsafe
 
