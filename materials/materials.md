@@ -205,7 +205,14 @@ On the other hand, once all materials are analyzed we won't care about this file
   * More materials: surveyed all links dating back to 2020 (incl.) and addded them to feature
 - Tighten Rust’s Belt: Shrinking Embedded Rust Binaries: https://dl.acm.org/doi/pdf/10.1145/3519941.3535075
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (40m)
+  * Problem: same as above
+  * Root causes: save as above (+ also `.bss` problem with enum discriminators)
+  * Solution: same as above
+  * LLVM: paper suggests some optimizations: panic locations size (added to feature), devirtualization and interface minimization (do not look very promising so didn't copy them)
+  * More materials (in "Related work"):
+    + "Using C++ Efficiently In Embedded Applications" - nothing interesting
+    + "RustyGecko - Developing Rust on Bare-Metal" - no deep comparison with C
 
 # Other
 
