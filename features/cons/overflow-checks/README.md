@@ -1,9 +1,16 @@
 Rust does not check overflows in release (so I'm not sure we need this directory).
 On the other hand it does not assign `nsw`s to signed integer computations like C/C++.
 
+Note that overhead here is not the checks themselves but disabling of optimizations (e.g. vectorization).
+
+Android seems to enable overflow checks (UBsan, Isan) for critical components (written in C):
+  - https://android-developers.googleblog.com/2016/05/hardening-media-stack.html
+  - https://android-developers.googleblog.com/2018/06/compiler-based-security-mitigations-in.html
+
 # TODO
 
 - Add `nsw` to signed integers and compare perf of large and/or performance sensitive projects
+- Measure overhead via `-Z force-overflow-checks`
 
 # Inclusive ranges are slower than exclusive ones
 
