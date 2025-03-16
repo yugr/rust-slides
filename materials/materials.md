@@ -108,6 +108,7 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Does the compiler optimize moves? https://www.reddit.com/r/rust/comments/ykku69/does_the_compiler_optimize_moves/
   * this should be a dedicated perf issue
 - Rust `[#inline]` annotations discussion https://github.com/rust-lang/hashbrown/pull/119
+- Check for Integer Overflow by Default: https://github.com/rust-lang/rust/issues/47739
 
 # Data structures performance
 
