@@ -109,6 +109,7 @@ On the other hand, once all materials are analyzed we won't care about this file
   * this should be a dedicated perf issue
 - Rust `[#inline]` annotations discussion https://github.com/rust-lang/hashbrown/pull/119
 - Check for Integer Overflow by Default: https://github.com/rust-lang/rust/issues/47739
+- Myths and Legends about Integer Overflow in Rust: https://huonw.github.io/blog/2016/04/myths-and-legends-about-integer-overflow-in-rust/
 
 # Data structures performance
 
