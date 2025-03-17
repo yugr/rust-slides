@@ -3,6 +3,8 @@ All info about problems with indexing checks at runtime.
 matklad [claims](https://github.com/matklad/bounds-check-cost) that main problem with index checks
 is blockage of autovec (and maybe other optimizations) and check themselves are cheap.
 
+burntsushi [claims](https://news.ycombinator.com/item?id=14903258) that bounds checking is not the main problem with autovectorization
+
 # TODO
 
 - Disable index checks in compiler and compare perf of large and/or performance sensitive projects

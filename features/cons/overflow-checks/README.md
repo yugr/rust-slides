@@ -1,4 +1,8 @@
 Rust does not check overflows in release (so I'm not sure we need this directory).
+
+Rust does not check for signed integer overflow in release because it is fully specified as 2's complement wrapping (https://doc.rust-lang.org/book/ch03-02-data-types.html#integer-overflow).
+Rust suggests using `wrapping_*` methods to explicitly use this.
+
 On the other hand it does not assign `nsw`s to signed integer computations like C/C++.
 
 Note that overhead here is not the checks themselves but disabling of optimizations (e.g. vectorization).

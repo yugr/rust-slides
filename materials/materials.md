@@ -109,7 +109,10 @@ On the other hand, once all materials are analyzed we won't care about this file
   * this should be a dedicated perf issue
 - Rust `[#inline]` annotations discussion https://github.com/rust-lang/hashbrown/pull/119
   * Assignee: zakhar
-  * Status: in progress
+  * Status: Done (15m)
+  * Discussion mostly about `[#inline]` effect on compile time
+  * Not our topic
+  * More materials: N/A
 - Check for Integer Overflow by Default: https://github.com/rust-lang/rust/issues/47739
 - Myths and Legends about Integer Overflow in Rust: https://huonw.github.io/blog/2016/04/myths-and-legends-about-integer-overflow-in-rust/
 
@@ -200,6 +203,8 @@ On the other hand, once all materials are analyzed we won't care about this file
   * check comments
 - From 'Very Fast' to '~Fastest': Helping rust unleash compiler optimizations: https://blog.anubhab.me/tech/optimizing-diff-match-patch/
   * comments in https://www.reddit.com/r/rust/comments/1hsnnat/40_boost_in_text_diff_flow_just_by_facilitating/
+- Example of loop rewrite for vectorization https://github.com/dropbox/rust-brotli/blob/238c9c539b446d7d980e0a50795752c45dd3359e/src/enc/static_dict.rs lines 122 and 131
+- Discussion about explicit SIMD in Rust https://internals.rust-lang.org/t/getting-explicit-simd-on-stable-rust/4380/133
 
 # Panics
 
@@ -278,4 +283,13 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Rust inadequate for text compression codecs? https://news.ycombinator.com/item?id=43295908
 - Rust: Not So Great For Codec Implementing: https://news.ycombinator.com/item?id=14901443
   * Assignee: zakhar
-  * Status: in progress
+  * Status: DONE (80m)
+  * Problem: Borrow-checker limitations, not enough allocation control, weak macro system
+  * Solution: Wait until all the RFCs fixing these problems are implemented
+  * More materials:
+    + rust-brotli rewrite for vectorization example
+    + Why you should, actually, rewrite some of it in Rust
+    + Discussion about explicit SIMD in Rust
+    + Reddit comments to the same post
+- Reddit comments to 'Rust: Not So Great For Codec Implementing' https://www.reddit.com/r/rust/comments/6qv2s5/rust_not_so_great_for_codec_implementing/
+- Why you should, actually, rewrite some of it in Rust https://news.ycombinator.com/item?id=14753201
