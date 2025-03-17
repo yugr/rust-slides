@@ -108,6 +108,8 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Does the compiler optimize moves? https://www.reddit.com/r/rust/comments/ykku69/does_the_compiler_optimize_moves/
   * this should be a dedicated perf issue
 - Rust `[#inline]` annotations discussion https://github.com/rust-lang/hashbrown/pull/119
+  * Assignee: zakhar
+  * Status: in progress
 - Check for Integer Overflow by Default: https://github.com/rust-lang/rust/issues/47739
 - Myths and Legends about Integer Overflow in Rust: https://huonw.github.io/blog/2016/04/myths-and-legends-about-integer-overflow-in-rust/
 
@@ -275,3 +277,5 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Why I hate Rust programming language? https://www.reddit.com/r/programming/comments/n9l68o/why_i_hate_rust_programming_language/ (comments)
 - Rust inadequate for text compression codecs? https://news.ycombinator.com/item?id=43295908
 - Rust: Not So Great For Codec Implementing: https://news.ycombinator.com/item?id=14901443
+  * Assignee: zakhar
+  * Status: in progress
