@@ -70,6 +70,8 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Why Rust doesn't need a standard div_rem: An LLVM tale: https://codspeed.io/blog/why-rust-doesnt-need-a-standard-divrem (also comments in https://www.reddit.com/r/rust/comments/173wr86/why_rust_doesnt_need_a_standard_div_rem_an_llvm)
 - Asm snippets: https://www.eventhelix.com/rust/
 - Battle Of The Backends: Rust vs. Go vs. C# vs. Kotlin - inovex GmbH: https://www.inovex.de/de/blog/rust-vs-go-vs-c-vs-kotlin
+  * Assignee: yugr
+  * Status: in progress
 - How much does Rust's bounds checking actually cost?: https://blog.readyset.io/bounds-checks/
   * comments in https://news.ycombinator.com/item?id=33805419
 - A cool Rust optimization story: https://quickwit.io/blog/search-a-sorted-block
