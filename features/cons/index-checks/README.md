@@ -4,7 +4,7 @@ matklad [claims](https://github.com/matklad/bounds-check-cost) that main problem
 is blockage of autovec (and maybe other optimizations) and check themselves are cheap.
 Another example of blocked autovec: https://rust.godbolt.org/z/hccWGv889
 
-burntsushi [claims](https://news.ycombinator.com/item?id=14903258) that bounds checking is not the main problem with autovectorization
+burntsushi [claims](https://news.ycombinator.com/item?id=14903258) that bounds checking is not the only problem with autovectorization
 
 Note that bounds checks also take some I$ and branch predictor slots.
 
@@ -16,6 +16,7 @@ Feedback from Servo devs on bounds checks overhead: https://news.ycombinator.com
 
 - Disable index checks in compiler and compare perf of large and/or performance sensitive projects
   * patch to disable checks: https://blog.readyset.io/bounds-checks
+- Can we somehow measure how often compiler is able to remove index checks from loops ?
 
 # Combining multiple checks not optimized
 
@@ -23,6 +24,6 @@ Compiler does not combine multiple related index checks to same slice within sam
 See [upstream #50759](https://github.com/rust-lang/rust/issues/50759) for good example of this.
 
 Basically when accessing `h[0]` and then `h[1]` it has to first check `0` and then `1`
-because it tries to report exact error location.
+because it tries to report exact error location (or at least LLVM optimizer believes so).
 
 Programmers can use explicit `assert!` macro to allow compiler to optimize checks.
