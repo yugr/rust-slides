@@ -32,7 +32,7 @@ On the other hand, once all materials are analyzed we won't care about this file
   * More materials: no performance-related materials found in blog
 - Speed of Rust vs C: https://kornel.ski/rust-c-speed
   * Assignee: yugr
-  * Status: in progress (40m)
+  * Status: DONE (50m)
   * Problem: basic comparison of Rust/C (not C++!) performance features; in particular
     + LLVM optimizer is the same
     + Rust misses `alloca`/`computed goto`
@@ -50,6 +50,7 @@ On the other hand, once all materials are analyzed we won't care about this file
     + [Reddit](https://www.reddit.com/r/rust/comments/m427lj/speed_of_rust_vs_c/)
     + [HN](https://news.ycombinator.com/item?id=26443768)
     + [Another HN](https://news.ycombinator.com/item?id=39476941)
+    + no new links found (hoorah !)
 - An Optimization That’s Impossible in Rust! https://tunglevo.com/note/an-optimization-thats-impossible-in-rust/
   * Comments: https://www.reddit.com/r/rust/comments/1f87siw/an_optimization_thats_impossible_in_rust/
 - Rust превосходит по производительности C++ согласно результатам Benchmarks Game: https://habr.com/ru/articles/480608/
