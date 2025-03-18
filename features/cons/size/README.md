@@ -43,6 +43,8 @@ LTO and opt-level Z may also help (see [here](https://rustwasm.github.io/docs/bo
 More low-level magic can be done (see e.g. [Windows hacks](https://github.com/mcountryman/min-sized-rust-windows))
 but probly 99% of users will not use them anyway.
 
+Larger sizes also slow down compile-times: https://news.ycombinator.com/item?id=26451717
+
 # TODO
 
 - Make size comparison on Linux

@@ -32,7 +32,24 @@ On the other hand, once all materials are analyzed we won't care about this file
   * More materials: no performance-related materials found in blog
 - Speed of Rust vs C: https://kornel.ski/rust-c-speed
   * Assignee: yugr
-  * Status: in progress
+  * Status: in progress (40m)
+  * Problem: basic comparison of Rust/C (not C++!) performance features; in particular
+    + LLVM optimizer is the same
+    + Rust misses `alloca`/`computed goto`
+    + 64-bit offsets in Rust (so what ?)
+    + Rust iterators allow more efficient codegen
+    + UTF-8 strings are slower
+    + no IO buffering by default
+    + due to privacy control in Rust, libs may return their types by value (so that users can store them on stack) without disclosing library details
+      - stack-allocated structs can be better optimized
+      - this breaks ABI though
+    + Rust can inline functions from stdlib (C++ can too)
+    + Struct optimizations
+    + Fearless concurrency
+  * More materials: nothing on blog but some vibrant discussions in aggregators :
+    + [Reddit](https://www.reddit.com/r/rust/comments/m427lj/speed_of_rust_vs_c/)
+    + [HN](https://news.ycombinator.com/item?id=26443768)
+    + [Another HN](https://news.ycombinator.com/item?id=39476941)
 - An Optimization That’s Impossible in Rust! https://tunglevo.com/note/an-optimization-thats-impossible-in-rust/
   * Comments: https://www.reddit.com/r/rust/comments/1f87siw/an_optimization_thats_impossible_in_rust/
 - Rust превосходит по производительности C++ согласно результатам Benchmarks Game: https://habr.com/ru/articles/480608/
@@ -65,6 +82,7 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Is bound checking the only runtime cost of Rust? https://users.rust-lang.org/t/is-bound-checking-the-only-runtime-cost-of-rust/66661
 - Why is Rust slightly slower than C? https://news.ycombinator.com/item?id=20944403
 - Rewrite the VP9 codec library in Rust: https://news.ycombinator.com/item?id=39537735
+- Is C++ more performant than Rust? https://www.reddit.com/r/cpp/comments/17zaiu6/is_c_more_performant_than_rust/
 
 # Rust-specific opts
 
@@ -88,7 +106,7 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Problem: just comparing performance of some network app (no analysis)
 - How much does Rust's bounds checking actually cost? https://blog.readyset.io/bounds-checks/
   * Assignee: yugr
-  * Status: in progress (70m)
+  * Status: DONE (75m)
   * Problem: investigates overhead of bounds checking operations
   * Solution:
     + experiments with replacing accesses with `get_unchecked` and modifying compiler (!)
@@ -169,7 +187,7 @@ On the other hand, once all materials are analyzed we won't care about this file
 - We need to do better in the benchmarks game: https://users.rust-lang.org/t/we-need-to-do-better-in-the-benchmarks-game/7317/5
 - Performance questions: https://users.rust-lang.org/t/performance-questions/45265
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (5m)
   * Problem: C++ version was significantly faster
   * Root cause: not determined (OP didn't continue on thread)
   * More materials: nothing generic enough in suggested articles

@@ -10,7 +10,8 @@ This is the plan of the talk.
   * inefficiencies may be due to bug / NYI feature in LLVM ("Sufficiently Smart Compiler")
   * should check what is NYI and can never be implemented in LLVM optimizer
   * do not expect "heroic compiler"
-- Performance of parallel code
+- Performance of parallel code ("fearless concurrency")
+  * well known and discussed in many posts and presentations
   * maybe next time
 - Container performance
   * e.g. `HashMap` is known to be much better than `std::unordered_map` (and `BTreeMap` than `std::map`) but in practice everyone just uses Abseil or Boost maps
