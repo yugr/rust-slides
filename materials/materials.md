@@ -74,6 +74,8 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Status: DONE (0m)
   * Problem: just comparing performance of some network app (no analysis)
 - How much does Rust's bounds checking actually cost?: https://blog.readyset.io/bounds-checks/
+  * Assignee: yugr
+  * Status: in progress
   * comments in https://news.ycombinator.com/item?id=33805419
 - A cool Rust optimization story: https://quickwit.io/blog/search-a-sorted-block
 - Inefficient codegen when accessing a vector with literal indices: https://github.com/rust-lang/rust/issues/50759
