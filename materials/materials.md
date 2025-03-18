@@ -27,7 +27,9 @@ On the other hand, once all materials are analyzed we won't care about this file
   * More materials: no interesting mats in suggestions
 - The relative performance of C and Rust: https://bcantrill.dtrace.org/2018/09/28/the-relative-performance-of-c-and-rust/
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (15m)
+  * Problem: studies performance of Rust data structures vs. some custom C equivalents (irrelevant)
+  * More materials: no performance-related materials found in blog
 - Speed of Rust vs C: https://kornel.ski/rust-c-speed
 - An Optimization That’s Impossible in Rust! https://tunglevo.com/note/an-optimization-thats-impossible-in-rust/
   * Comments: https://www.reddit.com/r/rust/comments/1f87siw/an_optimization_thats_impossible_in_rust/
