@@ -2,12 +2,20 @@ All info about problems with indexing checks at runtime.
 
 matklad [claims](https://github.com/matklad/bounds-check-cost) that main problem with index checks
 is blockage of autovec (and maybe other optimizations) and check themselves are cheap.
+Another example of blocked autovec: https://rust.godbolt.org/z/hccWGv889
 
 burntsushi [claims](https://news.ycombinator.com/item?id=14903258) that bounds checking is not the main problem with autovectorization
+
+Note that bounds checks also take some I$ and branch predictor slots.
+
+Bounds checks can be eliminated via asserts (https://rust.godbolt.org/z/GPMcYd371) or iterators.
+
+Feedback from Servo devs on bounds checks overhead: https://news.ycombinator.com/item?id=10268151
 
 # TODO
 
 - Disable index checks in compiler and compare perf of large and/or performance sensitive projects
+  * patch to disable checks: https://blog.readyset.io/bounds-checks
 
 # Combining multiple checks not optimized
 

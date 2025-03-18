@@ -52,6 +52,9 @@ On the other hand, once all materials are analyzed we won't care about this file
 - What makes Rust faster than C/C++? https://www.reddit.com/r/rust/comments/px72r1/what_makes_rust_faster_than_cc/
 - Why ISN'T Rust faster than C? https://www.reddit.com/r/rust/comments/1at3r6d/why_isnt_rust_faster_than_c_given_it_can_leverage/
 - Why is Rust not able to optimize this? https://www.reddit.com/r/rust/comments/181tp1a/why_is_rust_not_able_to_optimize_this/ (signed overflow)
+- Is bound checking the only runtime cost of Rust? https://users.rust-lang.org/t/is-bound-checking-the-only-runtime-cost-of-rust/66661
+- Why is Rust slightly slower than C? https://news.ycombinator.com/item?id=20944403
+- Rewrite the VP9 codec library in Rust: https://news.ycombinator.com/item?id=39537735
 
 # Rust-specific opts
 
@@ -73,10 +76,17 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Assignee: yugr
   * Status: DONE (0m)
   * Problem: just comparing performance of some network app (no analysis)
-- How much does Rust's bounds checking actually cost?: https://blog.readyset.io/bounds-checks/
+- How much does Rust's bounds checking actually cost? https://blog.readyset.io/bounds-checks/
   * Assignee: yugr
-  * Status: in progress
-  * comments in https://news.ycombinator.com/item?id=33805419
+  * Status: in progress (60m)
+  * Problem: investigates overhead of bounds checking operations
+  * Solution:
+    + experiments with replacing accesses with `get_unchecked` and modifying compiler (!)
+    + does not provide any analysis of results, asm, etc.
+    + no noticeable changes on her machine but up to 4x according to comments on Reddit
+  * More materials:
+    + a lot of comments on [Reddit](https://news.ycombinator.com/item?id=33805419) and [HackerNews](https://news.ycombinator.com/item?id=33805419)
+    + added new materials
 - A cool Rust optimization story: https://quickwit.io/blog/search-a-sorted-block
 - Inefficient codegen when accessing a vector with literal indices: https://github.com/rust-lang/rust/issues/50759
   * Assignee: yugr
@@ -120,6 +130,9 @@ On the other hand, once all materials are analyzed we won't care about this file
   * More materials: N/A
 - Check for Integer Overflow by Default: https://github.com/rust-lang/rust/issues/47739
 - Myths and Legends about Integer Overflow in Rust: https://huonw.github.io/blog/2016/04/myths-and-legends-about-integer-overflow-in-rust/
+- How are bounds checks optimized away? https://users.rust-lang.org/t/how-are-bounds-checks-optimized-away/91737/2
+- Rust's Vec indexing is bound-checked by default: https://news.ycombinator.com/item?id=30867188
+- Iterators and eliminating all runtime bounds checks: https://users.rust-lang.org/t/iterators-and-eliminating-all-runtime-bounds-checks/13935
 
 # Data structures performance
 

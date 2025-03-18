@@ -24,7 +24,9 @@ For each piece of [materials](../materials/materials.md) (blog/forum post) we ne
   - carefully read/watch it
   - if material is in wrong section - move appropriately
   - for blogposts be sure to check
-    * comments (in blog itself and on its Reddit/Hackernews announcements if present)
+    * comments in blog itself and in its Reddit/Hackernews announcements :
+      + Reddit: `TOPIC site:https://news.ycombinator.com`
+      + HackerNews: `TOPIC site:https://news.ycombinator.com`
     * relevant links in text (need to be added to materials)
     * other Rust-performance-relevant posts on blog (posts which look relevant need to be added to materials)
     * for articles check "Related work"
