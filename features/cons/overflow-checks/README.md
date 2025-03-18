@@ -4,6 +4,7 @@ Rust does not check for signed integer overflow in release because it is fully s
 Rust suggests using `wrapping_*` methods to explicitly use this.
 
 On the other hand it does not assign `nsw`s to signed integer computations like C/C++.
+See https://kristerw.blogspot.com/2016/02/how-undefined-signed-overflow-enables.html for example optimizations based on `nsw`.
 
 Note that overhead here is not the checks themselves but disabling of optimizations (e.g. vectorization).
 

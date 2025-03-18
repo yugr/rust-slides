@@ -78,14 +78,14 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Problem: just comparing performance of some network app (no analysis)
 - How much does Rust's bounds checking actually cost? https://blog.readyset.io/bounds-checks/
   * Assignee: yugr
-  * Status: in progress (60m)
+  * Status: in progress (70m)
   * Problem: investigates overhead of bounds checking operations
   * Solution:
     + experiments with replacing accesses with `get_unchecked` and modifying compiler (!)
     + does not provide any analysis of results, asm, etc.
     + no noticeable changes on her machine but up to 4x according to comments on Reddit
   * More materials:
-    + a lot of comments on [Reddit](https://news.ycombinator.com/item?id=33805419) and [HackerNews](https://news.ycombinator.com/item?id=33805419)
+    + a lot of comments on [Reddit](https://www.reddit.com/r/rust/comments/z92vid/measuring_how_much_rusts_bounds_checking_actually/), [Reddit](https://www.reddit.com/r/programming/comments/z9hjpk/how_much_does_rusts_bounds_checking_actually_cost/) and [HackerNews](https://news.ycombinator.com/item?id=33805419)
     + added new materials
 - A cool Rust optimization story: https://quickwit.io/blog/search-a-sorted-block
 - Inefficient codegen when accessing a vector with literal indices: https://github.com/rust-lang/rust/issues/50759
@@ -299,7 +299,7 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Leaving Rust gamedev after 3 years: https://loglog.games/blog/leaving-rust-gamedev/ (also comments in https://news.ycombinator.com/item?id=40172033 and https://habr.com/ru/articles/813597/)
 - Why I hate Rust programming language? https://www.reddit.com/r/programming/comments/n9l68o/why_i_hate_rust_programming_language/ (comments)
 - Rust inadequate for text compression codecs? https://news.ycombinator.com/item?id=43295908
-- Rust: Not So Great For Codec Implementing: https://news.ycombinator.com/item?id=14901443
+- Rust: Not So Great For Codec Implementing: https://codecs.multimedia.cx/2017/07/rust-not-so-great-for-codec-implementing/
   * Assignee: zakhar
   * Status: DONE (80m)
   * Problem: Borrow-checker limitations, not enough allocation control, weak macro system
@@ -308,6 +308,6 @@ On the other hand, once all materials are analyzed we won't care about this file
     + rust-brotli rewrite for vectorization example
     + Why you should, actually, rewrite some of it in Rust
     + Discussion about explicit SIMD in Rust
-    + Reddit comments to the same post
+    + Reddit comments to the same post (https://codecs.multimedia.cx/2017/07/rust-not-so-great-for-codec-implementing/)
 - Reddit comments to 'Rust: Not So Great For Codec Implementing' https://www.reddit.com/r/rust/comments/6qv2s5/rust_not_so_great_for_codec_implementing/
 - Why you should, actually, rewrite some of it in Rust https://news.ycombinator.com/item?id=14753201
