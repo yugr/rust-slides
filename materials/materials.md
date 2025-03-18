@@ -22,7 +22,9 @@ On the other hand, once all materials are analyzed we won't care about this file
 
 - C++ faster and safer by Rust: benchmarked by Yandex: https://habr.com/ru/articles/492410/
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (15m)
+  * Problem: response to critique of Rust by Polukhin; they confirm that comparison of asm of microbenchmarks is pointless
+  * More materials: no interesting mats in suggestions
 - The relative performance of C and Rust: https://bcantrill.dtrace.org/2018/09/28/the-relative-performance-of-c-and-rust/
 - Speed of Rust vs C: https://kornel.ski/rust-c-speed
 - An Optimization That’s Impossible in Rust! https://tunglevo.com/note/an-optimization-thats-impossible-in-rust/
