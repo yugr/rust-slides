@@ -26,6 +26,8 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Problem: response to critique of Rust by Polukhin; they confirm that comparison of asm of microbenchmarks is pointless
   * More materials: no interesting mats in suggestions
 - The relative performance of C and Rust: https://bcantrill.dtrace.org/2018/09/28/the-relative-performance-of-c-and-rust/
+  * Assignee: yugr
+  * Status: in progress
 - Speed of Rust vs C: https://kornel.ski/rust-c-speed
 - An Optimization That’s Impossible in Rust! https://tunglevo.com/note/an-optimization-thats-impossible-in-rust/
   * Comments: https://www.reddit.com/r/rust/comments/1f87siw/an_optimization_thats_impossible_in_rust/
