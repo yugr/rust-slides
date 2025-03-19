@@ -55,7 +55,11 @@ On the other hand, once all materials are analyzed we won't care about this file
 - An Optimization That’s Impossible in Rust! https://tunglevo.com/note/an-optimization-thats-impossible-in-rust/
   * Comments: https://www.reddit.com/r/rust/comments/1f87siw/an_optimization_thats_impossible_in_rust/
 - Rust превосходит по производительности C++ согласно результатам Benchmarks Game: https://habr.com/ru/articles/480608/
+  * Assignee: yugr
+  * Status: in progress
 - Rust vs. C++ на алгоритмических задачах: https://habr.com/ru/articles/344282/
+  * Assignee: yugr
+  * Status: in progress
 - Небезопасный Rust сложнее C: https://habr.com/ru/companies/ruvds/articles/858246/
 - Safety vs Performance. A case study of C, C++ and Rust sort implementations: https://github.com/Voultapher/sort-research-rs/blob/main/writeup/sort_safety/text.md
 - Loop Performance in Rust: https://www.youtube.com/watch?v=E37rSIhWjso
