@@ -58,19 +58,22 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Небезопасный Rust сложнее C: https://habr.com/ru/companies/ruvds/articles/858246/
 - Safety vs Performance. A case study of C, C++ and Rust sort implementations: https://github.com/Voultapher/sort-research-rs/blob/main/writeup/sort_safety/text.md
 - Loop Performance in Rust: https://www.youtube.com/watch?v=E37rSIhWjso
-- Rust vs C++ Theoretical Performance: https://users.rust-lang.org/t/rust-vs-c-theoretical-performance/4069/8
-- Looking for help understanding Rust’s performance vs C++: https://users.rust-lang.org/t/looking-for-help-understanding-rusts-performance-vs-c/30469/27
-- Performance of array access vs C: https://users.rust-lang.org/t/performance-of-array-access-vs-c/43522/13
-- Looking for help understanding Rust’s performance vs C++: https://users.rust-lang.org/t/looking-for-help-understanding-rusts-performance-vs-c/30469/22
-- Executable size and performance vs. C? https://users.rust-lang.org/t/executable-size-and-performance-vs-c/4496/30
-- Rust vs. C vs. Go runtime speed comparison: https://users.rust-lang.org/t/rust-vs-c-vs-go-runtime-speed-comparison/104107/13
-- Performance issue with C-array like computation: https://users.rust-lang.org/t/performance-issue-with-c-array-like-computation-2-times-worst-than-naive-java/9807/49
-- Simple Rust and C# performance comparison: https://users.rust-lang.org/t/simple-rust-and-c-performance-comparison/42970/3
-- Why is C++ still beating Rust at performance in some places? https://users.rust-lang.org/t/why-is-c-still-beating-rust-at-performance-in-some-places/95877/4
+- Rust vs C++ Theoretical Performance: https://users.rust-lang.org/t/rust-vs-c-theoretical-performance/4069
+  * Assignee: yugr
+  * Status: in progress
+- Looking for help understanding Rust’s performance vs C++: https://users.rust-lang.org/t/looking-for-help-understanding-rusts-performance-vs-c/30469
+  * Assignee: yugr
+  * Status: in progress
+- Performance of array access vs C: https://users.rust-lang.org/t/performance-of-array-access-vs-c/43522
+- Looking for help understanding Rust’s performance vs C++: https://users.rust-lang.org/t/looking-for-help-understanding-rusts-performance-vs-c/30469
+- Executable size and performance vs. C? https://users.rust-lang.org/t/executable-size-and-performance-vs-c/4496
+- Rust vs. C vs. Go runtime speed comparison: https://users.rust-lang.org/t/rust-vs-c-vs-go-runtime-speed-comparison/104107
+- Performance issue with C-array like computation: https://users.rust-lang.org/t/performance-issue-with-c-array-like-computation-2-times-worst-than-naive-java/9807
+- Simple Rust and C# performance comparison: https://users.rust-lang.org/t/simple-rust-and-c-performance-comparison/42970
+- Why is C++ still beating Rust at performance in some places? https://users.rust-lang.org/t/why-is-c-still-beating-rust-at-performance-in-some-places/95877
 - Rust vs. C++: Fine-grained Performance: https://users.rust-lang.org/t/rust-vs-c-fine-grained-performance/4407
 - A good performance comparision C and Rust: https://users.rust-lang.org/t/a-good-performance-comparision-c-and-rust/5901/7
 - Rust-specific code optimisations vs other languages: https://users.rust-lang.org/t/rust-specific-code-optimisations-vs-other-languages/49663
-- Rust-specific code optimisations vs other languages: https://users.rust-lang.org/t/rust-specific-code-optimisations-vs-other-languages/49663/9
 - How to speed up this rust code? I’m measuring a 30% slowdown versus the C++ version: https://users.rust-lang.org/t/how-to-speed-up-this-rust-code-im-measuring-a-30-slowdown-versus-the-c-version/1488
 - Goals and priorities for C++: https://internals.rust-lang.org/t/goals-and-priorities-for-c/12031/32 (some points on Rust perf features like lack of fast-math or move semantics)
 - Zero cost abstractions: Rust vs C++: https://www.rottedfrog.co.uk/?p=24
@@ -89,7 +92,7 @@ On the other hand, once all materials are analyzed we won't care about this file
 
 - Non-aliasing guarantees of &mut T and rustc optimization: https://users.rust-lang.org/t/non-aliasing-guarantees-of-mut-t-and-rustc-optimization/34386
 - Possible Rust-specific optimizations: https://users.rust-lang.org/t/possible-rust-specific-optimizations/79895/2 (also https://habr.com/ru/companies/beget/articles/842868/)
-- What kind of performance rust is trying to achieve? https://users.rust-lang.org/t/what-kind-of-performance-rust-is-trying-to-achieve/1674/4
+- What kind of performance rust is trying to achieve? https://users.rust-lang.org/t/what-kind-of-performance-rust-is-trying-to-achieve/1674
 
 # Compiler codegen
 
@@ -159,7 +162,7 @@ On the other hand, once all materials are analyzed we won't care about this file
   * More materials: N/A
 - Check for Integer Overflow by Default: https://github.com/rust-lang/rust/issues/47739
 - Myths and Legends about Integer Overflow in Rust: https://huonw.github.io/blog/2016/04/myths-and-legends-about-integer-overflow-in-rust/
-- How are bounds checks optimized away? https://users.rust-lang.org/t/how-are-bounds-checks-optimized-away/91737/2
+- How are bounds checks optimized away? https://users.rust-lang.org/t/how-are-bounds-checks-optimized-away/91737
 - Rust's Vec indexing is bound-checked by default: https://news.ycombinator.com/item?id=30867188
 - Iterators and eliminating all runtime bounds checks: https://users.rust-lang.org/t/iterators-and-eliminating-all-runtime-bounds-checks/13935
 
@@ -183,9 +186,9 @@ On the other hand, once all materials are analyzed we won't care about this file
   * https://towardsdatascience.com/nine-rules-for-simd-acceleration-of-your-rust-code-part-1-c16fe639ce21
   * https://medium.com/towards-data-science/nine-rules-for-simd-acceleration-of-your-rust-code-part-2-6a104b3be6f3
 - Taming Floating-Point Sums: https://orlp.net/blog/taming-float-sums/
-- Auto-vectorization in Rust: https://users.rust-lang.org/t/auto-vectorization-in-rust/24379/14
-- Understanding Rusts Auto-Vectorization and Methods for speed: https://users.rust-lang.org/t/understanding-rusts-auto-vectorization-and-methods-for-speed-increase/84891/5 (reslicing technique)
-- We need to do better in the benchmarks game: https://users.rust-lang.org/t/we-need-to-do-better-in-the-benchmarks-game/7317/5
+- Auto-vectorization in Rust: https://users.rust-lang.org/t/auto-vectorization-in-rust/24379
+- Understanding Rusts Auto-Vectorization and Methods for speed: https://users.rust-lang.org/t/understanding-rusts-auto-vectorization-and-methods-for-speed-increase/84891 (reslicing technique)
+- We need to do better in the benchmarks game: https://users.rust-lang.org/t/we-need-to-do-better-in-the-benchmarks-game/7317
 - Performance questions: https://users.rust-lang.org/t/performance-questions/45265
   * Assignee: yugr
   * Status: DONE (5m)
@@ -224,14 +227,14 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Bringing runtime checks to compile time in Rust: https://ktkaufman03.github.io/blog/2023/04/20/rust-compile-time-checks
 - Optimization story - quantum mechanics simulation speedup: https://tinkering.xyz/fmo-optimization-story
 - Benchmarking and Optimization of Rust Libraries by Paul Mason: https://www.youtube.com/watch?v=d2ZQ9-4ZJmQ&t=749s
-- Rust newbie: Algorithm performance question: https://users.rust-lang.org/t/rust-newbie-algorithm-performance-question/47413/11
+- Rust newbie: Algorithm performance question: https://users.rust-lang.org/t/rust-newbie-algorithm-performance-question/47413
 - Why my Rust multithreaded solution is slow as compared: https://users.rust-lang.org/t/why-my-rust-multithreaded-solution-is-slow-as-compared-to-the-same-c-solution/95581
-- A performance problem compared with Julia: https://users.rust-lang.org/t/a-performance-problem-compared-with-julia/51871/18
-- Help comparing Rust vs Julia speed: https://users.rust-lang.org/t/help-comparing-rust-vs-julia-speed/54514/11
-- Optimizing linear algebra code: https://users.rust-lang.org/t/optimizing-linear-algebra-code/39433/14
+- A performance problem compared with Julia: https://users.rust-lang.org/t/a-performance-problem-compared-with-julia/51871
+- Help comparing Rust vs Julia speed: https://users.rust-lang.org/t/help-comparing-rust-vs-julia-speed/54514
+- Optimizing linear algebra code: https://users.rust-lang.org/t/optimizing-linear-algebra-code/39433
 - Rust program has only 42% the speed of similar c++ program: https://users.rust-lang.org/t/rust-program-has-only-42-the-speed-of-similar-c-program/73738
-- Performance issue - High complexity code: https://users.rust-lang.org/t/performance-issue-high-complexity-code/40241/17
-- Performance question: https://users.rust-lang.org/t/performance-question/54977/8
+- Performance issue - High complexity code: https://users.rust-lang.org/t/performance-issue-high-complexity-code/40241
+- Performance question: https://users.rust-lang.org/t/performance-question/54977
 - Rust performance help (convolution): https://users.rust-lang.org/t/rust-performance-help-convolution/44075
 - Optimization comparison: Vec vs array and for vs while: https://internals.rust-lang.org/t/optimization-comparison-vec-vs-array-and-for-vs-while/16410
 - Performance optimization, and how to do it wrong: https://genna.win/blog/convolution-simd/
