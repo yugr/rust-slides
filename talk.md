@@ -11,6 +11,7 @@ This is the plan of the talk.
   * should check what is NYI and can never be implemented in LLVM optimizer
   * do not expect "heroic compiler"
 - Performance of parallel code ("fearless concurrency")
+  * claimed to be underlying reason of `ripgrep` success by its author
   * well known and discussed in many posts and presentations
   * maybe next time
 - Container performance
