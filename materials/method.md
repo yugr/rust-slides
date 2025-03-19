@@ -18,8 +18,11 @@ Look for any mentions of `/performance|optimizations|compiler|inefficient|code ?
   - Reddit
     * general:
       + https://www.reddit.com/r/rust/search/?q=optimize&type=posts and https://www.reddit.com/r/rust/search/?q=performance&type=posts
-    * burntsushi (regex):
-      + https://www.reddit.com/user/burntsushi/search/?q=optimize&type=comments and https://www.reddit.com/user/burntsushi/search/?q=performance&type=comments
+    * top-1:
+      + burntsushi (regex):
+        - https://www.reddit.com/user/burntsushi/search/?q=optimize&type=comments and https://www.reddit.com/user/burntsushi/search/?q=performance&type=comments
+      + Shnatsel :
+        - https://www.reddit.com/user/Shnatsel/search/?q=optimize&type=comments and https://www.reddit.com/user/Shnatsel/search/?q=performance&type=comments
 
 Check Github for innate (unfixable, by design) performance issues :
   - rejected opts: https://github.com/rust-lang/rust/issues?q=is%3Aissue%20state%3Aclosed%20reason%3Anot-planned%20label%3AI-slow
