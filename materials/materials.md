@@ -15,6 +15,7 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Rust design patterns: https://softwarepatternslexicon.com/patterns-rust/
 - Rust Performance Book (by Nethercote): https://nnethercote.github.io/perf-book/
   * pay attention to links at https://nnethercote.github.io/perf-book/bounds-checks.html
+  * comments: https://www.reddit.com/r/rust/comments/jvmb8u/the_rust_performance_book/
 - Some general guidelines from Redox OS https://doc.redox-os.org/book/rusting-properly.html
 - TODO(gh-3) survey [other projects](real-projects.md)
 
@@ -176,6 +177,8 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Rust's Vec indexing is bound-checked by default: https://news.ycombinator.com/item?id=30867188
 - Iterators and eliminating all runtime bounds checks: https://users.rust-lang.org/t/iterators-and-eliminating-all-runtime-bounds-checks/13935
 - How to zip two slices efficiently: https://users.rust-lang.org/t/how-to-zip-two-slices-efficiently/2048
+- How to avoid bounds checks in Rust without unsafe: https://shnatsel.medium.com/how-to-avoid-bounds-checks-in-rust-without-unsafe-f65e618b4c1e
+- Inline In Rust: Inline In Rust: https://matklad.github.io/2021/07/09/inline-in-rust.html
 
 # Data structures performance
 
@@ -220,6 +223,9 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Can You Trust a Compiler to Optimize Your Code? https://matklad.github.io/2023/04/09/can-you-trust-a-compiler-to-optimize-your-code.html
   * Comments in https://www.reddit.com/r/rust/comments/15f5p94/can_you_trust_a_compiler_to_optimize_your_code/
 - Iterator::max with reference-type items cannot leverage SIMD instructions: https://github.com/rust-lang/rust/issues/106539
+- SIMD Vector/Slice/Chunk Addition: https://www.reddit.com/r/rust/comments/154vowr/simd_vectorslicechunk_addition/
+- simd-itertools: simd-accelerated iterators for "find", "filter", "contains" and many more: https://www.reddit.com/r/rust/comments/1e3ps2a/simditertools_simdaccelerated_iterators_for_find/
+- Memory-safe PNG decoders now vastly outperform C PNG libraries: https://www.reddit.com/r/rust/comments/1ha7uyi/memorysafe_png_decoders_now_vastly_outperform_c/
 
 # Manual optimizations
 
@@ -249,6 +255,7 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Rust performance help (convolution): https://users.rust-lang.org/t/rust-performance-help-convolution/44075
 - Optimization comparison: Vec vs array and for vs while: https://internals.rust-lang.org/t/optimization-comparison-vec-vs-array-and-for-vs-while/16410
 - Performance optimization, and how to do it wrong: https://genna.win/blog/convolution-simd/
+  * comments: https://www.reddit.com/r/rust/comments/1j2iqhq/performance_optimization_and_how_to_do_it_wrong/
 - Code critique/review request: https://www.reddit.com/r/learnrust/comments/xllzqm/code_critiquereview_request/ (comments)
 - When Zero Cost Abstractions Aren’t Zero Cost: https://www.reddit.com/r/rust/comments/p0ul6b/when_zero_cost_abstractions_arent_zero_cost/
 - Achieving warp speed with Rust: https://gist.github.com/jFransham/369a86eff00e5f280ed25121454acec1
@@ -260,6 +267,8 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Rust Performance Pitfalls: https://llogiq.github.io/2017/06/01/perf-pitfalls.html
 - Where should I start if I want to squeeze out as much performance as I can from my rust code? https://www.reddit.com/r/rust/comments/bb5lnj/where_should_i_start_if_i_want_to_squeeze_out_as/
 - How to avoid bounds checks in Rust: https://shnatsel.medium.com/how-to-avoid-bounds-checks-in-rust-without-unsafe-f65e618b4c1e
+  * this article is very important for bounds checking part
+  * comments: https://www.reddit.com/r/rust/comments/10edmjf/how_to_avoid_bounds_checks_in_rust_without_unsafe/
 - Unnecessary Optimization in Rust: https://www.reddit.com/r/rust/comments/1hk0bry/unnecessary_optimization_in_rust_hamming/
   * check comments
 - From 'Very Fast' to '~Fastest': Helping rust unleash compiler optimizations: https://blog.anubhab.me/tech/optimizing-diff-match-patch/
@@ -268,6 +277,9 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Discussion about explicit SIMD in Rust https://internals.rust-lang.org/t/getting-explicit-simd-on-stable-rust/4380/133
 - Optimizing rav1d, an AV1 Decoder in Rust: https://www.memorysafety.org/blog/rav1d-performance-optimization/
   * comments in https://www.reddit.com/r/rust/comments/1fdzu7z/optimizing_rav1d_an_av1_decoder_in_rust/
+- Porting C to Rust for a Fast and Safe AV1 Media Decoder: https://www.memorysafety.org/blog/porting-c-to-rust-for-av1/
+  * this contains example of efficient implementation of self-referential struct
+- Safe elimination of unnecessary bound checks: https://www.reddit.com/r/rust/comments/1iqev5s/safe_elimination_of_unnecessary_bound_checks/
 
 # Panics
 
@@ -317,6 +329,8 @@ On the other hand, once all materials are analyzed we won't care about this file
   * need to be super-attentive to this post, this may be key to how we treat unsafe in our talk
 - Implementing a VM: how unsafe should I go? https://www.reddit.com/r/rust/comments/n8yy7z/implementing_a_vm_how_unsafe_should_i_go/
 - Good example of high performance Rust project without unsafe code? https://www.reddit.com/r/rust/comments/we91es/good_example_of_high_performance_rust_project/
+- How do you all think about the `unsafe` vs zero-cost trade off? https://www.reddit.com/r/rust/comments/f5wgsn/how_do_you_all_think_about_the_unsafe_vs_zerocost/
+- Unsafe Rust is Harder Than C: https://www.reddit.com/r/rust/comments/1gbqy6c/unsafe_rust_is_harder_than_c/
 
 # Code size
 

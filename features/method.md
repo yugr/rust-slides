@@ -44,6 +44,7 @@ For each piece of [materials](../materials/materials.md) (blog/forum post) we ne
   - mark very high quality/influential posts in dedicated section in [gems.md](../materials/gems.md)
     * e.g. with useful methodology, important ideas, good explanation of some subject, etc.
     * such posts MUST be read by all team members
+    * such posts will be part of recommended readings
 
 When commiting changes
   - change Status to DONE and add how much time you spent on it (to help with future planning)
