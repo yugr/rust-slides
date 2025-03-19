@@ -60,16 +60,21 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Loop Performance in Rust: https://www.youtube.com/watch?v=E37rSIhWjso
 - Rust vs C++ Theoretical Performance: https://users.rust-lang.org/t/rust-vs-c-theoretical-performance/4069
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (30m)
   * Discussion about Rust potential improvements over C++:
     + niche optimization
     + shared refs guarantee immutability
     + aliasing
     + non-nullability of references
-  * More materials: added some more linked mats
+  * More materials: added some more linked mats and started looking at Shnatsel's posts
 - Looking for help understanding Rust’s performance vs C++: https://users.rust-lang.org/t/looking-for-help-understanding-rusts-performance-vs-c/30469
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (15m)
+  * Problem: matrix multiply code is slower than C++
+  * Root cause: bounds checks can not be eliminated
+  * Solution: suggested to construct custom slice or use `get_unchecked`
+  * LLVM: can not be optimized (data struct is too complex: `Vec<Vec<f64>>`)
+  * More materials: 
 - Performance of array access vs C: https://users.rust-lang.org/t/performance-of-array-access-vs-c/43522
 - Executable size and performance vs. C? https://users.rust-lang.org/t/executable-size-and-performance-vs-c/4496
 - Rust vs. C vs. Go runtime speed comparison: https://users.rust-lang.org/t/rust-vs-c-vs-go-runtime-speed-comparison/104107
@@ -261,6 +266,8 @@ On the other hand, once all materials are analyzed we won't care about this file
   * comments in https://www.reddit.com/r/rust/comments/1hsnnat/40_boost_in_text_diff_flow_just_by_facilitating/
 - Example of loop rewrite for vectorization https://github.com/dropbox/rust-brotli/blob/238c9c539b446d7d980e0a50795752c45dd3359e/src/enc/static_dict.rs lines 122 and 131
 - Discussion about explicit SIMD in Rust https://internals.rust-lang.org/t/getting-explicit-simd-on-stable-rust/4380/133
+- Optimizing rav1d, an AV1 Decoder in Rust: https://www.memorysafety.org/blog/rav1d-performance-optimization/
+  * comments in https://www.reddit.com/r/rust/comments/1fdzu7z/optimizing_rav1d_an_av1_decoder_in_rust/
 
 # Panics
 

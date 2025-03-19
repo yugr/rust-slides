@@ -1,4 +1,6 @@
-All info about problems with indexing checks at runtime.
+All info about problems with bounds checks at runtime.
+
+# Problems caused by bounds checks
 
 matklad [claims](https://github.com/matklad/bounds-check-cost) that main problem with index checks
 is blockage of autovec (and maybe other optimizations) and check themselves are cheap.
@@ -6,11 +8,23 @@ Another example of blocked autovec: https://rust.godbolt.org/z/hccWGv889
 
 burntsushi [claims](https://news.ycombinator.com/item?id=14903258) that bounds checking is not the only problem with autovectorization
 
+Feedback from Servo devs on bounds checks overhead: https://news.ycombinator.com/item?id=10268151
+
 Note that bounds checks also take some I$ and branch predictor slots.
 
-Bounds checks can be eliminated via asserts (https://rust.godbolt.org/z/GPMcYd371) or iterators.
+# Solutions
 
-Feedback from Servo devs on bounds checks overhead: https://news.ycombinator.com/item?id=10268151
+Bounds checks can be removed via
+  - using iterators instead of indexes (this is not always possible)
+  - using asserts (https://rust.godbolt.org/z/GPMcYd371)
+  - constructing pre-checked slices:
+```
+let len = vec.len();
+let slice = &vec[0..len];
+for i in 0..len {
+    slice[i] // no bounds check
+}
+```
 
 # TODO
 
