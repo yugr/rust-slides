@@ -61,11 +61,16 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Rust vs C++ Theoretical Performance: https://users.rust-lang.org/t/rust-vs-c-theoretical-performance/4069
   * Assignee: yugr
   * Status: in progress
+  * Discussion about Rust potential improvements over C++:
+    + niche optimization
+    + shared refs guarantee immutability
+    + aliasing
+    + non-nullability of references
+  * More materials: added some more linked mats
 - Looking for help understanding Rust’s performance vs C++: https://users.rust-lang.org/t/looking-for-help-understanding-rusts-performance-vs-c/30469
   * Assignee: yugr
   * Status: in progress
 - Performance of array access vs C: https://users.rust-lang.org/t/performance-of-array-access-vs-c/43522
-- Looking for help understanding Rust’s performance vs C++: https://users.rust-lang.org/t/looking-for-help-understanding-rusts-performance-vs-c/30469
 - Executable size and performance vs. C? https://users.rust-lang.org/t/executable-size-and-performance-vs-c/4496
 - Rust vs. C vs. Go runtime speed comparison: https://users.rust-lang.org/t/rust-vs-c-vs-go-runtime-speed-comparison/104107
 - Performance issue with C-array like computation: https://users.rust-lang.org/t/performance-issue-with-c-array-like-computation-2-times-worst-than-naive-java/9807
@@ -165,6 +170,7 @@ On the other hand, once all materials are analyzed we won't care about this file
 - How are bounds checks optimized away? https://users.rust-lang.org/t/how-are-bounds-checks-optimized-away/91737
 - Rust's Vec indexing is bound-checked by default: https://news.ycombinator.com/item?id=30867188
 - Iterators and eliminating all runtime bounds checks: https://users.rust-lang.org/t/iterators-and-eliminating-all-runtime-bounds-checks/13935
+- How to zip two slices efficiently: https://users.rust-lang.org/t/how-to-zip-two-slices-efficiently/2048
 
 # Data structures performance
 
