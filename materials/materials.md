@@ -56,11 +56,14 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Comments: https://www.reddit.com/r/rust/comments/1f87siw/an_optimization_thats_impossible_in_rust/
 - Rust превосходит по производительности C++ согласно результатам Benchmarks Game: https://habr.com/ru/articles/480608/
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (15m)
+  * Article itself just confirms Benchmarks Game results; an interesting discussion in comments about `unique_ptr`
+  * More materials: added info about `unique_ptr` vs `Box` to features
 - Rust vs. C++ на алгоритмических задачах: https://habr.com/ru/articles/344282/
   * Assignee: yugr
-  * Status: in progress
-- Небезопасный Rust сложнее C: https://habr.com/ru/companies/ruvds/articles/858246/
+  * Status: DONE (10m)
+  * Article compares C++ vs Rust on simple programs
+  * More materials: nothing interesting in comments
 - Safety vs Performance. A case study of C, C++ and Rust sort implementations: https://github.com/Voultapher/sort-research-rs/blob/main/writeup/sort_safety/text.md
 - Loop Performance in Rust: https://www.youtube.com/watch?v=E37rSIhWjso
 - Rust vs C++ Theoretical Performance: https://users.rust-lang.org/t/rust-vs-c-theoretical-performance/4069
@@ -335,6 +338,7 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Good example of high performance Rust project without unsafe code? https://www.reddit.com/r/rust/comments/we91es/good_example_of_high_performance_rust_project/
 - How do you all think about the `unsafe` vs zero-cost trade off? https://www.reddit.com/r/rust/comments/f5wgsn/how_do_you_all_think_about_the_unsafe_vs_zerocost/
 - Unsafe Rust is Harder Than C: https://www.reddit.com/r/rust/comments/1gbqy6c/unsafe_rust_is_harder_than_c/
+  * Russian translation: https://habr.com/ru/companies/ruvds/articles/858246/
 
 # Code size
 
