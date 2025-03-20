@@ -43,4 +43,4 @@ mov     edi, dword ptr [rax]
 jmp     g(int)@PLT
 ```
 See [Box vs std::unique_ptr, assembly differences](https://www.reddit.com/r/rust/comments/16hi9em/box_vs_stdunique_ptr_assembly_differences/)
-for detailed discussion.
+and [this](https://www.rottedfrog.co.uk/?p=24) for detailed discussion.

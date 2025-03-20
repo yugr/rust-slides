@@ -125,7 +125,14 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Goals and priorities for C++: https://internals.rust-lang.org/t/goals-and-priorities-for-c/12031/32 (some points on Rust perf features like lack of fast-math or move semantics)
 - Zero cost abstractions: Rust vs C++: https://www.rottedfrog.co.uk/?p=24
   * Assignee: yugr
-  * Status: in progress
+  * Status: in progress (20m)
+  * Article compares performance of `unique_ptr` vs `Box`
+    + code is larger to support panic unwinding
+    + LLVM does not optimize dead code after tail call
+    + significantly more code to support panicking (but it can be removed with `-C panic=abort`)
+  * More materials:
+    + [Reddit](https://www.reddit.com/r/rust/comments/gqw2gj/zero_cost_abstractions_rust_vs_c/)
+    + no more interesting posts in "performance site:https://www.rottedfrog.co.uk"
 - Evaluating Languages for Bioinformatics: https://github.com/rjray/mscs-thesis-project
 - Rust is now overall faster than C in benchmarks: https://www.reddit.com/r/rust/comments/kpqmrh/rust_is_now_overall_faster_than_c_in_benchmarks/
 - Rust Optimizations That C++ Can't Do: https://robert.ocallahan.org/2017/04/rust-optimizations-that-c-cant-do_5.html
