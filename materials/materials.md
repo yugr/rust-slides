@@ -65,7 +65,11 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Article compares C++ vs Rust on simple programs
   * More materials: nothing interesting in comments
 - Safety vs Performance. A case study of C, C++ and Rust sort implementations: https://github.com/Voultapher/sort-research-rs/blob/main/writeup/sort_safety/text.md
+  * Assignee: yugr
+  * Status: in progress
 - Loop Performance in Rust: https://www.youtube.com/watch?v=E37rSIhWjso
+  * Assignee: yugr
+  * Status: in progress
 - Rust vs C++ Theoretical Performance: https://users.rust-lang.org/t/rust-vs-c-theoretical-performance/4069
   * Assignee: yugr
   * Status: DONE (30m)
