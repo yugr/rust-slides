@@ -2,7 +2,7 @@ All info about problems with bounds checks at runtime.
 
 # Problems caused by bounds checks
 
-matklad [claims](https://github.com/matklad/bounds-check-cost) that main problem with index checks
+matklad [claims](https://github.com/matklad/bounds-check-cost) that main problem with bounds checks
 is blockage of autovec (and maybe other optimizations) and check themselves are cheap.
 Another example of blocked autovec: https://rust.godbolt.org/z/hccWGv889
 
@@ -13,6 +13,10 @@ Feedback from Servo devs on bounds checks overhead: https://news.ycombinator.com
 Note that bounds checks also take some I$ and branch predictor slots.
 
 # Solutions
+
+Often compiler may remove bounds checks itself
+but this is not always the case even in [simple](https://users.rust-lang.org/t/performance-of-array-access-vs-c/43522)
+examples.
 
 Bounds checks can be removed via
   - using iterators instead of indexes (this is not always possible)

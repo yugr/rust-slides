@@ -100,7 +100,12 @@ On the other hand, once all materials are analyzed we won't care about this file
   * More materials: 
 - Performance of array access vs C: https://users.rust-lang.org/t/performance-of-array-access-vs-c/43522
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (10m)
+  * Problem: code slower than C++ equivalent
+  * Root cause: bounds checks in simple pattern
+  * Solution: rewrite to allow LLVM to better optimize it
+  * LLVM: most likely could be fixed
+  * More materials: N/A
 - Executable size and performance vs. C? https://users.rust-lang.org/t/executable-size-and-performance-vs-c/4496
   * Assignee: yugr
   * Status: in progress
