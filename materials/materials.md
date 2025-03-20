@@ -74,7 +74,13 @@ On the other hand, once all materials are analyzed we won't care about this file
   * More materials: NA
 - Loop Performance in Rust: https://www.youtube.com/watch?v=E37rSIhWjso
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (50m)
+  * Video discusses loop codegen :
+    + autovec
+    + lack of fast math
+    + LLVM misopts
+    + explicit SIMD
+  * More materials: N/A
 - Rust vs C++ Theoretical Performance: https://users.rust-lang.org/t/rust-vs-c-theoretical-performance/4069
   * Assignee: yugr
   * Status: DONE (30m)
