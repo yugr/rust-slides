@@ -238,7 +238,7 @@ On the other hand, once all materials are analyzed we won't care about this file
 
 - Aliasing in Rust: https://www.reddit.com/r/rust/comments/1ery9dy/aliasing_in_rust/
 - Rust’s iterators are inefficient, and here’s what we can do about it: https://medium.com/@veedrac/rust-is-slow-and-i-am-the-cure-32facc0fdcb
-- Nethercote's posts: https://blog.mozilla.org/nnethercote/category/rust/
+- (!) Nethercote's posts: https://blog.mozilla.org/nnethercote/category/rust/
   * Nethercote is top industry expert, need to pay close attention to his posts
 - http://troubles.md/abusing-rustc/
 - Можно ли доверить компилятору оптимизацию вашего кода? https://habr.com/ru/companies/timeweb/articles/759326/
@@ -332,7 +332,7 @@ On the other hand, once all materials are analyzed we won't care about this file
 
 # Unsafe
 
-- Being Fair about Memory Safety and Performance: https://www.thecodedmessage.com/posts/unsafe/
+- (!) Being Fair about Memory Safety and Performance: https://www.thecodedmessage.com/posts/unsafe/
   * need to be super-attentive to this post, this may be key to how we treat unsafe in our talk
 - Implementing a VM: how unsafe should I go? https://www.reddit.com/r/rust/comments/n8yy7z/implementing_a_vm_how_unsafe_should_i_go/
 - Good example of high performance Rust project without unsafe code? https://www.reddit.com/r/rust/comments/we91es/good_example_of_high_performance_rust_project/
