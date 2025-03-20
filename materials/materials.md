@@ -124,6 +124,8 @@ On the other hand, once all materials are analyzed we won't care about this file
 - How to speed up this rust code? I’m measuring a 30% slowdown versus the C++ version: https://users.rust-lang.org/t/how-to-speed-up-this-rust-code-im-measuring-a-30-slowdown-versus-the-c-version/1488
 - Goals and priorities for C++: https://internals.rust-lang.org/t/goals-and-priorities-for-c/12031/32 (some points on Rust perf features like lack of fast-math or move semantics)
 - Zero cost abstractions: Rust vs C++: https://www.rottedfrog.co.uk/?p=24
+  * Assignee: yugr
+  * Status: in progress
 - Evaluating Languages for Bioinformatics: https://github.com/rjray/mscs-thesis-project
 - Rust is now overall faster than C in benchmarks: https://www.reddit.com/r/rust/comments/kpqmrh/rust_is_now_overall_faster_than_c_in_benchmarks/
 - Rust Optimizations That C++ Can't Do: https://robert.ocallahan.org/2017/04/rust-optimizations-that-c-cant-do_5.html
