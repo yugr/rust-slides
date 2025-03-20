@@ -16,6 +16,7 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Rust Performance Book (by Nethercote): https://nnethercote.github.io/perf-book/
   * pay attention to links at https://nnethercote.github.io/perf-book/bounds-checks.html
   * comments: https://www.reddit.com/r/rust/comments/jvmb8u/the_rust_performance_book/
+  * additions: https://github.com/nnethercote/perf-book/issues
 - Some general guidelines from Redox OS https://doc.redox-os.org/book/rusting-properly.html
 - TODO(gh-3) survey [other projects](real-projects.md)
 
@@ -295,6 +296,18 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Porting C to Rust for a Fast and Safe AV1 Media Decoder: https://www.memorysafety.org/blog/porting-c-to-rust-for-av1/
   * this contains example of efficient implementation of self-referential struct
 - Safe elimination of unnecessary bound checks: https://www.reddit.com/r/rust/comments/1iqev5s/safe_elimination_of_unnecessary_bound_checks/
+- Rust loop speed: https://www.reddit.com/r/rust/comments/1aumq2h/rust_loop_speed/
+- Why is this functional version faster than my for loop? https://www.reddit.com/r/rust/comments/xtiqj8/why_is_this_functional_version_faster_than_my_for/
+- Iterators vs index loops performance: https://users.rust-lang.org/t/iterators-vs-index-loops-performance/52131
+- Performance difference between iterator and for loop: https://users.rust-lang.org/t/performance-difference-between-iterator-and-for-loop/50254
+- Performance of iterator over for-loops without boundry check: https://users.rust-lang.org/t/performance-of-iterator-over-for-loops-without-boundry-checks/96162
+- Are iterators even efficient? https://users.rust-lang.org/t/are-iterators-even-efficient/36050
+- Iter with step_by(2) performs slowly: https://github.com/rust-lang/rust/issues/59281
+- What additional performance overhead does the use of iterators: https://internals.rust-lang.org/t/what-additional-performance-overhead-does-the-use-of-iterators-and-closures-cause/20296
+- We all know `iter` is faster than `loop`, but why: https://users.rust-lang.org/t/we-all-know-iter-is-faster-than-loop-but-why/51486
+- Why for_each is much faster than for loop in release mode: https://stackoverflow.com/questions/76091417/why-for-each-is-much-faster-than-for-loop-in-release-mode-cargo-run-r
+- Huge performance gap in simple loop. Explanations? https://www.reddit.com/r/rust/comments/11f00kc/huge_performance_gap_in_simple_loop_explanations/
+- Iterator::fold is a little slow compared to bare loop: https://github.com/rust-lang/rust/issues/76725
 
 # Panics
 
