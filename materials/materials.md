@@ -66,7 +66,11 @@ On the other hand, once all materials are analyzed we won't care about this file
   * More materials: nothing interesting in comments
 - Safety vs Performance. A case study of C, C++ and Rust sort implementations: https://github.com/Voultapher/sort-research-rs/blob/main/writeup/sort_safety/text.md
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (10m)
+  * Article benchmarks various sort implementations in Rust/C++ and their safety guarantees
+  * Rust implementations also have to be memory-safe
+  * Only relevant part is perf comparison (Rust wins by Nx)
+  * More materials: NA
 - Loop Performance in Rust: https://www.youtube.com/watch?v=E37rSIhWjso
   * Assignee: yugr
   * Status: in progress

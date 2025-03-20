@@ -2,6 +2,9 @@ This is a collection of performance improvements in Rust stdlib.
 
 Associative containers (`BTreeSet`, `HashSet`) are much faster than C++.
 
+Sort implementations are [significantly faster](https://github.com/Voultapher/sort-research-rs/blob/main/writeup/sort_safety/text.md)
+despite doing more work due to safety guarantees.
+
 Rust encapsulation rules allow library authors to hide details of their types.
 This allows returning values of internal types on stack, rather than
 allocating them on heap. One example of this is IO in stdlib -
