@@ -108,7 +108,12 @@ On the other hand, once all materials are analyzed we won't care about this file
   * More materials: N/A
 - Executable size and performance vs. C? https://users.rust-lang.org/t/executable-size-and-performance-vs-c/4496
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (10m)
+  * Problem: code slower than C++ equivalent
+  * Root cause: most likely bounds checks
+  * Solution: rewrite to use iterators
+  * LLVM: most likely have been fixed (the post is very old)
+  * More materials: N/A
 - Rust vs. C vs. Go runtime speed comparison: https://users.rust-lang.org/t/rust-vs-c-vs-go-runtime-speed-comparison/104107
 - Performance issue with C-array like computation: https://users.rust-lang.org/t/performance-issue-with-c-array-like-computation-2-times-worst-than-naive-java/9807
 - Simple Rust and C# performance comparison: https://users.rust-lang.org/t/simple-rust-and-c-performance-comparison/42970
@@ -198,7 +203,7 @@ On the other hand, once all materials are analyzed we won't care about this file
   * this should be a dedicated perf issue
 - Rust `[#inline]` annotations discussion https://github.com/rust-lang/hashbrown/pull/119
   * Assignee: zakhar
-  * Status: Done (15m)
+  * Status: DONE (15m)
   * Discussion mostly about `[#inline]` effect on compile time
   * Not our topic
   * More materials: N/A
