@@ -99,7 +99,11 @@ On the other hand, once all materials are analyzed we won't care about this file
   * LLVM: can not be optimized (data struct is too complex: `Vec<Vec<f64>>`)
   * More materials: 
 - Performance of array access vs C: https://users.rust-lang.org/t/performance-of-array-access-vs-c/43522
+  * Assignee: yugr
+  * Status: in progress
 - Executable size and performance vs. C? https://users.rust-lang.org/t/executable-size-and-performance-vs-c/4496
+  * Assignee: yugr
+  * Status: in progress
 - Rust vs. C vs. Go runtime speed comparison: https://users.rust-lang.org/t/rust-vs-c-vs-go-runtime-speed-comparison/104107
 - Performance issue with C-array like computation: https://users.rust-lang.org/t/performance-issue-with-c-array-like-computation-2-times-worst-than-naive-java/9807
 - Simple Rust and C# performance comparison: https://users.rust-lang.org/t/simple-rust-and-c-performance-comparison/42970
