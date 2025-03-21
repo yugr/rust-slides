@@ -147,7 +147,12 @@ On the other hand, once all materials are analyzed we won't care about this file
   * More materials: none
 - Rust Optimizations That C++ Can't Do: https://robert.ocallahan.org/2017/04/rust-optimizations-that-c-cant-do_5.html
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (20m)
+  * Just an example of aliasing optimization
+  * More materials: scanned mats in
+    + "rust performance site:https://robert.ocallahan.org"
+    + [Reddit](https://www.reddit.com/r/rust/comments/63ijkw/rust_optimizations_that_c_cant_do/)
+    + [HN](https://news.ycombinator.com/item?id=14040021)
 - What makes Rust faster than C/C++? https://www.reddit.com/r/rust/comments/px72r1/what_makes_rust_faster_than_cc/
 - Why ISN'T Rust faster than C? https://www.reddit.com/r/rust/comments/1at3r6d/why_isnt_rust_faster_than_c_given_it_can_leverage/
 - Why is Rust not able to optimize this? https://www.reddit.com/r/rust/comments/181tp1a/why_is_rust_not_able_to_optimize_this/ (signed overflow)
@@ -237,6 +242,9 @@ On the other hand, once all materials are analyzed we won't care about this file
 - How to zip two slices efficiently: https://users.rust-lang.org/t/how-to-zip-two-slices-efficiently/2048
 - How to avoid bounds checks in Rust without unsafe: https://shnatsel.medium.com/how-to-avoid-bounds-checks-in-rust-without-unsafe-f65e618b4c1e
 - Inline In Rust: Inline In Rust: https://matklad.github.io/2021/07/09/inline-in-rust.html
+- Why doesn't the Rust optimizer remove those useless instructions: https://stackoverflow.com/questions/45586159/why-doesnt-the-rust-optimizer-remove-those-useless-instructions-tested-on-godb
+  * we should mention why Godbolt for Rust may be misleading !
+  * see also https://github.com/rust-lang/rust/issues/11906
 
 # Data structures performance
 
