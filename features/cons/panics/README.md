@@ -14,3 +14,4 @@ Does `panic=abort` avoid all overheads ?
 Check if optimizations from https://www.youtube.com/watch?v=ItemByR4PRg (LICM, ADCE, etc.) are also disabled for Rust ?
 
 Check if C++ also has same overhead due to exceptions: https://www.rottedfrog.co.uk/?p=24
+  - If not, we need a slide on this
