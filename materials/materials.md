@@ -153,6 +153,7 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Why is Rust slightly slower than C? https://news.ycombinator.com/item?id=20944403
 - Rewrite the VP9 codec library in Rust: https://news.ycombinator.com/item?id=39537735
 - Is C++ more performant than Rust? https://www.reddit.com/r/cpp/comments/17zaiu6/is_c_more_performant_than_rust/
+- Why Not Rust ? https://github.com/guevara/read-it-later/issues/8279
 
 # Rust-specific opts
 

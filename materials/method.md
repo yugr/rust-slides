@@ -23,6 +23,8 @@ Look for any mentions of `/performance|optimizations|compiler|inefficient|code ?
         - https://www.reddit.com/user/burntsushi/search/?q=optimize&type=comments and https://www.reddit.com/user/burntsushi/search/?q=performance&type=comments
       + Shnatsel :
         - https://www.reddit.com/user/Shnatsel/search/?q=optimize&type=comments and https://www.reddit.com/user/Shnatsel/search/?q=performance&type=comments
+      + steveklabnik1:
+        - https://www.reddit.com/user/steveklabnik1/search/?q=performance&type=comments
 
 Check Github for innate (unfixable, by design) performance issues :
   - rejected opts: https://github.com/rust-lang/rust/issues?q=is%3Aissue%20state%3Aclosed%20reason%3Anot-planned%20label%3AI-slow
