@@ -278,6 +278,7 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Rust’s iterators are inefficient, and here’s what we can do about it: https://medium.com/@veedrac/rust-is-slow-and-i-am-the-cure-32facc0fdcb
 - (!) Nethercote's posts: https://blog.mozilla.org/nnethercote/category/rust/
   * Nethercote is top industry expert, need to pay close attention to his posts
+- (!) Moar Nethercote's posts: https://nnethercote.github.io/
 - http://troubles.md/abusing-rustc/
 - Можно ли доверить компилятору оптимизацию вашего кода? https://habr.com/ru/companies/timeweb/articles/759326/
 - Как избавиться от проверок выхода за границы: https://habr.com/ru/companies/otus/articles/718012/
