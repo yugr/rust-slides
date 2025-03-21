@@ -134,6 +134,8 @@ On the other hand, once all materials are analyzed we won't care about this file
     + [Reddit](https://www.reddit.com/r/rust/comments/gqw2gj/zero_cost_abstractions_rust_vs_c/)
     + no more interesting posts in "performance site:https://www.rottedfrog.co.uk"
 - Evaluating Languages for Bioinformatics: https://github.com/rjray/mscs-thesis-project
+  * Assignee: yugr
+  * Status: in progress
 - Rust is now overall faster than C in benchmarks: https://www.reddit.com/r/rust/comments/kpqmrh/rust_is_now_overall_faster_than_c_in_benchmarks/
 - Rust Optimizations That C++ Can't Do: https://robert.ocallahan.org/2017/04/rust-optimizations-that-c-cant-do_5.html
 - What makes Rust faster than C/C++? https://www.reddit.com/r/rust/comments/px72r1/what_makes_rust_faster_than_cc/
