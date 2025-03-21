@@ -135,7 +135,10 @@ On the other hand, once all materials are analyzed we won't care about this file
     + no more interesting posts in "performance site:https://www.rottedfrog.co.uk"
 - Evaluating Languages for Bioinformatics: https://github.com/rjray/mscs-thesis-project
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (5m)
+  * Thesis investigates applicability of diff. languages to bioinformatics
+  * He runs several domain-relevant benchmarks and compares results, without any analysis
+  * Conclusion: not relevant
 - Rust is now overall faster than C in benchmarks: https://www.reddit.com/r/rust/comments/kpqmrh/rust_is_now_overall_faster_than_c_in_benchmarks/
 - Rust Optimizations That C++ Can't Do: https://robert.ocallahan.org/2017/04/rust-optimizations-that-c-cant-do_5.html
 - What makes Rust faster than C/C++? https://www.reddit.com/r/rust/comments/px72r1/what_makes_rust_faster_than_cc/
