@@ -125,7 +125,7 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Goals and priorities for C++: https://internals.rust-lang.org/t/goals-and-priorities-for-c/12031/32 (some points on Rust perf features like lack of fast-math or move semantics)
 - Zero cost abstractions: Rust vs C++: https://www.rottedfrog.co.uk/?p=24
   * Assignee: yugr
-  * Status: in progress (20m)
+  * Status: DONE (20m)
   * Article compares performance of `unique_ptr` vs `Box`
     + code is larger to support panic unwinding
     + LLVM does not optimize dead code after tail call
