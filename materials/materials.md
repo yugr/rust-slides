@@ -445,6 +445,22 @@ On the other hand, once all materials are analyzed we won't care about this file
     + "Using C++ Efficiently In Embedded Applications" - nothing interesting
     + "RustyGecko - Developing Rust on Bare-Metal" - no deep comparison with C
 
+# Codegen unit
+
+- Huge performance gap between lto="fat",cgu=1 and default release profile https://github.com/rust-lang/rust/issues/93321
+- Iterator-based approach performs 10x worse than manual implementation https://github.com/rust-lang/rust/issues/80416
+- Performance regressions of compiled code over the last year https://github.com/rust-lang/rust/issues/47561
+- 2x benchmark loss in rayon-hash from multiple codegen-units https://github.com/rust-lang/rust/issues/47665
+- rustc: Default 32 codegen units at O0 https://github.com/rust-lang/rust/pull/44853
+    - 32 codegen units may not always be better at -O0 https://github.com/rust-lang/rust/issues/44941
+- Back-end parallelism in the Rust compiler https://nnethercote.github.io/2023/07/11/back-end-parallelism-in-the-rust-compiler.html
+    - https://news.ycombinator.com/item?id=36678457
+    - https://www.reddit.com/r/rust/comments/14wcezs/backend_parallelism_in_the_rust_compiler/
+- Let’s talk about parallel codegen https://internals.rust-lang.org/t/lets-talk-about-parallel-codegen/2759
+- codegen-units + ThinLTO is not as good as codegen-units = 1 https://github.com/rust-lang/rust/issues/47745
+- Adding --emit=asm speeds up generated code because of codegen units https://github.com/rust-lang/rust/issues/57235
+- Speeding up rustc by being lazy https://www.reddit.com/r/rust/comments/1d9b36j/speeding_up_rustc_by_being_lazy/
+
 # Other
 
 - Leaving Rust gamedev after 3 years: https://loglog.games/blog/leaving-rust-gamedev/ (also comments in https://news.ycombinator.com/item?id=40172033 and https://habr.com/ru/articles/813597/)
