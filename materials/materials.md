@@ -155,8 +155,11 @@ On the other hand, once all materials are analyzed we won't care about this file
     + [HN](https://news.ycombinator.com/item?id=14040021)
 - (!) What makes Rust faster than C/C++? https://www.reddit.com/r/rust/comments/px72r1/what_makes_rust_faster_than_cc/
   * Assignee: yugr
-  * Status: in progress (25m)
-  * A lot of high quality comments, a must-read for us
+  * Status: DONE (50m)
+  * A lot of high quality comments (a must-read for us):
+    + [this](https://www.reddit.com/r/rust/comments/px72r1/comment/hem26o0/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button)
+    + other comments mention known issues: stdlib data structures, aliasing, moves, etc.
+    + a [linked article](https://matklad.github.io/2020/09/20/why-not-rust.html) mentions [expression templates](https://en.wikipedia.org/wiki/Expression_templates) which are very important to linear algebra code but impossible in Rust
   * More materials: added relevant links
 - Why ISN'T Rust faster than C? https://www.reddit.com/r/rust/comments/1at3r6d/why_isnt_rust_faster_than_c_given_it_can_leverage/
 - Why is Rust not able to optimize this? https://www.reddit.com/r/rust/comments/181tp1a/why_is_rust_not_able_to_optimize_this/ (signed overflow)
@@ -298,6 +301,9 @@ On the other hand, once all materials are analyzed we won't care about this file
 - SIMD Vector/Slice/Chunk Addition: https://www.reddit.com/r/rust/comments/154vowr/simd_vectorslicechunk_addition/
 - simd-itertools: simd-accelerated iterators for "find", "filter", "contains" and many more: https://www.reddit.com/r/rust/comments/1e3ps2a/simditertools_simdaccelerated_iterators_for_find/
 - Memory-safe PNG decoders now vastly outperform C PNG libraries: https://www.reddit.com/r/rust/comments/1ha7uyi/memorysafe_png_decoders_now_vastly_outperform_c/
+- (!) Expression templates: https://en.wikipedia.org/wiki/Expression_templates
+  * This is a foundation block of C++ linear algebra packages like Eigen
+  * Rust does not support such idioms (and it's considered a big flaw)
 
 # Manual optimizations
 
