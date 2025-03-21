@@ -13,9 +13,14 @@ In this talk we
 
 # Conference
 
-C++Russia 2026
+- C++Russia
+  * Spring 2026
+- [RustCon](https://rustcon.ru/)
+  * Dec 05 2025
 
 # Name
 
+- C++ vs Rust: low-level performance analysis
+  * Need "C++" to be approved to C++Russia...
 - Rust performance: pros and cons
 - Rust low-level performance
