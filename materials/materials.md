@@ -153,9 +153,11 @@ On the other hand, once all materials are analyzed we won't care about this file
     + "rust performance site:https://robert.ocallahan.org"
     + [Reddit](https://www.reddit.com/r/rust/comments/63ijkw/rust_optimizations_that_c_cant_do/)
     + [HN](https://news.ycombinator.com/item?id=14040021)
-- What makes Rust faster than C/C++? https://www.reddit.com/r/rust/comments/px72r1/what_makes_rust_faster_than_cc/
+- (!) What makes Rust faster than C/C++? https://www.reddit.com/r/rust/comments/px72r1/what_makes_rust_faster_than_cc/
   * Assignee: yugr
-  * Status: in progress
+  * Status: in progress (25m)
+  * A lot of high quality comments, a must-read for us
+  * More materials: added relevant links
 - Why ISN'T Rust faster than C? https://www.reddit.com/r/rust/comments/1at3r6d/why_isnt_rust_faster_than_c_given_it_can_leverage/
 - Why is Rust not able to optimize this? https://www.reddit.com/r/rust/comments/181tp1a/why_is_rust_not_able_to_optimize_this/ (signed overflow)
 - Is bound checking the only runtime cost of Rust? https://users.rust-lang.org/t/is-bound-checking-the-only-runtime-cost-of-rust/66661
@@ -247,6 +249,8 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Why doesn't the Rust optimizer remove those useless instructions: https://stackoverflow.com/questions/45586159/why-doesnt-the-rust-optimizer-remove-those-useless-instructions-tested-on-godb
   * we should mention why Godbolt for Rust may be misleading !
   * see also https://github.com/rust-lang/rust/issues/11906
+- Does Rust have return value optimization? https://users.rust-lang.org/t/does-rust-have-return-value-optimization/10389
+- Copy elision & RVO optimization: https://internals.rust-lang.org/t/copy-elision-rvo-optimization/17276
 
 # Data structures performance
 

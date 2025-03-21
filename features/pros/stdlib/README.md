@@ -1,6 +1,7 @@
 This is a collection of performance improvements in Rust stdlib.
 
 Associative containers (`BTreeSet`, `HashSet`) are much faster than C++.
+Same goes for regexes (`std::regex` is known to be very slow).
 
 Sort implementations are [significantly faster](https://github.com/Voultapher/sort-research-rs/blob/main/writeup/sort_safety/text.md)
 despite doing more work due to safety guarantees.
