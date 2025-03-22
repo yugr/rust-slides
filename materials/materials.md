@@ -162,7 +162,11 @@ On the other hand, once all materials are analyzed we won't care about this file
     + a [linked article](https://matklad.github.io/2020/09/20/why-not-rust.html) mentions [expression templates](https://en.wikipedia.org/wiki/Expression_templates) which are very important to linear algebra code but impossible in Rust
   * More materials: added relevant links
 - Why ISN'T Rust faster than C? https://www.reddit.com/r/rust/comments/1at3r6d/why_isnt_rust_faster_than_c_given_it_can_leverage/
+  * Assignee: yugr
+  * Statis: in progress
 - Why is Rust not able to optimize this? https://www.reddit.com/r/rust/comments/181tp1a/why_is_rust_not_able_to_optimize_this/ (signed overflow)
+  * Assignee: yugr
+  * Statis: in progress
 - Is bound checking the only runtime cost of Rust? https://users.rust-lang.org/t/is-bound-checking-the-only-runtime-cost-of-rust/66661
 - Why is Rust slightly slower than C? https://news.ycombinator.com/item?id=20944403
 - Rewrite the VP9 codec library in Rust: https://news.ycombinator.com/item?id=39537735
