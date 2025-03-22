@@ -163,10 +163,22 @@ On the other hand, once all materials are analyzed we won't care about this file
   * More materials: added relevant links
 - Why ISN'T Rust faster than C? https://www.reddit.com/r/rust/comments/1at3r6d/why_isnt_rust_faster_than_c_given_it_can_leverage/
   * Assignee: yugr
-  * Statis: in progress
+  * Statis: DONE (30m)
+  * A general discussion; mentioned topic
+    + aliasing
+    + niche opts
+    + high-level data structures
+    + Pascal strings
+    + bounds checks hurting autovec
+  * Commenters conclude that it's not valid to compare Rust to pure C (C++ should be used)
+  * More materials: nothing unseen before in links
 - Why is Rust not able to optimize this? https://www.reddit.com/r/rust/comments/181tp1a/why_is_rust_not_able_to_optimize_this/ (signed overflow)
   * Assignee: yugr
-  * Statis: in progress
+  * Statis: DONE (20m)
+  * Problem: `(num * 2) / 2` not optimized in Rust
+  * Root cause: overflow is defined in Rust
+  * Solutions: `unchecked` methods, `unchecked_math` pragma, compiler hints
+  * More materials: nothing in links
 - Is bound checking the only runtime cost of Rust? https://users.rust-lang.org/t/is-bound-checking-the-only-runtime-cost-of-rust/66661
 - Why is Rust slightly slower than C? https://news.ycombinator.com/item?id=20944403
 - Rewrite the VP9 codec library in Rust: https://news.ycombinator.com/item?id=39537735

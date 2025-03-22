@@ -6,11 +6,28 @@ Rust suggests using `wrapping_*` methods to explicitly use this.
 On the other hand it does not assign `nsw`s to signed integer computations like C/C++.
 See https://kristerw.blogspot.com/2016/02/how-undefined-signed-overflow-enables.html for example optimizations based on `nsw`.
 
-Note that overhead here is not the checks themselves but disabling of optimizations (e.g. vectorization).
-
 Android seems to enable overflow checks (UBsan, Isan) for critical components (written in C):
   - https://android-developers.googleblog.com/2016/05/hardening-media-stack.html
   - https://android-developers.googleblog.com/2018/06/compiler-based-security-mitigations-in.html
+
+# Problems caused by defined overflow
+
+Note that overhead here is not the checks themselves but disabling of optimizations (e.g. vectorization).
+
+# Solutions
+
+- `unchecked_add` and friends
+- `unchecked_math` pragma
+- asserts or compiler hints:
+```
+pub unsafe fn nop(x: i32) -> i32 {
+    if x <= i32::MIN >> 1 || x >= i32::MAX >> 1 {
+        unsafe { std::hint::unreachable_unchecked() }
+    }
+    x * 2 / 2
+}
+```
+(from [here](https://www.reddit.com/r/rust/comments/181av9f/comment/kae7079/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button)).
 
 # TODO
 
