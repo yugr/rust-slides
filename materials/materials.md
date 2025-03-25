@@ -464,6 +464,25 @@ On the other hand, once all materials are analyzed we won't care about this file
 # Codegen unit
 
 - Huge performance gap between lto="fat",cgu=1 and default release profile https://github.com/rust-lang/rust/issues/93321
+    * Assignee: zakhar
+    * Status: DONE (15m)
+    * Problem: 4x perf difference between base compile flags and lto="fat", cgu=1
+    * Root cause: Different inlining with different number of CGUs
+    * Solution: Careful addition of extra `[#inline]` tags and/or using fat LTO.
+      Possible future "become" keyword (tail call optimization) is stated as a fix from the issue creator.
+    * More materials:
+        + Some possibly interesting benchmark https://github.com/ggwpez/substrate-bench/tree/master/reports/01-first-findings
+        + CGUs may cause unpredictable behaviour when comparing pointers https://github.com/rust-lang/rust/issues/46139
+        + TCO in Rust blogpost https://seanchen1991.github.io/posts/tco-story/
+        + Explicit Tail Call RFC https://github.com/rust-lang/rfcs/pull/3407
+- CGUs may cause unpredictable behaviour when comparing pointers https://github.com/rust-lang/rust/issues/46139
+    * Assignee: zakhar
+    * Status: DONE (15m)
+    * Problem: Comparison of vtable pointers can be true or false depending of number of CGU in build configuration
+    * Reasons: Seems that uniqueness of vtables is not guaranteed, so strange behaviour is expected
+               vtables get duplicated between CGUs and are sometimes different between different CGUs (possibly a bug)
+    * Solution: Discussion suggests using `linkonce_odr` in LLVM IR as a partial solution.
+- Some possibly interesting benchmark (low cgu and fat lto not always better) https://github.com/ggwpez/substrate-bench/tree/master/reports/01-first-findings
 - Iterator-based approach performs 10x worse than manual implementation https://github.com/rust-lang/rust/issues/80416
 - Performance regressions of compiled code over the last year https://github.com/rust-lang/rust/issues/47561
 - 2x benchmark loss in rayon-hash from multiple codegen-units https://github.com/rust-lang/rust/issues/47665
@@ -475,10 +494,17 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Let’s talk about parallel codegen https://internals.rust-lang.org/t/lets-talk-about-parallel-codegen/2759
 - codegen-units + ThinLTO is not as good as codegen-units = 1 https://github.com/rust-lang/rust/issues/47745
 - Adding --emit=asm speeds up generated code because of codegen units https://github.com/rust-lang/rust/issues/57235
+    * Assignee: zakhar
+    * Status: DONE (10m)
+    * Problem: --emit=asm flag drastically improves small benchmark performance
+    * Root cause: With multiple codegen units compiler is unable to detect that loop does not do anything
+    * Solution: Use cgu=1 for building (especially for small projects)
 - Speeding up rustc by being lazy https://www.reddit.com/r/rust/comments/1d9b36j/speeding_up_rustc_by_being_lazy/
 
 # Other
 
+- Explicit Tail Call RFC https://github.com/rust-lang/rfcs/pull/3407
+- TCO in Rust blogpost https://seanchen1991.github.io/posts/tco-story/
 - Leaving Rust gamedev after 3 years: https://loglog.games/blog/leaving-rust-gamedev/ (also comments in https://news.ycombinator.com/item?id=40172033 and https://habr.com/ru/articles/813597/)
 - Why I hate Rust programming language? https://www.reddit.com/r/programming/comments/n9l68o/why_i_hate_rust_programming_language/ (comments)
 - Rust inadequate for text compression codecs? https://news.ycombinator.com/item?id=43295908
