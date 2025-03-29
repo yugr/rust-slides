@@ -184,6 +184,7 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Rewrite the VP9 codec library in Rust: https://news.ycombinator.com/item?id=39537735
 - Is C++ more performant than Rust? https://www.reddit.com/r/cpp/comments/17zaiu6/is_c_more_performant_than_rust/
 - Why Not Rust ? https://github.com/guevara/read-it-later/issues/8279
+- Expression Templates in Rust? https://www.reddit.com/r/rust/comments/1f0hi5k/expression_templates_in_rust
 
 # Rust-specific opts
 
