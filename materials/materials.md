@@ -388,6 +388,12 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Why for_each is much faster than for loop in release mode: https://stackoverflow.com/questions/76091417/why-for-each-is-much-faster-than-for-loop-in-release-mode-cargo-run-r
 - Huge performance gap in simple loop. Explanations? https://www.reddit.com/r/rust/comments/11f00kc/huge_performance_gap_in_simple_loop_explanations/
 - Iterator::fold is a little slow compared to bare loop: https://github.com/rust-lang/rust/issues/76725
+- Iterator-based approach performs 10x worse than manual implementation https://github.com/rust-lang/rust/issues/80416
+    * Assignee: zakhar
+    * Status: DONE (15m)
+    * Problem: FFT implementation takes 10x more time than manual implementation
+    * Root cause: compiler seems to be unable to propagate compile-time knowledge when .cycle() and .skip() are used together
+    * Solution: use mutable iterator with .nth() instead of .skip()
 
 # Panics
 
@@ -484,13 +490,13 @@ On the other hand, once all materials are analyzed we won't care about this file
                vtables get duplicated between CGUs and are sometimes different between different CGUs (possibly a bug)
     * Solution: Discussion suggests using `linkonce_odr` in LLVM IR as a partial solution.
 - Some possibly interesting benchmark (low cgu and fat lto not always better) https://github.com/ggwpez/substrate-bench/tree/master/reports/01-first-findings
-- Iterator-based approach performs 10x worse than manual implementation https://github.com/rust-lang/rust/issues/80416
-    * Assignee: zakhar
-    * Status: in progress
 - Performance regressions of compiled code over the last year https://github.com/rust-lang/rust/issues/47561
 - 2x benchmark loss in rayon-hash from multiple codegen-units https://github.com/rust-lang/rust/issues/47665
     * Assignee: zakhar
-    * Status: in progress
+    * Status: DONE (10m)
+    * Problem: Using multiple CGUs reduces benchmark performance by half
+    * Reason: Inlining is not performed across multiple CGUs
+    * Solution: Use LTO or compile with one CGU (adding inline tag into stdlib isn't feasible for a user)
 - rustc: Default 32 codegen units at O0 https://github.com/rust-lang/rust/pull/44853
     - 32 codegen units may not always be better at -O0 https://github.com/rust-lang/rust/issues/44941
 - Back-end parallelism in the Rust compiler https://nnethercote.github.io/2023/07/11/back-end-parallelism-in-the-rust-compiler.html

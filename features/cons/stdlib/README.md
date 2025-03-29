@@ -4,6 +4,8 @@ Rust's UTF-8 `String`s have invariant checks which make code slower (compared to
 
 IO is not buffered by default in Rust.
 
+Compiler fails to optimize some stdlib operator adapter combinations (https://github.com/rust-lang/rust/issues/80416)
+
 # TODO
 
 - Benchmark disabling of invariant checks in `String`.
