@@ -485,8 +485,12 @@ On the other hand, once all materials are analyzed we won't care about this file
     * Solution: Discussion suggests using `linkonce_odr` in LLVM IR as a partial solution.
 - Some possibly interesting benchmark (low cgu and fat lto not always better) https://github.com/ggwpez/substrate-bench/tree/master/reports/01-first-findings
 - Iterator-based approach performs 10x worse than manual implementation https://github.com/rust-lang/rust/issues/80416
+    * Assignee: zakhar
+    * Status: in progress
 - Performance regressions of compiled code over the last year https://github.com/rust-lang/rust/issues/47561
 - 2x benchmark loss in rayon-hash from multiple codegen-units https://github.com/rust-lang/rust/issues/47665
+    * Assignee: zakhar
+    * Status: in progress
 - rustc: Default 32 codegen units at O0 https://github.com/rust-lang/rust/pull/44853
     - 32 codegen units may not always be better at -O0 https://github.com/rust-lang/rust/issues/44941
 - Back-end parallelism in the Rust compiler https://nnethercote.github.io/2023/07/11/back-end-parallelism-in-the-rust-compiler.html
