@@ -516,6 +516,8 @@ On the other hand, once all materials are analyzed we won't care about this file
 
 - Explicit Tail Call RFC https://github.com/rust-lang/rfcs/pull/3407
 - TCO in Rust blogpost https://seanchen1991.github.io/posts/tco-story/
+    * Assignee: zakhar
+    * Status: in progress
 - Leaving Rust gamedev after 3 years: https://loglog.games/blog/leaving-rust-gamedev/ (also comments in https://news.ycombinator.com/item?id=40172033 and https://habr.com/ru/articles/813597/)
 - Why I hate Rust programming language? https://www.reddit.com/r/programming/comments/n9l68o/why_i_hate_rust_programming_language/ (comments)
 - Rust inadequate for text compression codecs? https://news.ycombinator.com/item?id=43295908
