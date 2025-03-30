@@ -529,10 +529,12 @@ On the other hand, once all materials are analyzed we won't care about this file
     - https://news.ycombinator.com/item?id=36678457
     - https://www.reddit.com/r/rust/comments/14wcezs/backend_parallelism_in_the_rust_compiler/
     * Assignee: zakhar
-    * Status: in progress
+    * Status: DONE (30m)
+    * Problem: Nethercote's investigation on how to improve compilation times using CGUs. He also confirms that multiple CGUs with thin LTO is still worse than using one CGU.
 - Let’s talk about parallel codegen https://internals.rust-lang.org/t/lets-talk-about-parallel-codegen/2759
     * Assignee: zakhar
-    * Status: in progress
+    * Status: DONE (25m)
+    * Problem: A prolonged discussion about default number of codegen units. Brings up a point about builds with multiple CGUs being non-deterministic
 - codegen-units + ThinLTO is not as good as codegen-units = 1 https://github.com/rust-lang/rust/issues/47745
 - Adding --emit=asm speeds up generated code because of codegen units https://github.com/rust-lang/rust/issues/57235
     * Assignee: zakhar
@@ -546,11 +548,11 @@ On the other hand, once all materials are analyzed we won't care about this file
 
 - Explicit Tail Call RFC https://github.com/rust-lang/rfcs/pull/3407
     * Assignee: zakhar
-    * Status: Done (10m)
+    * Status: DONE (10m)
     * Problem: RFC for explicit tail calls. Still in development
 - TCO in Rust blogpost https://seanchen1991.github.io/posts/tco-story/
     * Assignee: zakhar
-    * Status: Done (15m)
+    * Status: DONE (15m)
     * Problem: Rust does not have TCO
     * Solution: Some crates (tco, tramp) provide macros to optimize tail-calling functions.
         + These crates are not well-developed and are either in POC state or do not provide 'real' (constant memory usage) TCO
