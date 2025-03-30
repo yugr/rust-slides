@@ -209,13 +209,21 @@ On the other hand, once all materials are analyzed we won't care about this file
       - in particular they mention lack of placement new as performance problem (created gh-7 to add materials on this)
   * More materials: no new links
 - Why Not Rust ? https://github.com/guevara/read-it-later/issues/8279
+  * Assignee: yugr
+  * Status: in progress
 - Expression Templates in Rust? https://www.reddit.com/r/rust/comments/1f0hi5k/expression_templates_in_rust
 
 # Rust-specific opts
 
 - Non-aliasing guarantees of &mut T and rustc optimization: https://users.rust-lang.org/t/non-aliasing-guarantees-of-mut-t-and-rustc-optimization/34386
+  * Assignee: yugr
+  * Status: in progress
 - Possible Rust-specific optimizations: https://users.rust-lang.org/t/possible-rust-specific-optimizations/79895/2 (also https://habr.com/ru/companies/beget/articles/842868/)
+  * Assignee: yugr
+  * Status: in progress
 - What kind of performance rust is trying to achieve? https://users.rust-lang.org/t/what-kind-of-performance-rust-is-trying-to-achieve/1674
+  * Assignee: yugr
+  * Status: in progress
 
 # Compiler codegen
 
