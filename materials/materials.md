@@ -181,8 +181,14 @@ On the other hand, once all materials are analyzed we won't care about this file
   * More materials: nothing in links
 - Is bound checking the only runtime cost of Rust? https://users.rust-lang.org/t/is-bound-checking-the-only-runtime-cost-of-rust/66661
 - Why is Rust slightly slower than C? https://news.ycombinator.com/item?id=20944403
+  * Assignee: yugr
+  * Status: in progress
 - Rewrite the VP9 codec library in Rust: https://news.ycombinator.com/item?id=39537735
+  * Assignee: yugr
+  * Status: in progress
 - Is C++ more performant than Rust? https://www.reddit.com/r/cpp/comments/17zaiu6/is_c_more_performant_than_rust/
+  * Assignee: yugr
+  * Status: in progress
 - Why Not Rust ? https://github.com/guevara/read-it-later/issues/8279
 - Expression Templates in Rust? https://www.reddit.com/r/rust/comments/1f0hi5k/expression_templates_in_rust
 
