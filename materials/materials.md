@@ -182,13 +182,32 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Is bound checking the only runtime cost of Rust? https://users.rust-lang.org/t/is-bound-checking-the-only-runtime-cost-of-rust/66661
 - Why is Rust slightly slower than C? https://news.ycombinator.com/item?id=20944403
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (50m)
+  * Problem: userspace network driver was up to 10% slower compared to C (although much faster than other langs)
+  * Root cause:
+    + authors claim that main slowdown is due to bounds checking
+    + enabling integer overflows did not change performance
+  * Solution:
+    + using unsafe Rust code (obtained via `c2rust` tool) fixed performance
+  * More materials:
+    + original post: https://github.com/ixy-languages/ixy-languages/blob/master/Rust-vs-C-performance.md
+    + paper: https://www.net.in.tum.de/fileadmin/bibtex/publications/papers/the-case-for-writing-network-drivers-in-high-level-languages.pdf
+    + video: https://media.ccc.de/v/35c3-9670-safe_and_secure_drivers_in_high-level_languages (Rust performance discussed at 53:00)
+    + Reddit: https://www.reddit.com/r/rust/comments/d2rpsa/a_highspeed_network_driver_written_in_c_rust_go_c/
 - Rewrite the VP9 codec library in Rust: https://news.ycombinator.com/item?id=39537735
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (10m)
+  * Post is just about example kernel driver written in Rust
+  * Commenters discuss cost of bounds checks at some length but nothing new
+  * More materials: none
 - Is C++ more performant than Rust? https://www.reddit.com/r/cpp/comments/17zaiu6/is_c_more_performant_than_rust/
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (20m)
+  * Comments:
+    + known stuff: aliasing, bounds checks
+    + interesting discussion here: https://www.reddit.com/r/cpp/comments/17zaiu6/comment/k9zhm09/
+      - in particular they mention lack of placement new as performance problem (created gh-7 to add materials on this)
+  * More materials: no new links
 - Why Not Rust ? https://github.com/guevara/read-it-later/issues/8279
 - Expression Templates in Rust? https://www.reddit.com/r/rust/comments/1f0hi5k/expression_templates_in_rust
 
@@ -271,6 +290,7 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Iterators and eliminating all runtime bounds checks: https://users.rust-lang.org/t/iterators-and-eliminating-all-runtime-bounds-checks/13935
 - How to zip two slices efficiently: https://users.rust-lang.org/t/how-to-zip-two-slices-efficiently/2048
 - How to avoid bounds checks in Rust without unsafe: https://shnatsel.medium.com/how-to-avoid-bounds-checks-in-rust-without-unsafe-f65e618b4c1e
+  * this is oft cited
 - Inline In Rust: Inline In Rust: https://matklad.github.io/2021/07/09/inline-in-rust.html
 - Why doesn't the Rust optimizer remove those useless instructions: https://stackoverflow.com/questions/45586159/why-doesnt-the-rust-optimizer-remove-those-useless-instructions-tested-on-godb
   * we should mention why Godbolt for Rust may be misleading !

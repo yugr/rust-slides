@@ -4,6 +4,7 @@ This is the plan of the talk.
 
 - Non-idiomatic code (SIMD, intrinsics, inline asm, `wrapping_add`, too many `unsafe`s, `restrict` in C++, etc.)
   * would like to compare "standard" Rust and C++
+  * Benchmarks Game uses wildly non-canonical code, to everyone's dismay
 - Just comparing few random programs
   * not enough to draw conclusions
 - Just looking at asm code

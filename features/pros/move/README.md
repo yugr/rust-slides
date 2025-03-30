@@ -8,3 +8,4 @@ Examples of this:
 Also Rust's move is just a `memcpy` which is a single instruction in LLVM IR
 so much easier to optimize in middle-end.
 
+Example of cost of copies in large C++ codebase : https://groups.google.com/a/chromium.org/g/chromium-dev/c/EUqoIz2iFU4/m/kPZ5ZK0K3gEJ
