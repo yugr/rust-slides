@@ -33,6 +33,7 @@ pub unsafe fn nop(x: i32) -> i32 {
 
 - Add `nsw` to signed integers and compare perf of large and/or performance sensitive projects
 - Measure overhead via `-Z force-overflow-checks`
+  * Does it add `nsw`/`nuw` and enable loop optimizations ?
 
 # Inclusive ranges are slower than exclusive ones
 

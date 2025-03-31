@@ -54,6 +54,7 @@ On the other hand, once all materials are analyzed we won't care about this file
     + [Another HN](https://news.ycombinator.com/item?id=39476941)
     + no new links found (hoorah !)
 - An Optimization That’s Impossible in Rust! https://tunglevo.com/note/an-optimization-thats-impossible-in-rust/
+  * Translation: https://habr.com/ru/companies/beget/articles/842868/
   * Comments: https://www.reddit.com/r/rust/comments/1f87siw/an_optimization_thats_impossible_in_rust/
 - Rust превосходит по производительности C++ согласно результатам Benchmarks Game: https://habr.com/ru/articles/480608/
   * Assignee: yugr
@@ -210,20 +211,39 @@ On the other hand, once all materials are analyzed we won't care about this file
   * More materials: no new links
 - Why Not Rust ? https://github.com/guevara/read-it-later/issues/8279
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (10m)
+  * Post lists several Rust perf problems:
+    + `memcpy`'s and placement new
+    + LLVM `noalias` problems
+    + no expression templates
+  * All mentioned issues are fixed by now
+  * More materials: added links
 - Expression Templates in Rust? https://www.reddit.com/r/rust/comments/1f0hi5k/expression_templates_in_rust
+- Expression templates in Eigen: https://eigen.tuxfamily.org/index.php?title=Expression_templates
 
 # Rust-specific opts
 
 - Non-aliasing guarantees of &mut T and rustc optimization: https://users.rust-lang.org/t/non-aliasing-guarantees-of-mut-t-and-rustc-optimization/34386
   * Assignee: yugr
-  * Status: in progress
-- Possible Rust-specific optimizations: https://users.rust-lang.org/t/possible-rust-specific-optimizations/79895/2 (also https://habr.com/ru/companies/beget/articles/842868/)
+  * Status: DONE (5m)
+  * Problem: Rust aliasing info not used for optimization
+  * Root cause: aliasing used to be disabled by default back then
+  * Solution: force enable via flag
+  * More materials: N/A
+- Possible Rust-specific optimizations: https://users.rust-lang.org/t/possible-rust-specific-optimizations/79895
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (5m)
+  * User wonders what are potential, NYI optimizations
+  * The only answer is `noalias`
+  * More materials: added links
 - What kind of performance rust is trying to achieve? https://users.rust-lang.org/t/what-kind-of-performance-rust-is-trying-to-achieve/1674
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (20m)
+  * User asked whether Rust tries to be as fast as C and why
+  * Answers:
+    + Steven Klabnik: yes, C is reference
+    + opts: noalias, codegen via macro (e.g. in Servo), fearless concurrency
+  * More materials: couldn't find any relevant links for improving performance by codegen via macro
 
 # Compiler codegen
 

@@ -11,7 +11,7 @@ This is the plan of the talk.
   * inefficiencies may be due to bug / NYI feature in LLVM ("Sufficiently Smart Compiler")
   * should check what is NYI and can never be implemented in LLVM optimizer
   * do not expect "heroic compiler"
-- Performance of parallel code ("fearless concurrency")
+- Performance of parallel code (["fearless concurrency"](https://blog.rust-lang.org/2015/04/10/Fearless-Concurrency.html))
   * claimed to be underlying reason of `ripgrep` success by its author
   * well known and discussed in many posts and presentations
   * maybe next time
@@ -26,6 +26,7 @@ This is the plan of the talk.
 
 Rust targets same problem area:
   - [system programming language](https://willcrichton.net/notes/systems-programming/)
+    * "Generaly, it's 'the same order of magnitude as C'. Sometimes faster, sometimes slower" ([Steven Klabnik](https://users.rust-lang.org/t/what-kind-of-performance-rust-is-trying-to-achieve/1674/2))
   - zero-cost abstractions
     * no (or minimal) runtime overhead
     * don't pay for what you don't use
@@ -39,7 +40,8 @@ Rust targets same problem area:
 
 Rust seems to put safety ahead of performance:
   - "Rust is a modern systems programming language focusing on safety, speed, and concurrency" ([Rust by Example](https://doc.rust-lang.org/rust-by-example/))
-  - but at the same time things which would have incurred too much overhead are allowed
+  - "Rust prioritizes memory safety above all else. But speed is a close second" ([Steven Klabnik](https://users.rust-lang.org/t/what-kind-of-performance-rust-is-trying-to-achieve/1674/2))
+  - but at the same time things which would have incurred too much overhead are disabled
     * e.g. integer overflows not checked in release
 
 Some Rust's abstractions are NOT zero-cost (or at least less zero-cost than in C++) :

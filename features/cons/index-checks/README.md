@@ -31,6 +31,7 @@ for i in 0..len {
     slice[i] // no bounds check
 }
 ```
+  (also [here](https://users.rust-lang.org/t/possible-rust-specific-optimizations/79895/5)).
 
 # TODO
 
