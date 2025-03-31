@@ -5,7 +5,7 @@ Rust's reference semantics allows compiler to be much more aggressive
 
 In particular:
   - mutable reference is guaranteed to be `noalias` (aka `restrict`)
-  - shared references are guaranteed to point to immutable data
+  - shared references are guaranteed to point to immutable data (and thus are different from C++ `const T &` !)
   - all references are guaranteed to be non-null
 
 Some examples of this:

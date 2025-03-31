@@ -254,7 +254,11 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Rust loves LLVM: https://www.youtube.com/watch?v=Kqz-umsAnk8 (https://llvm.org/devmtg/2024-10/slides/keynote/Popov-Rust_Heart_LLVM.pdf)
 - Rust and LLVM in 2021: https://llvm.org/devmtg/2021-02-28/slides/Patrick-rust-llvm.pdf
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (20m)
+  * Slides for LLVM dev meeting
+    + A general overview of new features
+    + Discusses CGU problem (and how ThinLTO fixes it), PGO, aliasing, various LLVM fixes
+  * More materials: no new links
 - Inspecting rustc LLVM optimization remarks using cargo-remark: https://kobzol.github.io/rust/cargo/2023/08/12/rust-llvm-optimization-remarks.html
   * need to run `cargo remark` on some real projects
 - Improving crypto code in Rust using LLVM’s optnone: https://blog.trailofbits.com/2022/02/01/part-2-rusty-crypto/
@@ -560,7 +564,7 @@ On the other hand, once all materials are analyzed we won't care about this file
     * Solution: Use LTO or compile with one CGU (adding inline tag into stdlib isn't feasible for a user)
 - rustc: Default 32 codegen units at O0 https://github.com/rust-lang/rust/pull/44853
     - 32 codegen units may not always be better at -O0 https://github.com/rust-lang/rust/issues/44941
-- Back-end parallelism in the Rust compiler https://nnethercote.github.io/2023/07/11/back-end-parallelism-in-the-rust-compiler.html
+- (!) Back-end parallelism in the Rust compiler: https://nnethercote.github.io/2023/07/11/back-end-parallelism-in-the-rust-compiler.html
     - https://news.ycombinator.com/item?id=36678457
     - https://www.reddit.com/r/rust/comments/14wcezs/backend_parallelism_in_the_rust_compiler/
     * Assignee: zakhar
