@@ -573,13 +573,13 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Let’s talk about parallel codegen https://internals.rust-lang.org/t/lets-talk-about-parallel-codegen/2759
     * Assignee: zakhar
     * Status: DONE (25m)
-    * Problem: A prolonged discussion about default number of codegen units. Brings up a point about builds with multiple CGUs being non-deterministic
+    * Problem: A prolonged discussion about default number of codegen units. Brings up a point about builds with multiple CGUs being non-deterministic. Contains some perf overhead measurements.
 - codegen-units + ThinLTO is not as good as codegen-units = 1 https://github.com/rust-lang/rust/issues/47745
 - Adding --emit=asm speeds up generated code because of codegen units https://github.com/rust-lang/rust/issues/57235
     * Assignee: zakhar
     * Status: DONE (10m)
-    * Problem: --emit=asm flag drastically improves small benchmark performance
-    * Root cause: With multiple codegen units compiler is unable to detect that loop does not do anything
+    * Problem: `--emit=asm` flag drastically improves small benchmark performance
+    * Root cause: `--emit-asm` disables CGUs; with multiple codegen units compiler is unable to detect that loop does not do anything
     * Solution: Use cgu=1 for building (especially for small projects)
 - Speeding up rustc by being lazy https://www.reddit.com/r/rust/comments/1d9b36j/speeding_up_rustc_by_being_lazy/
 

@@ -58,6 +58,7 @@ Each performance feature neeeds to contain
     * pay special attention to cases which can not be optimized at all
   - info on whether this error is a common case in practice
     * may need to write analysis passes to scan real Rust code (libs, big projects) for occurences
+  - links to important articles (design, etc.)
   - (need to collect prooflinks with timecodes, reprocases for everything)
 
 Hopefully in many cases all above will be obtained from collected materials.
