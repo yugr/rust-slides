@@ -248,13 +248,15 @@ On the other hand, once all materials are analyzed we won't care about this file
 
 - Rust under the hood: https://www.youtube.com/watch?v=L8caNpK3Shs
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (20m)
+  * Discusses codegen for some common constructs
+  * Mentions niche opt but otherwise nothing relevant for us
 - Rust loves LLVM: https://www.youtube.com/watch?v=Kqz-umsAnk8 (https://llvm.org/devmtg/2024-10/slides/keynote/Popov-Rust_Heart_LLVM.pdf)
 - Rust and LLVM in 2021: https://llvm.org/devmtg/2021-02-28/slides/Patrick-rust-llvm.pdf
   * Assignee: yugr
   * Status: in progress
 - Inspecting rustc LLVM optimization remarks using cargo-remark: https://kobzol.github.io/rust/cargo/2023/08/12/rust-llvm-optimization-remarks.html
-  * need to run `cargo remark` on real projects
+  * need to run `cargo remark` on some real projects
 - Improving crypto code in Rust using LLVM’s optnone: https://blog.trailofbits.com/2022/02/01/part-2-rusty-crypto/
 - Why Rust doesn't need a standard div_rem: An LLVM tale: https://codspeed.io/blog/why-rust-doesnt-need-a-standard-divrem (also comments in https://www.reddit.com/r/rust/comments/173wr86/why_rust_doesnt_need_a_standard_div_rem_an_llvm)
 - Asm snippets: https://www.eventhelix.com/rust/
@@ -274,6 +276,8 @@ On the other hand, once all materials are analyzed we won't care about this file
     + a lot of comments on [Reddit](https://www.reddit.com/r/rust/comments/z92vid/measuring_how_much_rusts_bounds_checking_actually/), [Reddit](https://www.reddit.com/r/programming/comments/z9hjpk/how_much_does_rusts_bounds_checking_actually_cost/) and [HackerNews](https://news.ycombinator.com/item?id=33805419)
     + added new materials
 - A cool Rust optimization story: https://quickwit.io/blog/search-a-sorted-block
+  * Assignee: yugr
+  * Status: in progress
 - Inefficient codegen when accessing a vector with literal indices: https://github.com/rust-lang/rust/issues/50759
   * Assignee: yugr
   * Status: DONE (20-30m)
