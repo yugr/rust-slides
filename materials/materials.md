@@ -1,10 +1,9 @@
 Materials have been collected according to [collection methodology](materials/method.md).
 
 Note that section split below is rather crude and may do more harm than good.
-Refactor structure if you think it makes sense.
+Please refactor mercilessly if you think it makes sense.
 On the other hand, once all materials are analyzed we won't care about this file.
 
-- TODO(gh-1) scan https://internals.rust-lang.org/c/compiler for relevant posts and add them to above sections
 - TODO(gh-2) add more interesting issues from
   * rejected opts: https://github.com/rust-lang/rust/issues?q=is%3Aissue%20state%3Aclosed%20reason%3Anot-planned%20label%3AI-slow
   * compiler RFCs: https://github.com/rust-lang/rust/issues?q=is%3Aissue%20label%3AT-compiler%20rfc
@@ -18,7 +17,7 @@ On the other hand, once all materials are analyzed we won't care about this file
   * comments: https://www.reddit.com/r/rust/comments/jvmb8u/the_rust_performance_book/
   * additions: https://github.com/nnethercote/perf-book/issues
 - Some general guidelines from Redox OS https://doc.redox-os.org/book/rusting-properly.html
-- TODO(gh-3) survey [other projects](real-projects.md)
+- Found no guidelines in [other projects](real-projects.md) in gh-3
 
 # C++ comparison
 
@@ -248,8 +247,12 @@ On the other hand, once all materials are analyzed we won't care about this file
 # Compiler codegen
 
 - Rust under the hood: https://www.youtube.com/watch?v=L8caNpK3Shs
+  * Assignee: yugr
+  * Status: in progress
 - Rust loves LLVM: https://www.youtube.com/watch?v=Kqz-umsAnk8 (https://llvm.org/devmtg/2024-10/slides/keynote/Popov-Rust_Heart_LLVM.pdf)
 - Rust and LLVM in 2021: https://llvm.org/devmtg/2021-02-28/slides/Patrick-rust-llvm.pdf
+  * Assignee: yugr
+  * Status: in progress
 - Inspecting rustc LLVM optimization remarks using cargo-remark: https://kobzol.github.io/rust/cargo/2023/08/12/rust-llvm-optimization-remarks.html
   * need to run `cargo remark` on real projects
 - Improving crypto code in Rust using LLVM’s optnone: https://blog.trailofbits.com/2022/02/01/part-2-rusty-crypto/
