@@ -296,12 +296,16 @@ On the other hand, once all materials are analyzed we won't care about this file
   * More materials: NA
 - Costs of iterators and Zero Cost Abstractions in Rust: https://github.com/mike-barber/rust-zero-cost-abstractions
   * pay attention to this post, it directly intersects with our topic
+  * Assignee: yugr
+  * Status: in progress
 - Addressing Rust optimization failures in LLVM: http://www.khei4.com/gsoc2023/
   * Assignee: yugr
   * Status: DONE (5m)
   * Just solved some LLVM bugs, no generalizations
   * More materials: N/A
 - Why does the Rust compiler not optimize code assuming that two mutable references cannot alias? https://stackoverflow.com/questions/57259126/why-does-the-rust-compiler-not-optimize-code-assuming-that-two-mutable-reference
+  * Assignee: yugr
+  * Status: in progress
 - Square powers not being fully optimized? https://www.reddit.com/r/rust/comments/exojhk/square_powers_not_being_fully_optimized/
   * Assignee: yugr
   * Status: postponed (awaiting response, 20m)
