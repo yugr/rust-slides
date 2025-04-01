@@ -325,8 +325,12 @@ On the other hand, once all materials are analyzed we won't care about this file
   * LLVM: one of commenters suggest how it can be fixed in LLVM (via loop splitting)
   * More materials: no new mats in suggestions
 - Assembly examples of missed Rust compiler optimizations: https://www.reddit.com/r/rust/comments/14zhb0s/assembly_examples_of_missed_rust_compiler/
+  * Assignee: yugr
+  * Status: in progress
 - Does the compiler optimize moves? https://www.reddit.com/r/rust/comments/ykku69/does_the_compiler_optimize_moves/
   * this should be a dedicated perf issue
+  * Assignee: yugr
+  * Status: in progress
 - Rust `[#inline]` annotations discussion https://github.com/rust-lang/hashbrown/pull/119
   * Assignee: zakhar
   * Status: DONE (15m)
