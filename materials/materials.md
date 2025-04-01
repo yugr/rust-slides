@@ -351,6 +351,7 @@ On the other hand, once all materials are analyzed we won't care about this file
   * see also https://github.com/rust-lang/rust/issues/11906
 - Does Rust have return value optimization? https://users.rust-lang.org/t/does-rust-have-return-value-optimization/10389
 - Copy elision & RVO optimization: https://internals.rust-lang.org/t/copy-elision-rvo-optimization/17276
+- Big performance problem with closed intervals looping: https://github.com/rust-lang/rust/issues/45222
 
 # Data structures performance
 
