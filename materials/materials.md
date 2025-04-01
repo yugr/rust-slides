@@ -281,7 +281,11 @@ On the other hand, once all materials are analyzed we won't care about this file
     + added new materials
 - A cool Rust optimization story: https://quickwit.io/blog/search-a-sorted-block
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (10m)
+  * OP used different implementations of binary search in his library
+  * Basically the conclusion is that compiler is not always perfect e.g. [stopped generating branchless code](https://bugs.llvm.org/show_bug.cgi?id=40027) at some point
+  * More materials:
+    + Reddit comments: https://www.reddit.com/r/rust/comments/qde4w7/a_cool_rust_optimization_story/ (nothing relevant)
 - Inefficient codegen when accessing a vector with literal indices: https://github.com/rust-lang/rust/issues/50759
   * Assignee: yugr
   * Status: DONE (20-30m)
