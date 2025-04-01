@@ -305,7 +305,10 @@ On the other hand, once all materials are analyzed we won't care about this file
   * More materials: N/A
 - Why does the Rust compiler not optimize code assuming that two mutable references cannot alias? https://stackoverflow.com/questions/57259126/why-does-the-rust-compiler-not-optimize-code-assuming-that-two-mutable-reference
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (5m)
+  * Problem: Rust code is less efficient than equivalent C++ code with `restrict`'s
+  * Root cause: Rust aliasing optimizations were [disabled by default](https://github.com/rust-lang/rust/issues/54878) back then (and enabled now)
+  * More materials: N/A
 - Square powers not being fully optimized? https://www.reddit.com/r/rust/comments/exojhk/square_powers_not_being_fully_optimized/
   * Assignee: yugr
   * Status: postponed (awaiting response, 20m)
