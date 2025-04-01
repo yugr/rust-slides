@@ -24,17 +24,17 @@ On the other hand, once all materials are analyzed we won't care about this file
 - C++ faster and safer by Rust: benchmarked by Yandex: https://habr.com/ru/articles/492410/
   * Assignee: yugr
   * Status: DONE (15m)
-  * Problem: response to critique of Rust by Polukhin; they confirm that comparison of asm of microbenchmarks is pointless
+  * Main idea: response to critique of Rust by Polukhin; they confirm that comparison of asm of microbenchmarks is pointless
   * More materials: no interesting mats in suggestions
 - The relative performance of C and Rust: https://bcantrill.dtrace.org/2018/09/28/the-relative-performance-of-c-and-rust/
   * Assignee: yugr
   * Status: DONE (15m)
-  * Problem: studies performance of Rust data structures vs. some custom C equivalents (irrelevant)
+  * Main idea: studies performance of Rust data structures vs. some custom C equivalents (irrelevant)
   * More materials: no performance-related materials found in blog
 - Speed of Rust vs C: https://kornel.ski/rust-c-speed
   * Assignee: yugr
   * Status: DONE (50m)
-  * Problem: basic comparison of Rust/C (not C++!) performance features; in particular
+  * Main idea: basic comparison of Rust/C (not C++!) performance features; in particular
     + LLVM optimizer is the same
     + Rust misses `alloca`/`computed goto`
     + 64-bit offsets in Rust (so what ?)
@@ -58,24 +58,24 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Rust превосходит по производительности C++ согласно результатам Benchmarks Game: https://habr.com/ru/articles/480608/
   * Assignee: yugr
   * Status: DONE (15m)
-  * Article itself just confirms Benchmarks Game results; an interesting discussion in comments about `unique_ptr`
+  * Main idea: article itself just confirms Benchmarks Game results; an interesting discussion in comments about `unique_ptr`
   * More materials: added info about `unique_ptr` vs `Box` to features
 - Rust vs. C++ на алгоритмических задачах: https://habr.com/ru/articles/344282/
   * Assignee: yugr
   * Status: DONE (10m)
-  * Article compares C++ vs Rust on simple programs
+  * Main idea: article compares C++ vs Rust on simple programs
   * More materials: nothing interesting in comments
 - Safety vs Performance. A case study of C, C++ and Rust sort implementations: https://github.com/Voultapher/sort-research-rs/blob/main/writeup/sort_safety/text.md
   * Assignee: yugr
   * Status: DONE (10m)
-  * Article benchmarks various sort implementations in Rust/C++ and their safety guarantees
-  * Rust implementations also have to be memory-safe
-  * Only relevant part is perf comparison (Rust wins by Nx)
+  * Main idea: article benchmarks various sort implementations in Rust/C++ and their safety guarantees
+    + Rust implementations also have to be memory-safe
+  * Conclusion: the relevant part is perf comparison (Rust wins by Nx)
   * More materials: NA
 - Loop Performance in Rust: https://www.youtube.com/watch?v=E37rSIhWjso
   * Assignee: yugr
   * Status: DONE (50m)
-  * Video discusses loop codegen :
+  * Main idea: discusses loop codegen :
     + autovec
     + lack of fast math
     + LLVM misopts
@@ -84,7 +84,7 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Rust vs C++ Theoretical Performance: https://users.rust-lang.org/t/rust-vs-c-theoretical-performance/4069
   * Assignee: yugr
   * Status: DONE (30m)
-  * Discussion about Rust potential improvements over C++:
+  * Main idea: discusses potential Rust improvements over C++:
     + niche optimization
     + shared refs guarantee immutability
     + aliasing
@@ -126,7 +126,7 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Zero cost abstractions: Rust vs C++: https://www.rottedfrog.co.uk/?p=24
   * Assignee: yugr
   * Status: DONE (20m)
-  * Article compares performance of `unique_ptr` vs `Box`
+  * Main idea: compares performance of `unique_ptr` vs `Box`
     + code is larger to support panic unwinding
     + LLVM does not optimize dead code after tail call
     + significantly more code to support panicking (but it can be removed with `-C panic=abort`)
@@ -136,19 +136,19 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Evaluating Languages for Bioinformatics: https://github.com/rjray/mscs-thesis-project
   * Assignee: yugr
   * Status: DONE (5m)
-  * Thesis investigates applicability of diff. languages to bioinformatics
-  * He runs several domain-relevant benchmarks and compares results, without any analysis
+  * Main idea: thesis investigates applicability of diff. languages to bioinformatics
+    + Author runs several domain-relevant benchmarks and compares results, without low-level analysis
   * Conclusion: not relevant
   * More materials: none
 - Rust is now overall faster than C in benchmarks: https://www.reddit.com/r/rust/comments/kpqmrh/rust_is_now_overall_faster_than_c_in_benchmarks/
   * Assignee: yugr
   * Status: DONE (5m)
-  * Just general rant about Benchmarks Game irrelevance
+  * Main idea: just general rant about Benchmarks Game irrelevance
   * More materials: none
 - Rust Optimizations That C++ Can't Do: https://robert.ocallahan.org/2017/04/rust-optimizations-that-c-cant-do_5.html
   * Assignee: yugr
   * Status: DONE (20m)
-  * Just an example of aliasing optimization
+  * Main idea: just an example of aliasing optimization
   * More materials: scanned mats in
     + "rust performance site:https://robert.ocallahan.org"
     + [Reddit](https://www.reddit.com/r/rust/comments/63ijkw/rust_optimizations_that_c_cant_do/)
@@ -156,7 +156,7 @@ On the other hand, once all materials are analyzed we won't care about this file
 - (!) What makes Rust faster than C/C++? https://www.reddit.com/r/rust/comments/px72r1/what_makes_rust_faster_than_cc/
   * Assignee: yugr
   * Status: DONE (50m)
-  * A lot of high quality comments (a must-read for us):
+  * Main idea: a lot of high quality comments (a must-read for us):
     + [this](https://www.reddit.com/r/rust/comments/px72r1/comment/hem26o0/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button)
     + other comments mention known issues: stdlib data structures, aliasing, moves, etc.
     + a [linked article](https://matklad.github.io/2020/09/20/why-not-rust.html) mentions [expression templates](https://en.wikipedia.org/wiki/Expression_templates) which are very important to linear algebra code but impossible in Rust
@@ -164,7 +164,7 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Why ISN'T Rust faster than C? https://www.reddit.com/r/rust/comments/1at3r6d/why_isnt_rust_faster_than_c_given_it_can_leverage/
   * Assignee: yugr
   * Statis: DONE (30m)
-  * A general discussion; mentioned topic
+  * Main idea: general discussion; mentioned topics :
     + aliasing
     + niche opts
     + high-level data structures
@@ -197,8 +197,7 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Rewrite the VP9 codec library in Rust: https://news.ycombinator.com/item?id=39537735
   * Assignee: yugr
   * Status: DONE (10m)
-  * Post is just about example kernel driver written in Rust
-  * Commenters discuss cost of bounds checks at some length but nothing new
+  * Main idea: post is just about example kernel driver written in Rust; commenters discuss cost of bounds checks at some length but nothing new
   * More materials: none
 - Is C++ more performant than Rust? https://www.reddit.com/r/cpp/comments/17zaiu6/is_c_more_performant_than_rust/
   * Assignee: yugr
@@ -211,11 +210,11 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Why Not Rust ? https://github.com/guevara/read-it-later/issues/8279
   * Assignee: yugr
   * Status: DONE (10m)
-  * Post lists several Rust perf problems:
+  * Main idea: post lists several Rust perf problems:
     + `memcpy`'s and placement new
     + LLVM `noalias` problems
     + no expression templates
-  * All mentioned issues are fixed by now
+    + all mentioned issues are fixed by now
   * More materials: added links
 - Expression Templates in Rust? https://www.reddit.com/r/rust/comments/1f0hi5k/expression_templates_in_rust
 - Expression templates in Eigen: https://eigen.tuxfamily.org/index.php?title=Expression_templates
@@ -232,14 +231,12 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Possible Rust-specific optimizations: https://users.rust-lang.org/t/possible-rust-specific-optimizations/79895
   * Assignee: yugr
   * Status: DONE (5m)
-  * User wonders what are potential, NYI optimizations
-  * The only answer is `noalias`
+  * Main idea: user wonders what are potential, NYI optimizations; the only answer is `noalias`
   * More materials: added links
 - What kind of performance rust is trying to achieve? https://users.rust-lang.org/t/what-kind-of-performance-rust-is-trying-to-achieve/1674
   * Assignee: yugr
   * Status: DONE (20m)
-  * User asked whether Rust tries to be as fast as C and why
-  * Answers:
+  * Main idea: user asked whether Rust tries to be as fast as C and why; answers:
     + Steven Klabnik: yes, C is reference
     + opts: noalias, codegen via macro (e.g. in Servo), fearless concurrency
   * More materials: couldn't find any relevant links for improving performance by codegen via macro
@@ -249,8 +246,8 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Rust under the hood: https://www.youtube.com/watch?v=L8caNpK3Shs
   * Assignee: yugr
   * Status: DONE (20m)
-  * Discusses codegen for some common constructs
-  * Mentions niche opt but otherwise nothing relevant for us
+  * Main idea: discusses codegen for some common constructs
+    + mentions niche opt but otherwise nothing relevant for us
 - Rust loves LLVM: https://www.youtube.com/watch?v=Kqz-umsAnk8 (https://llvm.org/devmtg/2024-10/slides/keynote/Popov-Rust_Heart_LLVM.pdf)
 - Rust and LLVM in 2021: https://llvm.org/devmtg/2021-02-28/slides/Patrick-rust-llvm.pdf
   * Assignee: yugr
@@ -267,7 +264,7 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Battle Of The Backends: Rust vs. Go vs. C# vs. Kotlin - inovex GmbH: https://www.inovex.de/de/blog/rust-vs-go-vs-c-vs-kotlin
   * Assignee: yugr
   * Status: DONE (0m)
-  * Problem: just comparing performance of some network app (no analysis)
+  * Main idea: just comparing performance of some network app (no analysis)
 - How much does Rust's bounds checking actually cost? https://blog.readyset.io/bounds-checks/
   * Assignee: yugr
   * Status: DONE (75m)
@@ -282,8 +279,8 @@ On the other hand, once all materials are analyzed we won't care about this file
 - A cool Rust optimization story: https://quickwit.io/blog/search-a-sorted-block
   * Assignee: yugr
   * Status: DONE (10m)
-  * OP used different implementations of binary search in his library
-  * Basically the conclusion is that compiler is not always perfect e.g. [stopped generating branchless code](https://bugs.llvm.org/show_bug.cgi?id=40027) at some point
+  * Main idea: OP used different implementations of binary search in his library
+    + Basically the conclusion is that compiler is not always perfect e.g. [stopped generating branchless code](https://bugs.llvm.org/show_bug.cgi?id=40027) at some point
   * More materials:
     + Reddit comments: https://www.reddit.com/r/rust/comments/qde4w7/a_cool_rust_optimization_story/ (nothing relevant)
 - Inefficient codegen when accessing a vector with literal indices: https://github.com/rust-lang/rust/issues/50759
@@ -295,13 +292,16 @@ On the other hand, once all materials are analyzed we won't care about this file
   * LLVM: no good/generic way to solve this in LLVM
   * More materials: NA
 - Costs of iterators and Zero Cost Abstractions in Rust: https://github.com/mike-barber/rust-zero-cost-abstractions
-  * pay attention to this post, it directly intersects with our topic
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (10m)
+  * Main idea: analyzes simple loop in multiple languages
+  * Conclusion: no new info for us
+  * More materials:
+    + [video](https://www.youtube.com/watch?v=mX1BsqTfy6E)
 - Addressing Rust optimization failures in LLVM: http://www.khei4.com/gsoc2023/
   * Assignee: yugr
   * Status: DONE (5m)
-  * Just solved some LLVM bugs, no generalizations
+  * Main idea: just solved some LLVM bugs, no generalizations
   * More materials: N/A
 - Why does the Rust compiler not optimize code assuming that two mutable references cannot alias? https://stackoverflow.com/questions/57259126/why-does-the-rust-compiler-not-optimize-code-assuming-that-two-mutable-reference
   * Assignee: yugr
@@ -327,8 +327,8 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Rust `[#inline]` annotations discussion https://github.com/rust-lang/hashbrown/pull/119
   * Assignee: zakhar
   * Status: DONE (15m)
-  * Discussion mostly about `[#inline]` effect on compile time
-  * Not our topic
+  * Main idea: mostly discusses about `[#inline]` effect on compile time
+    + Not our topic
   * More materials: N/A
 - Check for Integer Overflow by Default: https://github.com/rust-lang/rust/issues/47739
 - Myths and Legends about Integer Overflow in Rust: https://huonw.github.io/blog/2016/04/myths-and-legends-about-integer-overflow-in-rust/

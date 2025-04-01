@@ -8,6 +8,8 @@ In particular:
   - shared references are guaranteed to point to immutable data (and thus are different from C++ `const T &` !)
   - all references are guaranteed to be non-null
 
+Note that aliasing optimizations are NOT applied to pointers.
+
 # Examples
 
 - [Rust Optimizations That C++ Can't Do](https://robert.ocallahan.org/2017/04/rust-optimizations-that-c-cant-do_5.html)
