@@ -562,7 +562,7 @@ On the other hand, once all materials are analyzed we won't care about this file
         + CGUs may cause unpredictable behaviour when comparing pointers https://github.com/rust-lang/rust/issues/46139
         + TCO in Rust blogpost https://seanchen1991.github.io/posts/tco-story/
         + Explicit Tail Call RFC https://github.com/rust-lang/rfcs/pull/3407
-- (!) CGUs may cause unpredictable behaviour when comparing pointers https://github.com/rust-lang/rust/issues/46139
+- CGUs may cause unpredictable behaviour when comparing pointers https://github.com/rust-lang/rust/issues/46139
     * Assignee: zakhar
     * Status: DONE (15m)
     * Problem: Comparison of vtable pointers can be true or false depending of number of CGU in build configuration
