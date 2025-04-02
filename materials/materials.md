@@ -326,7 +326,10 @@ On the other hand, once all materials are analyzed we won't care about this file
   * More materials: no new mats in suggestions
 - Assembly examples of missed Rust compiler optimizations: https://www.reddit.com/r/rust/comments/14zhb0s/assembly_examples_of_missed_rust_compiler/
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (10m)
+  * Main idea: two examples of missed LLVM optimizations
+    + Not relevant
+  * More materials: none
 - Does the compiler optimize moves? https://www.reddit.com/r/rust/comments/ykku69/does_the_compiler_optimize_moves/
   * this should be a dedicated perf issue
   * Assignee: yugr
