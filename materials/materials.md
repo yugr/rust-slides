@@ -333,7 +333,7 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Does the compiler optimize moves? https://www.reddit.com/r/rust/comments/ykku69/does_the_compiler_optimize_moves/
   * this should be a dedicated perf issue
   * Assignee: yugr
-  * Status: in progress
+  * Status: in progress (55m)
 - Rust `[#inline]` annotations discussion https://github.com/rust-lang/hashbrown/pull/119
   * Assignee: zakhar
   * Status: DONE (15m)
