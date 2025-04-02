@@ -1,6 +1,10 @@
 Rust does not always perform move/copy elision.
 
-This is actually similar to C++ : code like
+Rust copies/moves are sife-effect free so it does not need
+special copy-elision rules like C++. So in theory compiler
+is capable of removing all redundant `memcpy`'s.
+
+E.g. C++ code like
 ```c++
 #include <utility>
 
@@ -24,10 +28,8 @@ void cpy(A a) {
   sink(a2);
 }
 ```
-is not optimized either.
-
-Equivalent Rust code contains just 1 `memcpy` :
-```
+is not optimized by Clang/GCC whereas equivalent Rust code contains just 1 `memcpy` :
+```rust
 use std::hint::black_box;
 
 #[derive(Clone)]
@@ -48,3 +50,6 @@ pub fn cpy(a: A) {
 }
 ```
 (compile via `rustc -O --emit asm --crate-type=lib repro.rs -o- | c++filt`).
+
+Unfortunately in some cases Rust still generates redundant `memcpy`'s
+(e.g. why there is one in program above ?).
