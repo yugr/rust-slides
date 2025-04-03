@@ -29,3 +29,6 @@ Look for any mentions of `/performance|optimizations|compiler|inefficient|code ?
 Check Github for innate (unfixable, by design) performance issues :
   - rejected opts: https://github.com/rust-lang/rust/issues?q=is%3Aissue%20state%3Aclosed%20reason%3Anot-planned%20label%3AI-slow
   - compiler RFCs: https://github.com/rust-lang/rust/issues?q=is%3Aissue%20label%3AT-compiler%20rfc
+
+Check compiler team repo :
+  - https://github.com/rust-lang/compiler-team

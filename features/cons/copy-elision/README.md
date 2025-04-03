@@ -1,8 +1,10 @@
 Rust does not always perform move/copy elision.
 
-Rust copies/moves are sife-effect free so it does not need
-special copy-elision rules like C++. So in theory compiler
-is capable of removing all redundant `memcpy`'s.
+Rust copies/moves are side-effect-free (have "no user-visible
+effects") so it does not need special copy-elision rules
+like C++. So in theory compiler is capable of
+removing all redundant `memcpy`'s.
+E.g. Rust had (N)RVO since day one.
 
 E.g. C++ code like
 ```c++
@@ -38,18 +40,57 @@ pub struct A {
 }
 
 pub fn mov(a: A) {
-    let a1 = a;
-    let a2 = a1;
-    black_box(&a2);
+    let a = a;
+    let a = a;
+    black_box(&a);
 }
 
 pub fn cpy(a: A) {
-    let a1 = a.clone();
-    let a2 = a1.clone();
-    black_box(&a2);
+    let a = a.clone();
+    let a = a.clone();
+    black_box(&a);
 }
 ```
 (compile via `rustc -O --emit asm --crate-type=lib repro.rs -o- | c++filt`).
 
-Unfortunately in some cases Rust still generates redundant `memcpy`'s
-(e.g. why there is one in program above ?).
+Function returns and parameter passing also do not generate `memcpy` :
+```
+use std::hint::black_box;
+
+#[derive(Clone)]
+pub struct A {
+  pub data: [i32; 1024],
+}
+
+extern "C" {
+    fn foo() -> A;
+}
+
+pub fn param(a: A) {
+    black_box(&a);
+}
+
+pub fn ret() -> A {
+    unsafe { foo() }
+}
+```
+
+On the other hand in many other cases Rust keeps spurious `memcpy`'s
+e.g. in
+```
+use std::hint::black_box;
+
+#[derive(Clone)]
+pub struct A {
+  pub data: [i32; 1024],
+}
+
+pub fn mov(a: A) {
+    let a = a;
+    black_box(&a);
+}
+```
+The reason is that LLVM is not always good at optimizing `memcpy`
+so Rust has [custom optimization passes](https://github.com/rust-lang/rust/blob/master/compiler/rustc_mir_transform/src/dest_prop.rs) to deal with them.
+This work is [ongoing](https://github.com/rust-lang/rust/labels/A-mir-opt-nrvo)
+e.g. [#91521](https://github.com/rust-lang/rust/issues/91521) has been fixed.

@@ -4,9 +4,12 @@ Note that section split below is rather crude and may do more harm than good.
 Please refactor mercilessly if you think it makes sense.
 On the other hand, once all materials are analyzed we won't care about this file.
 
-- TODO(gh-2) add more interesting issues from
+- TODO(gh-2) add more interesting materials from
   * rejected opts: https://github.com/rust-lang/rust/issues?q=is%3Aissue%20state%3Aclosed%20reason%3Anot-planned%20label%3AI-slow
   * compiler RFCs: https://github.com/rust-lang/rust/issues?q=is%3Aissue%20label%3AT-compiler%20rfc
+  * MIR opts: https://github.com/rust-lang/rust/issues?q=state%3Aopen%20label%3A%22A-mir-opt%22
+- TODO(gh-8) add more interesting materials from
+  * https://github.com/rust-lang/compiler-team
 
 # Coding guidelines
 
@@ -478,6 +481,7 @@ On the other hand, once all materials are analyzed we won't care about this file
     * Problem: FFT implementation takes 10x more time than manual implementation
     * Root cause: compiler seems to be unable to propagate compile-time knowledge when .cycle() and .skip() are used together
     * Solution: use mutable iterator with .nth() instead of .skip()
+- Memory-safe PNG decoders now vastly outperform C PNG libraries: https://www.reddit.com/r/programming/comments/1hak25t/memorysafe_png_decoders_now_vastly_outperform_c/
 
 # Panics
 
