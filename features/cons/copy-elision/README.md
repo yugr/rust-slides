@@ -4,7 +4,7 @@ Rust copies/moves are side-effect-free (have "no user-visible
 effects") so it does not need special copy-elision rules
 like C++. So in theory compiler is capable of
 removing all redundant `memcpy`'s.
-E.g. Rust had (N)RVO since day one.
+E.g. Rust had (non-guaranteed) (N)RVO since day one.
 
 E.g. C++ code like
 ```c++
@@ -93,4 +93,20 @@ pub fn mov(a: A) {
 The reason is that LLVM is not always good at optimizing `memcpy`
 so Rust has [custom optimization passes](https://github.com/rust-lang/rust/blob/master/compiler/rustc_mir_transform/src/dest_prop.rs) to deal with them.
 This work is [ongoing](https://github.com/rust-lang/rust/labels/A-mir-opt-nrvo)
-e.g. [#91521](https://github.com/rust-lang/rust/issues/91521) has been fixed.
+e.g. [#91521](https://github.com/rust-lang/rust/issues/91521) has been fixed
+and [#32966](https://github.com/rust-lang/rust/issues/32966) hasn't.
+
+# Solutions
+
+Enable additional MIR opts (does not help with case above though):
+  - `-Zmir-enable-passes=+DestinationPropagation,+RenameReturnPlace`
+  - `-Zmir-opt-level=4`
+  - (may need to prepend `-Zunsound-mir-opts`)
+
+# Examples
+
+- [#116541](https://github.com/rust-lang/rust/issues/116541)
+
+# TODO
+
+- Read comments about problems with copy elision in `dest_prop.rs` and `nrvo.rs`

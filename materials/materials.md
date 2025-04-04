@@ -243,6 +243,11 @@ On the other hand, once all materials are analyzed we won't care about this file
     + Steven Klabnik: yes, C is reference
     + opts: noalias, codegen via macro (e.g. in Servo), fearless concurrency
   * More materials: couldn't find any relevant links for improving performance by codegen via macro
+- C++ vector::emplace_back vs rust Vec::push: https://www.reddit.com/r/rust/comments/1eeuqtc/c_vectoremplace_back_vs_rust_vecpushf_copying_v/
+  * Very important comment from SkiFire13
+  * Be sure to check 1% commenters !
+- How to create large objects directly in heap: https://users.rust-lang.org/t/how-to-create-large-objects-directly-in-heap/26405
+  * Very important comment from Klabnik
 
 # Compiler codegen
 

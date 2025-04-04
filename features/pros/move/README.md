@@ -2,7 +2,7 @@ This is about Rust's move-by-default feature.
 
 Rust has _destructive_ moves i.e. destructor of moved object is not called afterwards.
 
-Also Rust's move is just a `memcpy` which is a single instruction in LLVM IR
+Also Rust's move (and copy, for copyable types) is just a `memcpy` which is a single instruction in LLVM IR
 so much easier to optimize in middle-end.
 
 # Examples
