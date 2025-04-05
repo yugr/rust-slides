@@ -53,30 +53,7 @@ pub fn cpy(a: A) {
 ```
 (compile via `rustc -O --emit asm --crate-type=lib repro.rs -o- | c++filt`).
 
-Function returns and parameter passing also do not generate `memcpy` :
-```
-use std::hint::black_box;
-
-#[derive(Clone)]
-pub struct A {
-  pub data: [i32; 1024],
-}
-
-extern "C" {
-    fn foo() -> A;
-}
-
-pub fn param(a: A) {
-    black_box(&a);
-}
-
-pub fn ret() -> A {
-    unsafe { foo() }
-}
-```
-
-On the other hand in many other cases Rust keeps spurious `memcpy`'s
-e.g. in
+In many cases Rust keeps spurious `memcpy`'s esp. on function bondary:
 ```
 use std::hint::black_box;
 
@@ -86,22 +63,28 @@ pub struct A {
 }
 
 pub fn mov(a: A) {
-    let a = a;
-    black_box(&a);
+    black_box(a);
 }
 ```
+
 The reason is that LLVM is not always good at optimizing `memcpy`
 so Rust has [custom optimization passes](https://github.com/rust-lang/rust/blob/master/compiler/rustc_mir_transform/src/dest_prop.rs) to deal with them.
 This work is [ongoing](https://github.com/rust-lang/rust/labels/A-mir-opt-nrvo)
 e.g. [#91521](https://github.com/rust-lang/rust/issues/91521) has been fixed
-and [#32966](https://github.com/rust-lang/rust/issues/32966) hasn't.
+and [#32966](https://github.com/rust-lang/rust/issues/32966)
+and [#79914](https://github.com/rust-lang/rust/issues/79914) haven't.
+Some info on why this may happen can be found in [#103172](https://github.com/rust-lang/rust/pull/103172).
 
 # Solutions
+
+Pass large structs by reference.
 
 Enable additional MIR opts (does not help with case above though):
   - `-Zmir-enable-passes=+DestinationPropagation,+RenameReturnPlace`
   - `-Zmir-opt-level=4`
   - (may need to prepend `-Zunsound-mir-opts`)
+
+(does not help in all cases).
 
 # Examples
 
@@ -110,3 +93,4 @@ Enable additional MIR opts (does not help with case above though):
 # TODO
 
 - Read comments about problems with copy elision in `dest_prop.rs` and `nrvo.rs`
+- Why Rust generates `memcpy` in simple example above ?
