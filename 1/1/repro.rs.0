@@ -1,0 +1,15 @@
+use std::hint::black_box;
+
+pub struct A {
+  data: [i32; 1024],
+}
+
+extern "Rust" {
+  fn foo(a: &A);
+}
+
+pub fn mov(a: A) {
+    let a1 = a;
+    let a2 = a1;
+    unsafe { foo(&a2) }
+}
