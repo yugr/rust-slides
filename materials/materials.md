@@ -248,6 +248,8 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Be sure to check 1% commenters !
 - How to create large objects directly in heap: https://users.rust-lang.org/t/how-to-create-large-objects-directly-in-heap/26405
   * Very important comment from Klabnik
+- Introduce deduced parameter attributes: https://github.com/rust-lang/rust/pull/103172
+  * Mentions some relevant details about `memcpy` elision
 
 # Compiler codegen
 
