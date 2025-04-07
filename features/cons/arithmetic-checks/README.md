@@ -1,5 +1,5 @@
 Rust adds safety checks for some arithmetic operations.
-See [dedicated page](../../overflow-checks/README.md) for overflow checks.
+See [dedicated page](overflow-checks/README.md) for overflow checks.
 
 Another example is division - as shown [here](https://codspeed.io/blog/why-rust-doesnt-need-a-standard-divrem#an-inline-assembly-version)
 the overhead may be quite significant (7%).
