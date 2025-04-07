@@ -317,6 +317,7 @@ On the other hand, once all materials are analyzed we won't care about this file
 - How to zip two slices efficiently: https://users.rust-lang.org/t/how-to-zip-two-slices-efficiently/2048
 - How to avoid bounds checks in Rust without unsafe: https://shnatsel.medium.com/how-to-avoid-bounds-checks-in-rust-without-unsafe-f65e618b4c1e
   * this is oft cited
+- How to avoid bounds checking: https://users.rust-lang.org/t/how-to-avoid-bounds-checking/4433
 
 # Copy elision/NRVO
 
