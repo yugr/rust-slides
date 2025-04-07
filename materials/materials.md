@@ -272,10 +272,20 @@ On the other hand, once all materials are analyzed we won't care about this file
   * need to run `cargo remark` on some real projects
 - Improving crypto code in Rust using LLVM’s optnone: https://blog.trailofbits.com/2022/02/01/part-2-rusty-crypto/
   * Assignee: yugr
-  * Status: in progress
-- Why Rust doesn't need a standard div_rem: An LLVM tale: https://codspeed.io/blog/why-rust-doesnt-need-a-standard-divrem (also comments in https://www.reddit.com/r/rust/comments/173wr86/why_rust_doesnt_need_a_standard_div_rem_an_llvm)
+  * Status: DONE (5m)
+  * Author needs constant time execution in crypto code so he disables optimizations
+    + There are instructions on building and small updates of compiler
+  * More materials: no relevant materials in https://blog.trailofbits.com/categories/rust/
+- Why Rust doesn't need a standard div_rem: An LLVM tale: https://codspeed.io/blog/why-rust-doesnt-need-a-standard-divrem
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (35m)
+  * Author investigates why Rust does not have `div_rem` API in stdlib
+    + Rust relies on LLVM to combine `div` and `rem` in IR
+    + Fusion happens but Rust also inserts checks
+    + Checks can be avoided by using unchecked intrinsics
+  * More materials:
+    + [Reddit](https://www.reddit.com/r/rust/comments/173wr86/why_rust_doesnt_need_a_standard_div_rem_an_llvm)
+    + no more relevants posts
 - Asm snippets: https://www.eventhelix.com/rust/
 - Battle Of The Backends: Rust vs. Go vs. C# vs. Kotlin - inovex GmbH: https://www.inovex.de/de/blog/rust-vs-go-vs-c-vs-kotlin
   * Assignee: yugr
@@ -464,6 +474,7 @@ On the other hand, once all materials are analyzed we won't care about this file
   * overhead of consuming iterators
 - 5x Slower than Go? Optimizing Rust Protobuf Decoding Performance: https://www.greptime.com/blogs/2024-04-09-rust-protobuf-performance
 - Rust Performance Pitfalls: https://llogiq.github.io/2017/06/01/perf-pitfalls.html
+  * Reddit: https://www.reddit.com/r/rust/comments/6ep1ao/blog_rust_performance_pitfalls/
 - Where should I start if I want to squeeze out as much performance as I can from my rust code? https://www.reddit.com/r/rust/comments/bb5lnj/where_should_i_start_if_i_want_to_squeeze_out_as/
 - How to avoid bounds checks in Rust: https://shnatsel.medium.com/how-to-avoid-bounds-checks-in-rust-without-unsafe-f65e618b4c1e
   * this article is very important for bounds checking part
