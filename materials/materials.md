@@ -260,7 +260,12 @@ On the other hand, once all materials are analyzed we won't care about this file
     + mentions niche opt but otherwise nothing relevant for us
 - Rust loves LLVM: https://www.youtube.com/watch?v=Kqz-umsAnk8 (https://llvm.org/devmtg/2024-10/slides/keynote/Popov-Rust_Heart_LLVM.pdf)
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (15m)
+  * General overview of Rust-LLVM integration, touches several perf-related topics but no new info:
+    + bounds checks
+    + memcpy elimination
+    + inclusive ranges
+  * More materials: none
 - Rust and LLVM in 2021: https://llvm.org/devmtg/2021-02-28/slides/Patrick-rust-llvm.pdf
   * Assignee: yugr
   * Status: DONE (20m)
