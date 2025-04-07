@@ -374,9 +374,17 @@ On the other hand, once all materials are analyzed we won't care about this file
     + Not our topic
   * More materials: N/A
 - Check for Integer Overflow by Default: https://github.com/rust-lang/rust/issues/47739
+  * Status: in progress
+  * Assignee: yugr
 - Myths and Legends about Integer Overflow in Rust: https://huonw.github.io/blog/2016/04/myths-and-legends-about-integer-overflow-in-rust/
+  * Status: in progress
+  * Assignee: yugr
 - How are bounds checks optimized away? https://users.rust-lang.org/t/how-are-bounds-checks-optimized-away/91737
+  * Status: in progress
+  * Assignee: yugr
 - Rust's Vec indexing is bound-checked by default: https://news.ycombinator.com/item?id=30867188
+  * Status: in progress
+  * Assignee: yugr
 - Iterators and eliminating all runtime bounds checks: https://users.rust-lang.org/t/iterators-and-eliminating-all-runtime-bounds-checks/13935
 - How to zip two slices efficiently: https://users.rust-lang.org/t/how-to-zip-two-slices-efficiently/2048
 - How to avoid bounds checks in Rust without unsafe: https://shnatsel.medium.com/how-to-avoid-bounds-checks-in-rust-without-unsafe-f65e618b4c1e
