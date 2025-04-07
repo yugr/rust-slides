@@ -10,6 +10,7 @@ On the other hand, once all materials are analyzed we won't care about this file
   * MIR opts: https://github.com/rust-lang/rust/issues?q=state%3Aopen%20label%3A%22A-mir-opt%22
 - TODO(gh-8) add more interesting materials from
   * https://github.com/rust-lang/compiler-team
+- TODO(gh-10) add more interesting materials from RFCs
 
 # Coding guidelines
 
@@ -22,7 +23,7 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Some general guidelines from Redox OS https://doc.redox-os.org/book/rusting-properly.html
 - Found no guidelines in [other projects](real-projects.md) in gh-3
 
-# C++ comparison
+# C/C++ comparison
 
 - C++ faster and safer by Rust: benchmarked by Yandex: https://habr.com/ru/articles/492410/
   * Assignee: yugr
@@ -175,13 +176,6 @@ On the other hand, once all materials are analyzed we won't care about this file
     + bounds checks hurting autovec
   * Commenters conclude that it's not valid to compare Rust to pure C (C++ should be used)
   * More materials: nothing unseen before in links
-- Why is Rust not able to optimize this? https://www.reddit.com/r/rust/comments/181tp1a/why_is_rust_not_able_to_optimize_this/ (signed overflow)
-  * Assignee: yugr
-  * Statis: DONE (20m)
-  * Problem: `(num * 2) / 2` not optimized in Rust
-  * Root cause: overflow is defined in Rust
-  * Solutions: `unchecked` methods, `unchecked_math` pragma, compiler hints
-  * More materials: nothing in links
 - Is bound checking the only runtime cost of Rust? https://users.rust-lang.org/t/is-bound-checking-the-only-runtime-cost-of-rust/66661
 - Why is Rust slightly slower than C? https://news.ycombinator.com/item?id=20944403
   * Assignee: yugr
@@ -221,6 +215,17 @@ On the other hand, once all materials are analyzed we won't care about this file
   * More materials: added links
 - Expression Templates in Rust? https://www.reddit.com/r/rust/comments/1f0hi5k/expression_templates_in_rust
 - Expression templates in Eigen: https://eigen.tuxfamily.org/index.php?title=Expression_templates
+- What kind of performance rust is trying to achieve? https://users.rust-lang.org/t/what-kind-of-performance-rust-is-trying-to-achieve/1674
+  * Assignee: yugr
+  * Status: DONE (20m)
+  * Main idea: user asked whether Rust tries to be as fast as C and why; answers:
+    + Steven Klabnik: yes, C is reference
+    + opts: noalias, codegen via macro (e.g. in Servo), fearless concurrency
+  * More materials: couldn't find any relevant links for improving performance by codegen via macro
+- Battle Of The Backends: Rust vs. Go vs. C# vs. Kotlin - inovex GmbH: https://www.inovex.de/de/blog/rust-vs-go-vs-c-vs-kotlin
+  * Assignee: yugr
+  * Status: DONE (0m)
+  * Main idea: just comparing performance of some network app (no analysis)
 
 # Rust-specific opts
 
@@ -236,13 +241,93 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Status: DONE (5m)
   * Main idea: user wonders what are potential, NYI optimizations; the only answer is `noalias`
   * More materials: added links
-- What kind of performance rust is trying to achieve? https://users.rust-lang.org/t/what-kind-of-performance-rust-is-trying-to-achieve/1674
+
+# Overflow checks
+
+- Why is Rust not able to optimize this? https://www.reddit.com/r/rust/comments/181tp1a/why_is_rust_not_able_to_optimize_this/ (signed overflow)
   * Assignee: yugr
-  * Status: DONE (20m)
-  * Main idea: user asked whether Rust tries to be as fast as C and why; answers:
-    + Steven Klabnik: yes, C is reference
-    + opts: noalias, codegen via macro (e.g. in Servo), fearless concurrency
-  * More materials: couldn't find any relevant links for improving performance by codegen via macro
+  * Statis: DONE (20m)
+  * Problem: `(num * 2) / 2` not optimized in Rust
+  * Root cause: overflow is defined in Rust
+  * Solutions: `unchecked` methods, `unchecked_math` pragma, compiler hints
+  * More materials: nothing in links
+- The Performance Cost of Integer Overflow Checking: https://news.ycombinator.com/item?id=8765714
+  * Danluu's blog is very important
+- Thought: switch the default on overflow checking: https://internals.rust-lang.org/t/thought-switch-the-default-on-overflow-checking-and-provide-rfc-560s-scoped-attribute-for-checked-arithmetic/15118
+  * Assignee: yugr
+  * Status: DONE (10m)
+  * Discussion of RFC 560 and changing integer overflow checks to be enabled in release by default
+  * More materials: added link to great article by John Regher about overflow overheads
+- Check for Integer Overflow by Default: https://github.com/rust-lang/rust/issues/47739
+  * Status: DONE (50m)
+  * Assignee: yugr
+  * OP suggests to enable overflow checking in release by default
+  * Other people also complain how `as` is unchecked
+  * More materials: added more links
+- Myths and Legends about Integer Overflow in Rust: https://huonw.github.io/blog/2016/04/myths-and-legends-about-integer-overflow-in-rust/
+  * Status: in progress
+  * Assignee: yugr
+  * More materials:
+    + [User forum](https://users.rust-lang.org/t/myths-and-legends-about-integer-overflow-in-rust/5612)
+    + [Reddit](https://www.reddit.com/r/rust/comments/4gz93u/myths_and_legends_about_integer_overflow_in_rust/)
+    + [HN](https://news.ycombinator.com/item?id=11595398)
+- [RFC 560](https://github.com/rust-lang/rfcs/blob/master/text/0560-integer-overflow.md)
+  * Status: in progress (20m)
+  * Assignee: yugr
+  * RFC talks about background and compromises of decision to diff debug and release behavior
+    + I tried to merge all relevant info to section about overflow checks
+  * More materials:
+    + [GH discussion](https://github.com/rust-lang/rfcs/pull/560) - still needs to survey this !
+- Square powers not being fully optimized? https://www.reddit.com/r/rust/comments/exojhk/square_powers_not_being_fully_optimized/
+  * Assignee: yugr
+  * Status: postponed (awaiting response, 20m)
+  * Problem: `2.pow(n)` not optimized to `1 << n`
+  * Root cause: missing optimization in LLVM
+  * Solution: was fixed in LLVM in [upstream #47234](https://github.com/rust-lang/rust/issues/47234) but the reverted due to [upstream #120537](https://github.com/rust-lang/rust/issues/120537); current status unclear so I asked in first issue
+  * More materials: no interesting mats in suggestions
+
+# Bounds checks
+
+- How much does Rust's bounds checking actually cost? https://blog.readyset.io/bounds-checks/
+  * Assignee: yugr
+  * Status: DONE (75m)
+  * Problem: investigates overhead of bounds checking operations
+  * Solution:
+    + experiments with replacing accesses with `get_unchecked` and modifying compiler (!)
+    + does not provide any analysis of results, asm, etc.
+    + no noticeable changes on her machine but up to 4x according to comments on Reddit
+  * More materials:
+    + a lot of comments on [Reddit](https://www.reddit.com/r/rust/comments/z92vid/measuring_how_much_rusts_bounds_checking_actually/), [Reddit](https://www.reddit.com/r/programming/comments/z9hjpk/how_much_does_rusts_bounds_checking_actually_cost/) and [HackerNews](https://news.ycombinator.com/item?id=33805419)
+    + added new materials
+- Inefficient codegen when accessing a vector with literal indices: https://github.com/rust-lang/rust/issues/50759
+  * Assignee: yugr
+  * Status: DONE (20-30m)
+  * Problem: repetative indexing checks when Vec/slice is accessed multiple times
+  * Root cause: Rust has to preserve order of checks (for not so clear reason)
+  * Solution: can be worked around via `assert!` hint (looks like generic solution for such situations)
+  * LLVM: no good/generic way to solve this in LLVM
+  * More materials: NA
+- How are bounds checks optimized away? https://users.rust-lang.org/t/how-are-bounds-checks-optimized-away/91737
+  * Status: in progress
+  * Assignee: yugr
+- Rust's Vec indexing is bound-checked by default: https://news.ycombinator.com/item?id=30867188
+  * Status: in progress
+  * Assignee: yugr
+- Iterators and eliminating all runtime bounds checks: https://users.rust-lang.org/t/iterators-and-eliminating-all-runtime-bounds-checks/13935
+- How to zip two slices efficiently: https://users.rust-lang.org/t/how-to-zip-two-slices-efficiently/2048
+- How to avoid bounds checks in Rust without unsafe: https://shnatsel.medium.com/how-to-avoid-bounds-checks-in-rust-without-unsafe-f65e618b4c1e
+  * this is oft cited
+
+# Copy elision/NRVO
+
+- Does the compiler optimize moves? https://www.reddit.com/r/rust/comments/ykku69/does_the_compiler_optimize_moves/
+  * this should be a dedicated perf issue
+  * Assignee: yugr
+  * Status: DONE (at least 4h)
+  * Discusses a known problem when compiler fails to remove `memcpy`'s
+  * More materials: added a lot of links
+- Does Rust have return value optimization? https://users.rust-lang.org/t/does-rust-have-return-value-optimization/10389
+- Copy elision & RVO optimization: https://internals.rust-lang.org/t/copy-elision-rvo-optimization/17276
 - C++ vector::emplace_back vs rust Vec::push: https://www.reddit.com/r/rust/comments/1eeuqtc/c_vectoremplace_back_vs_rust_vecpushf_copying_v/
   * Very important comment from SkiFire13
   * Be sure to check 1% commenters !
@@ -292,21 +377,6 @@ On the other hand, once all materials are analyzed we won't care about this file
     + [Reddit](https://www.reddit.com/r/rust/comments/173wr86/why_rust_doesnt_need_a_standard_div_rem_an_llvm)
     + no more relevants posts
 - Asm snippets: https://www.eventhelix.com/rust/
-- Battle Of The Backends: Rust vs. Go vs. C# vs. Kotlin - inovex GmbH: https://www.inovex.de/de/blog/rust-vs-go-vs-c-vs-kotlin
-  * Assignee: yugr
-  * Status: DONE (0m)
-  * Main idea: just comparing performance of some network app (no analysis)
-- How much does Rust's bounds checking actually cost? https://blog.readyset.io/bounds-checks/
-  * Assignee: yugr
-  * Status: DONE (75m)
-  * Problem: investigates overhead of bounds checking operations
-  * Solution:
-    + experiments with replacing accesses with `get_unchecked` and modifying compiler (!)
-    + does not provide any analysis of results, asm, etc.
-    + no noticeable changes on her machine but up to 4x according to comments on Reddit
-  * More materials:
-    + a lot of comments on [Reddit](https://www.reddit.com/r/rust/comments/z92vid/measuring_how_much_rusts_bounds_checking_actually/), [Reddit](https://www.reddit.com/r/programming/comments/z9hjpk/how_much_does_rusts_bounds_checking_actually_cost/) and [HackerNews](https://news.ycombinator.com/item?id=33805419)
-    + added new materials
 - A cool Rust optimization story: https://quickwit.io/blog/search-a-sorted-block
   * Assignee: yugr
   * Status: DONE (10m)
@@ -314,14 +384,6 @@ On the other hand, once all materials are analyzed we won't care about this file
     + Basically the conclusion is that compiler is not always perfect e.g. [stopped generating branchless code](https://bugs.llvm.org/show_bug.cgi?id=40027) at some point
   * More materials:
     + Reddit comments: https://www.reddit.com/r/rust/comments/qde4w7/a_cool_rust_optimization_story/ (nothing relevant)
-- Inefficient codegen when accessing a vector with literal indices: https://github.com/rust-lang/rust/issues/50759
-  * Assignee: yugr
-  * Status: DONE (20-30m)
-  * Problem: repetative indexing checks when Vec/slice is accessed multiple times
-  * Root cause: Rust has to preserve order of checks (for not so clear reason)
-  * Solution: can be worked around via `assert!` hint (looks like generic solution for such situations)
-  * LLVM: no good/generic way to solve this in LLVM
-  * More materials: NA
 - Costs of iterators and Zero Cost Abstractions in Rust: https://github.com/mike-barber/rust-zero-cost-abstractions
   * Assignee: yugr
   * Status: DONE (10m)
@@ -340,13 +402,6 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Problem: Rust code is less efficient than equivalent C++ code with `restrict`'s
   * Root cause: Rust aliasing optimizations were [disabled by default](https://github.com/rust-lang/rust/issues/54878) back then (and enabled now)
   * More materials: N/A
-- Square powers not being fully optimized? https://www.reddit.com/r/rust/comments/exojhk/square_powers_not_being_fully_optimized/
-  * Assignee: yugr
-  * Status: postponed (awaiting response, 20m)
-  * Problem: `2.pow(n)` not optimized to `1 << n`
-  * Root cause: missing optimization in LLVM
-  * Solution: was fixed in LLVM in [upstream #47234](https://github.com/rust-lang/rust/issues/47234) but the reverted due to [upstream #120537](https://github.com/rust-lang/rust/issues/120537); current status unclear so I asked in first issue
-  * More materials: no interesting mats in suggestions
 - Why isn't the for loop optimized better (in this one example)? https://www.reddit.com/r/rust/comments/15tvuio/why_isnt_the_for_loop_optimized_better_in_this/
   * Assignee: yugr
   * Status: DONE (30m)
@@ -361,40 +416,16 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Main idea: two examples of missed LLVM optimizations
     + Not relevant
   * More materials: none
-- Does the compiler optimize moves? https://www.reddit.com/r/rust/comments/ykku69/does_the_compiler_optimize_moves/
-  * this should be a dedicated perf issue
-  * Assignee: yugr
-  * Status: DONE (at least 4h)
-  * Discusses a known problem when compiler fails to remove `memcpy`'s
-  * More materials: added a lot of links
 - Rust `[#inline]` annotations discussion https://github.com/rust-lang/hashbrown/pull/119
   * Assignee: zakhar
   * Status: DONE (15m)
   * Main idea: mostly discusses about `[#inline]` effect on compile time
     + Not our topic
   * More materials: N/A
-- Check for Integer Overflow by Default: https://github.com/rust-lang/rust/issues/47739
-  * Status: in progress
-  * Assignee: yugr
-- Myths and Legends about Integer Overflow in Rust: https://huonw.github.io/blog/2016/04/myths-and-legends-about-integer-overflow-in-rust/
-  * Status: in progress
-  * Assignee: yugr
-- How are bounds checks optimized away? https://users.rust-lang.org/t/how-are-bounds-checks-optimized-away/91737
-  * Status: in progress
-  * Assignee: yugr
-- Rust's Vec indexing is bound-checked by default: https://news.ycombinator.com/item?id=30867188
-  * Status: in progress
-  * Assignee: yugr
-- Iterators and eliminating all runtime bounds checks: https://users.rust-lang.org/t/iterators-and-eliminating-all-runtime-bounds-checks/13935
-- How to zip two slices efficiently: https://users.rust-lang.org/t/how-to-zip-two-slices-efficiently/2048
-- How to avoid bounds checks in Rust without unsafe: https://shnatsel.medium.com/how-to-avoid-bounds-checks-in-rust-without-unsafe-f65e618b4c1e
-  * this is oft cited
 - Inline In Rust: Inline In Rust: https://matklad.github.io/2021/07/09/inline-in-rust.html
 - Why doesn't the Rust optimizer remove those useless instructions: https://stackoverflow.com/questions/45586159/why-doesnt-the-rust-optimizer-remove-those-useless-instructions-tested-on-godb
   * we should mention why Godbolt for Rust may be misleading !
   * see also https://github.com/rust-lang/rust/issues/11906
-- Does Rust have return value optimization? https://users.rust-lang.org/t/does-rust-have-return-value-optimization/10389
-- Copy elision & RVO optimization: https://internals.rust-lang.org/t/copy-elision-rvo-optimization/17276
 - Big performance problem with closed intervals looping: https://github.com/rust-lang/rust/issues/45222
 - (!) How the Rust Compiler Works, a Deep Dive: https://www.youtube.com/watch?v=Ju7v6vgfEt8
 
@@ -564,6 +595,7 @@ On the other hand, once all materials are analyzed we won't care about this file
   * LLVM: N/A
   * More materials: added P2544R0 link
 - C++ exceptions are becoming more and more problematic: https://open-std.org/JTC1/SC22/WG21/docs/papers/2022/p2544r0.html
+- Panics in rust consuming some extra resources. Can we disable it? https://www.reddit.com/r/rust/comments/12qhynj/panics_in_rust_consuming_some_extra_resources_can/
 
 # Unsafe
 

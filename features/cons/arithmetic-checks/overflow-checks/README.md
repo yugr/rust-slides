@@ -1,7 +1,20 @@
 Rust does not check overflows in release (so I'm not sure we need this directory).
 
-Rust does not check for signed integer overflow in release because it is fully specified as 2's complement wrapping (https://doc.rust-lang.org/book/ch03-02-data-types.html#integer-overflow).
-Rust suggests using `wrapping_*` methods to explicitly use this.
+Overflows are evaluated via 2's complement wrapping (https://doc.rust-lang.org/book/ch03-02-data-types.html#integer-overflow)
+in release but panic in debug
+This is allowed by [RFC 560](https://github.com/rust-lang/rfcs/blob/master/text/0560-integer-overflow.md)
+(panicking is also permitted in release so its suggested to NOT rely on wrapping semantics
+in release and use explicit `wrapping_*` methods if needed).
+
+This decision is a compromise between safety and security.
+Rust developers clearly [state](https://github.com/rust-lang/rfcs/pull/560#issuecomment-69403142) that
+> Plan is to turn on checking by default if we can get the performance hit low enough
+
+John Regehr's well known study [estimates](https://users.cs.utah.edu/~regehr/papers/overflow12.pdf)
+integer checks to have 30-50% overhead on average (with up to 3x worst case).
+
+Interestingly enough Rust makes a less secure choice than Swift
+which aborts on integer overflow even in release builds.
 
 On the other hand it does not assign `nsw`s to signed integer computations like C/C++.
 See https://kristerw.blogspot.com/2016/02/how-undefined-signed-overflow-enables.html for example optimizations based on `nsw`.
@@ -12,11 +25,13 @@ Android seems to enable overflow checks (UBsan, Isan) for critical components (w
 
 # Problems caused by defined overflow
 
-Note that overhead here is not the checks themselves but disabling of optimizations (e.g. vectorization).
+Note that overhead here is not the checks themselves but disabling of optimizations
+(e.g. vectorization due to potential wrapping).
 
 # Solutions
 
 - `unchecked_add` and friends
+- `Wrapping<T>` types in stdlib
 - `unchecked_math` pragma
 - asserts or compiler hints:
 ```
@@ -32,7 +47,8 @@ pub unsafe fn nop(x: i32) -> i32 {
 # TODO
 
 - Add `nsw` to signed integers and compare perf of large and/or performance sensitive projects
-- Measure overhead via `-Z force-overflow-checks`
+- Measure overhead via `-Z force-overflow-checks` (or `-C overflow-checks=on`)
+  * See [RFC 1535](https://github.com/rust-lang/rfcs/blob/master/text/1535-stable-overflow-checks.md) for some details
   * Does it add `nsw`/`nuw` and enable loop optimizations ?
 
 # Inclusive ranges are slower than exclusive ones

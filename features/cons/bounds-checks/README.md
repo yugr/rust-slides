@@ -49,6 +49,9 @@ See [upstream #50759](https://github.com/rust-lang/rust/issues/50759) for good e
 Basically when accessing `h[0]` and then `h[1]` it has to first check `0` and then `1`
 because it tries to report exact error location (or at least LLVM optimizer believes so).
 
+This may be an overkill - RFC 560 explicitly [allows](https://github.com/rust-lang/rfcs/blob/master/text/0560-integer-overflow.md#delayed-panics)
+delayed panics.
+
 Programmers can use explicit `assert!` macro to allow compiler to optimize checks.
 Or just optimizer hint:
 ```
