@@ -308,8 +308,11 @@ On the other hand, once all materials are analyzed we won't care about this file
   * LLVM: no good/generic way to solve this in LLVM
   * More materials: NA
 - How are bounds checks optimized away? https://users.rust-lang.org/t/how-are-bounds-checks-optimized-away/91737
-  * Status: in progress
+  * Status: DONE (10m)
   * Assignee: yugr
+  * OP asks how bounds checking elimination works
+  * Answers: unsafe code in iterators, polyhedral optimization in LLVM (?)
+  * More materials: nothing interesting in suggested links
 - Rust's Vec indexing is bound-checked by default: https://news.ycombinator.com/item?id=30867188
   * Status: in progress
   * Assignee: yugr
@@ -318,6 +321,17 @@ On the other hand, once all materials are analyzed we won't care about this file
 - How to avoid bounds checks in Rust without unsafe: https://shnatsel.medium.com/how-to-avoid-bounds-checks-in-rust-without-unsafe-f65e618b4c1e
   * this is oft cited
 - How to avoid bounds checking: https://users.rust-lang.org/t/how-to-avoid-bounds-checking/4433
+  * Status: DONE (5m)
+  * Assignee: yugr
+  * OP asks how to disable bounds checks to measure overhead
+  * People suggest potential fixes in stdlib (added to bounds checking section)
+  * More materials: nothing new
+- Is bound checking the only runtime cost of Rust? https://users.rust-lang.org/t/is-bound-checking-the-only-runtime-cost-of-rust/66661/19
+  * Status: DONE (5m)
+  * Assignee: yugr
+  * OP asks what are the overheads of Rust language
+  * People suggest various issues (UFT8 checks, `Rc`, error checking, etc.) but all known by us
+  * More materials: nothing new
 
 # Copy elision/NRVO
 

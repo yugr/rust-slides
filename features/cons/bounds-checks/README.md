@@ -37,6 +37,7 @@ for i in 0..len {
 
 - Disable index checks in compiler and compare perf of large and/or performance sensitive projects
   * patch to disable checks: https://blog.readyset.io/bounds-checks
+  * also some info [here](https://users.rust-lang.org/t/a-way-to-turn-off-all-bounds-checks-for-exploring-optimisation-potential/117528/4)
   * disables [in stdlib](https://github.com/rust-lang/rust/pull/119440)
   * [unchecked_math](https://github.com/rust-lang/rfcs/issues/2508) feature may be relevant
 - Can we somehow measure how often compiler is able to remove index checks from loops ?
