@@ -314,8 +314,15 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Answers: unsafe code in iterators, polyhedral optimization in LLVM (?)
   * More materials: nothing interesting in suggested links
 - Rust's Vec indexing is bound-checked by default: https://news.ycombinator.com/item?id=30867188
-  * Status: in progress
+  * Status: DONE (30m)
   * Assignee: yugr
+  * Problem: Rust Vec's are bounds checked which hurts performance (corresponding C++ microbenchmarks shows 2x overhead)
+  * Root cause: due to calling extern function it's not possible to move checks outside the loop
+  * Solution:
+    + use subslicing to avoid checks
+    + limit iteration count by vector length
+    + code is much better in trunk
+  * More materials: added relevant info
 - Iterators and eliminating all runtime bounds checks: https://users.rust-lang.org/t/iterators-and-eliminating-all-runtime-bounds-checks/13935
 - How to zip two slices efficiently: https://users.rust-lang.org/t/how-to-zip-two-slices-efficiently/2048
 - How to avoid bounds checks in Rust without unsafe: https://shnatsel.medium.com/how-to-avoid-bounds-checks-in-rust-without-unsafe-f65e618b4c1e

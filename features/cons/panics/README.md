@@ -9,7 +9,7 @@ Panicking causes significant code bloat in small functions (e.g. [here](https://
 
 # TODO
 
-Does `panic=abort` avoid all overheads ?
+Does `panic=abort` avoid all overheads ? I couldn't get it to do anything in [this](https://news.ycombinator.com/item?id=30867188) example.
 
 Check if optimizations from https://www.youtube.com/watch?v=ItemByR4PRg (LICM, ADCE, etc.) are also disabled for Rust ?
 
