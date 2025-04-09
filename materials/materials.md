@@ -500,8 +500,12 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Solution: not a problem for real code
   * More materials: none
 - (!) How the Rust Compiler Works, a Deep Dive: https://www.youtube.com/watch?v=Ju7v6vgfEt8
-  * Status: in progress
+  * Status: DONE (2h)
   * Assignee: yugr
+  * Video about Rust compiler:
+    + walk though different IRs (AST, HIR, THIR, MIR)
+    + some info on rustc driver
+    + not too many details
 
 # Data structures performance
 
