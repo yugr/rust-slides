@@ -214,7 +214,11 @@ On the other hand, once all materials are analyzed we won't care about this file
     + all mentioned issues are fixed by now
   * More materials: added links
 - Expression Templates in Rust? https://www.reddit.com/r/rust/comments/1f0hi5k/expression_templates_in_rust
+  * Assignee: yugr
+  * Status: in progress
 - Expression templates in Eigen: https://eigen.tuxfamily.org/index.php?title=Expression_templates
+  * Assignee: yugr
+  * Status: in progress
 - What kind of performance rust is trying to achieve? https://users.rust-lang.org/t/what-kind-of-performance-rust-is-trying-to-achieve/1674
   * Assignee: yugr
   * Status: DONE (20m)
@@ -227,6 +231,8 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Status: DONE (0m)
   * Main idea: just comparing performance of some network app (no analysis)
 - Comparing Pythagorean triples in C++, D, and Rust: https://old.reddit.com/r/rust/comments/ab7hsi/comparing_pythagorean_triples_in_c_d_and_rust/
+  * Assignee: yugr
+  * Status: in progress
 
 # Rust-specific opts
 
@@ -337,9 +343,15 @@ On the other hand, once all materials are analyzed we won't care about this file
     + code is much better in trunk
   * More materials: added relevant info
 - Iterators and eliminating all runtime bounds checks: https://users.rust-lang.org/t/iterators-and-eliminating-all-runtime-bounds-checks/13935
+  * Assignee: yugr
+  * Status: in progress
 - How to zip two slices efficiently: https://users.rust-lang.org/t/how-to-zip-two-slices-efficiently/2048
+  * Assignee: yugr
+  * Status: in progress
 - How to avoid bounds checks in Rust without unsafe: https://shnatsel.medium.com/how-to-avoid-bounds-checks-in-rust-without-unsafe-f65e618b4c1e
-  * this is oft cited
+  * Assignee: yugr
+  * Status: in progress
+  * this is oft cited !
 - How to avoid bounds checking: https://users.rust-lang.org/t/how-to-avoid-bounds-checking/4433
   * Status: DONE (5m)
   * Assignee: yugr
@@ -362,13 +374,23 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Discusses a known problem when compiler fails to remove `memcpy`'s
   * More materials: added a lot of links
 - Does Rust have return value optimization? https://users.rust-lang.org/t/does-rust-have-return-value-optimization/10389
+  * Assignee: yugr
+  * Status: in progress
 - Copy elision & RVO optimization: https://internals.rust-lang.org/t/copy-elision-rvo-optimization/17276
+  * Assignee: yugr
+  * Status: in progress
 - C++ vector::emplace_back vs rust Vec::push: https://www.reddit.com/r/rust/comments/1eeuqtc/c_vectoremplace_back_vs_rust_vecpushf_copying_v/
+  * Assignee: yugr
+  * Status: in progress
   * Very important comment from SkiFire13
   * Be sure to check 1% commenters !
 - How to create large objects directly in heap: https://users.rust-lang.org/t/how-to-create-large-objects-directly-in-heap/26405
+  * Assignee: yugr
+  * Status: in progress
   * Very important comment from Klabnik
 - Introduce deduced parameter attributes: https://github.com/rust-lang/rust/pull/103172
+  * Assignee: yugr
+  * Status: in progress
   * Mentions some relevant details about `memcpy` elision
 
 # Iterators
