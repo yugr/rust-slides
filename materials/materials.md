@@ -119,8 +119,23 @@ On the other hand, once all materials are analyzed we won't care about this file
   * LLVM: most likely have been fixed (the post is very old)
   * More materials: N/A
 - Rust vs. C vs. Go runtime speed comparison: https://users.rust-lang.org/t/rust-vs-c-vs-go-runtime-speed-comparison/104107
+  * Assignee: zakhar
+  * Status: DONE (10m)
+  * Problem: Rust benchmark 10x slower than C
+  * Root cause: Rust code is underoptimized (and run in the debug build)
+  * Solution: Do not use inclusive ranges, use `cmp::min` to allow the compiler to drop bounds-checks (or use unsafe).
 - Performance issue with C-array like computation: https://users.rust-lang.org/t/performance-issue-with-c-array-like-computation-2-times-worst-than-naive-java/9807
+  * Assignee: zakhar
+  * Status: DONE (15m)
+  * Problem: Rust code slower than Java JIT equivalent
+  * Root cause: Low-level CPU architecture effects from different ways to find 3-element min (https://matklad.github.io/2017/03/12/min-of-three.html). Also, JIT has runtime statistics.
+  * Solution: Maybe LLVM already generates better assembly
 - Simple Rust and C# performance comparison: https://users.rust-lang.org/t/simple-rust-and-c-performance-comparison/42970
+ * Assignee: zakhar
+ * Status: DONE (10m)
+ * Problem: Rust code slower than C# equivalent
+ * Root cause: Benchmark to small to reliably measure it and errors in using the benchmarking framework
+ * Solution: As author states, "building these into somewhat larger programs and the Rust code was about twice as fast in the final result".
 - Why is C++ still beating Rust at performance in some places? https://users.rust-lang.org/t/why-is-c-still-beating-rust-at-performance-in-some-places/95877
 - Rust vs. C++: Fine-grained Performance: https://users.rust-lang.org/t/rust-vs-c-fine-grained-performance/4407
 - A good performance comparision C and Rust: https://users.rust-lang.org/t/a-good-performance-comparision-c-and-rust/5901/7

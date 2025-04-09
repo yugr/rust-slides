@@ -32,6 +32,7 @@ for i in 0..len {
 }
 ```
   (also [here](https://users.rust-lang.org/t/possible-rust-specific-optimizations/79895/5)).
+  - using `cmp::min`, does not require unsafe or asserts, but may be unstable in removing the checks (https://users.rust-lang.org/t/rust-vs-c-vs-go-runtime-speed-comparison/104107/15). Also, off-by-error in this example (https://users.rust-lang.org/t/rust-vs-c-vs-go-runtime-speed-comparison/104107/20).
 
 # TODO
 
@@ -41,6 +42,7 @@ for i in 0..len {
   * disables [in stdlib](https://github.com/rust-lang/rust/pull/119440)
   * [unchecked_math](https://github.com/rust-lang/rfcs/issues/2508) feature may be relevant
 - Can we somehow measure how often compiler is able to remove index checks from loops ?
+- Verify strange off-by-one behaviour of bounds checks (maybe a bug?) (https://users.rust-lang.org/t/rust-vs-c-vs-go-runtime-speed-comparison/104107/20)
 
 # Combining multiple checks not optimized
 
