@@ -192,6 +192,14 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Commenters conclude that it's not valid to compare Rust to pure C (C++ should be used)
   * More materials: nothing unseen before in links
 - Is bound checking the only runtime cost of Rust? https://users.rust-lang.org/t/is-bound-checking-the-only-runtime-cost-of-rust/66661
+  * Assignee: zakhar
+  * Status: DONE (10m)
+  * Problems:
+    + Method calls on `dyn Trait` objects are always indirect ("virtual")
+    + Function pointer calls are indirect
+    + Checked arithmetic
+    + RefCel, Rc, Arc checks
+ * Solution: For less bounds checking use iterators or provide compiler with more info (e.g. using asserts)
 - Why is Rust slightly slower than C? https://news.ycombinator.com/item?id=20944403
   * Assignee: yugr
   * Status: DONE (50m)
