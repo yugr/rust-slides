@@ -226,6 +226,7 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Assignee: yugr
   * Status: DONE (0m)
   * Main idea: just comparing performance of some network app (no analysis)
+- Comparing Pythagorean triples in C++, D, and Rust: https://old.reddit.com/r/rust/comments/ab7hsi/comparing_pythagorean_triples_in_c_d_and_rust/
 
 # Rust-specific opts
 
@@ -367,6 +368,41 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Introduce deduced parameter attributes: https://github.com/rust-lang/rust/pull/103172
   * Mentions some relevant details about `memcpy` elision
 
+# Iterators
+
+- Costs of iterators and Zero Cost Abstractions in Rust: https://github.com/mike-barber/rust-zero-cost-abstractions
+  * Assignee: yugr
+  * Status: DONE (10m)
+  * Main idea: analyzes simple loop in multiple languages
+  * Conclusion: no new info for us
+  * More materials:
+    + [video](https://www.youtube.com/watch?v=mX1BsqTfy6E)
+- Big performance problem with closed intervals looping: https://github.com/rust-lang/rust/issues/45222
+  * Status: DONE (10m)
+  * Assignee: yugr
+  * Problem: low performance of closed-interval loops (e.g. no vectorization)
+  * Root cause: LLVM does not optimize `RangeInclusive` well
+  * Solution: working on different implementation for `..=` syntax in [issue #123741](https://github.com/rust-lang/rust/issues/123741) which will resolve this at runtime
+  * More materials: added
+- New range types: https://github.com/rust-lang/rust/issues/123741
+  * Be sure to analyze links
+- Rust’s iterators are inefficient, and here’s what we can do about it: https://medium.com/@veedrac/rust-is-slow-and-i-am-the-cure-32facc0fdcb
+- Iterators vs index loops performance: https://users.rust-lang.org/t/iterators-vs-index-loops-performance/52131
+- Performance difference between iterator and for loop: https://users.rust-lang.org/t/performance-difference-between-iterator-and-for-loop/50254
+- Performance of iterator over for-loops without boundry check: https://users.rust-lang.org/t/performance-of-iterator-over-for-loops-without-boundry-checks/96162
+- Are iterators even efficient? https://users.rust-lang.org/t/are-iterators-even-efficient/36050
+- Iter with step_by(2) performs slowly: https://github.com/rust-lang/rust/issues/59281
+- What additional performance overhead does the use of iterators: https://internals.rust-lang.org/t/what-additional-performance-overhead-does-the-use-of-iterators-and-closures-cause/20296
+- We all know `iter` is faster than `loop`, but why: https://users.rust-lang.org/t/we-all-know-iter-is-faster-than-loop-but-why/51486
+- Why for_each is much faster than for loop in release mode: https://stackoverflow.com/questions/76091417/why-for-each-is-much-faster-than-for-loop-in-release-mode-cargo-run-r
+- Iterator::fold is a little slow compared to bare loop: https://github.com/rust-lang/rust/issues/76725
+- Iterator-based approach performs 10x worse than manual implementation https://github.com/rust-lang/rust/issues/80416
+    * Assignee: zakhar
+    * Status: DONE (15m)
+    * Problem: FFT implementation takes 10x more time than manual implementation
+    * Root cause: compiler seems to be unable to propagate compile-time knowledge when .cycle() and .skip() are used together
+    * Solution: use mutable iterator with .nth() instead of .skip()
+
 # Compiler codegen
 
 - Rust under the hood: https://www.youtube.com/watch?v=L8caNpK3Shs
@@ -415,13 +451,6 @@ On the other hand, once all materials are analyzed we won't care about this file
     + Basically the conclusion is that compiler is not always perfect e.g. [stopped generating branchless code](https://bugs.llvm.org/show_bug.cgi?id=40027) at some point
   * More materials:
     + Reddit comments: https://www.reddit.com/r/rust/comments/qde4w7/a_cool_rust_optimization_story/ (nothing relevant)
-- Costs of iterators and Zero Cost Abstractions in Rust: https://github.com/mike-barber/rust-zero-cost-abstractions
-  * Assignee: yugr
-  * Status: DONE (10m)
-  * Main idea: analyzes simple loop in multiple languages
-  * Conclusion: no new info for us
-  * More materials:
-    + [video](https://www.youtube.com/watch?v=mX1BsqTfy6E)
 - Addressing Rust optimization failures in LLVM: http://www.khei4.com/gsoc2023/
   * Assignee: yugr
   * Status: DONE (5m)
@@ -454,17 +483,22 @@ On the other hand, once all materials are analyzed we won't care about this file
     + Not our topic
   * More materials: N/A
 - Inline In Rust: Inline In Rust: https://matklad.github.io/2021/07/09/inline-in-rust.html
-  * Status: in progress
+  * Status: DONE (5m)
   * Assignee: yugr
+  * Articles describes what `#[inline]` does
+    + it is different from C `inline` (embeds function IR into crate's .o, allowing it to be inlined into dependents)
+    + template functions are already `#[inline]`
+  * More materials: no relevant mats
 - Why doesn't the Rust optimizer remove those useless instructions: https://stackoverflow.com/questions/45586159/why-doesnt-the-rust-optimizer-remove-those-useless-instructions-tested-on-godb
-  * Status: in progress
+  * Status: DONE (30m)
   * Assignee: yugr
-  * TODO: should mention why Godbolt for Rust may be misleading
-  * More materials:
-    + see also https://github.com/rust-lang/rust/issues/11906
-- Big performance problem with closed intervals looping: https://github.com/rust-lang/rust/issues/45222
-  * Status: in progress
-  * Assignee: yugr
+  * Problem: useless `push`/`pop` in function
+    * Need to add `#[inline(never)]`, otherwise `rustc` won't generate body (see [issue #119850](https://github.com/rust-lang/rust/issues/119850) for details)
+  * Root cause: Godbolt uses some spurious debug flags which trigger this 
+    + This is no longer an issue
+    + See https://github.com/rust-lang/rust/issues/11906
+  * Solution: not a problem for real code
+  * More materials: none
 - (!) How the Rust Compiler Works, a Deep Dive: https://www.youtube.com/watch?v=Ju7v6vgfEt8
   * Status: in progress
   * Assignee: yugr
@@ -522,7 +556,6 @@ On the other hand, once all materials are analyzed we won't care about this file
 # Manual optimizations
 
 - Aliasing in Rust: https://www.reddit.com/r/rust/comments/1ery9dy/aliasing_in_rust/
-- Rust’s iterators are inefficient, and here’s what we can do about it: https://medium.com/@veedrac/rust-is-slow-and-i-am-the-cure-32facc0fdcb
 - (!) Nethercote's posts: https://blog.mozilla.org/nnethercote/category/rust/
   * Nethercote is top industry expert, need to pay close attention to his posts
 - (!) Moar Nethercote's posts: https://nnethercote.github.io/
@@ -576,22 +609,7 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Safe elimination of unnecessary bound checks: https://www.reddit.com/r/rust/comments/1iqev5s/safe_elimination_of_unnecessary_bound_checks/
 - Rust loop speed: https://www.reddit.com/r/rust/comments/1aumq2h/rust_loop_speed/
 - Why is this functional version faster than my for loop? https://www.reddit.com/r/rust/comments/xtiqj8/why_is_this_functional_version_faster_than_my_for/
-- Iterators vs index loops performance: https://users.rust-lang.org/t/iterators-vs-index-loops-performance/52131
-- Performance difference between iterator and for loop: https://users.rust-lang.org/t/performance-difference-between-iterator-and-for-loop/50254
-- Performance of iterator over for-loops without boundry check: https://users.rust-lang.org/t/performance-of-iterator-over-for-loops-without-boundry-checks/96162
-- Are iterators even efficient? https://users.rust-lang.org/t/are-iterators-even-efficient/36050
-- Iter with step_by(2) performs slowly: https://github.com/rust-lang/rust/issues/59281
-- What additional performance overhead does the use of iterators: https://internals.rust-lang.org/t/what-additional-performance-overhead-does-the-use-of-iterators-and-closures-cause/20296
-- We all know `iter` is faster than `loop`, but why: https://users.rust-lang.org/t/we-all-know-iter-is-faster-than-loop-but-why/51486
-- Why for_each is much faster than for loop in release mode: https://stackoverflow.com/questions/76091417/why-for-each-is-much-faster-than-for-loop-in-release-mode-cargo-run-r
 - Huge performance gap in simple loop. Explanations? https://www.reddit.com/r/rust/comments/11f00kc/huge_performance_gap_in_simple_loop_explanations/
-- Iterator::fold is a little slow compared to bare loop: https://github.com/rust-lang/rust/issues/76725
-- Iterator-based approach performs 10x worse than manual implementation https://github.com/rust-lang/rust/issues/80416
-    * Assignee: zakhar
-    * Status: DONE (15m)
-    * Problem: FFT implementation takes 10x more time than manual implementation
-    * Root cause: compiler seems to be unable to propagate compile-time knowledge when .cycle() and .skip() are used together
-    * Solution: use mutable iterator with .nth() instead of .skip()
 - Memory-safe PNG decoders now vastly outperform C PNG libraries: https://www.reddit.com/r/programming/comments/1hak25t/memorysafe_png_decoders_now_vastly_outperform_c/
 
 # Panics
