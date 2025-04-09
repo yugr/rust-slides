@@ -288,6 +288,12 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Solution: was fixed in LLVM in [upstream #47234](https://github.com/rust-lang/rust/issues/47234) but the reverted due to [upstream #120537](https://github.com/rust-lang/rust/issues/120537); current status unclear so I asked in first issue
   * More materials: no interesting mats in suggestions
 - Integer overflow checking cost: http://danluu.com/integer-overflow/
+  * Status: DONE (10m)
+  * Assignee: yugr
+  * Author gives some insights on performance of checks in modern X86
+  * He also gives some ballpark estimates of checking overhead which do not match the benchmarks
+  * Overall the post looks quite superficial
+  * More materials: none
 
 # Bounds checks
 
