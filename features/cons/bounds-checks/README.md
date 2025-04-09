@@ -51,7 +51,8 @@ Basically when accessing `h[0]` and then `h[1]` it has to first check `0` and th
 because it tries to report exact error location (or at least LLVM optimizer believes so).
 
 This may be an overkill - RFC 560 explicitly [allows](https://github.com/rust-lang/rfcs/blob/master/text/0560-integer-overflow.md#delayed-panics)
-delayed panics.
+delayed panics. Also [here](https://github.com/rust-lang/rfcs/pull/560#issuecomment-69382228):
+> it should be permitted but not required to abort the process when a overflowed value would have been observed
 
 Programmers can use explicit `assert!` macro to allow compiler to optimize checks.
 Or just optimizer hint:

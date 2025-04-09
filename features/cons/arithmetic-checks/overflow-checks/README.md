@@ -9,6 +9,8 @@ in release and use explicit `wrapping_*` methods / `Wrapping` types if needed).
 This decision is a compromise between safety and security.
 Rust developers clearly [state](https://github.com/rust-lang/rfcs/pull/560#issuecomment-69403142) that
 > Plan is to turn on checking by default if we can get the performance hit low enough
+and also that it should
+> leave room in the future to move towards universal overflow checking if it becomes feasible
 and also [here](https://www.reddit.com/r/rust/comments/4gz93u/comment/d2mcoje/)
 > It is hoped that as the performance of checks improves (notably with delayed checks, better value propagation, etc...),
 > at some point in the future they could be switched on by default.

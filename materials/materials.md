@@ -275,12 +275,15 @@ On the other hand, once all materials are analyzed we won't care about this file
     + [Reddit](https://www.reddit.com/r/rust/comments/4gz93u/myths_and_legends_about_integer_overflow_in_rust/)
     + [HN](https://news.ycombinator.com/item?id=11595398)
 - [RFC 560](https://github.com/rust-lang/rfcs/blob/master/text/0560-integer-overflow.md)
-  * Status: in progress (20m)
+  * Status: DONE (1.5h)
   * Assignee: yugr
   * RFC talks about background and compromises of decision to diff debug and release behavior
     + I tried to merge all relevant info to section about overflow checks
   * More materials:
-    + [GH discussion](https://github.com/rust-lang/rfcs/pull/560) - still needs to survey this !
+    + [GH discussion](https://github.com/rust-lang/rfcs/pull/560)
+      - added all relevant links/citations
+      - many good objections which mainly revolve around performance hit for debug builds and integer overflows being too rare (e.g. not found in Rustc codebase at that time)
+      - on rareness of overflows in real-world [this](https://github.com/rust-lang/rfcs/pull/560#issuecomment-72352420) comment states that such bugs can only be triggered in extreme cases (via fuzzing), not in "normal" tests
 - Square powers not being fully optimized? https://www.reddit.com/r/rust/comments/exojhk/square_powers_not_being_fully_optimized/
   * Assignee: yugr
   * Status: postponed (awaiting response, 20m)

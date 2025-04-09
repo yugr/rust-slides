@@ -13,8 +13,8 @@ Look for any mentions of `/performance|optimizations|compiler|inefficient|code ?
     * https://github.com/rust-lang/this-week-in-rust
     * blogs below have mainly been extracted from last 4 years of weeklies (starting Dec 2020)
   - forums (also follow suggested links, recursively)
-    * https://users.rust-lang.org
-    * https://internals.rust-lang.org/c/compiler/20/l/hot
+    * https://users.rust-lang.org (URLO)
+    * https://internals.rust-lang.org/c/compiler/20/l/hot (IRLO)
   - Reddit
     * general:
       + https://www.reddit.com/r/rust/search/?q=optimize&type=posts and https://www.reddit.com/r/rust/search/?q=performance&type=posts
