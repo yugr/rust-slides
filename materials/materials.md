@@ -454,11 +454,20 @@ On the other hand, once all materials are analyzed we won't care about this file
     + Not our topic
   * More materials: N/A
 - Inline In Rust: Inline In Rust: https://matklad.github.io/2021/07/09/inline-in-rust.html
+  * Status: in progress
+  * Assignee: yugr
 - Why doesn't the Rust optimizer remove those useless instructions: https://stackoverflow.com/questions/45586159/why-doesnt-the-rust-optimizer-remove-those-useless-instructions-tested-on-godb
-  * we should mention why Godbolt for Rust may be misleading !
-  * see also https://github.com/rust-lang/rust/issues/11906
+  * Status: in progress
+  * Assignee: yugr
+  * TODO: should mention why Godbolt for Rust may be misleading
+  * More materials:
+    + see also https://github.com/rust-lang/rust/issues/11906
 - Big performance problem with closed intervals looping: https://github.com/rust-lang/rust/issues/45222
+  * Status: in progress
+  * Assignee: yugr
 - (!) How the Rust Compiler Works, a Deep Dive: https://www.youtube.com/watch?v=Ju7v6vgfEt8
+  * Status: in progress
+  * Assignee: yugr
 
 # Data structures performance
 
@@ -735,5 +744,5 @@ On the other hand, once all materials are analyzed we won't care about this file
     + Why you should, actually, rewrite some of it in Rust
     + Discussion about explicit SIMD in Rust
     + Reddit comments to the same post (https://codecs.multimedia.cx/2017/07/rust-not-so-great-for-codec-implementing/)
-- Reddit comments to 'Rust: Not So Great For Codec Implementing' https://www.reddit.com/r/rust/comments/6qv2s5/rust_not_so_great_for_codec_implementing/
-- Why you should, actually, rewrite some of it in Rust https://news.ycombinator.com/item?id=14753201
+- Reddit comments to 'Rust: Not So Great For Codec Implementing': https://www.reddit.com/r/rust/comments/6qv2s5/rust_not_so_great_for_codec_implementing/
+- Why you should, actually, rewrite some of it in Rust: https://news.ycombinator.com/item?id=14753201
