@@ -264,9 +264,11 @@ On the other hand, once all materials are analyzed we won't care about this file
   * OP suggests to enable overflow checking in release by default
   * Other people also complain how `as` is unchecked
   * More materials: added more links
-- Myths and Legends about Integer Overflow in Rust: https://huonw.github.io/blog/2016/04/myths-and-legends-about-integer-overflow-in-rust/
-  * Status: in progress
+- (!) Myths and Legends about Integer Overflow in Rust: https://huonw.github.io/blog/2016/04/myths-and-legends-about-integer-overflow-in-rust/
+  * Status: DONE (40m)
   * Assignee: yugr
+  * Author surveys RFC 560; discusses semantics of integer overflows and reasoning behind it
+    + In particular he mentions that main source of overhead is inhibiting vectorization (not the checks themselves)
   * More materials:
     + [User forum](https://users.rust-lang.org/t/myths-and-legends-about-integer-overflow-in-rust/5612)
     + [Reddit](https://www.reddit.com/r/rust/comments/4gz93u/myths_and_legends_about_integer_overflow_in_rust/)
@@ -285,6 +287,7 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Root cause: missing optimization in LLVM
   * Solution: was fixed in LLVM in [upstream #47234](https://github.com/rust-lang/rust/issues/47234) but the reverted due to [upstream #120537](https://github.com/rust-lang/rust/issues/120537); current status unclear so I asked in first issue
   * More materials: no interesting mats in suggestions
+- Integer overflow checking cost: http://danluu.com/integer-overflow/
 
 # Bounds checks
 
@@ -618,6 +621,7 @@ On the other hand, once all materials are analyzed we won't care about this file
   * More materials: added P2544R0 link
 - C++ exceptions are becoming more and more problematic: https://open-std.org/JTC1/SC22/WG21/docs/papers/2022/p2544r0.html
 - Panics in rust consuming some extra resources. Can we disable it? https://www.reddit.com/r/rust/comments/12qhynj/panics_in_rust_consuming_some_extra_resources_can/
+- RFC 1513: Less unwinding: https://github.com/rust-lang/rfcs/blob/master/text/1513-less-unwinding.md
 
 # Unsafe
 

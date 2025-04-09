@@ -4,24 +4,40 @@ Overflows are evaluated via 2's complement wrapping (https://doc.rust-lang.org/b
 in release but panic in debug
 This is allowed by [RFC 560](https://github.com/rust-lang/rfcs/blob/master/text/0560-integer-overflow.md)
 (panicking is also permitted in release so its suggested to NOT rely on wrapping semantics
-in release and use explicit `wrapping_*` methods if needed).
+in release and use explicit `wrapping_*` methods / `Wrapping` types if needed).
 
 This decision is a compromise between safety and security.
 Rust developers clearly [state](https://github.com/rust-lang/rfcs/pull/560#issuecomment-69403142) that
 > Plan is to turn on checking by default if we can get the performance hit low enough
+and also [here](https://www.reddit.com/r/rust/comments/4gz93u/comment/d2mcoje/)
+> It is hoped that as the performance of checks improves (notably with delayed checks, better value propagation, etc...),
+> at some point in the future they could be switched on by default.
 
 John Regehr's well known study [estimates](https://users.cs.utah.edu/~regehr/papers/overflow12.pdf)
 integer checks to have 30-50% overhead on average (with up to 3x worst case).
+
+Main sources of overhead from checked arithmetic are
+  - checks themselves (comparison + optional jump => wasted decode + increased I$ and BTB pressure)
+  - inhibiting other opts due to serialization (so disables vectorization, loop opts)
+(from [Myths and Legends](https://huonw.github.io/blog/2016/04/myths-and-legends-about-integer-overflow-in-rust/)).
+The second one is much more problemantic in terms of perf.
 
 Interestingly enough Rust makes a less secure choice than Swift
 which aborts on integer overflow even in release builds.
 
 On the other hand it does not assign `nsw`s to signed integer computations like C/C++.
 See https://kristerw.blogspot.com/2016/02/how-undefined-signed-overflow-enables.html for example optimizations based on `nsw`.
+This may not be a big problem: `0..n` in
+```
+for i in 0..n
+```
+is guaranteed to execute `n` times.
 
 Android seems to enable overflow checks (UBsan, Isan) for critical components (written in C):
   - https://android-developers.googleblog.com/2016/05/hardening-media-stack.html
   - https://android-developers.googleblog.com/2018/06/compiler-based-security-mitigations-in.html
+
+Also Swift language has overflow checks on by default even in optimized builds.
 
 # Problems caused by defined overflow
 
@@ -43,6 +59,11 @@ pub unsafe fn nop(x: i32) -> i32 {
 }
 ```
 (from [here](https://www.reddit.com/r/rust/comments/181av9f/comment/kae7079/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button)).
+
+# Links
+
+* [RFC 560](https://github.com/rust-lang/rfcs/blob/master/text/0560-integer-overflow.md)
+* [Myths and Legends about Integer Overflow](https://huonw.github.io/blog/2016/04/myths-and-legends-about-integer-overflow-in-rust/)
 
 # TODO
 
