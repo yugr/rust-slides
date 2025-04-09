@@ -122,13 +122,20 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Assignee: zakhar
   * Status: DONE (10m)
   * Problem: Rust benchmark 10x slower than C
-  * Root cause: Rust code is underoptimized (and run in the debug build)
+  * Root cause:
+    + Rust code was compiled in debug mode
+    + missing `assert`'s to disable bounds checking
+    + some benchmark-specific code tweaking to please compiler
   * Solution: Do not use inclusive ranges, use `cmp::min` to allow the compiler to drop bounds-checks (or use unsafe).
+    + [Explanation](https://users.rust-lang.org/t/rust-vs-c-vs-go-runtime-speed-comparison/104107/22) of problems with inclusive ranges
 - Performance issue with C-array like computation: https://users.rust-lang.org/t/performance-issue-with-c-array-like-computation-2-times-worst-than-naive-java/9807
   * Assignee: zakhar
   * Status: DONE (15m)
   * Problem: Rust code slower than Java JIT equivalent
-  * Root cause: Low-level CPU architecture effects from different ways to find 3-element min (https://matklad.github.io/2017/03/12/min-of-three.html). Also, JIT has runtime statistics.
+  * Root cause:
+    + Use `-mcpu=native`
+    + Low-level CPU architecture effects from different ways to find 3-element min (https://matklad.github.io/2017/03/12/min-of-three.html)
+    + Also, JIT has access to runtime statistics (e.g. which allows better vectorization)
   * Solution: Maybe LLVM already generates better assembly
 - Simple Rust and C# performance comparison: https://users.rust-lang.org/t/simple-rust-and-c-performance-comparison/42970
  * Assignee: zakhar

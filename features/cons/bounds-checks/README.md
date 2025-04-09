@@ -32,7 +32,12 @@ for i in 0..len {
 }
 ```
   (also [here](https://users.rust-lang.org/t/possible-rust-specific-optimizations/79895/5)).
-  - using `cmp::min`, does not require unsafe or asserts, but may be unstable in removing the checks (https://users.rust-lang.org/t/rust-vs-c-vs-go-runtime-speed-comparison/104107/15). Also, off-by-error in this example (https://users.rust-lang.org/t/rust-vs-c-vs-go-runtime-speed-comparison/104107/20).
+  - using `cmp::min` to force index into safe range:
+```
+let bounded_i = cmp::min(i, sums.len());
+sums[bounded_i] = ...
+```
+    * this approach may be unstable in removing the checks, see [this](https://users.rust-lang.org/t/rust-vs-c-vs-go-runtime-speed-comparison/104107/15) and [this](https://users.rust-lang.org/t/rust-vs-c-vs-go-runtime-speed-comparison/104107/20) for details
 
 # TODO
 
@@ -67,3 +72,6 @@ pub unsafe fn nop(x: i32) -> i32 {
 }
 ```
 (from [here](https://www.reddit.com/r/rust/comments/181av9f/comment/kae7079/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button)).
+
+One more workaround suggested [here](https://users.rust-lang.org/t/is-bound-checking-the-only-runtime-cost-of-rust/66661/22)
+is to rearrange access to perform the farthest one first.
