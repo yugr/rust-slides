@@ -23,6 +23,9 @@ Main sources of overhead from checked arithmetic are
   - inhibiting other opts due to serialization (so disables vectorization, loop opts)
 (from [Myths and Legends](https://huonw.github.io/blog/2016/04/myths-and-legends-about-integer-overflow-in-rust/)).
 The second one is much more problemantic in terms of perf.
+[This discussion](https://www.reddit.com/r/rust/comments/ab7hsi/comment/ed0u11h/)
+suggests that this could be fixed if overflow checking were combined
+into arithmetic instruction in IR (to avoid introducing control flow and splitting BBs).
 
 Interestingly enough Rust makes a less secure choice than Swift
 which aborts on integer overflow even in release builds.

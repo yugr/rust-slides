@@ -260,9 +260,17 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Assignee: yugr
   * Status: DONE (0m)
   * Main idea: just comparing performance of some network app (no analysis)
-- Comparing Pythagorean triples in C++, D, and Rust: https://old.reddit.com/r/rust/comments/ab7hsi/comparing_pythagorean_triples_in_c_d_and_rust/
+- Comparing Pythagorean triples in C++, D, and Rust: https://atilaoncode.blog/2018/12/31/comparing-pythagorean-triples-in-c-d-and-rust/
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (40m)
+  * Problem: Rust program runs 2x slower than C++/D
+  * Root cause: inclusive ranges `..=`
+  * Solution: replace `a..=b` with `a..(b + 1)`
+  * More materials:
+    + [Reddit](https://www.reddit.com/r/rust/comments/ab7hsi/comparing_pythagorean_triples_in_c_d_and_rust/)
+      - (!) [interesting discussion](https://www.reddit.com/r/rust/comments/ab7hsi/comment/ed0u11h/) of how integer checks were optimized in different toolchain
+      - (single instruction for overflow arithmetic, expanded late in pipeline)
+    + [HN](https://news.ycombinator.com/item?id=18794363)
 
 # Rust-specific opts
 
@@ -374,10 +382,18 @@ On the other hand, once all materials are analyzed we won't care about this file
   * More materials: added relevant info
 - Iterators and eliminating all runtime bounds checks: https://users.rust-lang.org/t/iterators-and-eliminating-all-runtime-bounds-checks/13935
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (5m)
+  * Compares Rust to some other language, no relevant info
+  * More materials: no new links
 - How to zip two slices efficiently: https://users.rust-lang.org/t/how-to-zip-two-slices-efficiently/2048
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (5m)
+  * Problem: `iter1.zip(iter2)` does not optimize very well
+  * Root cause: compiler needs to check if both iterators are not terminated
+  * Solution:
+    + for slices use explicit subslicing to `len1.min(len2)` to tell compiler that bounds checks can be removed
+    + (this is a common technique)
+  * More materials: no new links
 - How to avoid bounds checks in Rust without unsafe: https://shnatsel.medium.com/how-to-avoid-bounds-checks-in-rust-without-unsafe-f65e618b4c1e
   * Assignee: yugr
   * Status: in progress
