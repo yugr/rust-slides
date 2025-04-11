@@ -179,7 +179,7 @@ On the other hand, once all materials are analyzed we won't care about this file
     + "rust performance site:https://robert.ocallahan.org"
     + [Reddit](https://www.reddit.com/r/rust/comments/63ijkw/rust_optimizations_that_c_cant_do/)
     + [HN](https://news.ycombinator.com/item?id=14040021)
-- (!) What makes Rust faster than C/C++? https://www.reddit.com/r/rust/comments/px72r1/what_makes_rust_faster_than_cc/
+- What makes Rust faster than C/C++? https://www.reddit.com/r/rust/comments/px72r1/what_makes_rust_faster_than_cc/
   * Assignee: yugr
   * Status: DONE (50m)
   * Main idea: a lot of high quality comments (a must-read for us):
@@ -268,7 +268,7 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Solution: replace `a..=b` with `a..(b + 1)`
   * More materials:
     + [Reddit](https://www.reddit.com/r/rust/comments/ab7hsi/comparing_pythagorean_triples_in_c_d_and_rust/)
-      - (!) [interesting discussion](https://www.reddit.com/r/rust/comments/ab7hsi/comment/ed0u11h/) of how integer checks were optimized in different toolchain
+      - [interesting discussion](https://www.reddit.com/r/rust/comments/ab7hsi/comment/ed0u11h/) of how integer checks were optimized in different toolchain
       - (single instruction for overflow arithmetic, expanded late in pipeline)
     + [HN](https://news.ycombinator.com/item?id=18794363)
 
@@ -309,7 +309,7 @@ On the other hand, once all materials are analyzed we won't care about this file
   * OP suggests to enable overflow checking in release by default
   * Other people also complain how `as` is unchecked
   * More materials: added more links
-- (!) Myths and Legends about Integer Overflow in Rust: https://huonw.github.io/blog/2016/04/myths-and-legends-about-integer-overflow-in-rust/
+- Myths and Legends about Integer Overflow in Rust: https://huonw.github.io/blog/2016/04/myths-and-legends-about-integer-overflow-in-rust/
   * Status: DONE (40m)
   * Assignee: yugr
   * Author surveys RFC 560; discusses semantics of integer overflows and reasoning behind it
@@ -394,7 +394,7 @@ On the other hand, once all materials are analyzed we won't care about this file
     + for slices use explicit subslicing to `len1.min(len2)` to tell compiler that bounds checks can be removed
     + (this is a common technique)
   * More materials: no new links
-- (!) How to avoid bounds checks in Rust without unsafe: https://shnatsel.medium.com/how-to-avoid-bounds-checks-in-rust-without-unsafe-f65e618b4c1e
+- How to avoid bounds checks in Rust without unsafe: https://shnatsel.medium.com/how-to-avoid-bounds-checks-in-rust-without-unsafe-f65e618b4c1e
   * Assignee: yugr
   * Status: DONE (1h)
   * And oft cited article on avoiding bounds checks
@@ -588,7 +588,7 @@ On the other hand, once all materials are analyzed we won't care about this file
     + See https://github.com/rust-lang/rust/issues/11906
   * Solution: not a problem for real code
   * More materials: none
-- (!) How the Rust Compiler Works, a Deep Dive: https://www.youtube.com/watch?v=Ju7v6vgfEt8
+- How the Rust Compiler Works, a Deep Dive: https://www.youtube.com/watch?v=Ju7v6vgfEt8
   * Status: DONE (2h)
   * Assignee: yugr
   * Video about Rust compiler:
@@ -642,16 +642,16 @@ On the other hand, once all materials are analyzed we won't care about this file
 - SIMD Vector/Slice/Chunk Addition: https://www.reddit.com/r/rust/comments/154vowr/simd_vectorslicechunk_addition/
 - simd-itertools: simd-accelerated iterators for "find", "filter", "contains" and many more: https://www.reddit.com/r/rust/comments/1e3ps2a/simditertools_simdaccelerated_iterators_for_find/
 - Memory-safe PNG decoders now vastly outperform C PNG libraries: https://www.reddit.com/r/rust/comments/1ha7uyi/memorysafe_png_decoders_now_vastly_outperform_c/
-- (!) Expression templates: https://en.wikipedia.org/wiki/Expression_templates
+- Expression templates: https://en.wikipedia.org/wiki/Expression_templates
   * This is a foundation block of C++ linear algebra packages like Eigen
   * Rust does not support such idioms (and it's considered a big flaw)
 
 # Manual optimizations
 
 - Aliasing in Rust: https://www.reddit.com/r/rust/comments/1ery9dy/aliasing_in_rust/
-- (!) Nethercote's posts: https://blog.mozilla.org/nnethercote/category/rust/
+- Nethercote's posts: https://blog.mozilla.org/nnethercote/category/rust/
   * Nethercote is top industry expert, need to pay close attention to his posts
-- (!) Moar Nethercote's posts: https://nnethercote.github.io/
+- Moar Nethercote's posts: https://nnethercote.github.io/
 - http://troubles.md/abusing-rustc/
 - Можно ли доверить компилятору оптимизацию вашего кода? https://habr.com/ru/companies/timeweb/articles/759326/
 - Как избавиться от проверок выхода за границы: https://habr.com/ru/companies/otus/articles/718012/
@@ -752,7 +752,7 @@ On the other hand, once all materials are analyzed we won't care about this file
 
 # Unsafe
 
-- (!) Being Fair about Memory Safety and Performance: https://www.thecodedmessage.com/posts/unsafe/
+- Being Fair about Memory Safety and Performance: https://www.thecodedmessage.com/posts/unsafe/
   * need to be super-attentive to this post, this may be key to how we treat unsafe in our talk
 - Implementing a VM: how unsafe should I go? https://www.reddit.com/r/rust/comments/n8yy7z/implementing_a_vm_how_unsafe_should_i_go/
 - Good example of high performance Rust project without unsafe code? https://www.reddit.com/r/rust/comments/we91es/good_example_of_high_performance_rust_project/
@@ -812,7 +812,7 @@ On the other hand, once all materials are analyzed we won't care about this file
     * Solution: Use LTO or compile with one CGU (adding inline tag into stdlib isn't feasible for a user)
 - rustc: Default 32 codegen units at O0 https://github.com/rust-lang/rust/pull/44853
     - 32 codegen units may not always be better at -O0 https://github.com/rust-lang/rust/issues/44941
-- (!) Back-end parallelism in the Rust compiler: https://nnethercote.github.io/2023/07/11/back-end-parallelism-in-the-rust-compiler.html
+- Back-end parallelism in the Rust compiler: https://nnethercote.github.io/2023/07/11/back-end-parallelism-in-the-rust-compiler.html
     - https://news.ycombinator.com/item?id=36678457
     - https://www.reddit.com/r/rust/comments/14wcezs/backend_parallelism_in_the_rust_compiler/
     * Assignee: zakhar
