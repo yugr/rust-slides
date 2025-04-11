@@ -26,6 +26,12 @@ by better copy elision but
 Box recently got a [workaround](https://users.rust-lang.org/t/construct-a-box-i32-32-32-32-without-hitting-stack/71214)
 for this.
 
+A poor man's placement new used to be
+```
+let boxed: Boxed<BigStruct> = box foo();
+```
+(not sure if it works now).
+
 There have been some RFCs about adding support for placement new
 but according to [this](https://www.reddit.com/r/rust/comments/1eeuqtc/c_vectoremplace_back_vs_rust_vecpushf_copying_v/)
 there is nothing officially accepted.

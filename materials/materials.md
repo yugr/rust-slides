@@ -434,7 +434,9 @@ On the other hand, once all materials are analyzed we won't care about this file
   * More materials: added a lot of links
 - Does Rust have return value optimization? https://users.rust-lang.org/t/does-rust-have-return-value-optimization/10389
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (5m)
+  * General question on how to avoid moves on return w/o good answers
+  * More materials: no relevant links
 - Copy elision & RVO optimization: https://internals.rust-lang.org/t/copy-elision-rvo-optimization/17276
   * Assignee: yugr
   * Status: in progress
@@ -451,6 +453,7 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Assignee: yugr
   * Status: in progress
   * Mentions some relevant details about `memcpy` elision
+- Do move forwarding in MIR: https://github.com/rust-lang/rust/issues/32966
 
 # Iterators
 
