@@ -394,10 +394,23 @@ On the other hand, once all materials are analyzed we won't care about this file
     + for slices use explicit subslicing to `len1.min(len2)` to tell compiler that bounds checks can be removed
     + (this is a common technique)
   * More materials: no new links
-- How to avoid bounds checks in Rust without unsafe: https://shnatsel.medium.com/how-to-avoid-bounds-checks-in-rust-without-unsafe-f65e618b4c1e
+- (!) How to avoid bounds checks in Rust without unsafe: https://shnatsel.medium.com/how-to-avoid-bounds-checks-in-rust-without-unsafe-f65e618b4c1e
   * Assignee: yugr
-  * Status: in progress
-  * this is oft cited !
+  * Status: DONE (1h)
+  * And oft cited article on avoiding bounds checks
+  * Instructions for avoiding bounds checks in Rust programs:
+    + subslicing
+    + asserts
+    + iterators
+    + forcing index into bounds via `% len` or `& (len - 1)`
+  * Mentions that overhead is small in practice (10%) w/o hard evidence
+  * More materials:
+    + [bounds-check-cookbook](https://github.com/Shnatsel/bounds-check-cookbook/)
+      - companion code for the article
+    + [Reddit](https://www.reddit.com/r/rust/comments/10edmjf/how_to_avoid_bounds_checks_in_rust_without_unsafe/)
+      - interesting trick to replaced `x[i..(i + 2)]` with `x[i..][..2]` to avoid potential overflow; not sure how it's used though
+      - another trick: `let [a, b, c] = data[..3] else { panic!() }`
+    + no more relevant articles in blog
 - How to avoid bounds checking: https://users.rust-lang.org/t/how-to-avoid-bounds-checking/4433
   * Status: DONE (5m)
   * Assignee: yugr
@@ -458,6 +471,7 @@ On the other hand, once all materials are analyzed we won't care about this file
 - New range types: https://github.com/rust-lang/rust/issues/123741
   * Be sure to analyze links
 - Rust’s iterators are inefficient, and here’s what we can do about it: https://medium.com/@veedrac/rust-is-slow-and-i-am-the-cure-32facc0fdcb
+  * [Reddit](https://www.reddit.com/r/rust/comments/5ez38g/rusts_iterators_are_inefficient_and_heres_what_we/)
 - Iterators vs index loops performance: https://users.rust-lang.org/t/iterators-vs-index-loops-performance/52131
 - Performance difference between iterator and for loop: https://users.rust-lang.org/t/performance-difference-between-iterator-and-for-loop/50254
 - Performance of iterator over for-loops without boundry check: https://users.rust-lang.org/t/performance-of-iterator-over-for-loops-without-boundry-checks/96162
@@ -473,6 +487,7 @@ On the other hand, once all materials are analyzed we won't care about this file
     * Problem: FFT implementation takes 10x more time than manual implementation
     * Root cause: compiler seems to be unable to propagate compile-time knowledge when .cycle() and .skip() are used together
     * Solution: use mutable iterator with .nth() instead of .skip()
+- Why are cartesian iterators slower than nested fors? https://users.rust-lang.org/t/why-are-cartesian-iterators-slower-than-nested-fors/42847
 
 # Compiler codegen
 
@@ -686,6 +701,7 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Why is this functional version faster than my for loop? https://www.reddit.com/r/rust/comments/xtiqj8/why_is_this_functional_version_faster_than_my_for/
 - Huge performance gap in simple loop. Explanations? https://www.reddit.com/r/rust/comments/11f00kc/huge_performance_gap_in_simple_loop_explanations/
 - Memory-safe PNG decoders now vastly outperform C PNG libraries: https://www.reddit.com/r/programming/comments/1hak25t/memorysafe_png_decoders_now_vastly_outperform_c/
+- Speeding up RGB to grayscale conversion in Rust: https://www.reddit.com/r/rust/comments/7rxrka/speeding_up_rgb_to_grayscale_conversion_in_rust/
 
 # Panics
 

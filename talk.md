@@ -20,7 +20,7 @@ This is the plan of the talk.
 - Language features which are not directly performance-related:
   * custom allocators and placement-new
   * ABI
-- Compile times
+- (Slow) compile times
 
 # Is it fair to compare with C++ ?
 

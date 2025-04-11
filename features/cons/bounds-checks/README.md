@@ -23,7 +23,7 @@ Bounds checks can be removed via
     * [example](https://www.reddit.com/r/rust/comments/154vowr/comment/jsr0b51/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button)
   - using asserts (https://rust.godbolt.org/z/GPMcYd371) or `core::hint::unreachable_unchecked`
     * [example](https://github.com/rust-random/rand/pull/960)
-  - constructing pre-checked slices:
+  - constructing pre-checked slices (reslicing, subslicing):
 ```
 let len = vec.len();
 let slice = &vec[0..len];
@@ -32,12 +32,30 @@ for i in 0..len {
 }
 ```
   (also [here](https://users.rust-lang.org/t/possible-rust-specific-optimizations/79895/5)).
+    * a handy variant of this when performing multiple accesses at once (from [here](https://www.reddit.com/r/rust/comments/10edmjf/comment/j4ufzxk/)):
+```
+let [a, b, c, d] = data[..4] else { panic!() }
+```
   - using `cmp::min` to force index into safe range:
 ```
 let bounded_i = cmp::min(i, sums.len());
 sums[bounded_i] = ...
 ```
     * this approach may be unstable in removing the checks, see [this](https://users.rust-lang.org/t/rust-vs-c-vs-go-runtime-speed-comparison/104107/15) and [this](https://users.rust-lang.org/t/rust-vs-c-vs-go-runtime-speed-comparison/104107/20) for details
+    * this is useful to tell compiler that two slices have the same range (by subslicing them to `min` of lengths, e.g. [here](https://shnatsel.medium.com/how-to-avoid-bounds-checks-in-rust-without-unsafe-f65e618b4c1e))
+  - forcing index into bounds via `& (len - 1)` (`len` must be power-of-2)
+
+For workarounds like this keep in mind that
+> The thing is that using unsafe not bound checking access
+> you are 100% sure code will do what you want,
+> otherwise you will have to chase the rabbit into the rabbithole with every version of Rust
+> since it changes how compiles the stuff,
+> sometimes it gains performance while others take a hit 
+(from [here](https://www.reddit.com/r/rust/comments/10edmjf/comment/j4qhgeo/)).
+
+# Links
+
+- [How to avoid bounds checks in Rust without unsafe](https://shnatsel.medium.com/how-to-avoid-bounds-checks-in-rust-without-unsafe-f65e618b4c1e)
 
 # TODO
 
@@ -74,4 +92,5 @@ pub unsafe fn nop(x: i32) -> i32 {
 (from [here](https://www.reddit.com/r/rust/comments/181av9f/comment/kae7079/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button)).
 
 One more workaround suggested [here](https://users.rust-lang.org/t/is-bound-checking-the-only-runtime-cost-of-rust/66661/22)
+and [here](https://www.reddit.com/r/rust/comments/10edmjf/comment/j4sfxyl/)
 is to rearrange access to perform the farthest one first.
