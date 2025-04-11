@@ -37,6 +37,4 @@ We could analyze
   - real production code
     * very hard to analyze
       + need methodology (e.g. first profile and study only hotspots)
-    * candidates:
-      + small but high-performant and important projects (std, tokio, nalgebra vs Eigen, regex/ripgrep)
-      * [large projects](real-projects.md)
+    * [candidates](real-projects.md)
