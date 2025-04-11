@@ -15,6 +15,9 @@ This effectively means that one
 > it will always be created on the stack first and then copied to the heap
 (from [here](https://users.rust-lang.org/t/how-to-create-large-objects-directly-in-heap/26405/2)).
 
+The issue is more important in C++ because there copy ctors are potentially more expensive
+(not just simple `memcpy`'s).
+
 # Solutions
 
 One could argue that lack of placement new may be alleivated
@@ -32,7 +35,13 @@ let boxed: Boxed<BigStruct> = box foo();
 ```
 (not sure if it works now).
 
+Another common [suggestion](https://www.reddit.com/r/rust/comments/1eeuqtc/comment/lfh557e/)
+is to extend the `new` method of container to accept closure
+which creates object. This increases the chance that compiler will be able to elide
+the `memcpy` (but still not guarantee it).
+
 There have been some RFCs about adding support for placement new
+(e.g. [this](https://y86-dev.github.io/blog/return-value-optimization/placement-by-return.html)
 but according to [this](https://www.reddit.com/r/rust/comments/1eeuqtc/c_vectoremplace_back_vs_rust_vecpushf_copying_v/)
 there is nothing officially accepted.
 Maintainers consider it [a low priority feature](https://www.reddit.com/r/rust/comments/1eeuqtc/comment/lfhqob6/).

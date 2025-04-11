@@ -439,12 +439,23 @@ On the other hand, once all materials are analyzed we won't care about this file
   * More materials: no relevant links
 - Copy elision & RVO optimization: https://internals.rust-lang.org/t/copy-elision-rvo-optimization/17276
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (35m)
+  * Author proposes to change some pass-by-value calls to pass-by-mut-reference to avoid copying in recursive function
+  * The conclusion seems to be that this is not generally correct
+  * Not relevant for us
+  * More materials: added mats on stack probing
 - C++ vector::emplace_back vs rust Vec::push: https://www.reddit.com/r/rust/comments/1eeuqtc/c_vectoremplace_back_vs_rust_vecpushf_copying_v/
   * Assignee: yugr
-  * Status: in progress
-  * Very important comment from SkiFire13
-  * Be sure to check 1% commenters !
+  * Status: DONE (20m)
+  * OP asks whether compiler can do placement new and copy elision
+  * SkiFire13 answers that
+    + this has been discussed many times but no concrete plans yet
+    + implementation existed in the past but wasn't stable
+    + compiler tries hard to elide copies
+    + it may help to pass lambda that creates struct to `new` function (because then buffer will already be available when creator is called)
+  * Other comments:
+    + issue is more important for C++ because copies are potentially more expensive (not just `memcpy`)
+  * More materials: added links
 - How to create large objects directly in heap: https://users.rust-lang.org/t/how-to-create-large-objects-directly-in-heap/26405
   * Assignee: yugr
   * Status: in progress
@@ -454,6 +465,9 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Status: in progress
   * Mentions some relevant details about `memcpy` elision
 - Do move forwarding in MIR: https://github.com/rust-lang/rust/issues/32966
+- Pre-RFC: Move-or-borrow elision: https://internals.rust-lang.org/t/pre-rfc-move-or-borrow-elision/13181
+- Semantics of MIR function calls: https://github.com/rust-lang/rust/issues/71117
+  * Highly technical, low priority
 
 # Iterators
 
@@ -645,6 +659,13 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Expression templates: https://en.wikipedia.org/wiki/Expression_templates
   * This is a foundation block of C++ linear algebra packages like Eigen
   * Rust does not support such idioms (and it's considered a big flaw)
+
+# Stack probing
+
+- probestack.rs: https://github.com/rust-lang/compiler-builtins/blob/master/compiler-builtins/src/probestack.rs
+  * Check comments
+- Is rust guaranteed to detect stack overflows? https://users.rust-lang.org/t/is-rust-guaranteed-to-detect-stack-overflows/52593
+- Bringing Stack Clash Protection to Clang / X86: https://blog.llvm.org/posts/2021-01-05-stack-clash-protection/
 
 # Manual optimizations
 
@@ -858,3 +879,4 @@ On the other hand, once all materials are analyzed we won't care about this file
     + Reddit comments to the same post (https://codecs.multimedia.cx/2017/07/rust-not-so-great-for-codec-implementing/)
 - Reddit comments to 'Rust: Not So Great For Codec Implementing': https://www.reddit.com/r/rust/comments/6qv2s5/rust_not_so_great_for_codec_implementing/
 - Why you should, actually, rewrite some of it in Rust: https://news.ycombinator.com/item?id=14753201
+- Rust должен умереть, МГУ сделал замеры: https://habr.com/ru/articles/598219/

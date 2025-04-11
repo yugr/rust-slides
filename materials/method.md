@@ -29,6 +29,10 @@ Look for any mentions of `/performance|optimizations|compiler|inefficient|code ?
         - https://www.reddit.com/user/Zde-G/search/?q=performance&type=comments
       + matthiem (gh-11):
         - https://www.reddit.com/user/Zde-G/search/?q=performance&type=comments
+      + SkiFire13 (gh-12):
+        - https://www.reddit.com/user/SkiFire13/search/?q=performance&type=comments
+      + simonask_ (gh-13):
+        - https://www.reddit.com/user/simonask_/search/?q=performance&type=comments
     * other known maintainers:
       + nikic:
         - https://www.reddit.com/user/nikic/search/?q=rust&type=comments (nothing found)
