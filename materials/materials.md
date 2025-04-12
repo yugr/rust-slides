@@ -484,7 +484,10 @@ On the other hand, once all materials are analyzed we won't care about this file
   * More materials: none
 - Do move forwarding in MIR: https://github.com/rust-lang/rust/issues/32966
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (5m)
+  * This is an old issue which suggests to do move elision at MIR level
+  * It's unclear why it's still open because move elision already seems to work
+  * More materials: nothing relevant
 - Pre-RFC: Move-or-borrow elision: https://internals.rust-lang.org/t/pre-rfc-move-or-borrow-elision/13181
   * Assignee: yugr
   * Status: in progress
