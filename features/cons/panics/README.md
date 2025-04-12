@@ -1,14 +1,25 @@
 All info about performance overhead of panics.
 
+Note that `unreachable!`, `assert!` and `unimplemented!`
+all panic internally.
+
 Panics involve stack unwinding and destructors so are definitely not free.
 E.g. they complicate compiler analyses due to presence of landing pads.
-
-Rust has `panic=abort` (similar to C++ `-fno-exceptions`)
 
 Panicking causes significant code bloat in small functions (e.g. [here](https://www.rottedfrog.co.uk/?p=24)).
 
 Panics make leaf functions no longer leaf (see [this](https://www.reddit.com/r/programming/comments/2po703/comment/cmym6jk/))
 which may harm optimizations (e.g. inlining) and introduce unnecessary reg spills.
+
+# Solutions
+
+Rust has `panic=abort` (similar to C++ `-fno-exceptions`)
+
+[No-panic Rust](https://blog.reverberate.org/2025/02/03/no-panic-rust.html)
+approach is about rigorously removing _all_ panic calls from your program.
+
+Ideally panics should be moved to cold functions to reduce overhead
+but this is [not done](https://github.com/rust-lang/rust/issues/111866) now.
 
 # Combining panics
 
