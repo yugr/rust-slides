@@ -1,5 +1,5 @@
 This is a collection of very important perf-related materials
-which all team members need to be aware about.
+which all team members need to be aware of.
 
 - [What makes Rust faster than C/C++?](https://www.reddit.com/r/rust/comments/px72r1/what_makes_rust_faster_than_cc/)
   * A lot of high quality comments (a must-read for us):

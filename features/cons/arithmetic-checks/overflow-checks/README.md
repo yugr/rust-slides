@@ -63,7 +63,11 @@ pub unsafe fn nop(x: i32) -> i32 {
     x * 2 / 2
 }
 ```
-(from [here](https://www.reddit.com/r/rust/comments/181av9f/comment/kae7079/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button)).
+(from [here](https://www.reddit.com/r/rust/comments/181av9f/comment/kae7079/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button))
+
+Some people (e.g. John Regehr) argue that HW support for overflow checking would significantly reduce costs.
+But arhictects [claim](https://news.ycombinator.com/item?id=8766264) that
+this will cause a big (~5%) increase of clock cycle.
 
 # Links
 

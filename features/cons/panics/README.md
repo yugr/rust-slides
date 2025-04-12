@@ -7,6 +7,9 @@ Rust has `panic=abort` (similar to C++ `-fno-exceptions`)
 
 Panicking causes significant code bloat in small functions (e.g. [here](https://www.rottedfrog.co.uk/?p=24)).
 
+Panics make leaf functions no longer leaf (see [this](https://www.reddit.com/r/programming/comments/2po703/comment/cmym6jk/))
+which may harm optimizations (e.g. inlining) and introduce unnecessary reg spills.
+
 # Combining panics
 
 In some cases Rust needs to perform several checks at once

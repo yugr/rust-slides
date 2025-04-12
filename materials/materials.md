@@ -296,8 +296,6 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Root cause: overflow is defined in Rust
   * Solutions: `unchecked` methods, `unchecked_math` pragma, compiler hints
   * More materials: nothing in links
-- The Performance Cost of Integer Overflow Checking: https://news.ycombinator.com/item?id=8765714
-  * Danluu's blog is very important
 - Thought: switch the default on overflow checking: https://internals.rust-lang.org/t/thought-switch-the-default-on-overflow-checking-and-provide-rfc-560s-scoped-attribute-for-checked-arithmetic/15118
   * Assignee: yugr
   * Status: DONE (10m)
@@ -336,12 +334,19 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Solution: was fixed in LLVM in [upstream #47234](https://github.com/rust-lang/rust/issues/47234) but the reverted due to [upstream #120537](https://github.com/rust-lang/rust/issues/120537); current status unclear so I asked in first issue
   * More materials: no interesting mats in suggestions
 - Integer overflow checking cost: http://danluu.com/integer-overflow/
-  * Status: DONE (10m)
+  * Status: DONE (70m)
   * Assignee: yugr
   * Author gives some insights on performance of checks in modern X86
   * He also gives some ballpark estimates of checking overhead which do not match the benchmarks
   * Overall the post looks quite superficial
-  * More materials: none
+  * More materials:
+    + [HN](https://news.ycombinator.com/item?id=8765714)
+      - [Extensive critique](https://news.ycombinator.com/item?id=8766264) of hardware overflow checking by thesz and others (5% clock cycle increase due to serialization and flags)
+      - nkurz [measured](https://news.ycombinator.com/item?id=8766009) UBsan to have 7% overhead (which confirms danluu's estimates)
+    + [Reddit](https://www.reddit.com/r/programming/comments/2po703/the_performance_cost_of_integer_overflow_checking/)
+      - `panic`'s make leaf functions non-leaf which may hurt optimizations, introduce reg spills, etc.
+    + [Reddit](https://www.reddit.com/r/rust/comments/2pp9lh/the_performance_cost_of_integer_overflow_checking/)
+      - just reiterates on previous post
 
 # Bounds checks
 
