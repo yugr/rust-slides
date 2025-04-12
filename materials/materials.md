@@ -478,11 +478,19 @@ On the other hand, once all materials are analyzed we won't care about this file
   * The issue is no longer relevant because there is no longer a copy in recent rustc's
   * More materials: none
 - Do move forwarding in MIR: https://github.com/rust-lang/rust/issues/32966
+  * Assignee: yugr
+  * Status: in progress
 - Pre-RFC: Move-or-borrow elision: https://internals.rust-lang.org/t/pre-rfc-move-or-borrow-elision/13181
+  * Assignee: yugr
+  * Status: in progress
+- Stack overflow with Boxed array: https://github.com/rust-lang/rust/issues/53827
+  * Assignee: yugr
+  * Status: in progress
+- Tracking issue for placement new: https://github.com/rust-lang/rust/issues/27779
+  * Assignee: yugr
+  * Status: in progress
 - Semantics of MIR function calls: https://github.com/rust-lang/rust/issues/71117
   * Highly technical, low priority
-- Stack overflow with Boxed array: https://github.com/rust-lang/rust/issues/53827
-- Tracking issue for placement new: https://github.com/rust-lang/rust/issues/27779
 
 # Iterators
 
