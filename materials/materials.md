@@ -493,7 +493,28 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Status: in progress
 - Stack overflow with Boxed array: https://github.com/rust-lang/rust/issues/53827
   * Assignee: yugr
-  * Status: in progress
+  * Status: postponed (waiting for joonazan reply, 40m)
+  * Problem: stack overflow when trying to initialize large boxed value
+  * Root cause: Rust does not have placement new
+  * Solution: several approaches based on `unsafe`
+  * More materials: references many more issues:
+    + [#28008](https://github.com/rust-lang/rust/issues/28008), [#58570](https://github.com/rust-lang/rust/issues/58570), [#40862](https://github.com/rust-lang/rust/issues/40862)
+    + (no additional info in them)
+    + some downstream issues: [windows-drivers-rs](https://github.com/microsoft/windows-drivers-rs/issues/326), [slint](https://github.com/slint-ui/slint/pull/5415), [iceoryx2](https://github.com/eclipse-iceoryx/iceoryx2/issues/220)
+    + joonazan [mentioned](https://github.com/rust-lang/rust/issues/53827#issuecomment-2086359730) that the issue also happens when deriving `Clone` for a large struct but I couldn't repro (just one `memcpy` is present):
+```
+#[derive(Clone)]
+struct S {
+    data: [u8; 1 << 24],
+}
+
+#[inline(never)]
+pub fn foo(p: Box<S>) {
+    let p2 = p.clone();
+    black_box(p2);
+}
+```
+  I [asked](https://github.com/rust-lang/rust/issues/53827#issuecomment-2798771056) for reprocase.
 - Tracking issue for placement new: https://github.com/rust-lang/rust/issues/27779
   * Assignee: yugr
   * Status: in progress

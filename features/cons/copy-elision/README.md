@@ -53,6 +53,9 @@ pub fn cpy(a: A) {
 ```
 (compile via `rustc -O --emit asm --crate-type=lib repro.rs -o- | c++filt`).
 
+[copyless](https://github.com/kvark/copyless) trait has been removed
+because situation w/ `memcpy`'s has been significantly improved.
+
 In many cases Rust keeps spurious `memcpy`'s esp. on function bondary:
 ```
 use std::hint::black_box;

@@ -41,6 +41,12 @@ let boxed: Boxed<BigStruct> = box foo();
 ```
 (not sure if it works now).
 
+Also for `Box` this can be solved via `into_boxed_slice`:
+```
+let boxed_slice: Box<[u8]> = vec![0; 100_000_000].into_boxed_slice();
+let boxed_array: Box<[u8; 100_000_000]> = vec![0; 100_000_000].into_boxed_slice().try_into().unwrap();
+```
+
 Another common [suggestion](https://www.reddit.com/r/rust/comments/1eeuqtc/comment/lfh557e/)
 is to extend the `new` method of container to accept closure
 which creates object. This increases the chance that compiler will be able to elide
@@ -48,9 +54,18 @@ the `memcpy` (but still not guarantee it).
 
 Finally some containers provide unsafe APIs for direct allocation and init e.g.
   - `Box` has `alloc` and `init`
+  - also `Box` [has](https://github.com/rust-lang/rust/issues/53827#issuecomment-570822294)
+```
+let a = unsafe {
+        let mut a = Box::<[[i32; 2048]; 2048]>::new_uninit();
+        ptr::write_bytes(a.as_mut_ptr(), 0, 1);
+        a.assume_init()
+};
+```
   - `Vec` has `with_capacity` and `set_len`
 
 # Examples
 
 - [#49733](https://github.com/rust-lang/rust/issues/49733#issuecomment-621666613)
+- [#53827](https://github.com/rust-lang/rust/issues/53827)
 - [How to boxed struct with large size without stack-overflow?](https://users.rust-lang.org/t/how-to-boxed-struct-with-large-size-without-stack-overflow/94961/1)
