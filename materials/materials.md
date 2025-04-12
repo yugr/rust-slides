@@ -424,7 +424,7 @@ On the other hand, once all materials are analyzed we won't care about this file
   * People suggest various issues (UFT8 checks, `Rc`, error checking, etc.) but all known by us
   * More materials: nothing new
 
-# Copy elision/NRVO
+# Copy elision/NRVO and placement new
 
 - Does the compiler optimize moves? https://www.reddit.com/r/rust/comments/ykku69/does_the_compiler_optimize_moves/
   * this should be a dedicated perf issue
@@ -458,16 +458,31 @@ On the other hand, once all materials are analyzed we won't care about this file
   * More materials: added links
 - How to create large objects directly in heap: https://users.rust-lang.org/t/how-to-create-large-objects-directly-in-heap/26405
   * Assignee: yugr
-  * Status: in progress
-  * Very important comment from Klabnik
+  * Status: DONE (15m)
+  * Problem: OP wants to avoid allocating large struct on stack when calling `Box::new`
+  * Root cause: no placement new in Rust and copy elision does not work in such cases
+  * Solution: use unsafe APIs (e.g. `Box::alloc`)
+    + "Does that mean I cannot create a struct that is bigger than the stack allows? And it will always be created on the stack first and then copied to the heap?"
+    + "Semantically yes" (Klabnik)
+  * More materials: added
 - Introduce deduced parameter attributes: https://github.com/rust-lang/rust/pull/103172
   * Assignee: yugr
-  * Status: in progress
-  * Mentions some relevant details about `memcpy` elision
+  * Status: DONE (15m)
+  * A highly technical discussion about addition of new attributes to generated LLVM IR
+  * No direct discussions of copy elision so not very relevant for us
+  * More materials: issue 103103 (see below)
+- Not using the byval attribute loses memcpy optimizations: https://github.com/rust-lang/rust/issues/103103
+  * Assignee: yugr
+  * Status: DONE (5m)
+  * A highly technical discussion of how to avoid `memcpy` in trampoline function
+  * The issue is no longer relevant because there is no longer a copy in recent rustc's
+  * More materials: none
 - Do move forwarding in MIR: https://github.com/rust-lang/rust/issues/32966
 - Pre-RFC: Move-or-borrow elision: https://internals.rust-lang.org/t/pre-rfc-move-or-borrow-elision/13181
 - Semantics of MIR function calls: https://github.com/rust-lang/rust/issues/71117
   * Highly technical, low priority
+- Stack overflow with Boxed array: https://github.com/rust-lang/rust/issues/53827
+- Tracking issue for placement new: https://github.com/rust-lang/rust/issues/27779
 
 # Iterators
 

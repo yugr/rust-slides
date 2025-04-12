@@ -18,6 +18,12 @@ This effectively means that one
 The issue is more important in C++ because there copy ctors are potentially more expensive
 (not just simple `memcpy`'s).
 
+There have been some RFCs about adding support for placement new
+(e.g. [this](https://y86-dev.github.io/blog/return-value-optimization/placement-by-return.html)
+but according to [this](https://www.reddit.com/r/rust/comments/1eeuqtc/c_vectoremplace_back_vs_rust_vecpushf_copying_v/)
+there is nothing officially accepted.
+Maintainers consider it [a low priority feature](https://www.reddit.com/r/rust/comments/1eeuqtc/comment/lfhqob6/).
+
 # Solutions
 
 One could argue that lack of placement new may be alleivated
@@ -40,11 +46,9 @@ is to extend the `new` method of container to accept closure
 which creates object. This increases the chance that compiler will be able to elide
 the `memcpy` (but still not guarantee it).
 
-There have been some RFCs about adding support for placement new
-(e.g. [this](https://y86-dev.github.io/blog/return-value-optimization/placement-by-return.html)
-but according to [this](https://www.reddit.com/r/rust/comments/1eeuqtc/c_vectoremplace_back_vs_rust_vecpushf_copying_v/)
-there is nothing officially accepted.
-Maintainers consider it [a low priority feature](https://www.reddit.com/r/rust/comments/1eeuqtc/comment/lfhqob6/).
+Finally some containers provide unsafe APIs for direct allocation and init e.g.
+  - `Box` has `alloc` and `init`
+  - `Vec` has `with_capacity` and `set_len`
 
 # Examples
 
