@@ -243,12 +243,6 @@ On the other hand, once all materials are analyzed we won't care about this file
     + no expression templates
     + all mentioned issues are fixed by now
   * More materials: added links
-- Expression Templates in Rust? https://www.reddit.com/r/rust/comments/1f0hi5k/expression_templates_in_rust
-  * Assignee: yugr
-  * Status: in progress
-- Expression templates in Eigen: https://eigen.tuxfamily.org/index.php?title=Expression_templates
-  * Assignee: yugr
-  * Status: in progress
 - What kind of performance rust is trying to achieve? https://users.rust-lang.org/t/what-kind-of-performance-rust-is-trying-to-achieve/1674
   * Assignee: yugr
   * Status: DONE (20m)
@@ -286,6 +280,15 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Status: DONE (5m)
   * Main idea: user wonders what are potential, NYI optimizations; the only answer is `noalias`
   * More materials: added links
+
+# Expression templates
+
+- Expression Templates in Rust? https://www.reddit.com/r/rust/comments/1f0hi5k/expression_templates_in_rust
+  * Assignee: yugr
+  * Status: in progress
+- Expression templates in Eigen: https://eigen.tuxfamily.org/index.php?title=Expression_templates
+  * Assignee: yugr
+  * Status: in progress
 
 # Overflow checks
 
@@ -490,7 +493,10 @@ On the other hand, once all materials are analyzed we won't care about this file
   * More materials: nothing relevant
 - Pre-RFC: Move-or-borrow elision: https://internals.rust-lang.org/t/pre-rfc-move-or-borrow-elision/13181
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (5m)
+  * Author proposes new special syntax to make code with `clone`'s more ergonomic
+  * Proposal is not relevant for performance
+  * More materials: none
 - Stack overflow with Boxed array: https://github.com/rust-lang/rust/issues/53827
   * Assignee: yugr
   * Status: postponed (waiting for joonazan reply, 40m)
@@ -517,7 +523,11 @@ pub fn foo(p: Box<S>) {
   I [asked](https://github.com/rust-lang/rust/issues/53827#issuecomment-2798771056) for reprocase.
 - Tracking issue for placement new: https://github.com/rust-lang/rust/issues/27779
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (10m)
+  * This is RFC about special syntax for placement new which got removed
+  * More materials: bugreports in real code:
+    + [BTreeMap](https://github.com/rust-lang/rust/issues/81444)
+    + [rust-gamedev](https://github.com/rust-gamedev/wg/issues/48)
 - Semantics of MIR function calls: https://github.com/rust-lang/rust/issues/71117
   * Highly technical, low priority
 
@@ -542,14 +552,32 @@ pub fn foo(p: Box<S>) {
 - Rust’s iterators are inefficient, and here’s what we can do about it: https://medium.com/@veedrac/rust-is-slow-and-i-am-the-cure-32facc0fdcb
   * [Reddit](https://www.reddit.com/r/rust/comments/5ez38g/rusts_iterators_are_inefficient_and_heres_what_we/)
 - Iterators vs index loops performance: https://users.rust-lang.org/t/iterators-vs-index-loops-performance/52131
+  * Assignee: yugr
+  * Status: in progress
 - Performance difference between iterator and for loop: https://users.rust-lang.org/t/performance-difference-between-iterator-and-for-loop/50254
+  * Assignee: yugr
+  * Status: in progress
 - Performance of iterator over for-loops without boundry check: https://users.rust-lang.org/t/performance-of-iterator-over-for-loops-without-boundry-checks/96162
+  * Assignee: yugr
+  * Status: in progress
 - Are iterators even efficient? https://users.rust-lang.org/t/are-iterators-even-efficient/36050
+  * Assignee: yugr
+  * Status: in progress
 - Iter with step_by(2) performs slowly: https://github.com/rust-lang/rust/issues/59281
+  * Assignee: yugr
+  * Status: in progress
 - What additional performance overhead does the use of iterators: https://internals.rust-lang.org/t/what-additional-performance-overhead-does-the-use-of-iterators-and-closures-cause/20296
+  * Assignee: yugr
+  * Status: in progress
 - We all know `iter` is faster than `loop`, but why: https://users.rust-lang.org/t/we-all-know-iter-is-faster-than-loop-but-why/51486
+  * Assignee: yugr
+  * Status: in progress
 - Why for_each is much faster than for loop in release mode: https://stackoverflow.com/questions/76091417/why-for-each-is-much-faster-than-for-loop-in-release-mode-cargo-run-r
+  * Assignee: yugr
+  * Status: in progress
 - Iterator::fold is a little slow compared to bare loop: https://github.com/rust-lang/rust/issues/76725
+  * Assignee: yugr
+  * Status: in progress
 - Iterator-based approach performs 10x worse than manual implementation https://github.com/rust-lang/rust/issues/80416
     * Assignee: zakhar
     * Status: DONE (15m)
@@ -557,6 +585,8 @@ pub fn foo(p: Box<S>) {
     * Root cause: compiler seems to be unable to propagate compile-time knowledge when .cycle() and .skip() are used together
     * Solution: use mutable iterator with .nth() instead of .skip()
 - Why are cartesian iterators slower than nested fors? https://users.rust-lang.org/t/why-are-cartesian-iterators-slower-than-nested-fors/42847
+  * Assignee: yugr
+  * Status: in progress
 
 # Compiler codegen
 

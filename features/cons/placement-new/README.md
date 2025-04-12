@@ -1,6 +1,7 @@
 Rust does not have a placement-new operator like C++.
 
-This is a particular pain when keeping large structs in containers (`Box`, `Vec`, etc.).
+This is a particular pain when keeping large structs in containers (`Box`, `Vec`,
+[BTreeMap](https://github.com/rust-lang/rust/issues/81444), etc.).
 For example something like
 ```
 pub fn with_new() -> Box<Pages> {
@@ -20,6 +21,7 @@ The issue is more important in C++ because there copy ctors are potentially more
 
 There have been some RFCs about adding support for placement new
 (e.g. [this](https://y86-dev.github.io/blog/return-value-optimization/placement-by-return.html)
+or [this](https://github.com/rust-lang/rust/issues/27779))
 but according to [this](https://www.reddit.com/r/rust/comments/1eeuqtc/c_vectoremplace_back_vs_rust_vecpushf_copying_v/)
 there is nothing officially accepted.
 Maintainers consider it [a low priority feature](https://www.reddit.com/r/rust/comments/1eeuqtc/comment/lfhqob6/).
@@ -49,7 +51,11 @@ let boxed_array: Box<[u8; 100_000_000]> = vec![0; 100_000_000].into_boxed_slice(
 
 Another common [suggestion](https://www.reddit.com/r/rust/comments/1eeuqtc/comment/lfh557e/)
 is to extend the `new` method of container to accept closure
-which creates object. This increases the chance that compiler will be able to elide
+which creates object:
+```
+container.push_with(|| TheType {a: 1, b: 1})
+```
+This increases the chance that compiler will be able to elide
 the `memcpy` (but still not guarantee it).
 
 Finally some containers provide unsafe APIs for direct allocation and init e.g.
@@ -63,6 +69,7 @@ let a = unsafe {
 };
 ```
   - `Vec` has `with_capacity` and `set_len`
+  - `BTreeMap` unfortunately has nothing ?
 
 # Examples
 
