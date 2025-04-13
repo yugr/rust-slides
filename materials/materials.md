@@ -601,7 +601,11 @@ pub fn foo(p: Box<S>) {
   * More materials: links added
 - Why for_each is much faster than for loop in release mode: https://stackoverflow.com/questions/76091417/why-for-each-is-much-faster-than-for-loop-in-release-mode-cargo-run-r
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (10m)
+  * Problem: external inclusive range loop runs much faster than internal
+  * Root cause: external iteration optimized by LLVM to simple arithmetic formula
+  * Solution: `for_each` is special-cased for `RangeInclusive` and should be used
+  * More materials:
 - Iterator::fold is a little slow compared to bare loop: https://github.com/rust-lang/rust/issues/76725
   * Assignee: yugr
   * Status: in progress
@@ -618,6 +622,7 @@ pub fn foo(p: Box<S>) {
 - Is manually looping through a vector always strictly worse then using iterators? https://users.rust-lang.org/t/is-manually-looping-through-a-vector-always-strictly-worse-then-using-iterators/5098
 - Why is iterator so much faster? https://www.reddit.com/r/rust/comments/eiwhkn/why_is_iterator_so_much_faster/
 - About optimizations of for loops: https://internals.rust-lang.org/t/about-optimizations-of-for-loops/18896
+- Why does iteration over an inclusive range generate longer assembly in Rust than in C++? https://stackoverflow.com/questions/70672533/why-does-iteration-over-an-inclusive-range-generate-longer-assembly-in-rust-than/70680224
 
 # Noalias
 
