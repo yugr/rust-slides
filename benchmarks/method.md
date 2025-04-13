@@ -32,6 +32,14 @@ Benchmarks need to run via standard approach
 taskset 0x1 nice -n -20 setarch -R ...
 ```
 
-# TODO
+Standard Rust benchmarks can be run using `cargo bench` command. Depending on benchmark implementation, it automatically warms up for 3s before benchmarking and runs each benchmark for approximately 5s. Low, mean and high time is reported, as well as number and type of outliers. It also can record benchmarking result and report change.
 
-Do we need some standard Rust crate to run benchmarks ?
+`cargo bench` does not seem to alter benchmarking process schedaffinity or niceness, so the preferred method of running `cargo bench` is
+```
+sudo renice -n -20 $$
+taskset 0x1 setarch -R cargo bench
+```
+
+# Common benchmarking tools
+
+Most popular Rust benchmarking crate is the `Criterion.rs` crate. Nightly version of Rust also has built-in `[#bench]` attribute. There also may be other benchmarking frameworks, but for a well-structured crate cargo should provide a simple `cargo bench` abstraction that will run all the available benchmarks (and tests) automatically.
