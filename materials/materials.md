@@ -540,7 +540,10 @@ pub fn foo(p: Box<S>) {
 - New range types: https://github.com/rust-lang/rust/issues/123741
   * Be sure to analyze links
 - Rust’s iterators are inefficient, and here’s what we can do about it: https://medium.com/@veedrac/rust-is-slow-and-i-am-the-cure-32facc0fdcb
-  * [Reddit](https://www.reddit.com/r/rust/comments/5ez38g/rusts_iterators_are_inefficient_and_heres_what_we/)
+  * Assignee: yugr
+  * Status: in progress
+  * More materials:
+    + [Reddit](https://www.reddit.com/r/rust/comments/5ez38g/rusts_iterators_are_inefficient_and_heres_what_we/)
 - Iterators vs index loops performance: https://users.rust-lang.org/t/iterators-vs-index-loops-performance/52131
   * Assignee: yugr
   * Status: DONE (10m)
