@@ -568,7 +568,16 @@ pub fn foo(p: Box<S>) {
   * More materials: no new links
 - Are iterators even efficient? https://users.rust-lang.org/t/are-iterators-even-efficient/36050
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (25m)
+  * OP asks for best practices for using iterators
+    + He uses some concrete microbenchmark and compares asm size
+  * Suggestions:
+    + Use open intervals
+    + Use `for_each` instead of loop for "chained" iterators (`chain`, `flat_map`, etc.)
+      - "If you use combinators that change the control flow, use for_each, otherwise for loops are fine. This includes flat_map, flatten, chain, and a few others" (from [here](https://users.rust-lang.org/t/are-iterators-even-efficient/36050/11))
+      - Nice hint !
+    + Preallocate vectors
+  * More materials: added
 - Iter with step_by(2) performs slowly: https://github.com/rust-lang/rust/issues/59281
   * Assignee: yugr
   * Status: in progress
@@ -595,6 +604,7 @@ pub fn foo(p: Box<S>) {
   * Status: in progress
 - Why iterating over the iterator is 3x slower: https://users.rust-lang.org/t/why-iterating-over-the-iterator-is-3x-slower/62098/9
 - Is manually looping through a vector always strictly worse then using iterators? https://users.rust-lang.org/t/is-manually-looping-through-a-vector-always-strictly-worse-then-using-iterators/5098
+- Why is iterator so much faster? https://www.reddit.com/r/rust/comments/eiwhkn/why_is_iterator_so_much_faster/
 
 # Noalias
 
