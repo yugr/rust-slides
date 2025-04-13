@@ -580,7 +580,9 @@ pub fn foo(p: Box<S>) {
   * More materials: added
 - Iter with step_by(2) performs slowly: https://github.com/rust-lang/rust/issues/59281
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (5m)
+  * The issue has been fixed in rustc, no new info in this issue
+  * More materials: [#57517](https://github.com/rust-lang/rust/issues/57517) also has been fixed (same perf for all benches)
 - What additional performance overhead does the use of iterators: https://internals.rust-lang.org/t/what-additional-performance-overhead-does-the-use-of-iterators-and-closures-cause/20296
   * Assignee: yugr
   * Status: in progress
