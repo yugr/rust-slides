@@ -585,7 +585,10 @@ pub fn foo(p: Box<S>) {
   * More materials: [#57517](https://github.com/rust-lang/rust/issues/57517) also has been fixed (same perf for all benches)
 - What additional performance overhead does the use of iterators: https://internals.rust-lang.org/t/what-additional-performance-overhead-does-the-use-of-iterators-and-closures-cause/20296
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (10m)
+  * OP asked about potential performance of iterators
+  * The only suggestion was to replace `Vec<u8>` with `&mut [u8]
+  * More materials: added link
 - We all know `iter` is faster than `loop`, but why: https://users.rust-lang.org/t/we-all-know-iter-is-faster-than-loop-but-why/51486
   * Assignee: yugr
   * Status: in progress
@@ -607,6 +610,7 @@ pub fn foo(p: Box<S>) {
 - Why iterating over the iterator is 3x slower: https://users.rust-lang.org/t/why-iterating-over-the-iterator-is-3x-slower/62098/9
 - Is manually looping through a vector always strictly worse then using iterators? https://users.rust-lang.org/t/is-manually-looping-through-a-vector-always-strictly-worse-then-using-iterators/5098
 - Why is iterator so much faster? https://www.reddit.com/r/rust/comments/eiwhkn/why_is_iterator_so_much_faster/
+- About optimizations of for loops: https://internals.rust-lang.org/t/about-optimizations-of-for-loops/18896
 
 # Noalias
 
