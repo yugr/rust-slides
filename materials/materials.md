@@ -265,16 +265,6 @@ On the other hand, once all materials are analyzed we won't care about this file
       - [interesting discussion](https://www.reddit.com/r/rust/comments/ab7hsi/comment/ed0u11h/) of how integer checks were optimized in different toolchain
       - (single instruction for overflow arithmetic, expanded late in pipeline)
     + [HN](https://news.ycombinator.com/item?id=18794363)
-
-# Rust-specific opts
-
-- Non-aliasing guarantees of &mut T and rustc optimization: https://users.rust-lang.org/t/non-aliasing-guarantees-of-mut-t-and-rustc-optimization/34386
-  * Assignee: yugr
-  * Status: DONE (5m)
-  * Problem: Rust aliasing info not used for optimization
-  * Root cause: aliasing used to be disabled by default back then
-  * Solution: force enable via flag
-  * More materials: N/A
 - Possible Rust-specific optimizations: https://users.rust-lang.org/t/possible-rust-specific-optimizations/79895
   * Assignee: yugr
   * Status: DONE (5m)
@@ -553,13 +543,26 @@ pub fn foo(p: Box<S>) {
   * [Reddit](https://www.reddit.com/r/rust/comments/5ez38g/rusts_iterators_are_inefficient_and_heres_what_we/)
 - Iterators vs index loops performance: https://users.rust-lang.org/t/iterators-vs-index-loops-performance/52131
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (10m)
+  * Problem: simple iterator loop is 2x faster than indexing
+  * Root-cause:
+    + in that version of compiler `&mut` made compiler think that size may be modified
+    + both programs are vectorized in trunk
+  * Solution: proposed to reslice
+  * More materials: no new links
 - Performance difference between iterator and for loop: https://users.rust-lang.org/t/performance-difference-between-iterator-and-for-loop/50254
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (5m)
+  * OP asks if there's difference between for-loop and external iteration
+  * The only main difference is automatic prelloc for external iteration case
+  * More materials: added link
 - Performance of iterator over for-loops without boundry check: https://users.rust-lang.org/t/performance-of-iterator-over-for-loops-without-boundry-checks/96162
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (5m)
+  * Problem: comparing slices is faster than comparing via per-element loop (unrelated to iterators really)
+  * Root cause: no def answer but most likely slice comparison compiles to `memcmp`
+  * Solution: NA
+  * More materials: no new links
 - Are iterators even efficient? https://users.rust-lang.org/t/are-iterators-even-efficient/36050
   * Assignee: yugr
   * Status: in progress
@@ -587,6 +590,26 @@ pub fn foo(p: Box<S>) {
 - Why are cartesian iterators slower than nested fors? https://users.rust-lang.org/t/why-are-cartesian-iterators-slower-than-nested-fors/42847
   * Assignee: yugr
   * Status: in progress
+- Why iterating over the iterator is 3x slower: https://users.rust-lang.org/t/why-iterating-over-the-iterator-is-3x-slower/62098/9
+- Is manually looping through a vector always strictly worse then using iterators? https://users.rust-lang.org/t/is-manually-looping-through-a-vector-always-strictly-worse-then-using-iterators/5098
+
+# Noalias
+
+- Non-aliasing guarantees of &mut T and rustc optimization: https://users.rust-lang.org/t/non-aliasing-guarantees-of-mut-t-and-rustc-optimization/34386
+  * Assignee: yugr
+  * Status: DONE (5m)
+  * Problem: Rust aliasing info not used for optimization
+  * Root cause: aliasing used to be disabled by default back then
+  * Solution: force enable via flag
+  * More materials: N/A
+- Why does the Rust compiler not optimize code assuming that two mutable references cannot alias? https://stackoverflow.com/questions/57259126/why-does-the-rust-compiler-not-optimize-code-assuming-that-two-mutable-reference
+  * Assignee: yugr
+  * Status: DONE (5m)
+  * Problem: Rust code is less efficient than equivalent C++ code with `restrict`'s
+  * Root cause: Rust aliasing optimizations were [disabled by default](https://github.com/rust-lang/rust/issues/54878) back then (and enabled now)
+  * More materials: N/A
+- Aliasing in Rust: https://www.reddit.com/r/rust/comments/1ery9dy/aliasing_in_rust/
+- Enable mutable noalias for LLVM >= 12 by nikic merged: https://www.reddit.com/r/rust/comments/maix26/enable_mutable_noalias_for_llvm_12_by_nikic_merged/
 
 # Compiler codegen
 
@@ -640,12 +663,6 @@ pub fn foo(p: Box<S>) {
   * Assignee: yugr
   * Status: DONE (5m)
   * Main idea: just solved some LLVM bugs, no generalizations
-  * More materials: N/A
-- Why does the Rust compiler not optimize code assuming that two mutable references cannot alias? https://stackoverflow.com/questions/57259126/why-does-the-rust-compiler-not-optimize-code-assuming-that-two-mutable-reference
-  * Assignee: yugr
-  * Status: DONE (5m)
-  * Problem: Rust code is less efficient than equivalent C++ code with `restrict`'s
-  * Root cause: Rust aliasing optimizations were [disabled by default](https://github.com/rust-lang/rust/issues/54878) back then (and enabled now)
   * More materials: N/A
 - Why isn't the for loop optimized better (in this one example)? https://www.reddit.com/r/rust/comments/15tvuio/why_isnt_the_for_loop_optimized_better_in_this/
   * Assignee: yugr
@@ -751,7 +768,6 @@ pub fn foo(p: Box<S>) {
 
 # Manual optimizations
 
-- Aliasing in Rust: https://www.reddit.com/r/rust/comments/1ery9dy/aliasing_in_rust/
 - Nethercote's posts: https://blog.mozilla.org/nnethercote/category/rust/
   * Nethercote is top industry expert, need to pay close attention to his posts
 - Moar Nethercote's posts: https://nnethercote.github.io/
