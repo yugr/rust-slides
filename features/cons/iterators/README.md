@@ -1,6 +1,7 @@
 Iterators are great but in some cases do not optimize very well.
 
 In some cases iterators are faster than indexing but that's not always the case.
+One example of this is `collect` which may preallocate result if size is known.
 
 Iterators are _much_ slower in debug.
 
@@ -33,3 +34,7 @@ using slice instead of Vec iteration may simplify work for LLVM.
 ## Do not use inclusive ranges
 
 See [overflow page](../arithmetic-checks/overflow-checks/README.md) for details.
+
+# TODO
+
+- Scan stdlib for iterator specializations (e.g. `with_capacity` for `collect<Vec>`)

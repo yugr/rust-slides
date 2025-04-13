@@ -591,7 +591,14 @@ pub fn foo(p: Box<S>) {
   * More materials: added link
 - We all know `iter` is faster than `loop`, but why: https://users.rust-lang.org/t/we-all-know-iter-is-faster-than-loop-but-why/51486
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (15m)
+  * OP wonders why iterators (with `for_each`) are faster than loops
+  * Answers:
+    + First of ["looping and iterators have approximately the same performance on average"](https://users.rust-lang.org/t/we-all-know-iter-is-faster-than-loop-but-why/51486/4)
+    + Also [experience shows a lot of variability of performance](https://users.rust-lang.org/t/we-all-know-iter-is-faster-than-loop-but-why/51486/10)
+    + Iterators allow elimination of bounds checks (through unchecked accesses), pre-allocation and other iterator specializations
+  * Finally all OP's loops produce same asm on recent rustc
+  * More materials: links added
 - Why for_each is much faster than for loop in release mode: https://stackoverflow.com/questions/76091417/why-for-each-is-much-faster-than-for-loop-in-release-mode-cargo-run-r
   * Assignee: yugr
   * Status: in progress
@@ -843,6 +850,7 @@ pub fn foo(p: Box<S>) {
 - Huge performance gap in simple loop. Explanations? https://www.reddit.com/r/rust/comments/11f00kc/huge_performance_gap_in_simple_loop_explanations/
 - Memory-safe PNG decoders now vastly outperform C PNG libraries: https://www.reddit.com/r/programming/comments/1hak25t/memorysafe_png_decoders_now_vastly_outperform_c/
 - Speeding up RGB to grayscale conversion in Rust: https://www.reddit.com/r/rust/comments/7rxrka/speeding_up_rgb_to_grayscale_conversion_in_rust/
+- Rust performance help (convolution): https://users.rust-lang.org/t/rust-performance-help-convolution/44075
 
 # Panics
 
