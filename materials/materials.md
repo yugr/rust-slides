@@ -608,7 +608,13 @@ pub fn foo(p: Box<S>) {
   * More materials:
 - Iterator::fold is a little slow compared to bare loop: https://github.com/rust-lang/rust/issues/76725
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (30m)
+  * Problem: replacing `Vec` accumulator in `fold` with `&mut Vec` improves performance
+  * Root cause: compiler failed to eliminate move
+  * Solution:
+    - Proposed `fold_mut` for [stdlib](https://github.com/rust-lang/rust/pull/76746) and [itertools](https://github.com/rust-itertools/itertools/pull/481)
+    - PRs rejected as too niche
+    - scottmcm suggested to [use lint](https://github.com/rust-lang/rust-clippy/issues/6053) instead (to replace `fold` with `for_each` with `FnMut`)
 - Iterator-based approach performs 10x worse than manual implementation https://github.com/rust-lang/rust/issues/80416
     * Assignee: zakhar
     * Status: DONE (15m)

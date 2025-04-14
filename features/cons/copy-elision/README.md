@@ -70,6 +70,8 @@ pub fn mov(a: A) {
 }
 ```
 
+Another common problen is [spurious moves in fold](https://github.com/rust-lang/rust/issues/76725).
+
 The reason is that LLVM is not always good at optimizing `memcpy`
 so Rust has [custom optimization passes](https://github.com/rust-lang/rust/blob/master/compiler/rustc_mir_transform/src/dest_prop.rs) to deal with them.
 This work is [ongoing](https://github.com/rust-lang/rust/labels/A-mir-opt-nrvo)
@@ -80,7 +82,7 @@ Some info on why this may happen can be found in [#103172](https://github.com/ru
 
 # Solutions
 
-Pass large structs by reference.
+Pass large structs (or [fold accumulators](https://github.com/rust-lang/rust-clippy/issues/6053)) by reference.
 
 Enable additional MIR opts (does not help with case above though):
   - `-Zmir-enable-passes=+DestinationPropagation,+RenameReturnPlace`
