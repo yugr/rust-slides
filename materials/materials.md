@@ -270,6 +270,7 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Status: DONE (5m)
   * Main idea: user wonders what are potential, NYI optimizations; the only answer is `noalias`
   * More materials: added links
+- What languages (other than Rust) have "zero cost abstraction"? https://www.reddit.com/r/rust/comments/zkr3xm/what_languages_other_than_rust_have_zero_cost/
 
 # Expression templates
 
@@ -520,6 +521,8 @@ pub fn foo(p: Box<S>) {
     + [rust-gamedev](https://github.com/rust-gamedev/wg/issues/48)
 - Semantics of MIR function calls: https://github.com/rust-lang/rust/issues/71117
   * Highly technical, low priority
+- Move semantics in C and Rust: https://radekvit.medium.com/move-semantics-in-c-and-rust-the-case-for-destructive-moves-d816891c354b
+- Are rust moves of structs, copies or moves Zero Cost Abstractions: https://www.reddit.com/r/rust/comments/1ibjnka/are_rust_moves_of_structs_copies_or_moves_zero/
 
 # Iterators
 
@@ -652,6 +655,7 @@ pub fn foo(p: Box<S>) {
 - Why does iteration over an inclusive range generate longer assembly in Rust than in C++? https://stackoverflow.com/questions/70672533/why-does-iteration-over-an-inclusive-range-generate-longer-assembly-in-rust-than/70680224
   * Assignee: yugr
   * Status: in progress
+- Zero-cost iterator abstractions...not so zero-cost? https://www.reddit.com/r/rust/comments/yaft60/zerocost_iterator_abstractionsnot_so_zerocost/
 
 # Noalias
 
@@ -768,6 +772,7 @@ pub fn foo(p: Box<S>) {
     + walk though different IRs (AST, HIR, THIR, MIR)
     + some info on rustc driver
     + not too many details
+- Should small Rust structs be passed by-copy or by-borrow? https://www.reddit.com/r/rust/comments/zzxz2e/should_small_rust_structs_be_passed_bycopy_or/
 
 # Data structures performance
 
@@ -885,6 +890,7 @@ pub fn foo(p: Box<S>) {
 - Memory-safe PNG decoders now vastly outperform C PNG libraries: https://www.reddit.com/r/programming/comments/1hak25t/memorysafe_png_decoders_now_vastly_outperform_c/
 - Speeding up RGB to grayscale conversion in Rust: https://www.reddit.com/r/rust/comments/7rxrka/speeding_up_rgb_to_grayscale_conversion_in_rust/
 - Rust performance help (convolution): https://users.rust-lang.org/t/rust-performance-help-convolution/44075
+- Rust: A better C++ than C++: Safety and performance: https://www.thecodedmessage.com/rust-c-book/safety.html
 
 # Panics
 
