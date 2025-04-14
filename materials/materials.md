@@ -625,10 +625,20 @@ pub fn foo(p: Box<S>) {
   * Assignee: yugr
   * Status: in progress
 - Why iterating over the iterator is 3x slower: https://users.rust-lang.org/t/why-iterating-over-the-iterator-is-3x-slower/62098/9
+  * Assignee: yugr
+  * Status: in progress
 - Is manually looping through a vector always strictly worse then using iterators? https://users.rust-lang.org/t/is-manually-looping-through-a-vector-always-strictly-worse-then-using-iterators/5098
+  * Assignee: yugr
+  * Status: in progress
 - Why is iterator so much faster? https://www.reddit.com/r/rust/comments/eiwhkn/why_is_iterator_so_much_faster/
+  * Assignee: yugr
+  * Status: in progress
 - About optimizations of for loops: https://internals.rust-lang.org/t/about-optimizations-of-for-loops/18896
+  * Assignee: yugr
+  * Status: in progress
 - Why does iteration over an inclusive range generate longer assembly in Rust than in C++? https://stackoverflow.com/questions/70672533/why-does-iteration-over-an-inclusive-range-generate-longer-assembly-in-rust-than/70680224
+  * Assignee: yugr
+  * Status: in progress
 
 # Noalias
 
