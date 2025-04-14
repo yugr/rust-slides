@@ -630,13 +630,22 @@ pub fn foo(p: Box<S>) {
   * More materials: no new links
 - Why iterating over the iterator is 3x slower: https://users.rust-lang.org/t/why-iterating-over-the-iterator-is-3x-slower/62098
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (5m)
+  * A highly niche issue with iterator code, not relevant for us
+  * More materials: no new links
 - Is manually looping through a vector always strictly worse then using iterators? https://users.rust-lang.org/t/is-manually-looping-through-a-vector-always-strictly-worse-then-using-iterators/5098
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (5m)
+  * This is a discussion of Dijkstra algorithm implementation
+  * There are no perf analysis, just suggestions that iterators are generally preferred
+  * More materials: none
 - Why is iterator so much faster? https://www.reddit.com/r/rust/comments/eiwhkn/why_is_iterator_so_much_faster/
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (20m)
+  * Problem: loop w/ external iteration is much faster
+  * Root cause: `..=` is slow for internal iteration due to additional check inside loop
+  * Solution: replace with `..`
+  * More materials: no new links
 - About optimizations of for loops: https://internals.rust-lang.org/t/about-optimizations-of-for-loops/18896
   * Assignee: yugr
   * Status: in progress
