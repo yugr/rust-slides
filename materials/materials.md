@@ -271,6 +271,7 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Main idea: user wonders what are potential, NYI optimizations; the only answer is `noalias`
   * More materials: added links
 - What languages (other than Rust) have "zero cost abstraction"? https://www.reddit.com/r/rust/comments/zkr3xm/what_languages_other_than_rust_have_zero_cost/
+- Is Rust faster than Fortran and C++? A case study with scientific applications: https://www.reddit.com/r/rust/comments/1jz504y/is_rust_faster_than_fortran_and_c_a_case_study/
 
 # Expression templates
 
