@@ -623,8 +623,12 @@ pub fn foo(p: Box<S>) {
     * Solution: use mutable iterator with .nth() instead of .skip()
 - Why are cartesian iterators slower than nested fors? https://users.rust-lang.org/t/why-are-cartesian-iterators-slower-than-nested-fors/42847
   * Assignee: yugr
-  * Status: in progress
-- Why iterating over the iterator is 3x slower: https://users.rust-lang.org/t/why-iterating-over-the-iterator-is-3x-slower/62098/9
+  * Status: DONE (15m)
+  * Problem: iterator loop is 3x slower than indexing
+  * Root cause: internal iteration + bounds checking
+  * Solution: should use external iteration for chained iters, remove bounds checking via `get_unchecked`
+  * More materials: no new links
+- Why iterating over the iterator is 3x slower: https://users.rust-lang.org/t/why-iterating-over-the-iterator-is-3x-slower/62098
   * Assignee: yugr
   * Status: in progress
 - Is manually looping through a vector always strictly worse then using iterators? https://users.rust-lang.org/t/is-manually-looping-through-a-vector-always-strictly-worse-then-using-iterators/5098

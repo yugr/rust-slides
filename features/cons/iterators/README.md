@@ -16,7 +16,8 @@ to optimize better than traditional for-loops.
 External iteration is [definitely](https://users.rust-lang.org/t/noob-chaining-efficiency/65355/8)
 [recommended](https://users.rust-lang.org/t/are-iterators-even-efficient/36050/2)
 for "chained" iterators i.e. combinators that change the control flow
-(`flat_map`, `flatten`, `chain`, [RangeInclusive](https://stackoverflow.com/a/70680224/2170527)
+(`flat_map`, `flatten`, `chain`, [RangeInclusive](https://stackoverflow.com/a/70680224/2170527),
+[iproduct!](https://users.rust-lang.org/t/why-are-cartesian-iterators-slower-than-nested-fors/42847)
 and some others). The logic is
 > For loop: When using a chain iterator in a for loop,
 > you're repeatedly calling next. This means that
