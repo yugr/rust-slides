@@ -39,6 +39,7 @@ Standard Rust benchmarks can be run using `cargo bench` command. Depending on be
 sudo renice -n -20 $$
 taskset 0x1 setarch -R cargo bench
 ```
+(what abour multithreaded benchmarks though ?).
 
 # Common benchmarking tools
 
