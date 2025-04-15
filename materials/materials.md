@@ -661,10 +661,10 @@ pub fn foo(p: Box<S>) {
   * More materials: no new links
 - About optimizations of for loops: https://internals.rust-lang.org/t/about-optimizations-of-for-loops/18896
   * Assignee: yugr
-  * Status: in progress (10m)
-  * A highly technical discussion
+  * Status: DONE (10m)
+  * A highly technical discussion w/o concrete conclusions
   * Problems of for-loops are
-    + Lowering happens early (at AST->HIR stage)
+    + Lowering happens early (at AST->HIR stage w/o typeinfo)
 - Why does iteration over an inclusive range generate longer assembly in Rust than in C++? https://stackoverflow.com/questions/70672533/why-does-iteration-over-an-inclusive-range-generate-longer-assembly-in-rust-than/70680224
   * Assignee: yugr
   * Status: DONE (10m)
