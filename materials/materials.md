@@ -802,7 +802,7 @@ pub fn foo(p: Box<S>) {
   * Assignee: yugr
   * Problem: useless `push`/`pop` in function
     * Need to add `#[inline(never)]`, otherwise `rustc` won't generate body (see [issue #119850](https://github.com/rust-lang/rust/issues/119850) for details)
-  * Root cause: Godbolt uses some spurious debug flags which trigger this 
+  * Root cause: Godbolt uses some spurious debug flags which trigger this
     + This is no longer an issue
     + See https://github.com/rust-lang/rust/issues/11906
   * Solution: not a problem for real code
@@ -832,13 +832,25 @@ pub fn foo(p: Box<S>) {
   * Problem: there is not problem actually, the article just illustrates how autovec works, etc.
   * More materials: no more interesting mats on this blog
 - Taking Advantage of Auto-Vectorization in Rust: https://www.nickwilcox.com/blog/autovec/ (also comments in https://www.reddit.com/r/rust/comments/gkq0op/taking_advantage_of_autovectorization_in_rust/)
-- Nine Rules for SIMD Acceleration of Your Rust Code:
-  * https://towardsdatascience.com/nine-rules-for-simd-acceleration-of-your-rust-code-part-1-c16fe639ce21
-  * https://medium.com/towards-data-science/nine-rules-for-simd-acceleration-of-your-rust-code-part-2-6a104b3be6f3
+  * Assignee: yugr
+  * Status: in progress
+- Nine Rules for SIMD Acceleration of Your Rust Code: https://towardsdatascience.com/nine-rules-for-simd-acceleration-of-your-rust-code-part-1-c16fe639ce21 and https://medium.com/towards-data-science/nine-rules-for-simd-acceleration-of-your-rust-code-part-2-6a104b3be6f3
+  * Assignee: yugr
+  * Status: in progress
+  * More materials:
+    + [Reddit](https://www.reddit.com/r/rust/comments/18hj1m6/nine_rules_for_simd_acceleration_of_your_rust/)
 - Taming Floating-Point Sums: https://orlp.net/blog/taming-float-sums/
+  * Assignee: yugr
+  * Status: in progress
 - Auto-vectorization in Rust: https://users.rust-lang.org/t/auto-vectorization-in-rust/24379
+  * Assignee: yugr
+  * Status: in progress
 - Understanding Rusts Auto-Vectorization and Methods for speed: https://users.rust-lang.org/t/understanding-rusts-auto-vectorization-and-methods-for-speed-increase/84891 (reslicing technique)
+  * Assignee: yugr
+  * Status: in progress
 - We need to do better in the benchmarks game: https://users.rust-lang.org/t/we-need-to-do-better-in-the-benchmarks-game/7317
+  * Assignee: yugr
+  * Status: in progress
 - Performance questions: https://users.rust-lang.org/t/performance-questions/45265
   * Assignee: yugr
   * Status: DONE (5m)
@@ -853,7 +865,6 @@ pub fn foo(p: Box<S>) {
   * Solution: N/A (pure analysis)
   * LLVM: N/A (pure analysis)
   * More materials: not checked (~100 non-fork Rust repos)
-- Nine Rules for SIMD Acceleration of Your Rust Code (Part 1): https://www.reddit.com/r/rust/comments/18hj1m6/nine_rules_for_simd_acceleration_of_your_rust/
 - Taking Advantage of Auto-Vectorization in Rust: https://www.nickwilcox.com/blog/autovec/
 - Auto-Vectorization for Newer Instruction Sets in Rust: https://www.nickwilcox.com/blog/autovec2/
 - Can You Trust a Compiler to Optimize Your Code? https://matklad.github.io/2023/04/09/can-you-trust-a-compiler-to-optimize-your-code.html
