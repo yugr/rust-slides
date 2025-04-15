@@ -524,10 +524,15 @@ pub fn foo(p: Box<S>) {
   * Highly technical, low priority
 - Move semantics in C and Rust: https://radekvit.medium.com/move-semantics-in-c-and-rust-the-case-for-destructive-moves-d816891c354b
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (5m)
+  * A general comparison of move semantics in Rust and C++ (correctness, exception guarantees, etc.)
+  * No performance comparison => irrelevant for us
 - Are rust moves of structs, copies or moves Zero Cost Abstractions: https://www.reddit.com/r/rust/comments/1ibjnka/are_rust_moves_of_structs_copies_or_moves_zero/
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (10m)
+  * It's not really clear what OP is asking about
+  * Basically replies are the usual memcpy not guaranteed to be removed (best effort)
+  * More materials: none
 
 # Iterators
 
