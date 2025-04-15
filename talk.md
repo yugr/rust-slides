@@ -51,6 +51,9 @@ Some Rust's abstractions are NOT zero-cost (or at least less zero-cost than in C
 
 Main source of performance overhead: UB avoidance
 
+Note that some overheads are basic (e.g. bounds checking)
+and some are consequences (e.g. disabled autovec).
+
 - Runtime checks:
   * index accesses:
     + LLVM may not always remove them which will break autovec
