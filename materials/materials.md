@@ -674,7 +674,12 @@ pub fn foo(p: Box<S>) {
   * Solutions: exclusive intervals and `for_each`
 - Zero-cost iterator abstractions...not so zero-cost? https://www.reddit.com/r/rust/comments/yaft60/zerocost_iterator_abstractionsnot_so_zerocost/
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (30m)
+  * Problem: complex iterator combination results in 10x overhead
+  * Root cause: not defined precisely, seems that compiler fails to optimize several combinators in chain and also inlining is not triggered reliably
+  * Solution: do not use overly complex iterators
+  * More materials: added links
+- Why is this functional version faster than my for loop? https://old.reddit.com/r/rust/comments/xtiqj8/why_is_this_functional_version_faster_than_my_for/iqq5v6u/
 
 # Noalias
 

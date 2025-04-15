@@ -1,6 +1,17 @@
 Iterators are great but in some cases do not optimize very well.
 
-In some cases iterators are faster than indexing but that's not always the case.
+Main benefit of iterators is that they are implemented via `unsafe`
+and do not have bounds checks.
+So in _some_ cases iterators are faster than indexing but that's not always the case:
+> Others have touched on how the “miracle” of zero cost abstraction has a limit.
+> In my limited experience, flat_map is usually that limit,
+> not to mention flat_map sandwiched by chunk and flatten.
+> The nested computation would obscure useful properties
+> of your data structures from the optimizer.
+> This is not a Rust only problem. Even Haskell,
+> the language making most use of flat_map (they call it bind),
+> has a hard time optimizing them all away. 
+(from [here](https://www.reddit.com/r/rust/comments/yaft60/zerocost_iterator_abstractionsnot_so_zerocost/)).
 One example of this is `collect` which may preallocate result if size is known.
 
 Iterators are _much_ slower in debug.
