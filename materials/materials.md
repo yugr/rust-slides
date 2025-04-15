@@ -680,6 +680,11 @@ pub fn foo(p: Box<S>) {
   * Solution: do not use overly complex iterators
   * More materials: added links
 - Why is this functional version faster than my for loop? https://old.reddit.com/r/rust/comments/xtiqj8/why_is_this_functional_version_faster_than_my_for/iqq5v6u/
+  * Assignee: yugr
+  * Status: DONE (10m)
+  * Problem: iterator version is much faster than loop
+  * Root cause: one of combinators includes a reservation for `collect` call
+  * Solution: do manual `with_capacity` in raw loop
 
 # Noalias
 
