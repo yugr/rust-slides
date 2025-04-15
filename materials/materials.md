@@ -523,7 +523,11 @@ pub fn foo(p: Box<S>) {
 - Semantics of MIR function calls: https://github.com/rust-lang/rust/issues/71117
   * Highly technical, low priority
 - Move semantics in C and Rust: https://radekvit.medium.com/move-semantics-in-c-and-rust-the-case-for-destructive-moves-d816891c354b
+  * Assignee: yugr
+  * Status: in progress
 - Are rust moves of structs, copies or moves Zero Cost Abstractions: https://www.reddit.com/r/rust/comments/1ibjnka/are_rust_moves_of_structs_copies_or_moves_zero/
+  * Assignee: yugr
+  * Status: in progress
 
 # Iterators
 
@@ -702,7 +706,11 @@ pub fn foo(p: Box<S>) {
   * Root cause: Rust aliasing optimizations were [disabled by default](https://github.com/rust-lang/rust/issues/54878) back then (and enabled now)
   * More materials: N/A
 - Aliasing in Rust: https://www.reddit.com/r/rust/comments/1ery9dy/aliasing_in_rust/
+  * Assignee: yugr
+  * Status: in progress
 - Enable mutable noalias for LLVM >= 12 by nikic merged: https://www.reddit.com/r/rust/comments/maix26/enable_mutable_noalias_for_llvm_12_by_nikic_merged/
+  * Assignee: yugr
+  * Status: in progress
 
 # Compiler codegen
 
