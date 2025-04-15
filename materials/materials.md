@@ -657,6 +657,8 @@ pub fn foo(p: Box<S>) {
   * Assignee: yugr
   * Status: in progress
 - Zero-cost iterator abstractions...not so zero-cost? https://www.reddit.com/r/rust/comments/yaft60/zerocost_iterator_abstractionsnot_so_zerocost/
+  * Assignee: yugr
+  * Status: in progress
 
 # Noalias
 
