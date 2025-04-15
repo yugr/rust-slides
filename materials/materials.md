@@ -545,9 +545,18 @@ pub fn foo(p: Box<S>) {
   * Be sure to analyze links
 - Rust’s iterators are inefficient, and here’s what we can do about it: https://medium.com/@veedrac/rust-is-slow-and-i-am-the-cure-32facc0fdcb
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (50m)
+  * Paper is rather old (2016)
+  * Paper outlines
+    + History of Rust iterators
+    + Problems w/ internal iteration (lack of control flow, usability, etc.)
+    + Performance issues w/ external iteration
+  * Paper suggests
+    + Seems to suggest using `iterator::all` with specialized versions for chained iterators
+    + Not expressed directly but it seems this is better than `for_each` because it allows `break`'ing
   * More materials:
     + [Reddit](https://www.reddit.com/r/rust/comments/5ez38g/rusts_iterators_are_inefficient_and_heres_what_we/)
+    + Added more links
 - Iterators vs index loops performance: https://users.rust-lang.org/t/iterators-vs-index-loops-performance/52131
   * Assignee: yugr
   * Status: DONE (10m)
@@ -652,10 +661,17 @@ pub fn foo(p: Box<S>) {
   * More materials: no new links
 - About optimizations of for loops: https://internals.rust-lang.org/t/about-optimizations-of-for-loops/18896
   * Assignee: yugr
-  * Status: in progress
+  * Status: in progress (10m)
+  * A highly technical discussion
+  * Problems of for-loops are
+    + Lowering happens early (at AST->HIR stage)
 - Why does iteration over an inclusive range generate longer assembly in Rust than in C++? https://stackoverflow.com/questions/70672533/why-does-iteration-over-an-inclusive-range-generate-longer-assembly-in-rust-than/70680224
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (10m)
+  * Problem: loop with inclusive range is much more verbose
+  * Root cause: usual problem w/ inclusive ranges
+  * Root cause: LLVM fails to split loops
+  * Solutions: exclusive intervals and `for_each`
 - Zero-cost iterator abstractions...not so zero-cost? https://www.reddit.com/r/rust/comments/yaft60/zerocost_iterator_abstractionsnot_so_zerocost/
   * Assignee: yugr
   * Status: in progress
@@ -871,6 +887,7 @@ pub fn foo(p: Box<S>) {
   * overhead of consuming iterators
 - 5x Slower than Go? Optimizing Rust Protobuf Decoding Performance: https://www.greptime.com/blogs/2024-04-09-rust-protobuf-performance
 - Rust Performance Pitfalls: https://llogiq.github.io/2017/06/01/perf-pitfalls.html
+  * HN: https://news.ycombinator.com/item?id=14514591
   * Reddit: https://www.reddit.com/r/rust/comments/6ep1ao/blog_rust_performance_pitfalls/
 - Where should I start if I want to squeeze out as much performance as I can from my rust code? https://www.reddit.com/r/rust/comments/bb5lnj/where_should_i_start_if_i_want_to_squeeze_out_as/
 - How to avoid bounds checks in Rust: https://shnatsel.medium.com/how-to-avoid-bounds-checks-in-rust-without-unsafe-f65e618b4c1e
@@ -894,6 +911,8 @@ pub fn foo(p: Box<S>) {
 - Speeding up RGB to grayscale conversion in Rust: https://www.reddit.com/r/rust/comments/7rxrka/speeding_up_rgb_to_grayscale_conversion_in_rust/
 - Rust performance help (convolution): https://users.rust-lang.org/t/rust-performance-help-convolution/44075
 - Rust: A better C++ than C++: Safety and performance: https://www.thecodedmessage.com/rust-c-book/safety.html
+- The Humble For Loop in Rust: https://blog.startifact.com/posts/humble-for-loop-rust/
+- Why can deriving Copy pessimize performance by 60%? https://www.reddit.com/r/rust/comments/1h8dj64/why_can_deriving_copy_pessimize_performance_by_60/
 
 # Panics
 
