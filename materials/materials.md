@@ -906,7 +906,8 @@ pub fn foo(p: Box<S>) {
   * More materials: no new links
 - We need to do better in the benchmarks game: https://users.rust-lang.org/t/we-need-to-do-better-in-the-benchmarks-game/7317
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (0m)
+  * Some random old discussion of benchmarks game results, not relevant
 - Performance questions: https://users.rust-lang.org/t/performance-questions/45265
   * Assignee: yugr
   * Status: DONE (5m)
