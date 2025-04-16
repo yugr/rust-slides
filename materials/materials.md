@@ -287,6 +287,10 @@ On the other hand, once all materials are analyzed we won't care about this file
 
 # Expression templates
 
+- Expression templates: https://en.wikipedia.org/wiki/Expression_templates
+  * Status: backlog
+  * This is a foundation block of C++ linear algebra packages like Eigen
+  * Rust does not support such idioms (and it's considered a big flaw)
 - Expression Templates in Rust? https://www.reddit.com/r/rust/comments/1f0hi5k/expression_templates_in_rust
   * Status: backlog
 - Expression templates in Eigen: https://eigen.tuxfamily.org/index.php?title=Expression_templates
@@ -923,31 +927,37 @@ pub fn foo(p: Box<S>) {
   * LLVM: N/A (pure analysis)
   * More materials: not checked (~100 non-fork Rust repos)
 - Taking Advantage of Auto-Vectorization in Rust: https://www.nickwilcox.com/blog/autovec/
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - Auto-Vectorization for Newer Instruction Sets in Rust: https://www.nickwilcox.com/blog/autovec2/
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - Can You Trust a Compiler to Optimize Your Code? https://matklad.github.io/2023/04/09/can-you-trust-a-compiler-to-optimize-your-code.html
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
   * More materials:
     + [Reddit](https://www.reddit.com/r/rust/comments/15f5p94/can_you_trust_a_compiler_to_optimize_your_code/)
 - Iterator::max with reference-type items cannot leverage SIMD instructions: https://github.com/rust-lang/rust/issues/106539
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - SIMD Vector/Slice/Chunk Addition: https://www.reddit.com/r/rust/comments/154vowr/simd_vectorslicechunk_addition/
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - simd-itertools: simd-accelerated iterators for "find", "filter", "contains" and many more: https://www.reddit.com/r/rust/comments/1e3ps2a/simditertools_simdaccelerated_iterators_for_find/
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - Memory-safe PNG decoders now vastly outperform C PNG libraries: https://www.reddit.com/r/rust/comments/1ha7uyi/memorysafe_png_decoders_now_vastly_outperform_c/
-  * Status: backlog
-- Expression templates: https://en.wikipedia.org/wiki/Expression_templates
-  * Status: backlog
-  * This is a foundation block of C++ linear algebra packages like Eigen
-  * Rust does not support such idioms (and it's considered a big flaw)
+  * Assignee: yugr
+  * Status: in progress
 - Mir optimization pass that implements auto-vectorization: https://internals.rust-lang.org/t/mir-optimization-pass-that-implements-auto-vectorization/16360
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - Target Feature vs Target CPU for Rust: https://www.nickwilcox.com/blog/target_cpu_vs_target_feature/
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - Speeding up RGB to grayscale conversion in Rust: https://coaxion.net/blog/2018/01/speeding-up-rgb-to-grayscale-conversion-in-rust-by-a-factor-of-2-2-and-various-other-multimedia-related-processing-loops/
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - Auto-vectorization fails in a for-loop: https://users.rust-lang.org/t/auto-vectorization-fails-in-a-for-loop/62612
   * Status: backlog
 - Rust autovectorization issues: https://users.rust-lang.org/t/rust-autovectorization-issues/126386
