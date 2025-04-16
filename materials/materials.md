@@ -837,9 +837,17 @@ pub fn foo(p: Box<S>) {
   * Status: DONE (10m)
   * Problem: there is not problem actually, the article just illustrates how autovec works, etc.
   * More materials: no more interesting mats on this blog
-- Taking Advantage of Auto-Vectorization in Rust: https://www.nickwilcox.com/blog/autovec/ (also comments in https://www.reddit.com/r/rust/comments/gkq0op/taking_advantage_of_autovectorization_in_rust/)
+- Taking Advantage of Auto-Vectorization in Rust: https://www.nickwilcox.com/blog/autovec/
   * Assignee: yugr
-  * Status: in progress
+  * Status: in progress (6:55)
+  * OP investigates ways to improve simple loop with autovec
+    + A useful hint to detect missing autovec is to look for "ss"-suffixed SSE instructions (Single Scalar) in asm
+    + Reslicing does not help in this case
+    + Replacing vector with raw arithmetic with vector of structs fixes it
+    + Reddit provides [solution](https://www.reddit.com/r/rust/comments/gkq0op/comment/fqsuzrk/) w/ iterators
+  * More materials:
+    + [Reddit](https://www.reddit.com/r/rust/comments/gkq0op/taking_advantage_of_autovectorization_in_rust/)
+    + added more links
 - Nine Rules for SIMD Acceleration of Your Rust Code: https://towardsdatascience.com/nine-rules-for-simd-acceleration-of-your-rust-code-part-1-c16fe639ce21 and https://medium.com/towards-data-science/nine-rules-for-simd-acceleration-of-your-rust-code-part-2-6a104b3be6f3
   * Assignee: yugr
   * Status: in progress
@@ -882,6 +890,9 @@ pub fn foo(p: Box<S>) {
 - Expression templates: https://en.wikipedia.org/wiki/Expression_templates
   * This is a foundation block of C++ linear algebra packages like Eigen
   * Rust does not support such idioms (and it's considered a big flaw)
+- Mir optimization pass that implements auto-vectorization: https://internals.rust-lang.org/t/mir-optimization-pass-that-implements-auto-vectorization/16360
+- Target Feature vs Target CPU for Rust: https://www.nickwilcox.com/blog/target_cpu_vs_target_feature/
+- Speeding up RGB to grayscale conversion in Rust: https://coaxion.net/blog/2018/01/speeding-up-rgb-to-grayscale-conversion-in-rust-by-a-factor-of-2-2-and-various-other-multimedia-related-processing-loops/
 
 # Stack probing
 

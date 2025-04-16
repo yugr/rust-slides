@@ -44,6 +44,7 @@ sums[bounded_i] = ...
     * this approach may be unstable in removing the checks, see [this](https://users.rust-lang.org/t/rust-vs-c-vs-go-runtime-speed-comparison/104107/15) and [this](https://users.rust-lang.org/t/rust-vs-c-vs-go-runtime-speed-comparison/104107/20) for details
     * this is useful to tell compiler that two slices have the same range (by subslicing them to `min` of lengths, e.g. [here](https://shnatsel.medium.com/how-to-avoid-bounds-checks-in-rust-without-unsafe-f65e618b4c1e))
   - forcing index into bounds via `& (len - 1)` (`len` must be power-of-2)
+  - avoid complex (actually [any nontrivial](https://www.nickwilcox.com/blog/autovec/)) arithmetic on indexes
 
 For workarounds like this keep in mind that
 > The thing is that using unsafe not bound checking access
