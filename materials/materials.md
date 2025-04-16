@@ -881,7 +881,12 @@ pub fn foo(p: Box<S>) {
     + [Reddit pt. 2](https://www.reddit.com/r/rust/comments/18lccf4/part_2_nine_rules_for_simd_acceleration_of_your/)
 - Taming Floating-Point Sums: https://orlp.net/blog/taming-float-sums/
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (15m)
+  * OP suggests to use FP intrinsics to enable vectorization of FP loop
+  * He suggests that using `-ffast-math` in presence of non-finite numbers is UB but does not give any proof
+  * More links:
+    + [Reddit](https://www.reddit.com/r/rust/comments/1d0jrpe/taming_floatingpoint_sums/)
+    + [HN](https://news.ycombinator.com/item?id=40477604)
 - Auto-vectorization in Rust: https://users.rust-lang.org/t/auto-vectorization-in-rust/24379
   * Assignee: yugr
   * Status: in progress
