@@ -12,3 +12,4 @@ which all team members need to be aware of.
 - [Back-end parallelism in the Rust compiler](https://nnethercote.github.io/2023/07/11/back-end-parallelism-in-the-rust-compiler.html)
   * How CGUs work
 - [Nethercote's posts](https://blog.mozilla.org/nnethercote/category/rust/)
+- [Understanding Rusts Auto-Vectorization and Methods for speed](https://users.rust-lang.org/t/understanding-rusts-auto-vectorization-and-methods-for-speed-increase/84891)

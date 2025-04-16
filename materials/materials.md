@@ -894,9 +894,16 @@ pub fn foo(p: Box<S>) {
   * Root cause: lack fast math (so `fmadd` not used), `y/sqrt(x)` not replaced with `y * 1/sqrt(x)`
   * Solution: use `-C llvm-args=-ffast-math` (does not seem to work) and float intrinsics
   * More materials: added links
-- Understanding Rusts Auto-Vectorization and Methods for speed: https://users.rust-lang.org/t/understanding-rusts-auto-vectorization-and-methods-for-speed-increase/84891 (reslicing technique)
+- Understanding Rusts Auto-Vectorization and Methods for speed: https://users.rust-lang.org/t/understanding-rusts-auto-vectorization-and-methods-for-speed-increase/84891
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (25m)
+  * OP wonders how to achieve autovec and optimize Rust numeric code in general
+  * Suggestions:
+    + fast math intrinsics
+    + use iterators and internal iteration to avoid bounds checking
+    + reslicing
+    + slices instead of `Vec`'s
+  * More materials: no new links
 - We need to do better in the benchmarks game: https://users.rust-lang.org/t/we-need-to-do-better-in-the-benchmarks-game/7317
   * Assignee: yugr
   * Status: in progress
