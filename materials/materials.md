@@ -840,6 +840,9 @@ pub fn foo(p: Box<S>) {
     + not too many details
 - Should small Rust structs be passed by-copy or by-borrow? https://www.reddit.com/r/rust/comments/zzxz2e/should_small_rust_structs_be_passed_bycopy_or/
   * Status: backlog
+- Inline in Rust: https://matklad.github.io/2021/07/09/inline-in-rust.html
+  * Status: backlog
+  * `#[inline]` should be a dedicated perf. feature
 
 # Data structures performance
 
@@ -928,12 +931,24 @@ pub fn foo(p: Box<S>) {
   * More materials: not checked (~100 non-fork Rust repos)
 - Can You Trust a Compiler to Optimize Your Code? https://matklad.github.io/2023/04/09/can-you-trust-a-compiler-to-optimize-your-code.html
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (15m)
+  * A very high-level article
+  * Suggests using flat data structures and `chunks_exact` iterator and avoiding dependencies across iterations (e.g. `&&`, `break`)
   * More materials:
     + [Reddit](https://www.reddit.com/r/rust/comments/15f5p94/can_you_trust_a_compiler_to_optimize_your_code/)
+    + no new links
 - Iterator::max with reference-type items cannot leverage SIMD instructions: https://github.com/rust-lang/rust/issues/106539
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (20m)
+  * Problem: finding maximum of slice via `iter().max()` is much slower than special crafted iterator
+  * Root cause: `max()` does not require `Copy` types so works on references; LLVM has hard time optimizing pointer accesses
+  * Solutions:
+    + use `iter().copied().max()` to remove dereference and allow autovec
+    + specialize `max()` for `Copy`able types (NYI)
+    + improve LLVM to handle this case better (seems to be [fixed](https://github.com/rust-lang/rust/issues/129583) already)
+  * More materials:
+    + one of suggestions (to use `copied()`) is actually a suggested perf guideline (see [perf-book #83](https://github.com/nnethercote/perf-book/issues/83))
+    + added links
 - SIMD Vector/Slice/Chunk Addition: https://www.reddit.com/r/rust/comments/154vowr/simd_vectorslicechunk_addition/
   * Assignee: yugr
   * Status: in progress

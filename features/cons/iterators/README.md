@@ -20,6 +20,12 @@ In particular _interior iteration_ (`for_each` w/ lambda, aka "internal iteratio
 or "push iteration) is [known](https://github.com/rust-lang/rust/issues/101814#issuecomment-1247184222)
 to optimize better than traditional for-loops ("external iteration", "pull iteration").
 
+Slice iterators do not require `Copy`able types so work on references.
+As shown in [upstream #106539](https://github.com/rust-lang/rust/issues/106539)
+this may cause overhead because LLVM fails to optimize code with derefs well (e.g. does not autovec).
+So a [suggested guideline](https://github.com/nnethercote/perf-book/issues/83)
+is to forcedly copy elements via `copied()`.
+
 # Solutions
 
 ## Using for_each for chained iterators
