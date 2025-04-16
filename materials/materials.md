@@ -873,7 +873,9 @@ pub fn foo(p: Box<S>) {
     + added more links
 - Nine Rules for SIMD Acceleration of Your Rust Code: https://towardsdatascience.com/nine-rules-for-simd-acceleration-of-your-rust-code-part-1-c16fe639ce21 and https://medium.com/towards-data-science/nine-rules-for-simd-acceleration-of-your-rust-code-part-2-6a104b3be6f3
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (10m)
+  * The article is a general intro to SIMD programming in Rust (crates e.g. core::simd, techniques, algorithms)
+  * Not relevant for compiler performance optimizations
   * More materials:
     + [Reddit pt. 1](https://www.reddit.com/r/rust/comments/18hj1m6/nine_rules_for_simd_acceleration_of_your_rust/)
     + [Reddit pt. 2](https://www.reddit.com/r/rust/comments/18lccf4/part_2_nine_rules_for_simd_acceleration_of_your/)

@@ -33,7 +33,7 @@ Rust targets same problem area:
     * no GC
     * "What you don’t use, you don’t pay for. And further: What you do use, you couldn’t hand code any better" (Stroustrup "Abstraction and the C++ machine model")
   - supports low-level tuning
-    * SIMD, inline asm, intrinsics (e.g. `__builtin_assume`, `__builtin_expect`, PGO)
+    * SIMD (core::arch, core::simd), inline asm, intrinsics (e.g. `__builtin_assume`, `__builtin_expect`, PGO)
   - same optimizer (LLVM)
 
 # Rust performance issues
