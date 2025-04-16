@@ -276,11 +276,7 @@ On the other hand, once all materials are analyzed we won't care about this file
 # Expression templates
 
 - Expression Templates in Rust? https://www.reddit.com/r/rust/comments/1f0hi5k/expression_templates_in_rust
-  * Assignee: yugr
-  * Status: in progress
 - Expression templates in Eigen: https://eigen.tuxfamily.org/index.php?title=Expression_templates
-  * Assignee: yugr
-  * Status: in progress
 
 # Overflow checks
 
