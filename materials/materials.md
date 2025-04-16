@@ -199,7 +199,7 @@ On the other hand, once all materials are analyzed we won't care about this file
   * More materials: added relevant links
 - Why ISN'T Rust faster than C? https://www.reddit.com/r/rust/comments/1at3r6d/why_isnt_rust_faster_than_c_given_it_can_leverage/
   * Assignee: yugr
-  * Statis: DONE (30m)
+  * Status: DONE (30m)
   * Main idea: general discussion; mentioned topics :
     + aliasing
     + niche opts
@@ -300,7 +300,7 @@ On the other hand, once all materials are analyzed we won't care about this file
 
 - Why is Rust not able to optimize this? https://www.reddit.com/r/rust/comments/181tp1a/why_is_rust_not_able_to_optimize_this/ (signed overflow)
   * Assignee: yugr
-  * Statis: DONE (20m)
+  * Status: DONE (20m)
   * Problem: `(num * 2) / 2` not optimized in Rust
   * Root cause: overflow is defined in Rust
   * Solutions: `unchecked` methods, `unchecked_math` pragma, compiler hints
