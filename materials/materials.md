@@ -953,11 +953,14 @@ pub fn foo(p: Box<S>) {
   * Assignee: yugr
   * Status: in progress
 - Auto-vectorization fails in a for-loop: https://users.rust-lang.org/t/auto-vectorization-fails-in-a-for-loop/62612
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - Rust autovectorization issues: https://users.rust-lang.org/t/rust-autovectorization-issues/126386
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - Rust and C++ on Floating-point Intensive Code: https://www.reidatcheson.com/hpc/architecture/performance/rust/c++/2019/10/19/measure-cache.html
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
   * More materials:
     + [HN](https://news.ycombinator.com/item?id=21342501)
 
