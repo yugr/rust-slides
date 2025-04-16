@@ -853,7 +853,7 @@ pub fn foo(p: Box<S>) {
 - Imprecise floating point operations: https://github.com/rust-lang/rust/issues/21690
   * Status: backlog
 
-# Vectorization
+# Autovec
 
 - Unleash the Power of Auto-Vectorization in Rust with LLVM: https://www.luiscardoso.dev/blog/auto-vectorization/
   * Assignee: yugr
@@ -875,7 +875,8 @@ pub fn foo(p: Box<S>) {
   * Assignee: yugr
   * Status: in progress
   * More materials:
-    + [Reddit](https://www.reddit.com/r/rust/comments/18hj1m6/nine_rules_for_simd_acceleration_of_your_rust/)
+    + [Reddit pt. 1](https://www.reddit.com/r/rust/comments/18hj1m6/nine_rules_for_simd_acceleration_of_your_rust/)
+    + [Reddit pt. 2](https://www.reddit.com/r/rust/comments/18lccf4/part_2_nine_rules_for_simd_acceleration_of_your/)
 - Taming Floating-Point Sums: https://orlp.net/blog/taming-float-sums/
   * Assignee: yugr
   * Status: in progress
