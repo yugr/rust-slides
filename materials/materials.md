@@ -951,7 +951,10 @@ pub fn foo(p: Box<S>) {
     + added links
 - SIMD Vector/Slice/Chunk Addition: https://www.reddit.com/r/rust/comments/154vowr/simd_vectorslicechunk_addition/
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (10m)
+  * Problem: simple `slice.iter().sum()` is faster than SIMD-friendly iteration with `chunks_exact()`
+  * Root cause: compiler failed to remove bounds check in intra-vector loop
+  * Solution: use `zip` or other simple code
 - simd-itertools: simd-accelerated iterators for "find", "filter", "contains" and many more: https://www.reddit.com/r/rust/comments/1e3ps2a/simditertools_simdaccelerated_iterators_for_find/
   * Assignee: yugr
   * Status: in progress
