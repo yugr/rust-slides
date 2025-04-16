@@ -718,7 +718,10 @@ pub fn foo(p: Box<S>) {
   * More materials: no new links
 - Enable mutable noalias for LLVM >= 12 by nikic merged: https://www.reddit.com/r/rust/comments/maix26/enable_mutable_noalias_for_llvm_12_by_nikic_merged/
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (20m)
+  * A general discussion of Rust noalias
+  * No new information but good comparison with C/C++ situation
+  * More materials: added links
 
 # Compiler codegen
 
@@ -826,6 +829,10 @@ pub fn foo(p: Box<S>) {
   * https://towardsdatascience.com/nine-rules-for-creating-fast-safe-and-compatible-data-structures-in-rust-part-1-c0973092e0a3
   * https://towardsdatascience.com/nine-rules-for-creating-fast-safe-and-compatible-data-structures-in-rust-part-2-da5e6961a0b7
 - https://dev.to/arunanshub/self-referential-structs-in-rust-33cm
+
+# Fast math
+
+* Imprecise floating point operations: https://github.com/rust-lang/rust/issues/21690
 
 # Vectorization
 
