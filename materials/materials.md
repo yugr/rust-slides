@@ -862,7 +862,7 @@ pub fn foo(p: Box<S>) {
   * More materials: no more interesting mats on this blog
 - Taking Advantage of Auto-Vectorization in Rust: https://www.nickwilcox.com/blog/autovec/
   * Assignee: yugr
-  * Status: in progress (6:55)
+  * Status: DONE (20m)
   * OP investigates ways to improve simple loop with autovec
     + A useful hint to detect missing autovec is to look for "ss"-suffixed SSE instructions (Single Scalar) in asm
     + Reslicing does not help in this case
