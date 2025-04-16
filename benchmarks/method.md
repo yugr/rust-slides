@@ -23,6 +23,7 @@ We need at least the following information:
   - how to build
   - how to run benches
   - additional (non-Rust) dependencies or system setup needed
+  - unusual compile flags in Cargo.toml (`panic=abort`, etc.)
   - what else ???
 
 # Running benchmarks
