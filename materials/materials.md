@@ -926,12 +926,6 @@ pub fn foo(p: Box<S>) {
   * Solution: N/A (pure analysis)
   * LLVM: N/A (pure analysis)
   * More materials: not checked (~100 non-fork Rust repos)
-- Taking Advantage of Auto-Vectorization in Rust: https://www.nickwilcox.com/blog/autovec/
-  * Assignee: yugr
-  * Status: in progress
-- Auto-Vectorization for Newer Instruction Sets in Rust: https://www.nickwilcox.com/blog/autovec2/
-  * Assignee: yugr
-  * Status: in progress
 - Can You Trust a Compiler to Optimize Your Code? https://matklad.github.io/2023/04/09/can-you-trust-a-compiler-to-optimize-your-code.html
   * Assignee: yugr
   * Status: in progress
