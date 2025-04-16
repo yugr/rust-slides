@@ -4,9 +4,7 @@ Note that section split below is rather crude and may do more harm than good.
 Please refactor mercilessly if you think it makes sense.
 On the other hand, once all materials are analyzed we won't care about this file.
 
-- TODO(gh-2) add more interesting materials from
-  * rejected opts: https://github.com/rust-lang/rust/issues?q=is%3Aissue%20state%3Aclosed%20reason%3Anot-planned%20label%3AI-slow
-  * compiler RFCs: https://github.com/rust-lang/rust/issues?q=is%3Aissue%20label%3AT-compiler%20rfc
+- TODO add more interesting materials from
   * MIR opts: https://github.com/rust-lang/rust/issues?q=state%3Aopen%20label%3A%22A-mir-opt%22
 - TODO(gh-8) add more interesting materials from
   * https://github.com/rust-lang/compiler-team
@@ -15,13 +13,18 @@ On the other hand, once all materials are analyzed we won't care about this file
 # Coding guidelines
 
 - Rustc development guide: https://rustc-dev-guide.rust-lang.org/
+  * Status: backlog
 - Rust design patterns: https://softwarepatternslexicon.com/patterns-rust/
+  * Status: backlog
 - Rust Performance Book (by Nethercote): https://nnethercote.github.io/perf-book/
+  * Status: backlog
   * pay attention to links at https://nnethercote.github.io/perf-book/bounds-checks.html
   * comments: https://www.reddit.com/r/rust/comments/jvmb8u/the_rust_performance_book/
   * additions: https://github.com/nnethercote/perf-book/issues
 - Some general guidelines from Redox OS https://doc.redox-os.org/book/rusting-properly.html
+  * Status: backlog
 - Found no guidelines in [other projects](real-projects.md) in gh-3
+  * Status: backlog
 
 # C/C++ comparison
 
@@ -57,6 +60,7 @@ On the other hand, once all materials are analyzed we won't care about this file
     + [Another HN](https://news.ycombinator.com/item?id=39476941)
     + no new links found (hoorah !)
 - An Optimization That’s Impossible in Rust! https://tunglevo.com/note/an-optimization-thats-impossible-in-rust/
+  * Status: backlog
   * Translation: https://habr.com/ru/companies/beget/articles/842868/
   * Comments: https://www.reddit.com/r/rust/comments/1f87siw/an_optimization_thats_impossible_in_rust/
 - Rust превосходит по производительности C++ согласно результатам Benchmarks Game: https://habr.com/ru/articles/480608/
@@ -144,11 +148,17 @@ On the other hand, once all materials are analyzed we won't care about this file
  * Root cause: Benchmark to small to reliably measure it and errors in using the benchmarking framework
  * Solution: As author states, "building these into somewhat larger programs and the Rust code was about twice as fast in the final result".
 - Why is C++ still beating Rust at performance in some places? https://users.rust-lang.org/t/why-is-c-still-beating-rust-at-performance-in-some-places/95877
+  * Status: backlog
 - Rust vs. C++: Fine-grained Performance: https://users.rust-lang.org/t/rust-vs-c-fine-grained-performance/4407
+  * Status: backlog
 - A good performance comparision C and Rust: https://users.rust-lang.org/t/a-good-performance-comparision-c-and-rust/5901/7
+  * Status: backlog
 - Rust-specific code optimisations vs other languages: https://users.rust-lang.org/t/rust-specific-code-optimisations-vs-other-languages/49663
+  * Status: backlog
 - How to speed up this rust code? I’m measuring a 30% slowdown versus the C++ version: https://users.rust-lang.org/t/how-to-speed-up-this-rust-code-im-measuring-a-30-slowdown-versus-the-c-version/1488
+  * Status: backlog
 - Goals and priorities for C++: https://internals.rust-lang.org/t/goals-and-priorities-for-c/12031/32 (some points on Rust perf features like lack of fast-math or move semantics)
+  * Status: backlog
 - Zero cost abstractions: Rust vs C++: https://www.rottedfrog.co.uk/?p=24
   * Assignee: yugr
   * Status: DONE (20m)
@@ -271,12 +281,16 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Main idea: user wonders what are potential, NYI optimizations; the only answer is `noalias`
   * More materials: added links
 - What languages (other than Rust) have "zero cost abstraction"? https://www.reddit.com/r/rust/comments/zkr3xm/what_languages_other_than_rust_have_zero_cost/
+  * Status: backlog
 - Is Rust faster than Fortran and C++? A case study with scientific applications: https://www.reddit.com/r/rust/comments/1jz504y/is_rust_faster_than_fortran_and_c_a_case_study/
+  * Status: backlog
 
 # Expression templates
 
 - Expression Templates in Rust? https://www.reddit.com/r/rust/comments/1f0hi5k/expression_templates_in_rust
+  * Status: backlog
 - Expression templates in Eigen: https://eigen.tuxfamily.org/index.php?title=Expression_templates
+  * Status: backlog
 
 # Overflow checks
 
@@ -517,6 +531,7 @@ pub fn foo(p: Box<S>) {
     + [BTreeMap](https://github.com/rust-lang/rust/issues/81444)
     + [rust-gamedev](https://github.com/rust-gamedev/wg/issues/48)
 - Semantics of MIR function calls: https://github.com/rust-lang/rust/issues/71117
+  * Status: backlog
   * Highly technical, low priority
 - Move semantics in C and Rust: https://radekvit.medium.com/move-semantics-in-c-and-rust-the-case-for-destructive-moves-d816891c354b
   * Assignee: yugr
@@ -547,6 +562,7 @@ pub fn foo(p: Box<S>) {
   * Solution: working on different implementation for `..=` syntax in [issue #123741](https://github.com/rust-lang/rust/issues/123741) which will resolve this at runtime
   * More materials: added
 - New range types: https://github.com/rust-lang/rust/issues/123741
+  * Status: backlog
   * Be sure to analyze links
 - Rust’s iterators are inefficient, and here’s what we can do about it: https://medium.com/@veedrac/rust-is-slow-and-i-am-the-cure-32facc0fdcb
   * Assignee: yugr
@@ -742,6 +758,8 @@ pub fn foo(p: Box<S>) {
     + Discusses CGU problem (and how ThinLTO fixes it), PGO, aliasing, various LLVM fixes
   * More materials: no new links
 - Inspecting rustc LLVM optimization remarks using cargo-remark: https://kobzol.github.io/rust/cargo/2023/08/12/rust-llvm-optimization-remarks.html
+  * Status: backlog
+  * This is an important feature
   * need to run `cargo remark` on some real projects
 - Improving crypto code in Rust using LLVM’s optnone: https://blog.trailofbits.com/2022/02/01/part-2-rusty-crypto/
   * Assignee: yugr
@@ -817,18 +835,23 @@ pub fn foo(p: Box<S>) {
     + some info on rustc driver
     + not too many details
 - Should small Rust structs be passed by-copy or by-borrow? https://www.reddit.com/r/rust/comments/zzxz2e/should_small_rust_structs_be_passed_bycopy_or/
+  * Status: backlog
 
 # Data structures performance
 
 - Learn Rust With Entirely Too Many Linked Lists: https://rust-unofficial.github.io/too-many-lists/
+  * Status: backlog
 - Nine Rules for Creating Fast, Safe, and Compatible Data Structures in Rust:
+  * Status: backlog
   * https://towardsdatascience.com/nine-rules-for-creating-fast-safe-and-compatible-data-structures-in-rust-part-1-c0973092e0a3
   * https://towardsdatascience.com/nine-rules-for-creating-fast-safe-and-compatible-data-structures-in-rust-part-2-da5e6961a0b7
 - https://dev.to/arunanshub/self-referential-structs-in-rust-33cm
+  * Status: backlog
 
 # Fast math
 
-* Imprecise floating point operations: https://github.com/rust-lang/rust/issues/21690
+- Imprecise floating point operations: https://github.com/rust-lang/rust/issues/21690
+  * Status: backlog
 
 # Vectorization
 
@@ -880,90 +903,157 @@ pub fn foo(p: Box<S>) {
   * LLVM: N/A (pure analysis)
   * More materials: not checked (~100 non-fork Rust repos)
 - Taking Advantage of Auto-Vectorization in Rust: https://www.nickwilcox.com/blog/autovec/
+  * Status: backlog
 - Auto-Vectorization for Newer Instruction Sets in Rust: https://www.nickwilcox.com/blog/autovec2/
+  * Status: backlog
 - Can You Trust a Compiler to Optimize Your Code? https://matklad.github.io/2023/04/09/can-you-trust-a-compiler-to-optimize-your-code.html
-  * Comments in https://www.reddit.com/r/rust/comments/15f5p94/can_you_trust_a_compiler_to_optimize_your_code/
+  * Status: backlog
+  * More materials:
+    + [Reddit](https://www.reddit.com/r/rust/comments/15f5p94/can_you_trust_a_compiler_to_optimize_your_code/)
 - Iterator::max with reference-type items cannot leverage SIMD instructions: https://github.com/rust-lang/rust/issues/106539
+  * Status: backlog
 - SIMD Vector/Slice/Chunk Addition: https://www.reddit.com/r/rust/comments/154vowr/simd_vectorslicechunk_addition/
+  * Status: backlog
 - simd-itertools: simd-accelerated iterators for "find", "filter", "contains" and many more: https://www.reddit.com/r/rust/comments/1e3ps2a/simditertools_simdaccelerated_iterators_for_find/
+  * Status: backlog
 - Memory-safe PNG decoders now vastly outperform C PNG libraries: https://www.reddit.com/r/rust/comments/1ha7uyi/memorysafe_png_decoders_now_vastly_outperform_c/
+  * Status: backlog
 - Expression templates: https://en.wikipedia.org/wiki/Expression_templates
+  * Status: backlog
   * This is a foundation block of C++ linear algebra packages like Eigen
   * Rust does not support such idioms (and it's considered a big flaw)
 - Mir optimization pass that implements auto-vectorization: https://internals.rust-lang.org/t/mir-optimization-pass-that-implements-auto-vectorization/16360
+  * Status: backlog
 - Target Feature vs Target CPU for Rust: https://www.nickwilcox.com/blog/target_cpu_vs_target_feature/
+  * Status: backlog
 - Speeding up RGB to grayscale conversion in Rust: https://coaxion.net/blog/2018/01/speeding-up-rgb-to-grayscale-conversion-in-rust-by-a-factor-of-2-2-and-various-other-multimedia-related-processing-loops/
+  * Status: backlog
 
 # Stack probing
 
 - probestack.rs: https://github.com/rust-lang/compiler-builtins/blob/master/compiler-builtins/src/probestack.rs
   * Check comments
+  * Status: backlog
 - Is rust guaranteed to detect stack overflows? https://users.rust-lang.org/t/is-rust-guaranteed-to-detect-stack-overflows/52593
+  * Status: backlog
 - Bringing Stack Clash Protection to Clang / X86: https://blog.llvm.org/posts/2021-01-05-stack-clash-protection/
+  * Status: backlog
 
 # Manual optimizations
 
 - Nethercote's posts: https://blog.mozilla.org/nnethercote/category/rust/
   * Nethercote is top industry expert, need to pay close attention to his posts
+  * Status: backlog
 - Moar Nethercote's posts: https://nnethercote.github.io/
+  * Status: backlog
 - http://troubles.md/abusing-rustc/
+  * Status: backlog
 - Можно ли доверить компилятору оптимизацию вашего кода? https://habr.com/ru/companies/timeweb/articles/759326/
+  * Status: backlog
 - Как избавиться от проверок выхода за границы: https://habr.com/ru/companies/otus/articles/718012/
+  * Status: backlog
 - Портируем декодер AV1 с С на Rust: https://habr.com/ru/companies/ruvds/articles/842970
+  * Status: backlog
 - Как я ускорила парсинг строк в serde_json на 20%: https://habr.com/ru/articles/838404/
+  * Status: backlog
 - Пошаговое повышение производительности алгоритма: https://habr.com/ru/articles/852974/
+  * Status: backlog
 - Unnecessary Optimization in Rust: https://emschwartz.me/unnecessary-optimization-in-rust-hamming-distances-simd-and-auto-vectorization/
+  * Status: backlog
 - Improve an algorithm performance step by step: https://blog.mapotofu.org/blogs/rabitq-bench/
+  * Status: backlog
 - Bringing runtime checks to compile time in Rust: https://ktkaufman03.github.io/blog/2023/04/20/rust-compile-time-checks
+  * Status: backlog
 - Optimization story - quantum mechanics simulation speedup: https://tinkering.xyz/fmo-optimization-story
+  * Status: backlog
 - Benchmarking and Optimization of Rust Libraries by Paul Mason: https://www.youtube.com/watch?v=d2ZQ9-4ZJmQ&t=749s
+  * Status: backlog
 - Rust newbie: Algorithm performance question: https://users.rust-lang.org/t/rust-newbie-algorithm-performance-question/47413
+  * Status: backlog
 - Why my Rust multithreaded solution is slow as compared: https://users.rust-lang.org/t/why-my-rust-multithreaded-solution-is-slow-as-compared-to-the-same-c-solution/95581
+  * Status: backlog
 - A performance problem compared with Julia: https://users.rust-lang.org/t/a-performance-problem-compared-with-julia/51871
+  * Status: backlog
 - Help comparing Rust vs Julia speed: https://users.rust-lang.org/t/help-comparing-rust-vs-julia-speed/54514
+  * Status: backlog
 - Optimizing linear algebra code: https://users.rust-lang.org/t/optimizing-linear-algebra-code/39433
+  * Status: backlog
 - Rust program has only 42% the speed of similar c++ program: https://users.rust-lang.org/t/rust-program-has-only-42-the-speed-of-similar-c-program/73738
+  * Status: backlog
 - Performance issue - High complexity code: https://users.rust-lang.org/t/performance-issue-high-complexity-code/40241
+  * Status: backlog
 - Performance question: https://users.rust-lang.org/t/performance-question/54977
+  * Status: backlog
 - Rust performance help (convolution): https://users.rust-lang.org/t/rust-performance-help-convolution/44075
+  * Status: backlog
 - Optimization comparison: Vec vs array and for vs while: https://internals.rust-lang.org/t/optimization-comparison-vec-vs-array-and-for-vs-while/16410
+  * Status: backlog
 - Performance optimization, and how to do it wrong: https://genna.win/blog/convolution-simd/
+  * Status: backlog
   * comments: https://www.reddit.com/r/rust/comments/1j2iqhq/performance_optimization_and_how_to_do_it_wrong/
 - Code critique/review request: https://www.reddit.com/r/learnrust/comments/xllzqm/code_critiquereview_request/ (comments)
+  * Status: backlog
 - When Zero Cost Abstractions Aren’t Zero Cost: https://www.reddit.com/r/rust/comments/p0ul6b/when_zero_cost_abstractions_arent_zero_cost/
+  * Status: backlog
 - Achieving warp speed with Rust: https://gist.github.com/jFransham/369a86eff00e5f280ed25121454acec1
+  * Status: backlog
   * pay attention to `assert` hint
 - From 48s to 5s - optimizing a 350 line raytracer in Rust: https://medium.com/@cfsamson/from-48s-to-5s-optimizing-a-350-line-pathtracer-in-rust-191ab4a1a412
+  * Status: backlog
 - Using break in for loop takes even 100ms in release mode: https://www.reddit.com/r/rust/comments/1738kd7/using_break_in_for_loop_takes_even_100ms_in/
+  * Status: backlog
   * overhead of consuming iterators
 - 5x Slower than Go? Optimizing Rust Protobuf Decoding Performance: https://www.greptime.com/blogs/2024-04-09-rust-protobuf-performance
+  * Status: backlog
 - Rust Performance Pitfalls: https://llogiq.github.io/2017/06/01/perf-pitfalls.html
-  * HN: https://news.ycombinator.com/item?id=14514591
-  * Reddit: https://www.reddit.com/r/rust/comments/6ep1ao/blog_rust_performance_pitfalls/
+  * Status: backlog
+  * More materials:
+    + [HN](https://news.ycombinator.com/item?id=14514591)
+    + [Reddit](https://www.reddit.com/r/rust/comments/6ep1ao/blog_rust_performance_pitfalls/)
 - Where should I start if I want to squeeze out as much performance as I can from my rust code? https://www.reddit.com/r/rust/comments/bb5lnj/where_should_i_start_if_i_want_to_squeeze_out_as/
+  * Status: backlog
 - How to avoid bounds checks in Rust: https://shnatsel.medium.com/how-to-avoid-bounds-checks-in-rust-without-unsafe-f65e618b4c1e
+  * Status: backlog
   * this article is very important for bounds checking part
-  * comments: https://www.reddit.com/r/rust/comments/10edmjf/how_to_avoid_bounds_checks_in_rust_without_unsafe/
+  * More materials:
+    + [Reddit](https://www.reddit.com/r/rust/comments/10edmjf/how_to_avoid_bounds_checks_in_rust_without_unsafe/)
 - Unnecessary Optimization in Rust: https://www.reddit.com/r/rust/comments/1hk0bry/unnecessary_optimization_in_rust_hamming/
+  * Status: backlog
   * check comments
 - From 'Very Fast' to '~Fastest': Helping rust unleash compiler optimizations: https://blog.anubhab.me/tech/optimizing-diff-match-patch/
-  * comments in https://www.reddit.com/r/rust/comments/1hsnnat/40_boost_in_text_diff_flow_just_by_facilitating/
+  * Status: backlog
+  * More materials:
+    + [Reddit](https://www.reddit.com/r/rust/comments/1hsnnat/40_boost_in_text_diff_flow_just_by_facilitating/)
 - Example of loop rewrite for vectorization https://github.com/dropbox/rust-brotli/blob/238c9c539b446d7d980e0a50795752c45dd3359e/src/enc/static_dict.rs lines 122 and 131
+  * Status: backlog
 - Discussion about explicit SIMD in Rust https://internals.rust-lang.org/t/getting-explicit-simd-on-stable-rust/4380/133
+  * Status: backlog
 - Optimizing rav1d, an AV1 Decoder in Rust: https://www.memorysafety.org/blog/rav1d-performance-optimization/
+  * Status: backlog
   * comments in https://www.reddit.com/r/rust/comments/1fdzu7z/optimizing_rav1d_an_av1_decoder_in_rust/
 - Porting C to Rust for a Fast and Safe AV1 Media Decoder: https://www.memorysafety.org/blog/porting-c-to-rust-for-av1/
+  * Status: backlog
   * this contains example of efficient implementation of self-referential struct
 - Safe elimination of unnecessary bound checks: https://www.reddit.com/r/rust/comments/1iqev5s/safe_elimination_of_unnecessary_bound_checks/
+  * Status: backlog
 - Rust loop speed: https://www.reddit.com/r/rust/comments/1aumq2h/rust_loop_speed/
+  * Status: backlog
 - Why is this functional version faster than my for loop? https://www.reddit.com/r/rust/comments/xtiqj8/why_is_this_functional_version_faster_than_my_for/
+  * Status: backlog
 - Huge performance gap in simple loop. Explanations? https://www.reddit.com/r/rust/comments/11f00kc/huge_performance_gap_in_simple_loop_explanations/
+  * Status: backlog
 - Memory-safe PNG decoders now vastly outperform C PNG libraries: https://www.reddit.com/r/programming/comments/1hak25t/memorysafe_png_decoders_now_vastly_outperform_c/
+  * Status: backlog
 - Speeding up RGB to grayscale conversion in Rust: https://www.reddit.com/r/rust/comments/7rxrka/speeding_up_rgb_to_grayscale_conversion_in_rust/
+  * Status: backlog
 - Rust performance help (convolution): https://users.rust-lang.org/t/rust-performance-help-convolution/44075
+  * Status: backlog
 - Rust: A better C++ than C++: Safety and performance: https://www.thecodedmessage.com/rust-c-book/safety.html
+  * Status: backlog
 - The Humble For Loop in Rust: https://blog.startifact.com/posts/humble-for-loop-rust/
+  * Status: backlog
 - Why can deriving Copy pessimize performance by 60%? https://www.reddit.com/r/rust/comments/1h8dj64/why_can_deriving_copy_pessimize_performance_by_60/
+  * Status: backlog
 
 # Panics
 
@@ -1006,17 +1096,25 @@ pub fn foo(p: Box<S>) {
   * LLVM: N/A
   * More materials: added P2544R0 link
 - C++ exceptions are becoming more and more problematic: https://open-std.org/JTC1/SC22/WG21/docs/papers/2022/p2544r0.html
+  * Status: backlog
 - Panics in rust consuming some extra resources. Can we disable it? https://www.reddit.com/r/rust/comments/12qhynj/panics_in_rust_consuming_some_extra_resources_can/
+  * Status: backlog
 - RFC 1513: Less unwinding: https://github.com/rust-lang/rfcs/blob/master/text/1513-less-unwinding.md
+  * Status: backlog
 
 # Unsafe
 
 - Being Fair about Memory Safety and Performance: https://www.thecodedmessage.com/posts/unsafe/
+  * Status: backlog
   * need to be super-attentive to this post, this may be key to how we treat unsafe in our talk
 - Implementing a VM: how unsafe should I go? https://www.reddit.com/r/rust/comments/n8yy7z/implementing_a_vm_how_unsafe_should_i_go/
+  * Status: backlog
 - Good example of high performance Rust project without unsafe code? https://www.reddit.com/r/rust/comments/we91es/good_example_of_high_performance_rust_project/
+  * Status: backlog
 - How do you all think about the `unsafe` vs zero-cost trade off? https://www.reddit.com/r/rust/comments/f5wgsn/how_do_you_all_think_about_the_unsafe_vs_zerocost/
+  * Status: backlog
 - Unsafe Rust is Harder Than C: https://www.reddit.com/r/rust/comments/1gbqy6c/unsafe_rust_is_harder_than_c/
+  * Status: backlog
   * Russian translation: https://habr.com/ru/companies/ruvds/articles/858246/
 
 # Code size
@@ -1062,7 +1160,9 @@ pub fn foo(p: Box<S>) {
                vtables get duplicated between CGUs and are sometimes different between different CGUs (possibly a bug)
     * Solution: Discussion suggests using `linkonce_odr` in LLVM IR as a partial solution.
 - Some possibly interesting benchmark (low cgu and fat lto not always better) https://github.com/ggwpez/substrate-bench/tree/master/reports/01-first-findings
+  * Status: backlog
 - Performance regressions of compiled code over the last year https://github.com/rust-lang/rust/issues/47561
+  * Status: backlog
 - 2x benchmark loss in rayon-hash from multiple codegen-units https://github.com/rust-lang/rust/issues/47665
     * Assignee: zakhar
     * Status: DONE (10m)
@@ -1070,7 +1170,9 @@ pub fn foo(p: Box<S>) {
     * Reason: Inlining is not performed across multiple CGUs
     * Solution: Use LTO or compile with one CGU (adding inline tag into stdlib isn't feasible for a user)
 - rustc: Default 32 codegen units at O0 https://github.com/rust-lang/rust/pull/44853
-    - 32 codegen units may not always be better at -O0 https://github.com/rust-lang/rust/issues/44941
+  * Status: backlog
+- 32 codegen units may not always be better at -O0 https://github.com/rust-lang/rust/issues/44941
+  * Status: backlog
 - Back-end parallelism in the Rust compiler: https://nnethercote.github.io/2023/07/11/back-end-parallelism-in-the-rust-compiler.html
     - https://news.ycombinator.com/item?id=36678457
     - https://www.reddit.com/r/rust/comments/14wcezs/backend_parallelism_in_the_rust_compiler/
@@ -1082,6 +1184,7 @@ pub fn foo(p: Box<S>) {
     * Status: DONE (25m)
     * Problem: A prolonged discussion about default number of codegen units. Brings up a point about builds with multiple CGUs being non-deterministic. Contains some perf overhead measurements.
 - codegen-units + ThinLTO is not as good as codegen-units = 1 https://github.com/rust-lang/rust/issues/47745
+  * Status: backlog
 - Adding --emit=asm speeds up generated code because of codegen units https://github.com/rust-lang/rust/issues/57235
     * Assignee: zakhar
     * Status: DONE (10m)
@@ -1089,6 +1192,7 @@ pub fn foo(p: Box<S>) {
     * Root cause: `--emit-asm` disables CGUs; with multiple codegen units compiler is unable to detect that loop does not do anything
     * Solution: Use cgu=1 for building (especially for small projects)
 - Speeding up rustc by being lazy https://www.reddit.com/r/rust/comments/1d9b36j/speeding_up_rustc_by_being_lazy/
+  * Status: backlog
 
 # Other
 
@@ -1103,8 +1207,11 @@ pub fn foo(p: Box<S>) {
     * Solution: Some crates (tco, tramp) provide macros to optimize tail-calling functions.
         + These crates are not well-developed and are either in POC state or do not provide 'real' (constant memory usage) TCO
 - Leaving Rust gamedev after 3 years: https://loglog.games/blog/leaving-rust-gamedev/ (also comments in https://news.ycombinator.com/item?id=40172033 and https://habr.com/ru/articles/813597/)
+  * Status: backlog
 - Why I hate Rust programming language? https://www.reddit.com/r/programming/comments/n9l68o/why_i_hate_rust_programming_language/ (comments)
+  * Status: backlog
 - Rust inadequate for text compression codecs? https://news.ycombinator.com/item?id=43295908
+  * Status: backlog
 - Rust: Not So Great For Codec Implementing: https://codecs.multimedia.cx/2017/07/rust-not-so-great-for-codec-implementing/
   * Assignee: zakhar
   * Status: DONE (80m)
@@ -1116,5 +1223,8 @@ pub fn foo(p: Box<S>) {
     + Discussion about explicit SIMD in Rust
     + Reddit comments to the same post (https://codecs.multimedia.cx/2017/07/rust-not-so-great-for-codec-implementing/)
 - Reddit comments to 'Rust: Not So Great For Codec Implementing': https://www.reddit.com/r/rust/comments/6qv2s5/rust_not_so_great_for_codec_implementing/
+  * Status: backlog
 - Why you should, actually, rewrite some of it in Rust: https://news.ycombinator.com/item?id=14753201
+  * Status: backlog
 - Rust должен умереть, МГУ сделал замеры: https://habr.com/ru/articles/598219/
+  * Status: backlog
