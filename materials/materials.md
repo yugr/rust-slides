@@ -889,7 +889,11 @@ pub fn foo(p: Box<S>) {
     + [HN](https://news.ycombinator.com/item?id=40477604)
 - Auto-vectorization in Rust: https://users.rust-lang.org/t/auto-vectorization-in-rust/24379
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (35m)
+  * Problem: simple numeric loops fails to vectorize in Rust (but does in C++/Fortran)
+  * Root cause: lack fast math (so `fmadd` not used), `y/sqrt(x)` not replaced with `y * 1/sqrt(x)`
+  * Solution: use `-C llvm-args=-ffast-math` (does not seem to work) and float intrinsics
+  * More materials: added links
 - Understanding Rusts Auto-Vectorization and Methods for speed: https://users.rust-lang.org/t/understanding-rusts-auto-vectorization-and-methods-for-speed-increase/84891 (reslicing technique)
   * Assignee: yugr
   * Status: in progress
@@ -936,6 +940,14 @@ pub fn foo(p: Box<S>) {
   * Status: backlog
 - Speeding up RGB to grayscale conversion in Rust: https://coaxion.net/blog/2018/01/speeding-up-rgb-to-grayscale-conversion-in-rust-by-a-factor-of-2-2-and-various-other-multimedia-related-processing-loops/
   * Status: backlog
+- Auto-vectorization fails in a for-loop: https://users.rust-lang.org/t/auto-vectorization-fails-in-a-for-loop/62612
+  * Status: backlog
+- Rust autovectorization issues: https://users.rust-lang.org/t/rust-autovectorization-issues/126386
+  * Status: backlog
+- Rust and C++ on Floating-point Intensive Code: https://www.reidatcheson.com/hpc/architecture/performance/rust/c++/2019/10/19/measure-cache.html
+  * Status: backlog
+  * More materials:
+    + [HN](https://news.ycombinator.com/item?id=21342501)
 
 # Stack probing
 
