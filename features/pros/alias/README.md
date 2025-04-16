@@ -9,6 +9,9 @@ In particular:
   - all references are guaranteed to be non-null
 
 Note that aliasing optimizations are NOT applied to pointers.
+Moreover, Rust does not have any kind of strict aliasing so
+`*mut i32` and `*mut f32` may alias.
+So using raw pointers has a performance hit compared to C++.
 
 # Examples
 

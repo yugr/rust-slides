@@ -712,7 +712,10 @@ pub fn foo(p: Box<S>) {
   * More materials: N/A
 - Aliasing in Rust: https://www.reddit.com/r/rust/comments/1ery9dy/aliasing_in_rust/
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (30m)
+  * OP asks whether Rust analog of C++ strict aliasing (for raw pointers)
+  * And it does not (which is not necessarily a bad thing as it makes code more predictable)
+  * More materials: no new links
 - Enable mutable noalias for LLVM >= 12 by nikic merged: https://www.reddit.com/r/rust/comments/maix26/enable_mutable_noalias_for_llvm_12_by_nikic_merged/
   * Assignee: yugr
   * Status: in progress
