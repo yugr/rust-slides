@@ -148,17 +148,23 @@ On the other hand, once all materials are analyzed we won't care about this file
  * Root cause: Benchmark to small to reliably measure it and errors in using the benchmarking framework
  * Solution: As author states, "building these into somewhat larger programs and the Rust code was about twice as fast in the final result".
 - Why is C++ still beating Rust at performance in some places? https://users.rust-lang.org/t/why-is-c-still-beating-rust-at-performance-in-some-places/95877
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - Rust vs. C++: Fine-grained Performance: https://users.rust-lang.org/t/rust-vs-c-fine-grained-performance/4407
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - A good performance comparision C and Rust: https://users.rust-lang.org/t/a-good-performance-comparision-c-and-rust/5901/7
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - Rust-specific code optimisations vs other languages: https://users.rust-lang.org/t/rust-specific-code-optimisations-vs-other-languages/49663
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - How to speed up this rust code? I’m measuring a 30% slowdown versus the C++ version: https://users.rust-lang.org/t/how-to-speed-up-this-rust-code-im-measuring-a-30-slowdown-versus-the-c-version/1488
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - Goals and priorities for C++: https://internals.rust-lang.org/t/goals-and-priorities-for-c/12031/32 (some points on Rust perf features like lack of fast-math or move semantics)
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - Zero cost abstractions: Rust vs C++: https://www.rottedfrog.co.uk/?p=24
   * Assignee: yugr
   * Status: DONE (20m)
@@ -281,9 +287,11 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Main idea: user wonders what are potential, NYI optimizations; the only answer is `noalias`
   * More materials: added links
 - What languages (other than Rust) have "zero cost abstraction"? https://www.reddit.com/r/rust/comments/zkr3xm/what_languages_other_than_rust_have_zero_cost/
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - Is Rust faster than Fortran and C++? A case study with scientific applications: https://www.reddit.com/r/rust/comments/1jz504y/is_rust_faster_than_fortran_and_c_a_case_study/
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 
 # Expression templates
 
@@ -566,8 +574,9 @@ pub fn foo(p: Box<S>) {
   * Solution: working on different implementation for `..=` syntax in [issue #123741](https://github.com/rust-lang/rust/issues/123741) which will resolve this at runtime
   * More materials: added
 - New range types: https://github.com/rust-lang/rust/issues/123741
-  * Status: backlog
-  * Be sure to analyze links
+  * Assignee: yugr
+  * Status: in progress
+  * Be sure to analyze links !
 - Rust’s iterators are inefficient, and here’s what we can do about it: https://medium.com/@veedrac/rust-is-slow-and-i-am-the-cure-32facc0fdcb
   * Assignee: yugr
   * Status: DONE (50m)
