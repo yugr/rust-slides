@@ -6,8 +6,10 @@ Autovec is a complex feature which is negatively affected by
 On the other hand it's positively affected by
   - [noalias](../../pros/alias/README.md)
 
-Autovec is unreliable (but can be tested at compile-time
-via `-Rpass=loop-vectorize -Rpass-missed=loop-vectorize`).
+Autovec is unreliable but can be tested at compile-time
+via `-C remark=loop-vectorize` or `-C llvm-args='--pass-remarks=vectorize'`
+(sadly [not showing](https://github.com/rust-lang/rust/issues/54048) good location for iterators,
+similar to Clang's `-Rpass=loop-vectorize -Rpass-missed=loop-vectorize`).
 On the other hand
 > in Rust we've found that once it starts working,
 > it tends to keep working across compiler versions with no issues

@@ -978,18 +978,37 @@ pub fn foo(p: Box<S>) {
   * Suggested alternatives: reslicing, iterators
 - Speeding up RGB to grayscale conversion in Rust: https://coaxion.net/blog/2018/01/speeding-up-rgb-to-grayscale-conversion-in-rust-by-a-factor-of-2-2-and-various-other-multimedia-related-processing-loops/
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (20m)
+  * OP investigates various methods to speed up his kernel:
+    + `assert!` (`assert_eq!` caused slowdown !)
+    + `exact_chunks` iterator (it was first introduced to stdlib as part of this work)
+  * Finally he was able to fully eliminate bounds checks
+  * More materials:
+    + [Reddit](https://www.reddit.com/r/rust/comments/7rxrka/speeding_up_rgb_to_grayscale_conversion_in_rust/)
+    + no new links
 - Auto-vectorization fails in a for-loop: https://users.rust-lang.org/t/auto-vectorization-fails-in-a-for-loop/62612
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (5m)
+  * Problem: autovec started to fail when using `marbles[8*i..8*(i+1)]` syntax
+  * Root cause: unclear, most likely LLVM IR was too complex for vectorizer
+  * Solution: help vectorizer with `chunks_exact`
+  * More materials: added links
 - Rust autovectorization issues: https://users.rust-lang.org/t/rust-autovectorization-issues/126386
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (5m)
+  * Problem: C++ `-Ofast` code much faster than Rust due to autovec
+  * Root cause: FP computations not vectorized due to fast math
+  * Solution: in this case it's possible to simply rewrite the algorithm to enable autovec
+  * More materials: no new links
 - Rust and C++ on Floating-point Intensive Code: https://www.reidatcheson.com/hpc/architecture/performance/rust/c++/2019/10/19/measure-cache.html
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (10m)
+  * Problem: C++ `-Ofast` code much faster than Rust due to autovec
+  * Root cause: FP computations not vectorized due to fast math
+  * Solution: same as in "Rust autovectorization issues"
   * More materials:
     + [HN](https://news.ycombinator.com/item?id=21342501)
+    + no new links
 
 # Stack probing
 
@@ -1106,8 +1125,6 @@ pub fn foo(p: Box<S>) {
   * Status: backlog
 - Memory-safe PNG decoders now vastly outperform C PNG libraries: https://www.reddit.com/r/programming/comments/1hak25t/memorysafe_png_decoders_now_vastly_outperform_c/
   * Status: backlog
-- Speeding up RGB to grayscale conversion in Rust: https://www.reddit.com/r/rust/comments/7rxrka/speeding_up_rgb_to_grayscale_conversion_in_rust/
-  * Status: backlog
 - Rust performance help (convolution): https://users.rust-lang.org/t/rust-performance-help-convolution/44075
   * Status: backlog
 - Rust: A better C++ than C++: Safety and performance: https://www.thecodedmessage.com/rust-c-book/safety.html
@@ -1116,6 +1133,8 @@ pub fn foo(p: Box<S>) {
   * Status: backlog
 - Why can deriving Copy pessimize performance by 60%? https://www.reddit.com/r/rust/comments/1h8dj64/why_can_deriving_copy_pessimize_performance_by_60/
   * Status: backlog
+- Porting EBU R128 audio loudness analysis from C to Rust: https://coaxion.net/blog/2020/09/porting-ebu-r128-audio-loudness-analysis-from-c-to-rust-porting-details/
+  * Was part 3 ever written ?
 
 # Panics
 

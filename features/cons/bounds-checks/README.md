@@ -23,6 +23,7 @@ Bounds checks can be removed via
     * [example](https://www.reddit.com/r/rust/comments/154vowr/comment/jsr0b51/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button)
   - using asserts (https://rust.godbolt.org/z/GPMcYd371) or `core::hint::unreachable_unchecked`
     * [example](https://github.com/rust-random/rand/pull/960)
+    * note that plain `assert!` should be used (e.g. `assert_eq!` may cause [slowdown](https://coaxion.net/blog/2018/01/speeding-up-rgb-to-grayscale-conversion-in-rust-by-a-factor-of-2-2-and-various-other-multimedia-related-processing-loops/) !)
   - constructing pre-checked slices (reslicing, subslicing):
 ```
 let len = vec.len();
