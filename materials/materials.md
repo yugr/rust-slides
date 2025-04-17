@@ -957,10 +957,19 @@ pub fn foo(p: Box<S>) {
   * Solution: use `zip` or other simple code
 - simd-itertools: simd-accelerated iterators for "find", "filter", "contains" and many more: https://www.reddit.com/r/rust/comments/1e3ps2a/simditertools_simdaccelerated_iterators_for_find/
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (10m)
+  * A small wrapper on top of standard iterators which does `chunks_exact` internally to facilitate autovec
+  * More materials: no new links
 - Memory-safe PNG decoders now vastly outperform C PNG libraries: https://www.reddit.com/r/rust/comments/1ha7uyi/memorysafe_png_decoders_now_vastly_outperform_c/
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (50m)
+  * Rust PNG libs outperform C ones
+  * The winning package (png by Shnatsel) is based on autovec
+    + Code is specifically structured to enable it
+  * A lot of interesting discussions of autovec:
+    + What enables and disables it in Rust
+    + How to track if it worked
+  * More materials: no new links
 - Mir optimization pass that implements auto-vectorization: https://internals.rust-lang.org/t/mir-optimization-pass-that-implements-auto-vectorization/16360
   * Assignee: yugr
   * Status: in progress

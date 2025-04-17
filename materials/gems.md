@@ -13,3 +13,5 @@ which all team members need to be aware of.
   * How CGUs work
 - [Nethercote's posts](https://blog.mozilla.org/nnethercote/category/rust/)
 - [Understanding Rusts Auto-Vectorization and Methods for speed](https://users.rust-lang.org/t/understanding-rusts-auto-vectorization-and-methods-for-speed-increase/84891)
+- [Memory-safe PNG decoders now vastly outperform C PNG libraries](https://www.reddit.com/r/rust/comments/1ha7uyi/memorysafe_png_decoders_now_vastly_outperform_c/)
+  * Good overview of autovec situation

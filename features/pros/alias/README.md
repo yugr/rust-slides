@@ -13,6 +13,9 @@ Moreover, Rust does not have any kind of strict aliasing so
 `*mut i32` and `*mut f32` may alias.
 So using raw pointers has a performance hit compared to C++.
 
+Note that aggressive noaliasing is also the main reason
+for high performance of Fortran.
+
 # Examples
 
 - [Rust Optimizations That C++ Can't Do](https://robert.ocallahan.org/2017/04/rust-optimizations-that-c-cant-do_5.html)

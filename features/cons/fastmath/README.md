@@ -7,4 +7,5 @@ This is about missing `-ffast-math` in Rust.
   * [Wrappers](https://github.com/bluss/fast-floats) also available
 - Use `std::intrinsics::XXX_algebraic` APIs
   * Support non-finite numbers (NaNs and Infs)
+  * In unstable :(
 - Does `-C llvm-args=-ffast-math` work ?
