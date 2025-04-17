@@ -972,7 +972,10 @@ pub fn foo(p: Box<S>) {
   * More materials: no new links
 - Mir optimization pass that implements auto-vectorization: https://internals.rust-lang.org/t/mir-optimization-pass-that-implements-auto-vectorization/16360
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (10m)
+  * OP proposes a MIR-level vectorization; it supersedes LLVM vectorizer in some cases (e.g. when bounds checks are in place)
+  * Proposal violates safety guarantees so was rejected
+  * Suggested alternatives: reslicing, iterators
 - Target Feature vs Target CPU for Rust: https://www.nickwilcox.com/blog/target_cpu_vs_target_feature/
   * Assignee: yugr
   * Status: in progress
