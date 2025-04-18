@@ -15,3 +15,5 @@ which all team members need to be aware of.
 - [Understanding Rusts Auto-Vectorization and Methods for speed](https://users.rust-lang.org/t/understanding-rusts-auto-vectorization-and-methods-for-speed-increase/84891)
 - [Memory-safe PNG decoders now vastly outperform C PNG libraries](https://www.reddit.com/r/rust/comments/1ha7uyi/memorysafe_png_decoders_now_vastly_outperform_c/)
   * Good overview of autovec situation
+- [What languages (other than Rust) have "zero cost abstraction"?](https://www.reddit.com/r/rust/comments/zkr3xm/what_languages_other_than_rust_have_zero_cost/)
+  * Good discussion of what 0-cost means in different languages

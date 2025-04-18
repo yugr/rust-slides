@@ -13,7 +13,7 @@ which may harm optimizations (e.g. inlining) and introduce unnecessary reg spill
 
 # Solutions
 
-Rust has `panic=abort` (similar to C++ `-fno-exceptions`)
+Rust has `panic=abort` (similar to C++ `-fno-exceptions`, ex. `-Z no-landing-pads`)
 
 [No-panic Rust](https://blog.reverberate.org/2025/02/03/no-panic-rust.html)
 approach is about rigorously removing _all_ panic calls from your program.

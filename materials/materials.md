@@ -149,22 +149,47 @@ On the other hand, once all materials are analyzed we won't care about this file
  * Solution: As author states, "building these into somewhat larger programs and the Rust code was about twice as fast in the final result".
 - Why is C++ still beating Rust at performance in some places? https://users.rust-lang.org/t/why-is-c-still-beating-rust-at-performance-in-some-places/95877
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (2m)
+  * OP asks why Rust is slower in general but gets no concrete answers
+  * More materials: no new links
 - Rust vs. C++: Fine-grained Performance: https://users.rust-lang.org/t/rust-vs-c-fine-grained-performance/4407
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (10m)
+  * The article is more about Rust as a language, optimizations are not discussed
+  * More materials:
+    + [Original post](https://cantrip.org/rust-vs-c++.html)
+    + no new links
 - A good performance comparision C and Rust: https://users.rust-lang.org/t/a-good-performance-comparision-c-and-rust/5901/7
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (5m)
+  * A superficial discussion of Rust vs C++ and benchmarks game
+  * Nothing concrete mentioned except jemalloc and noalias
+  * More materials: no new links
 - Rust-specific code optimisations vs other languages: https://users.rust-lang.org/t/rust-specific-code-optimisations-vs-other-languages/49663
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (5m)
+  * OP asks of Rust-specific perf optimizations
+  * Comments include
+    + noalias
+    + C++ problem with `unique_ptr` parameter passing
+    + niche opts
+    + ZSTs
+  * More materials: now new links
 - How to speed up this rust code? I’m measuring a 30% slowdown versus the C++ version: https://users.rust-lang.org/t/how-to-speed-up-this-rust-code-im-measuring-a-30-slowdown-versus-the-c-version/1488
   * Assignee: yugr
-  * Status: in progress
-- Goals and priorities for C++: https://internals.rust-lang.org/t/goals-and-priorities-for-c/12031/32 (some points on Rust perf features like lack of fast-math or move semantics)
+  * Status: DONE (20m)
+  * Problem: Rust code is slower than C++
+  * Root cause: stack protection, bounds checking
+  * More materials: no new links
+- Goals and priorities for C++: https://internals.rust-lang.org/t/goals-and-priorities-for-c/12031/32
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (25m)
+  * Discusses language goals but also some points on Rust perf features:
+    + lack of fast-math
+    + move semantics
+    + noalias
+  * Overall conclusion is that safety is most important and perf follows (one example is lack of fast math)
+  * More materials: no new links
 - Zero cost abstractions: Rust vs C++: https://www.rottedfrog.co.uk/?p=24
   * Assignee: yugr
   * Status: DONE (20m)
@@ -288,7 +313,14 @@ On the other hand, once all materials are analyzed we won't care about this file
   * More materials: added links
 - What languages (other than Rust) have "zero cost abstraction"? https://www.reddit.com/r/rust/comments/zkr3xm/what_languages_other_than_rust_have_zero_cost/
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (50m)
+  * General discussion of various perf. features which are not 0-cost:
+    + bounds checks
+    + panics can't be coalesced (but what about delayed panics ?)
+  * What allows Rust to be 0-cost (e.g. iterators):
+    + monomorphization
+    + inlining
+  * More materials: no new links
 - Is Rust faster than Fortran and C++? A case study with scientific applications: https://www.reddit.com/r/rust/comments/1jz504y/is_rust_faster_than_fortran_and_c_a_case_study/
   * Assignee: yugr
   * Status: in progress
@@ -1018,9 +1050,11 @@ pub fn foo(p: Box<S>) {
   * More materials:
     + [HN](https://news.ycombinator.com/item?id=21342501)
     + no new links
+- SIMD in zlib-rs: https://tweedegolf.nl/en/blog/153/simd-in-zlib-rs-part-1-autovectorization-and-target-features
 
 # Stack probing
 
+- Replace stack overflow checking with stack probes: https://github.com/rust-lang/rust/issues/16012
 - probestack.rs: https://github.com/rust-lang/compiler-builtins/blob/master/compiler-builtins/src/probestack.rs
   * Check comments
   * Status: backlog
@@ -1144,6 +1178,7 @@ pub fn foo(p: Box<S>) {
   * Status: backlog
 - Porting EBU R128 audio loudness analysis from C to Rust: https://coaxion.net/blog/2020/09/porting-ebu-r128-audio-loudness-analysis-from-c-to-rust-porting-details/
   * Was part 3 ever written ?
+- Safe and efficient bidirectional trees: https://www.reddit.com/r/rust/comments/55ns2m/safe_and_efficient_bidirectional_trees/
 
 # Panics
 

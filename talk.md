@@ -5,6 +5,7 @@ This is the plan of the talk.
 - Non-idiomatic code (SIMD, intrinsics, inline asm, `wrapping_add`, too many `unsafe`s, `restrict` in C++, etc.)
   * would like to compare "standard" Rust and C++
   * Benchmarks Game uses wildly non-canonical code, to everyone's dismay
+  * "It makes little sense to compare Rust vs C with respect to performance, because you can write the exact equivalent of C code in Rust and get the same performance" (from [here](https://users.rust-lang.org/t/a-good-performance-comparision-c-and-rust/5901/4))
 - Just comparing few random programs
   * not enough to draw conclusions
 - Just looking at asm code
@@ -27,7 +28,7 @@ This is the plan of the talk.
 Rust targets same problem area:
   - [system programming language](https://willcrichton.net/notes/systems-programming/)
     * "Generaly, it's 'the same order of magnitude as C'. Sometimes faster, sometimes slower" ([Steven Klabnik](https://users.rust-lang.org/t/what-kind-of-performance-rust-is-trying-to-achieve/1674/2))
-  - zero-cost abstractions
+  - zero-cost abstractions (should better be called "zero (unavoidable) overhead", this is also used by Stroustroup)
     * no (or minimal) runtime overhead
     * don't pay for what you don't use
     * no GC
@@ -41,6 +42,8 @@ Rust targets same problem area:
 Rust seems to put safety ahead of performance:
   - "Rust is a modern systems programming language focusing on safety, speed, and concurrency" ([Rust by Example](https://doc.rust-lang.org/rust-by-example/))
   - "Rust prioritizes memory safety above all else. But speed is a close second" ([Steven Klabnik](https://users.rust-lang.org/t/what-kind-of-performance-rust-is-trying-to-achieve/1674/2))
+  - more on tradeoffs [here](https://www.infoq.com/presentations/rust-tradeoffs/) and [here](https://www.youtube.com/watch?v=2wZ1pCpJUIM)
+  - manifests e.g. in inability to enable fast math or turn off bounds checking
   - but at the same time things which would have incurred too much overhead are disabled
     * e.g. integer overflows not checked in release
 
@@ -72,7 +75,7 @@ and some are consequences (e.g. disabled autovec).
     + "self-ref structs are not 0-cost" (https://www.youtube.com/watch?v=UrDhMWISR3w)
   * unable to take two mutable refs to different elements of std collections / slices
   * have to use indices (with runtime index checks penalty) instead of iterators
-  * as a result, ALL high-performance data structures use unsafe code to skip borrow checker
+  * as a result, ALL high-performance data structures use unsafe code to skip borrow checker (see [this](https://internals.rust-lang.org/t/goals-and-priorities-for-c/12031/52))
 - Integer overflows are defined (wrapping) in release
   * so no loop optimizations based on signed overflow
 - slower (safer?) library defaults:
