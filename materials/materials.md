@@ -1080,6 +1080,8 @@ pub fn foo(p: Box<S>) {
 # Stack probing
 
 - Replace stack overflow checking with stack probes: https://github.com/rust-lang/rust/issues/16012
+  * Assignee: yugr
+  * Status: in progress
 - probestack.rs: https://github.com/rust-lang/compiler-builtins/blob/master/compiler-builtins/src/probestack.rs
   * Assignee: yugr
   * Status: in progress
