@@ -19,7 +19,9 @@ On the other hand, once all materials are analyzed we won't care about this file
   * No info about performance
 - Rust design patterns: https://softwarepatternslexicon.com/patterns-rust/
   * Assignee: yugr
-  * Status: in progress
+  * Status: in progres
+  * No previously unknown perf hints (e.g. slices vs containers, etc.)
+  * More materials: no new links
 - Rust Performance Book (by Nethercote): https://nnethercote.github.io/perf-book/
   * Assignee: yugr
   * Status: DONE (45m)
@@ -1126,10 +1128,12 @@ pub fn foo(p: Box<S>) {
 # Manual optimizations
 
 - Nethercote's posts: https://blog.mozilla.org/nnethercote/category/rust/
+  * Assignee: yugr
+  * Status: in progress
   * Nethercote is top industry expert, need to pay close attention to his posts
-  * Status: backlog
 - Moar Nethercote's posts: https://nnethercote.github.io/
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - http://troubles.md/abusing-rustc/
   * Status: backlog
 - Можно ли доверить компилятору оптимизацию вашего кода? https://habr.com/ru/companies/timeweb/articles/759326/
