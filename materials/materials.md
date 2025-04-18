@@ -1133,7 +1133,12 @@ Nethercote is top industry expert, need to pay close attention to his posts
 
 - [How to speed up the Rust compiler](https://blog.mozilla.org/nnethercote/2016/10/14/how-to-speed-up-the-rust-compiler/)
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (25m)
+  * Overview of Rust build systems and dev process (useful reading if doing some rustc work):
+    + Used [rustc-benchmarks](https://github.com/rust-lang-deprecated/rustc-benchmarks) (no longer used)
+  * Optimizations:
+    + Mostly high-level opts (making allocations lazy, replacing `String` with `Cow<str>`)
+    + Mentions problem with CGUs
 - [How to speed up the Rust compiler some more](https://blog.mozilla.org/nnethercote/2016/11/23/how-to-speed-up-the-rust-compiler-some-more/)
   * Assignee: yugr
   * Status: in progress
