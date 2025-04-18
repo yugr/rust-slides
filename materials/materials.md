@@ -14,19 +14,29 @@ On the other hand, once all materials are analyzed we won't care about this file
 
 - Rustc development guide: https://rustc-dev-guide.rust-lang.org/
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (5m)
+  * Just general overview of compiler internals (infra, type checking, etc.)
+  * No info about performance
 - Rust design patterns: https://softwarepatternslexicon.com/patterns-rust/
   * Assignee: yugr
   * Status: in progress
 - Rust Performance Book (by Nethercote): https://nnethercote.github.io/perf-book/
   * Assignee: yugr
-  * Status: in progress
-  * pay attention to links at https://nnethercote.github.io/perf-book/bounds-checks.html
-  * comments: https://www.reddit.com/r/rust/comments/jvmb8u/the_rust_performance_book/
-  * additions: https://github.com/nnethercote/perf-book/issues
-- Some general guidelines from Redox OS https://doc.redox-os.org/book/rusting-properly.html
+  * Status: DONE (45m)
+  * Very common advices:
+    + Iterators instead of indices
+    + Slices instead of Vecs
+    + Assertions
+  * "I'm trying to keep the book practical by focusing on techniques that have been shown to be useful on real code" (as answer to why floating point is not covered)
+  * More materials:
+    + [Reddit](https://www.reddit.com/r/rust/comments/jvmb8u/the_rust_performance_book/)
+    + [GH issues](https://github.com/nnethercote/perf-book/issues)
+- Some general guidelines from Redox OS: https://doc.redox-os.org/book/rusting-properly.html
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (5m)
+  * Both performance and style guidelines w/o much explanation
+  * No previously unknown perf hints (e.g. slices vs containers, etc.)
+  * More materials: no new links
 - Found no guidelines in [other projects](real-projects.md) in gh-3
 
 # C/C++ comparison
@@ -1112,9 +1122,6 @@ pub fn foo(p: Box<S>) {
     + Algorithm
     + No perf overhead detected
   * More materials: none
-- Rust guarantees no segfaults with only safe code: https://users.rust-lang.org/t/rust-guarantees-no-segfaults-with-only-safe-code-but-it-segfaults-stack-overflow/4305/5
-  * Assignee: yugr
-  * Status: in progress
 
 # Manual optimizations
 

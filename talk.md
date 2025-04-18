@@ -80,7 +80,7 @@ and some are consequences (e.g. disabled autovec).
   * so no loop optimizations based on signed overflow
 - slower (safer?) library defaults:
   * [PRNG](https://users.rust-lang.org/t/julia-outperforms-rust-in-generating-a-vector-of-random-numbers/101624)
-  * [unbuffered IO](https://users.rust-lang.org/t/in-my-benchmark-i-found-rust-slower-than-c/71944/6) (need to use BufWriter)
+  * [unbuffered IO](https://users.rust-lang.org/t/in-my-benchmark-i-found-rust-slower-than-c/71944/6) (need to use BufWriter, also read [this](https://nnethercote.github.io/perf-book/io.html))
   * safer but slower sort algorithm
     + https://github.com/Voultapher/sort-research-rs/blob/main/writeup/sort_safety/text.md
     + https://www.youtube.com/watch?v=rZ7QQWKP8Rk

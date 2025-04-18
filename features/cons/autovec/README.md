@@ -2,9 +2,13 @@ This is about various problems with autovec in Rust.
 
 Autovec is a complex feature which is negatively affected by
   - [bounds checking](../bounds-checks/README.md)
-  - [lack of fast match](../fastmath/README.md)
+  - [lack of fast math](../fastmath/README.md)
 On the other hand it's positively affected by
   - [noalias](../../pros/alias/README.md)
+  - [chained iterators](../iterators/README.md)
+
+To facilitate vectorization use
+  - `chunks_exact` iterator (even if length is not divisable, see [this](https://github.com/nnethercote/perf-book/issues/52))
 
 Autovec is unreliable but can be tested at compile-time
 via `-C remark=loop-vectorize` or `-C llvm-args='--pass-remarks=vectorize'`

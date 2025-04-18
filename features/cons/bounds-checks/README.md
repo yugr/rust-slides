@@ -23,6 +23,7 @@ Bounds checks can be removed via
     * [example](https://www.reddit.com/r/rust/comments/154vowr/comment/jsr0b51/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button)
   - using asserts (https://rust.godbolt.org/z/GPMcYd371) or `core::hint::unreachable_unchecked`
     * [example](https://github.com/rust-random/rand/pull/960)
+    * [examples in Nethercote's book](https://nnethercote.github.io/perf-book/bounds-checks.html)
     * note that plain `assert!` should be used (e.g. `assert_eq!` may cause [slowdown](https://coaxion.net/blog/2018/01/speeding-up-rgb-to-grayscale-conversion-in-rust-by-a-factor-of-2-2-and-various-other-multimedia-related-processing-loops/) !)
   - constructing pre-checked slices (reslicing, subslicing):
 ```
@@ -37,6 +38,8 @@ for i in 0..len {
 ```
 let [a, b, c, d] = data[..4] else { panic!() }
 ```
+  - slicing i.e. using slices instead of e.g. `Vec`'s or `String`'s; particularly good for `&mut [T]` vs `&mut Vec<T>`
+    * see [issue](https://github.com/nnethercote/perf-book/issues/50) and [clippy check](https://github.com/rust-lang/rust-clippy/issues/10269)
   - using `cmp::min` to force index into safe range:
 ```
 let bounded_i = cmp::min(i, sums.len());

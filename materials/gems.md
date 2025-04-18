@@ -17,3 +17,4 @@ which all team members need to be aware of.
   * Good overview of autovec situation
 - [What languages (other than Rust) have "zero cost abstraction"?](https://www.reddit.com/r/rust/comments/zkr3xm/what_languages_other_than_rust_have_zero_cost/)
   * Good discussion of what 0-cost means in different languages
+- [Rust Performance Book](https://nnethercote.github.io/perf-book)
