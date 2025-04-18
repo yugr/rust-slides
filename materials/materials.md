@@ -767,7 +767,6 @@ pub fn foo(p: Box<S>) {
   * Root cause: one of combinators includes a reservation for `collect` call
   * Solution: do manual `with_capacity` in raw loop
 
-
 # Noalias
 
 - Non-aliasing guarantees of &mut T and rustc optimization: https://users.rust-lang.org/t/non-aliasing-guarantees-of-mut-t-and-rustc-optimization/34386
@@ -895,13 +894,20 @@ pub fn foo(p: Box<S>) {
     + walk though different IRs (AST, HIR, THIR, MIR)
     + some info on rustc driver
     + not too many details
-- Should small Rust structs be passed by-copy or by-borrow? https://www.reddit.com/r/rust/comments/zzxz2e/should_small_rust_structs_be_passed_bycopy_or/
+- Should small Rust structs be passed by-copy or by-borrow? https://www.forrestthewoods.com/blog/should-small-rust-structs-be-passed-by-copy-or-by-borrow/
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (15m)
+  * Investigates whether passing by value is faster than by reference
+  * No investigation of ABI or optimizer effects (e.g. author assumes it's equivalent to passing in regs)
+  * No relevant information in this article
+  * More materials:
+    + [Reddit](https://www.reddit.com/r/rust/comments/zzxz2e/should_small_rust_structs_be_passed_bycopy_or/)
+    + No more links in blog
 - Inline in Rust: https://matklad.github.io/2021/07/09/inline-in-rust.html
   * Assignee: yugr
-  * Status: in progress
-  * `#[inline]` should be a dedicated perf. feature ?
+  * Status: DONE (5m)
+  * Just general discussion of `#[inline]` enabling inlining across crates (mini-LTO)
+  * No new info
 
 # Data structures performance
 
