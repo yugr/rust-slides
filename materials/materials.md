@@ -880,10 +880,12 @@ pub fn foo(p: Box<S>) {
     + some info on rustc driver
     + not too many details
 - Should small Rust structs be passed by-copy or by-borrow? https://www.reddit.com/r/rust/comments/zzxz2e/should_small_rust_structs_be_passed_bycopy_or/
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - Inline in Rust: https://matklad.github.io/2021/07/09/inline-in-rust.html
-  * Status: backlog
-  * `#[inline]` should be a dedicated perf. feature
+  * Assignee: yugr
+  * Status: in progress
+  * `#[inline]` should be a dedicated perf. feature ?
 
 # Data structures performance
 
@@ -899,7 +901,8 @@ pub fn foo(p: Box<S>) {
 # Fast math
 
 - Imprecise floating point operations: https://github.com/rust-lang/rust/issues/21690
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 
 # Autovec
 
@@ -1056,12 +1059,15 @@ pub fn foo(p: Box<S>) {
 
 - Replace stack overflow checking with stack probes: https://github.com/rust-lang/rust/issues/16012
 - probestack.rs: https://github.com/rust-lang/compiler-builtins/blob/master/compiler-builtins/src/probestack.rs
-  * Check comments
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
+  * Check comments !
 - Is rust guaranteed to detect stack overflows? https://users.rust-lang.org/t/is-rust-guaranteed-to-detect-stack-overflows/52593
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - Bringing Stack Clash Protection to Clang / X86: https://blog.llvm.org/posts/2021-01-05-stack-clash-protection/
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 
 # Manual optimizations
 
