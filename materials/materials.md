@@ -924,7 +924,13 @@ pub fn foo(p: Box<S>) {
 
 - Imprecise floating point operations: https://github.com/rust-lang/rust/issues/21690
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (30m)
+  * This is a request for `-ffast-math` for Rust
+  * A lot of links to related issues
+  * A lot of discussions of alternatives but only 2 clear results:
+    + Maintainers will _never_ allow a global `-ffast-math` flag (which will cover dependencies)
+    + Maintainers consider fast intrinsics to be enough
+  * More materials: no new links
 
 # Autovec
 
@@ -1081,15 +1087,24 @@ pub fn foo(p: Box<S>) {
 
 - Replace stack overflow checking with stack probes: https://github.com/rust-lang/rust/issues/16012
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (20m)
+  * Proposes stack probes (analog of GCC's `-fstack-check`)
+  * Discusses implementation in detail
+  * More materials: a lot of links to stackoverflow bugs
 - probestack.rs: https://github.com/rust-lang/compiler-builtins/blob/master/compiler-builtins/src/probestack.rs
   * Assignee: yugr
-  * Status: in progress
-  * Check comments !
+  * Status: DONE (5m)
+  * Typical stack probing asm implementation
+  * More materials: none
 - Is rust guaranteed to detect stack overflows? https://users.rust-lang.org/t/is-rust-guaranteed-to-detect-stack-overflows/52593
   * Assignee: yugr
   * Status: in progress
+  * OP expected Rust to panic on stack overflow but it turns out that panicking in such cases is best effort
+  * More materials: a lot of similar posts, added the most popular
 - Bringing Stack Clash Protection to Clang / X86: https://blog.llvm.org/posts/2021-01-05-stack-clash-protection/
+  * Assignee: yugr
+  * Status: in progress
+- Rust guarantees no segfaults with only safe code: https://users.rust-lang.org/t/rust-guarantees-no-segfaults-with-only-safe-code-but-it-segfaults-stack-overflow/4305/5
   * Assignee: yugr
   * Status: in progress
 
