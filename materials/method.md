@@ -18,7 +18,7 @@ Look for any mentions of `/performance|optimizations|compiler|inefficient|code ?
   - Reddit
     * general:
       + https://www.reddit.com/r/rust/search/?q=optimize&type=posts and https://www.reddit.com/r/rust/search/?q=performance&type=posts
-    * top-1:
+    * top-1 (ideally all comments but at least the ones mentioning "performance"):
       + burntsushi (regex):
         - https://www.reddit.com/user/burntsushi/search/?q=optimize&type=comments and https://www.reddit.com/user/burntsushi/search/?q=performance&type=comments
       + Shnatsel :

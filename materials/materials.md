@@ -321,9 +321,15 @@ On the other hand, once all materials are analyzed we won't care about this file
     + monomorphization
     + inlining
   * More materials: no new links
-- Is Rust faster than Fortran and C++? A case study with scientific applications: https://www.reddit.com/r/rust/comments/1jz504y/is_rust_faster_than_fortran_and_c_a_case_study/
+- NPB-Rust: NAS Parallel Benchmarks in Rust: https://arxiv.org/abs/2502.15536
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (15m)
+  * Article discusses porting of NASA benchmarks to Rust
+  * Opts are mainly unsafe code and parallel iterators
+  * Does not discuss low-level performance issues like bounds checks or autovec so not relevant for us
+  * More materials:
+    + [Reddit](https://www.reddit.com/r/rust/comments/1jz504y/is_rust_faster_than_fortran_and_c_a_case_study/)
+    + no new links
 
 # Expression templates
 
@@ -605,10 +611,19 @@ pub fn foo(p: Box<S>) {
   * Root cause: LLVM does not optimize `RangeInclusive` well
   * Solution: working on different implementation for `..=` syntax in [issue #123741](https://github.com/rust-lang/rust/issues/123741) which will resolve this at runtime
   * More materials: added
-- New range types: https://github.com/rust-lang/rust/issues/123741
+- Pre-RFC: Fixing ranges by 2027: https://internals.rust-lang.org/t/pre-rfc-fixing-range-by-2027/19936
   * Assignee: yugr
-  * Status: in progress
-  * Be sure to analyze links !
+  * Status: DONE (1h)
+  * Core of proposal is to change Ranges (`..`, `..=`) to implement `IntoIterator` instead of `Iterator`
+  * Main motivation is better design (e.g. `exhausted` flag is no longer part of `RangeInclusive` so its shorter)
+  * Also this allows to replace `x..=y` with `x..(y + 1)` internally in `into_iter` and thus move check outside of the loop
+  * Unfortunately
+    + will likely result in code bloat (3x for loop bodies)
+    + proposal targets 2027 edition
+    + maintainer is not very interested in `RangeInclusive` optimization (just included it to "Future possibilities" section and [not implemented in initial PR](https://github.com/rust-lang/rust/pull/136167/))
+  * More materials:
+    + [RFC](https://github.com/rust-lang/rfcs/pull/3550)
+    + [Tracking issue](https://github.com/rust-lang/rust/issues/123741)
 - Rust’s iterators are inefficient, and here’s what we can do about it: https://medium.com/@veedrac/rust-is-slow-and-i-am-the-cure-32facc0fdcb
   * Assignee: yugr
   * Status: DONE (50m)
@@ -751,6 +766,7 @@ pub fn foo(p: Box<S>) {
   * Problem: iterator version is much faster than loop
   * Root cause: one of combinators includes a reservation for `collect` call
   * Solution: do manual `with_capacity` in raw loop
+
 
 # Noalias
 

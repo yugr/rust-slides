@@ -56,6 +56,12 @@ using slice instead of Vec iteration may simplify work for LLVM.
 ## Do not use inclusive ranges
 
 See [overflow page](../arithmetic-checks/overflow-checks/README.md) for details.
+Similar to "Using for_each for chained iterators" above.
+
+This may be fixed as part of [RFC 3550](https://github.com/rust-lang/rfcs/pull/3550)
+which changes `RangeInclusive` to be `IntoIterator` and
+internally changing `x..=y` to `x..(y + 1)` in `RangeInclusive::into_iter`
+but that's only for 2027 edition and also not clear there may be code bloat.
 
 # TODO
 
