@@ -13,18 +13,21 @@ On the other hand, once all materials are analyzed we won't care about this file
 # Coding guidelines
 
 - Rustc development guide: https://rustc-dev-guide.rust-lang.org/
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - Rust design patterns: https://softwarepatternslexicon.com/patterns-rust/
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - Rust Performance Book (by Nethercote): https://nnethercote.github.io/perf-book/
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
   * pay attention to links at https://nnethercote.github.io/perf-book/bounds-checks.html
   * comments: https://www.reddit.com/r/rust/comments/jvmb8u/the_rust_performance_book/
   * additions: https://github.com/nnethercote/perf-book/issues
 - Some general guidelines from Redox OS https://doc.redox-os.org/book/rusting-properly.html
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - Found no guidelines in [other projects](real-projects.md) in gh-3
-  * Status: backlog
 
 # C/C++ comparison
 
@@ -581,7 +584,7 @@ pub fn foo(p: Box<S>) {
     + [BTreeMap](https://github.com/rust-lang/rust/issues/81444)
     + [rust-gamedev](https://github.com/rust-gamedev/wg/issues/48)
 - Semantics of MIR function calls: https://github.com/rust-lang/rust/issues/71117
-  * Status: backlog
+  * Status: Wontfix
   * Highly technical, low priority
 - Move semantics in C and Rust: https://radekvit.medium.com/move-semantics-in-c-and-rust-the-case-for-destructive-moves-d816891c354b
   * Assignee: yugr
@@ -1098,12 +1101,17 @@ pub fn foo(p: Box<S>) {
   * More materials: none
 - Is rust guaranteed to detect stack overflows? https://users.rust-lang.org/t/is-rust-guaranteed-to-detect-stack-overflows/52593
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (5m)
   * OP expected Rust to panic on stack overflow but it turns out that panicking in such cases is best effort
   * More materials: a lot of similar posts, added the most popular
 - Bringing Stack Clash Protection to Clang / X86: https://blog.llvm.org/posts/2021-01-05-stack-clash-protection/
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (15m)
+  * Overview of stack probing support in LLVM (both Clang and Rust):
+    + Motivation (Qualys report)
+    + Algorithm
+    + No perf overhead detected
+  * More materials: none
 - Rust guarantees no segfaults with only safe code: https://users.rust-lang.org/t/rust-guarantees-no-segfaults-with-only-safe-code-but-it-segfaults-stack-overflow/4305/5
   * Assignee: yugr
   * Status: in progress
