@@ -1141,13 +1141,24 @@ Nethercote is top industry expert, need to pay close attention to his posts
     + Mentions problem with CGUs
 - [How to speed up the Rust compiler some more](https://blog.mozilla.org/nnethercote/2016/11/23/how-to-speed-up-the-rust-compiler-some-more/)
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (15m)
+  * Optimizations:
+    + High-level (avoiding unnecessary work, less aggressive compression, different hash function, etc.)
+    + Fixed outsized enum
+    + Pass references instead of copies
+    + [#36933](https://github.com/rust-lang/rust/pull/36993):
+      - Replace enums with bitmasks
+      - Replace `match` with if-else ordered by frequency
 - [How to speed up the Rust compiler in 2018](https://blog.mozilla.org/nnethercote/2018/04/30/how-to-speed-up-the-rust-compiler-in-2018/)
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (5m)
+  * LLVM starts to take 50% of compile time
+  * Optimizations:
+    + High-level (reduce data type, `ok_or` -> `ok_or_else`, laziness, etc.)
 - [The Rust compiler is getting faster](https://blog.mozilla.org/nnethercote/2018/05/17/the-rust-compiler-is-getting-faster/)
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (5m)
+  * Just intro to rustc perf GUI
 - [How to speed up the Rust compiler some more in 2018](https://blog.mozilla.org/nnethercote/2018/06/05/how-to-speed-up-the-rust-compiler-some-more-in-2018)
   * Assignee: yugr
   * Status: in progress
