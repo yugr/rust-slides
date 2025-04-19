@@ -37,7 +37,7 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Assignee: yugr
   * Status: DONE (5m)
   * Both performance and style guidelines w/o much explanation
-  * No previously unknown perf hints (e.g. slices vs containers, etc.)
+  * No previously unknown perf hints (e.g. slices vs containers, use `box` to facilitate placement-new, etc.)
   * More materials: no new links
 - Found no guidelines in [other projects](real-projects.md) in gh-3
 
@@ -1153,6 +1153,7 @@ Nethercote is top industry expert, need to pay close attention to his posts
   * Assignee: yugr
   * Status: DONE (5m)
   * LLVM starts to take 50% of compile time
+  * New benchmark suite is [rustc-perf](https://github.com/rust-lang/rustc-perf)
   * Optimizations:
     + High-level (reduce data type, `ok_or` -> `ok_or_else`, laziness, etc.)
 - [The Rust compiler is getting faster](https://blog.mozilla.org/nnethercote/2018/05/17/the-rust-compiler-is-getting-faster/)
@@ -1161,22 +1162,44 @@ Nethercote is top industry expert, need to pay close attention to his posts
   * Just intro to rustc perf GUI
 - [How to speed up the Rust compiler some more in 2018](https://blog.mozilla.org/nnethercote/2018/06/05/how-to-speed-up-the-rust-compiler-some-more-in-2018)
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (15m)
+  * LLVM starts to dominate compile time
+  * Optimizations:
+    + High-level (SmallVec, laziness, change data types, etc.)
+    + Manual `#[inline]` annotations
 - [How to speed up the Rust compiler in 2018: NLL edition](https://blog.mozilla.org/nnethercote/2018/11/06/how-to-speed-up-the-rust-compiler-in-2018-nll-edition/)
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (5m)
+  * Optimizations:
+    + High-level (avoid realloc, change container, etc.)
+    + Force inlining
 - [How to speed up the Rust compiler in 2019](https://blog.mozilla.org/nnethercote/2019/07/17/how-to-speed-up-the-rust-compiler-in-2019/)
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (5m)
+  * Optimizations:
+    + High-level (move rare large state to separate data structure, avoid repeated checks, etc.)
+    + Change `assert!` to `debug_assert!`
+    + Preallocate less aggressively
 - [The Rust compiler is still getting faster](https://blog.mozilla.org/nnethercote/2019/07/25/the-rust-compiler-is-still-getting-faster/)
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (5m)
+  * Just analysis of compiler speed improvements
 - [How to speed up the Rust compiler some more in 2019](https://blog.mozilla.org/nnethercote/2019/10/11/how-to-speed-up-the-rust-compiler-some-more-in-2019/)
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (15m)
+  * Optimizations:
+    + High-level (reduce size of data structures, boxing large results, etc.)
+    + Splitting some function to two variants: hot `#[inline(always)]` and cold `#[inline(never)]` wrapper which calls it
+    + Try to specialize debug impls via
+      - `if cfg!(debug_assertions)`
+      - `#[cfg(debug_assertions)]`
+      - `#[cfg_attr(debug_assertions, inline)]`
+      (no benefit overall)
+    + Avoid `chain` iterator (by manually doing two loops)
 - [How to speed up the Rust compiler one last time in 2019](https://blog.mozilla.org/nnethercote/2019/12/11/how-to-speed-up-the-rust-compiler-one-last-time-in-2019/)
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (5m)
+  * High-level opts
 - [How to speed up the Rust compiler in 2020](https://blog.mozilla.org/nnethercote/2020/04/24/how-to-speed-up-the-rust-compiler-in-2020/)
   * Assignee: yugr
   * Status: in progress
