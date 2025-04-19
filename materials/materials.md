@@ -1202,22 +1202,35 @@ Nethercote is top industry expert, need to pay close attention to his posts
   * High-level opts
 - [How to speed up the Rust compiler in 2020](https://blog.mozilla.org/nnethercote/2020/04/24/how-to-speed-up-the-rust-compiler-in-2020/)
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (20m)
+  * Optimizations:
+    + High-level (do not produce both IRs at same time, specialize function for common case, reusing parser, etc.)
 - [How to speed up the Rust compiler some more in 2020](https://blog.mozilla.org/nnethercote/2020/08/05/how-to-speed-up-the-rust-compiler-some-more-in-2020/)
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (20m)
+  * Optimizations:
+    + High-level (refactor `Iterator` methods to do less function calls, increase initial `Vec` alloc, boxing, etc.)
+    + Extract non-generic part of generic `RawVec::grow`
 - [How to speed up the Rust compiler one last time](https://blog.mozilla.org/nnethercote/2020/09/08/how-to-speed-up-the-rust-compiler-one-last-time/)
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (5m)
+  * Wrap-up and summary of previous work after switch to other tasks at Mozilla
 - [The Rust compiler has gotten faster again](https://nnethercote.github.io/2021/11/12/the-rust-compiler-has-gotten-faster-again.html)
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (0m)
+  * Summary of rustc performance changes w/o any analysis
 - [How to speed up the Rust compiler in 2022](https://nnethercote.github.io/2022/02/25/how-to-speed-up-the-rust-compiler-in-2022.html)
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (20m)
+  * Optimizations:
+    + High-level (do not search empty hashtab, change unlikely `Result` to panic, interning, etc.)
+    + Replace `assert!` w/ `debug_assert!`
 - [How to speed up the Rust compiler in April 2022](https://nnethercote.github.io/2022/04/12/how-to-speed-up-the-rust-compiler-in-april-2022.html)
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (5m)
+  * Optimizations:
+    + High-level (reduce `SmallVec` default size, avoid excessive cloning, [match to table-driven](https://github.com/rust-lang/rust/pull/94776), etc.)
+    + Forced inline
 - [How to speed up the Rust compiler in July 2022](https://nnethercote.github.io/2022/07/20/how-to-speed-up-the-rust-compiler-in-july-2022.html)
   * Assignee: yugr
   * Status: in progress

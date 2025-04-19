@@ -22,6 +22,7 @@ This is the plan of the talk.
   * custom allocators and placement-new
   * ABI
 - (Slow) compile times
+  * A lot of work done by Nethercote
 
 # Is it fair to compare with C++ ?
 
@@ -126,4 +127,10 @@ Rust language also enables new, more aggressive optimizations.
 
 # Conclusions
 
-Ideally need some ballpark numbers here for different classes of programs
+- Ideally need some ballpark numbers here for different classes of programs
+- Also split problems to ones that
+  * may eventually be fixed by compiler, at least in theory
+    + short-term (e.g. loop unswitching in iterators or redundant `memcpy`)
+    + long-term (e.g. de-templatizing)
+  * should be worked around by developers (e.g. bounds checks)
+  * can not be efficiently fixed (e.g. fast math)
