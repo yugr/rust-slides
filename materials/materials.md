@@ -1109,6 +1109,7 @@ pub fn foo(p: Box<S>) {
     + [HN](https://news.ycombinator.com/item?id=21342501)
     + no new links
 - SIMD in zlib-rs: https://tweedegolf.nl/en/blog/153/simd-in-zlib-rs-part-1-autovectorization-and-target-features
+  * Status: backlog
 
 # Stack probing
 
