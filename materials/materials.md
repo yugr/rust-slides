@@ -1245,22 +1245,34 @@ Nethercote is top industry expert, need to pay close attention to his posts
     + Forced inline
 - [How to speed up the Rust compiler in July 2022](https://nnethercote.github.io/2022/07/20/how-to-speed-up-the-rust-compiler-in-july-2022.html)
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (20m)
+  * Optimizations:
+    + High-level (reduce code in derived traits, fast checks, `SmallVec::insert` at end of vector, etc.)
+    + Jemalloc update
 - [How to speed up the Rust compiler in October 2022](https://nnethercote.github.io/2022/10/27/how-to-speed-up-the-rust-compiler-in-october-2022.html)
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (10m)
+  * Optimizations:
+    + High-level (enum shrinkage, replacing containers, etc.)
+    + Bump LLVM version, use LTO and BOLT
 - [How to speed up the Rust compiler in March 2023](https://nnethercote.github.io/2023/03/24/how-to-speed-up-the-rust-compiler-in-march-2023.html)
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (10m)
+  * Optimizations:
+    + Codegen opts (change LLVM IR to satisfy FastISel, larger BBs)
+    + High-level opts (data structure shrinkage, replace `Vec` w/ `ThinVec`)
 - [Back-end parallelism in the Rust compiler](https://nnethercote.github.io/2023/07/11/back-end-parallelism-in-the-rust-compiler.html)
   * Assignee: yugr
-  * Status: in progress
+  * Status: duplicate (zakhar)
 - [How to speed up the Rust compiler: data analysis assistance requested!](https://nnethercote.github.io/2023/07/25/how-to-speed-up-the-rust-compiler-data-analysis-assistance-requested.html)
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (0m)
+  * Just a request for help with building simple cost model for CGU split
 - [How to speed up the Rust compiler: data analysis update](https://nnethercote.github.io/2023/08/01/how-to-speed-up-the-rust-compiler-data-analysis-update.html)
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (0m)
+  * Results from previous analysis were inconclusive
+  * This is another request, this time with more data
 - [How to speed up the Rust compiler in August 2023](https://nnethercote.github.io/2023/08/25/how-to-speed-up-the-rust-compiler-in-august-2023.html)
   * Assignee: yugr
   * Status: in progress
