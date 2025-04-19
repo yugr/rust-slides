@@ -52,7 +52,9 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Assignee: yugr
   * Status: DONE (15m)
   * Main idea: studies performance of Rust data structures vs. some custom C equivalents (irrelevant)
-  * More materials: no performance-related materials found in blog
+  * More materials:
+    + [Reddit](https://www.reddit.com/r/rust/comments/9jsqyg/the_relative_performance_of_c_and_rust/)
+    + no performance-related materials found in blog
 - Speed of Rust vs C: https://kornel.ski/rust-c-speed
   * Assignee: yugr
   * Status: DONE (50m)
@@ -345,6 +347,11 @@ On the other hand, once all materials are analyzed we won't care about this file
   * More materials:
     + [Reddit](https://www.reddit.com/r/rust/comments/1jz504y/is_rust_faster_than_fortran_and_c_a_case_study/)
     + no new links
+- Rust now, on average, outperforms C++ in The Benchmarks Game: https://www.reddit.com/r/rust/comments/akluxx/rust_now_on_average_outperforms_c_in_the/
+  * Status: backlog
+- Rust 2019: Beat C++: https://www.reddit.com/r/rust/comments/acjcbp/rust_2019_beat_c/
+  * Status: backlog
+  * Important comment by nikic
 
 # Expression templates
 
@@ -609,6 +616,11 @@ pub fn foo(p: Box<S>) {
   * It's not really clear what OP is asking about
   * Basically replies are the usual memcpy not guaranteed to be removed (best effort)
   * More materials: none
+- rust ref vs clone performance for POD: https://www.reddit.com/r/rust/comments/1ilt0d3/rust_ref_vs_clone_performance_for_pod/
+  * Status: backlog
+  * Be sure to check comments
+- Performance Costs/Benefits of Moving vs referencing? https://www.reddit.com/r/rust/comments/10vlec0/performance_costsbenefits_of_moving_vs_referencing/
+  * Status: backlog
 
 # Iterators
 
@@ -1368,8 +1380,22 @@ Nethercote is top industry expert, need to pay close attention to his posts
 - Why can deriving Copy pessimize performance by 60%? https://www.reddit.com/r/rust/comments/1h8dj64/why_can_deriving_copy_pessimize_performance_by_60/
   * Status: backlog
 - Porting EBU R128 audio loudness analysis from C to Rust: https://coaxion.net/blog/2020/09/porting-ebu-r128-audio-loudness-analysis-from-c-to-rust-porting-details/
+  * Status: backlog
   * Was part 3 ever written ?
 - Safe and efficient bidirectional trees: https://www.reddit.com/r/rust/comments/55ns2m/safe_and_efficient_bidirectional_trees/
+  * Status: backlog
+- Pursuit of Performance on Building a JavaScript Compiler: https://oxc.rs/docs/learn/performance.html
+  * Status: backlog
+  * More materials:
+    + [Reddit](https://www.reddit.com/r/rust/comments/1fuj0qg/rust_performance_tricks_from_a_javascript_compiler/)
+- Cheap tricks for high-performance Rust: https://deterministic.space/high-performance-rust.html
+  * Status: backlog
+  * More materials:
+    + [Reddit](https://www.reddit.com/r/rust/comments/fdbszu/cheap_tricks_for_highperformance_rust/)
+- On Maximizing Your Rust Code's Performance: https://jbecker.dev/research/on-writing-performant-rust
+  * Status: backlog
+  * More materials:
+    + [Reddit](https://www.reddit.com/r/rust/comments/14y2kej/maximizing_your_rust_codes_performance/)
 
 # Panics
 
@@ -1416,6 +1442,8 @@ Nethercote is top industry expert, need to pay close attention to his posts
 - Panics in rust consuming some extra resources. Can we disable it? https://www.reddit.com/r/rust/comments/12qhynj/panics_in_rust_consuming_some_extra_resources_can/
   * Status: backlog
 - RFC 1513: Less unwinding: https://github.com/rust-lang/rfcs/blob/master/text/1513-less-unwinding.md
+  * Status: backlog
+- Is Rust leaving performance on the table by eliminating exceptions? https://www.reddit.com/r/rust/comments/k5wk7r/is_rust_leaving_performance_on_the_table_by/
   * Status: backlog
 
 # Unsafe
@@ -1543,4 +1571,6 @@ Nethercote is top industry expert, need to pay close attention to his posts
 - Why you should, actually, rewrite some of it in Rust: https://news.ycombinator.com/item?id=14753201
   * Status: backlog
 - Rust должен умереть, МГУ сделал замеры: https://habr.com/ru/articles/598219/
+  * Status: backlog
+-  Rust and Scientific/High-Performance Computing: https://www.reddit.com/r/rust/comments/smdl3m/rust_and_scientifichighperformance_computing/
   * Status: backlog

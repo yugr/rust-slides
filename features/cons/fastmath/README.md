@@ -9,6 +9,8 @@ but also [other domains](https://github.com/rust-lang/rust/issues/21690#issuecom
 > on stable hinders the use of Rust in some key algorithms for computer vision,
 > robotics and augmented reality applications
 
+Note that Fortran effectively has fast-math (or at least `-fassociative-math`) by default.
+
 Rust developers have [clearly rejected](https://github.com/rust-lang/rust/issues/21690#issuecomment-1589427278)
 global fast math flag.
 
