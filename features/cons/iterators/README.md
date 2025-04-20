@@ -12,7 +12,8 @@ So in _some_ cases iterators are faster than indexing but that's not always the 
 > the language making most use of flat_map (they call it bind),
 > has a hard time optimizing them all away. 
 (from [here](https://www.reddit.com/r/rust/comments/yaft60/zerocost_iterator_abstractionsnot_so_zerocost/)).
-One example of this is `collect` which may preallocate result if size is known.
+One example of this is `collect` which may preallocate result if size is known
+(via optional `Iterator::size_hint` method).
 
 Iterators are _much_ slower in debug.
 
