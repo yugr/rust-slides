@@ -352,6 +352,11 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Rust 2019: Beat C++: https://www.reddit.com/r/rust/comments/acjcbp/rust_2019_beat_c/
   * Status: backlog
   * Important comment by nikic
+- zlib-rs is faster than C: https://trifectatech.org/blog/zlib-rs-is-faster-than-c/
+  * More materials:
+    + [Tweedegolf](https://tweedegolf.nl/en/blog/149/zlib-rs-is-faster-than-c)
+    + [Reddit](https://www.reddit.com/r/rust/comments/1ixt1ei/zlibrs_is_faster_than_c_trifecta_tech_foundation/?rdt=48389)
+    + [HN](https://news.ycombinator.com/item?id=43381512)
 
 # Expression templates
 
@@ -1109,7 +1114,15 @@ pub fn foo(p: Box<S>) {
     + [HN](https://news.ycombinator.com/item?id=21342501)
     + no new links
 - SIMD in zlib-rs: https://tweedegolf.nl/en/blog/153/simd-in-zlib-rs-part-1-autovectorization-and-target-features
-  * Status: backlog
+  * Assignee: yugr
+  * Status: DONE (10m)
+  * A ver y recent article
+  * General overview of autovec:
+    + start with simple loop (based on iterators, autovectorizes)
+    + get rid of epilig loop via `exact_chunks` iterator
+    + then manually multiversion (via `target_feature` and const template param) for AVX2 vector size (dispatched via wrapper)
+  * More materials:
+    + Added "zlib-rs is faster than C" post
 
 # Stack probing
 
@@ -1276,13 +1289,45 @@ Nethercote is top industry expert, need to pay close attention to his posts
   * This is another request, this time with more data
 - [How to speed up the Rust compiler in August 2023](https://nnethercote.github.io/2023/08/25/how-to-speed-up-the-rust-compiler-in-august-2023.html)
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (30m)
+  * Explains why Rustc speed improvements are small
+  * Optimizations:
+    + High-level (fast hash funcs, fix buf size, mark derived hash as inline, caching)
+    + CGU tuning
+    + LLVM bump
+  * More materials:
+    + Several good posts at kobzol.github.io (post about opt remarks already added)
+    + [Talk at RustNL 2023](https://www.youtube.com/watch?v=q2vJ8Faundw)
 - [How to speed up the Rust compiler in March 2024](https://nnethercote.github.io/2024/03/06/how-to-speed-up-the-rust-compiler-in-march-2024.html)
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (5m)
+  * Profiles are now flat
+  * Optimizations:
+    + High-level (cache, inline fmt())
+    + Rustc now built w/ single CGU
+    + Llvm bump
 - [How to speed up the Rust compiler in March 2025](https://nnethercote.github.io/2025/03/19/how-to-speed-up-the-rust-compiler-in-march-2025.html)
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (10m)
+  * Optimizations:
+    + LLD and PGU used by default to build rustc
+    + LLVM bump
+    + Use protected visibility to speedup startup
+    + Faster hardware feature checking
+  * More materials: added visibility section
+
+# Visibility
+
+Is Rustc using non-default ELF visibility by default ?
+
+- -Z default-visibility option: https://github.com/rust-lang/compiler-team/issues/782
+  * Status: backlog
+- Use protected visibility by default on ELF platforms: https://github.com/rust-lang/rust/issues/105518
+  * Status: backlog
+- Rust dylib rabbit holes: https://davidlattimore.github.io/posts/2024/08/27/rust-dylib-rabbit-holes.html
+  * Status: backlog
+- Expose default_hidden_visibility as a rustc command line option: https://github.com/rust-lang/compiler-team/issues/656
+  * Status: backlog
 
 # Manual optimizations
 

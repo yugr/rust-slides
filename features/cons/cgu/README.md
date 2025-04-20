@@ -1,6 +1,7 @@
 Rust uses the concept of codegen units (CGUs) to parallelize compilation of crates and significantly reduce build times (16-32 cgus is the default value). However, splitting the program into several independent compilation units prevents some interprocedural optimizations:
 
 CGUs can be disabled (via `-C codegen-units=1`) but [recommended fix](https://llvm.org/devmtg/2021-02-28/slides/Patrick-rust-llvm.pdf) is to use ThinLTO.
+E.g. Rustc is compiled with [single CGU](https://nnethercote.github.io/2024/03/06/how-to-speed-up-the-rust-compiler-in-march-2024.html).
 
 This may not be a huge downside compared to C++ because Rust TU's are generally much larger (how much ?).
 
