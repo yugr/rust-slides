@@ -1318,16 +1318,44 @@ Nethercote is top industry expert, need to pay close attention to his posts
 
 # Visibility
 
-Is Rustc using non-default ELF visibility by default ?
+Note that currently Rustc is NOT using non-default (protected) ELF visibility by default
+(no pun intended). Can be checked via
+```
+for t in `rustc --print target-list`; do
+  echo "### $t"
+  rustc +nightly -Z unstable-options --target=$t --print target-spec-json | grep protect
+done
+```
 
-- -Z default-visibility option: https://github.com/rust-lang/compiler-team/issues/782
-  * Status: backlog
-- Use protected visibility by default on ELF platforms: https://github.com/rust-lang/rust/issues/105518
-  * Status: backlog
-- Rust dylib rabbit holes: https://davidlattimore.github.io/posts/2024/08/27/rust-dylib-rabbit-holes.html
-  * Status: backlog
 - Expose default_hidden_visibility as a rustc command line option: https://github.com/rust-lang/compiler-team/issues/656
-  * Status: backlog
+  * Assignee: yugr
+  * Status: DONE (5m)
+  * This is where it all started
+  * Added flag is analog of `-fvisibility=hidden`
+- Use protected visibility by default on ELF platforms: https://github.com/rust-lang/rust/issues/105518
+  * Assignee: yugr
+  * Status: DONE (1h)
+  * This first proposed to change default visibility to protected
+  * It was merged in
+    + [initial attempt](https://github.com/bjorn3/rust/commit/0a413310130d61e362cc1ec3dd956e6f8b128725)
+      - set `protected` for all Rust symbols (if `hidden` not selected via cmdline flag)
+      - failed rustc bootstrap due to issue in GNU ld
+    + [#130005](https://github.com/rust-lang/rust/pull/130005)
+      - this PR uses ELF-default visibility for C symbols (`no_mangle`?) and default visibility for Rust symbols
+      - default visibility can be selected (in order of prio) via cmdline flag, target default, interposable
+    + [#131634](https://github.com/rust-lang/rust/pull/131634)
+      - set `protected` default visility in rustc bootstrap if built with LLD
+- Rust dylib rabbit holes: https://davidlattimore.github.io/posts/2024/08/27/rust-dylib-rabbit-holes.html
+  * Assignee: yugr
+  * Status: DONE (20m)
+  * Summary of discussion
+- -Z default-visibility option: https://github.com/rust-lang/compiler-team/issues/782
+  * Assignee: yugr
+  * Status: DONE (10m)
+  * This discussion started as part of work on 105518
+  * Two proposals here:
+    + Extend visibility flag to cover any visibility
+    + Make `protected` the default visibility
 
 # Manual optimizations
 
