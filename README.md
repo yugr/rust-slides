@@ -13,7 +13,7 @@ In this talk we
 
 # Conference
 
-- C++Russia
+- [C++Russia](https://cppconf.ru/en/)
   * Spring 2026
 - [RustCon](https://rustcon.ru/)
   * Dec 05 2025
@@ -24,3 +24,13 @@ In this talk we
   * Need "C++" to be approved to C++Russia...
 - Rust performance: pros and cons
 - Rust low-level performance
+
+# Contents
+
+- [Reading materials](materials)
+  * Various posts and papers which served as base for slides
+- [Rust performance features](features)
+  * Pros and cons of language from performance standpoint
+- [Benchmarks](benchmarks)
+  * Projects used for Rust benchmarking
+- [Script of the planned talk](talk.md)
