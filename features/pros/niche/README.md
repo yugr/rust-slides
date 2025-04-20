@@ -5,6 +5,9 @@ Rust may rearrange struct fields to minimize padding.
 Rust may reuse empty bits for enum discriminator
 (transparent pointer tagging vs fat pointers).
 So `Option` can be optimized better than `std::optional`.
+Two types of optimization:
+  - Null pointer optimization
+  - Niche filling
 
 Unfortunately `Option<i32>` can't be optimized by compiler
 and we can't tell convey this info to it in situations
