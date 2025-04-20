@@ -135,3 +135,5 @@ Rust language also enables new, more aggressive optimizations.
     + long-term (e.g. de-templatizing)
   * should be worked around by developers (e.g. bounds checks)
   * can not be efficiently fixed (e.g. fast math)
+- It's possible to write 100% equivalent Rust/C++ code;
+  but Rust generally makes saner defaults in idiomatic code
