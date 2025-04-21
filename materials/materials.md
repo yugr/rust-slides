@@ -373,10 +373,12 @@ On the other hand, once all materials are analyzed we won't care about this file
     + [Reddit](https://www.reddit.com/r/rust/comments/1ixt1ei/zlibrs_is_faster_than_c_trifecta_tech_foundation/?rdt=48389)
     + [HN](https://news.ycombinator.com/item?id=43381512)
 - Making Rust faster than C: https://trifectatech.org/initiatives/codegen/
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
   * Mentioned [here](https://trifectatech.org/blog/zlib-rs-is-faster-than-c/) that C switch-cases are much faster
 - Improve state machine codegen: https://rust-lang.github.io/rust-project-goals/2025h1/improve-rustc-codegen.html
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 
 # Expression templates
 
