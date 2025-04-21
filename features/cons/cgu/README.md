@@ -7,7 +7,9 @@ This may not be a huge downside compared to C++ because Rust TU's are generally 
 
 # Known performance hits
 
-- Inlining requires explicit annotation (`#[inline]`) and LTO (but is still not perfect with these solutions) (https://github.com/wasmi-labs/wasmi/issues/339#issuecomment-1023034031)
+- Inlining requires explicit annotation (`#[inline]`) and LTO but is still not perfect with these solutions:
+  * https://github.com/wasmi-labs/wasmi/issues/339#issuecomment-1023034031
+  * https://github.com/rust-lang/rust/issues/47745
 - Dead code elimination is unable to detect dead loops if they are split over multiple CGUs (https://github.com/rust-lang/rust/issues/57235#issuecomment-450673756)
 - CGUs cause vtable duplication (but vtables in different CGUs are not always equal) which causes some pointer comparisons to be unpredictable (https://github.com/rust-lang/rust/issues/46139)
   * This may be a problem for optimizer because different copies of vtables will block devirtualization; hopefully it'll be fixed in [#68262](https://github.com/rust-lang/rust/issues/68262)

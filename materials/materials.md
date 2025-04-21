@@ -9,6 +9,8 @@ On the other hand, once all materials are analyzed we won't care about this file
 - TODO(gh-8) add more interesting materials from
   * https://github.com/rust-lang/compiler-team
 - TODO(gh-10) add more interesting materials from RFCs
+- TODO(gh-15) survey project goals for perf-related stuff
+  * https://rust-lang.github.io/rust-project-goals
 
 # Coding guidelines
 
@@ -348,15 +350,33 @@ On the other hand, once all materials are analyzed we won't care about this file
     + [Reddit](https://www.reddit.com/r/rust/comments/1jz504y/is_rust_faster_than_fortran_and_c_a_case_study/)
     + no new links
 - Rust now, on average, outperforms C++ in The Benchmarks Game: https://www.reddit.com/r/rust/comments/akluxx/rust_now_on_average_outperforms_c_in_the/
-  * Status: backlog
+  * Assignee: yugr
+  * Status: DONE (10m)
+  * A general discussions of benchmarks game, no relevant info
+  * More materials: none
 - Rust 2019: Beat C++: https://www.reddit.com/r/rust/comments/acjcbp/rust_2019_beat_c/
-  * Status: backlog
-  * Important comment by nikic
+  * Assignee: yugr
+  * Status: DONE (20m)
+  * Problem: OP wonders how to write equally performant code in Rust
+  * Root cause: need to enable autovec
+  * Solution: `exact_chunks`, unchecked ops, use `&[T]` instead of `&Vec<T>`
+  * More materials: no new links
 - zlib-rs is faster than C: https://trifectatech.org/blog/zlib-rs-is-faster-than-c/
+  * Assignee: yugr
+  * Status: in progress (20m)
+  * Optimizations:
+    + multiversioning is important feature for autovec but has to be done manually now
+    + manually rearrange fields according to frequency of access (for better cache locality)
+    * perf issue in Rust: slow switch-cases
   * More materials:
-    + [Tweedegolf](https://tweedegolf.nl/en/blog/149/zlib-rs-is-faster-than-c)
+    + [Tweedegolf](https://tweedegolf.nl/en/blog/149/zlib-rs-is-faster-than-c) - dup of Trifecta blogpost
     + [Reddit](https://www.reddit.com/r/rust/comments/1ixt1ei/zlibrs_is_faster_than_c_trifecta_tech_foundation/?rdt=48389)
     + [HN](https://news.ycombinator.com/item?id=43381512)
+- Making Rust faster than C: https://trifectatech.org/initiatives/codegen/
+  * Status: backlog
+  * Mentioned [here](https://trifectatech.org/blog/zlib-rs-is-faster-than-c/) that C switch-cases are much faster
+- Improve state machine codegen: https://rust-lang.github.io/rust-project-goals/2025h1/improve-rustc-codegen.html
+  * Status: backlog
 
 # Expression templates
 

@@ -5,8 +5,11 @@ This is the plan of the talk.
 - Non-idiomatic code (SIMD, intrinsics, inline asm, `wrapping_add`, too many `unsafe`s, `restrict` in C++, etc.)
   * would like to compare "standard" Rust and C++
   * Benchmarks Game uses wildly non-canonical code, to everyone's dismay
-  * "It makes little sense to compare Rust vs C with respect to performance, because you can write the exact equivalent of C code in Rust and get the same performance" (from [here](https://users.rust-lang.org/t/a-good-performance-comparision-c-and-rust/5901/4))
+  * "It makes little sense to compare Rust vs C with respect to performance, because you can write the exact equivalent of C code in Rust and get the same performance"
+    (from [here](https://users.rust-lang.org/t/a-good-performance-comparision-c-and-rust/5901/4))
   * "When you compare languages like C, C++ and Rust, which are by-design on equal footing, you can essentially only compare how easy it is to write performant code or how performant idiomatic code is. Modulo optimizer deficiencies, if you implement the exact same datastructures and same algorithms in these languages, they will perform the same." (from [here](https://www.reddit.com/r/rust/comments/9jsqyg/comment/e6ufwcm/))
+  * "If C can be faster than C I don't see why Rust can't be faster than C"
+    (from [here](https://www.reddit.com/r/rust/comments/1ixt1ei/comment/meow7rc/))
 - Just comparing few random programs
   * not enough to draw conclusions
 - Just looking at asm code

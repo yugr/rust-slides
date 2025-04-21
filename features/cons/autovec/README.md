@@ -24,3 +24,7 @@ it's unstable across releases:
 > have had terrible ramifications for codegen
 
 On a positive side, it's portable (to some extent).
+
+Rust also does not yet support multiversioning.
+There are [proposals](https://rust-lang.github.io/rust-project-goals/2025h1/simd-multiversioning.html)
+but currently people have to do it [by hand](https://tweedegolf.nl/en/blog/153/simd-in-zlib-rs-part-1-autovectorization-and-target-features).
