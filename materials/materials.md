@@ -77,10 +77,6 @@ On the other hand, once all materials are analyzed we won't care about this file
     + [HN](https://news.ycombinator.com/item?id=26443768)
     + [Another HN](https://news.ycombinator.com/item?id=39476941)
     + no new links found (hoorah !)
-- An Optimization That’s Impossible in Rust! https://tunglevo.com/note/an-optimization-thats-impossible-in-rust/
-  * Status: backlog
-  * Translation: https://habr.com/ru/companies/beget/articles/842868/
-  * Comments: https://www.reddit.com/r/rust/comments/1f87siw/an_optimization_thats_impossible_in_rust/
 - Rust превосходит по производительности C++ согласно результатам Benchmarks Game: https://habr.com/ru/articles/480608/
   * Assignee: yugr
   * Status: DONE (15m)
@@ -1015,8 +1011,11 @@ pub fn foo(p: Box<S>) {
   * No new info
 - Rust staticlibs and optimizing for size: https://internals.rust-lang.org/t/rust-staticlibs-and-optimizing-for-size/5746
   * Assignee: yugr
-  * Status: in progress
-  * This mentions that Rust compiles with `-ffunction-sections -Wl,--gc-sections` - need to chec this !
+  * Status: DONE (20m)
+  * Rust compiles with `-ffunction-sections -Wl,--gc-sections
+  * This is not always working as well as LTO because Rust may export unnecessary symbols
+    + post is old, not clear if this problem is still relevant ?
+    + i wasn't able to find relevant discussions...
 
 # Data structures performance
 
@@ -1028,6 +1027,10 @@ pub fn foo(p: Box<S>) {
   * https://towardsdatascience.com/nine-rules-for-creating-fast-safe-and-compatible-data-structures-in-rust-part-2-da5e6961a0b7
 - https://dev.to/arunanshub/self-referential-structs-in-rust-33cm
   * Status: backlog
+- An Optimization That’s Impossible in Rust! https://tunglevo.com/note/an-optimization-thats-impossible-in-rust/
+  * Status: backlog
+  * Translation: https://habr.com/ru/companies/beget/articles/842868/
+  * Comments: https://www.reddit.com/r/rust/comments/1f87siw/an_optimization_thats_impossible_in_rust/
 
 # Fast math
 
@@ -1633,6 +1636,10 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
 - Is Rust leaving performance on the table by eliminating exceptions? https://www.reddit.com/r/rust/comments/k5wk7r/is_rust_leaving_performance_on_the_table_by/
   * Status: backlog
 - How to Panic in Rust: https://www.ralfj.de/blog/2019/11/25/how-to-panic-in-rust.html
+  * Status: backlog
+- Сompiler can't remove panic locations if they are not used in panic handler: https://github.com/rust-lang/rust/issues/129330
+  * Status: backlog
+  * This gives some info on `panic_immediate_abort`
 
 # Unsafe
 

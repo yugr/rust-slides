@@ -38,6 +38,10 @@ As a workaround, developers need to use manual `assert!`'s (or `core::hint::unre
 
 # TODO
 
+What is `panic_immediate_abort` ?
+
+Does `panic=abort` remove landing pads and libunwind ?
+
 Does `panic=abort` avoid all overheads ? I couldn't get it to do anything in [this](https://news.ycombinator.com/item?id=30867188) example.
 
 Check if optimizations from https://www.youtube.com/watch?v=ItemByR4PRg (LICM, ADCE, etc.) are also disabled for Rust ?
