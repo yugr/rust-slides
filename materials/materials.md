@@ -689,11 +689,16 @@ pub fn foo(p: Box<S>) {
   * More materials: none
 - rust ref vs clone performance for POD: https://www.reddit.com/r/rust/comments/1ilt0d3/rust_ref_vs_clone_performance_for_pod/
   * Assignee: yugr
-  * Status: in progress
-  * Be sure to check comments
+  * Status: DONE (5m)
+  * OP asks whether he should prefer pass by copy or by reference
+  * No good answers
+  * More materials: no links
 - Performance Costs/Benefits of Moving vs referencing? https://www.reddit.com/r/rust/comments/10vlec0/performance_costsbenefits_of_moving_vs_referencing/
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (5m)
+  * OP asks whether he should prefer pass by copy or by reference
+  * No good answers
+  * More materials: no links
 
 # Iterators
 
