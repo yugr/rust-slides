@@ -2,7 +2,8 @@ Rust performs stack probing i.e.g verifying that we do not touch stack guard pag
 This incurs certain runtime overhead (function call, loop, touching memory).
 
 Stack probing is analog of GCC's `-fstack-check` (or `-fstack-clash-protection` ?).
-Compiler emits special code to touch each allocated page in prologue to detect stack overflow.
+Compiler emits special code to touch each allocated page in prologue to detect stack overflow
+(by reaching guard page).
 A very good explanation of [history of this feature in Rust](https://users.rust-lang.org/t/rust-guarantees-no-segfaults-with-only-safe-code-but-it-segfaults-stack-overflow/4305/2)
 is here
 

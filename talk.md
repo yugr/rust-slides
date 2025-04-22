@@ -110,6 +110,7 @@ and some are consequences (e.g. disabled autovec).
 # Rust-specific optimization opportunities
 
 Rust language also enables new, more aggressive optimizations.
+Rust _can_ be faster than C !
 
 - Move by default (https://www.thecodedmessage.com/posts/cpp-move/ and https://mcyoung.xyz/2021/04/26/move-ctors/)
   * also `Vec` is moved on `resize` at once, rather than by element as in STL

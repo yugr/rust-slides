@@ -44,3 +44,5 @@ Check if optimizations from https://www.youtube.com/watch?v=ItemByR4PRg (LICM, A
 
 Check if C++ also has same overhead due to exceptions: https://www.rottedfrog.co.uk/?p=24
   - If not, we need a slide on this
+
+Measure increase of BTB and I$ misses PMUs vs panics disabled

@@ -363,15 +363,21 @@ On the other hand, once all materials are analyzed we won't care about this file
   * More materials: no new links
 - zlib-rs is faster than C: https://trifectatech.org/blog/zlib-rs-is-faster-than-c/
   * Assignee: yugr
-  * Status: in progress (20m)
+  * Status: DONE (50m)
   * Optimizations:
     + multiversioning is important feature for autovec but has to be done manually now
     + manually rearrange fields according to frequency of access (for better cache locality)
-    * perf issue in Rust: slow switch-cases
+    + perf issue in Rust: slow switch-cases
+  * Extensive iscussion of unsafe on HN:
+    + even though zlib-rs uses unsafe, it's very localized
+    + general critics of Rust being unable to implement basic data structs w/o unsafe (double linked list)
+    + unsafe still has many checks one e.g. borrow checker
+    + correctness of unsafe block can't be verified in isolation, via local reasoning (so unsafe behavior is not localized in unsafe blocks)
   * More materials:
     + [Tweedegolf](https://tweedegolf.nl/en/blog/149/zlib-rs-is-faster-than-c) - dup of Trifecta blogpost
     + [Reddit](https://www.reddit.com/r/rust/comments/1ixt1ei/zlibrs_is_faster_than_c_trifecta_tech_foundation/?rdt=48389)
     + [HN](https://news.ycombinator.com/item?id=43381512)
+    + added some links
 - Making Rust faster than C: https://trifectatech.org/initiatives/codegen/
   * Assignee: yugr
   * Status: in progress
@@ -1553,6 +1559,7 @@ done
   * Status: backlog
 - Is Rust leaving performance on the table by eliminating exceptions? https://www.reddit.com/r/rust/comments/k5wk7r/is_rust_leaving_performance_on_the_table_by/
   * Status: backlog
+- How to Panic in Rust: https://www.ralfj.de/blog/2019/11/25/how-to-panic-in-rust.html
 
 # Unsafe
 
@@ -1568,6 +1575,8 @@ done
 - Unsafe Rust is Harder Than C: https://www.reddit.com/r/rust/comments/1gbqy6c/unsafe_rust_is_harder_than_c/
   * Status: backlog
   * Russian translation: https://habr.com/ru/companies/ruvds/articles/858246/
+  * More materials:
+    + [Reddit](https://news.ycombinator.com/item?id=41944121)
 
 # Code size
 
