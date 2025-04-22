@@ -20,8 +20,7 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Just general overview of compiler internals (infra, type checking, etc.)
   * No info about performance
 - Rust design patterns: https://softwarepatternslexicon.com/patterns-rust/
-  * Assignee: yugr
-  * Status: in progres
+  * Status: backlog
   * No previously unknown perf hints (e.g. slices vs containers, etc.)
   * More materials: no new links
 - Rust Performance Book (by Nethercote): https://nnethercote.github.io/perf-book/
@@ -407,7 +406,16 @@ On the other hand, once all materials are analyzed we won't care about this file
     + [Pre-RFC Zulip discussion](https://rust-lang.zulipchat.com/#narrow/channel/213817-t-lang/topic/Fallthrough.20in.20Match.20Statements/near/474669655)
 - Better rust codegen @ unconf 2024: https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (30m)
+  * Several perf-related proposals:
+    + `loop match`
+    + multiversioning for SIMD
+    + MIR opts (disabled for large funs, no funding atm)
+    + inefficient default symbol visibility (no details)
+    + inefficient TLS model
+  * More materials:
+    + added links
+    + failed to locate info on symbol visibility issue...
 
 # Expression templates
 
@@ -998,6 +1006,9 @@ pub fn foo(p: Box<S>) {
   * Status: DONE (5m)
   * Just general discussion of `#[inline]` enabling inlining across crates (mini-LTO)
   * No new info
+- Rust staticlibs and optimizing for size: https://internals.rust-lang.org/t/rust-staticlibs-and-optimizing-for-size/5746
+  * Status: backlog
+  * This mentions that Rust compiles with `-ffunction-sections -Wl,--gc-sections` - need to chec this !
 
 # Data structures performance
 
@@ -1416,6 +1427,10 @@ done
     + Make `protected` the default visibility
 
 # Thread-locals
+
+From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen):
+> Thread-local storage (TLS) model is very pessimistic by default.
+> Makes rayon much slower (tls_get_addr very high in profiles).
 
 - Rust thread_local bad performance? https://users.rust-lang.org/t/rust-thread-local-bad-performance/4385
   * Status: backlog
