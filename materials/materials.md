@@ -1415,6 +1415,21 @@ done
     + Extend visibility flag to cover any visibility
     + Make `protected` the default visibility
 
+# Thread-locals
+
+- Rust thread_local bad performance? https://users.rust-lang.org/t/rust-thread-local-bad-performance/4385
+  * Status: backlog
+- More efficient alternative to thread_local! and lazy_static? https://stackoverflow.com/questions/63433547/more-efficient-alternative-to-thread-local-and-lazy-static
+  * Status: backlog
+- Rust `thread_local!`s are surprisingly expensive: https://swatinem.de/blog/slow-thread-local/
+  * Status: backlog
+- Fast Thread Locals In Rust: https://matklad.github.io/2020/10/03/fast-thread-locals-in-rust.html
+  * Status: backlog
+  * More materials:
+    + [Reddit](https://www.reddit.com/r/rust/comments/j4iy50/blog_post_fast_thread_locals_in_rust/)
+- Request for prioritization: fast thread locals: https://internals.rust-lang.org/t/request-for-prioritization-fast-thread-locals/13982
+  * Status: backlog
+
 # Manual optimizations
 
 - http://troubles.md/abusing-rustc/
