@@ -106,6 +106,9 @@ and some are consequences (e.g. disabled autovec).
 - Forced variable initializations (especially large arrays)
   * https://blog.logrocket.com/understanding-inheritance-other-limitations-rust/
 - Code size
+- No gotos, computed or otherwise
+  * This is a real problem for writing efficient state machines
+    (see [this](https://github.com/rust-lang/rfcs/pull/3720) RFC proposal)
 
 # Rust-specific optimization opportunities
 
@@ -141,3 +144,5 @@ Rust _can_ be faster than C !
   * can not be efficiently fixed (e.g. fast math)
 - It's possible to write 100% equivalent Rust/C++ code;
   but Rust generally makes saner defaults in idiomatic code
+
+Caveat for whoever watches this in future: contents may easily get outdated

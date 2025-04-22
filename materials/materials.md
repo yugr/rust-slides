@@ -380,22 +380,52 @@ On the other hand, once all materials are analyzed we won't care about this file
     + added some links
 - Making Rust faster than C: https://trifectatech.org/initiatives/codegen/
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (10m)
   * Mentioned [here](https://trifectatech.org/blog/zlib-rs-is-faster-than-c/) that C switch-cases are much faster
+  * Describes work on state machine codegen improvements:
+    + idea [taken](https://github.com/ziglang/zig/pull/21257) from Zig language
+  * Plans to make more perf improvements (w/o details)
+  * More materials: added links
 - Improve state machine codegen: https://rust-lang.github.io/rust-project-goals/2025h1/improve-rustc-codegen.html
+  * Assignee: yugr
+  * Status: DONE (50m)
+  * Crux of the problem:
+    + Current state machines are `loop` + `match`
+    + They suffer from mispredicted branch (at start of `match`)
+  * New language construct `loop match` with `continue` to arms of match to implement state machines
+    + Basically a "controlled" goto
+    + "irreducible control flow primitive"
+    + improves readability and allows better codegen (up to 10-20% improvement)
+  * Pushback from maintainers against initial version due to alternative proposals (TCO) and ability to implement this as MIR optimization or macro
+    + Fixed by author
+  * Computed goto can be added in future
+  * There seems to be duplication with existing LLVM optimization `-C llvm-args=-enable-dfa-jump-thread`
+  * More materials:
+    + [RFC](https://github.com/rust-lang/rfcs/pull/3720)
+    + [Draft impl](https://github.com/trifectatechfoundation/rust/tree/labeled-match)
+    + [Work plan](https://trifectatech.org/initiatives/workplans/codegen/)
+    + [Pre-RFC Zulip discussion](https://rust-lang.zulipchat.com/#narrow/channel/213817-t-lang/topic/Fallthrough.20in.20Match.20Statements/near/474669655)
+- Better rust codegen @ unconf 2024: https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen
   * Assignee: yugr
   * Status: in progress
 
 # Expression templates
 
+ET's is an important patern for writing linear algebra code in C++. Can it be used in Rust ?
+  - Yes !
+
 - Expression templates: https://en.wikipedia.org/wiki/Expression_templates
-  * Status: backlog
-  * This is a foundation block of C++ linear algebra packages like Eigen
-  * Rust does not support such idioms (and it's considered a big flaw)
+  * Status: DONE (15m)
+  * Expression templates are a foundation block of C++ linear algebra packages (like Eigen)
+  * Allow to avoid generating intermediate results and codegen loop only at end of expression
+  * More materials:
+    + Seems to be [entirely possible](https://www.reddit.com/r/rust/comments/xidgcq/a_rust_linear_algebra_library_based_on_expression/)
+      to implement in Rust
 - Expression Templates in Rust? https://www.reddit.com/r/rust/comments/1f0hi5k/expression_templates_in_rust
-  * Status: backlog
-- Expression templates in Eigen: https://eigen.tuxfamily.org/index.php?title=Expression_templates
-  * Status: backlog
+  * Status: DONE (10m)
+  * Nothing prevents usage of Expression Template pattern in Rust
+  * Rust iterator combinators are implemented using similar pattern
+  * More materials: no new links
 
 # Overflow checks
 
