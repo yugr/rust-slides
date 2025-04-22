@@ -688,10 +688,12 @@ pub fn foo(p: Box<S>) {
   * Basically replies are the usual memcpy not guaranteed to be removed (best effort)
   * More materials: none
 - rust ref vs clone performance for POD: https://www.reddit.com/r/rust/comments/1ilt0d3/rust_ref_vs_clone_performance_for_pod/
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
   * Be sure to check comments
 - Performance Costs/Benefits of Moving vs referencing? https://www.reddit.com/r/rust/comments/10vlec0/performance_costsbenefits_of_moving_vs_referencing/
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 
 # Iterators
 
@@ -1007,7 +1009,8 @@ pub fn foo(p: Box<S>) {
   * Just general discussion of `#[inline]` enabling inlining across crates (mini-LTO)
   * No new info
 - Rust staticlibs and optimizing for size: https://internals.rust-lang.org/t/rust-staticlibs-and-optimizing-for-size/5746
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
   * This mentions that Rust compiles with `-ffunction-sections -Wl,--gc-sections` - need to chec this !
 
 # Data structures performance
@@ -1433,17 +1436,22 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
 > Makes rayon much slower (tls_get_addr very high in profiles).
 
 - Rust thread_local bad performance? https://users.rust-lang.org/t/rust-thread-local-bad-performance/4385
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - More efficient alternative to thread_local! and lazy_static? https://stackoverflow.com/questions/63433547/more-efficient-alternative-to-thread-local-and-lazy-static
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - Rust `thread_local!`s are surprisingly expensive: https://swatinem.de/blog/slow-thread-local/
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - Fast Thread Locals In Rust: https://matklad.github.io/2020/10/03/fast-thread-locals-in-rust.html
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
   * More materials:
     + [Reddit](https://www.reddit.com/r/rust/comments/j4iy50/blog_post_fast_thread_locals_in_rust/)
 - Request for prioritization: fast thread locals: https://internals.rust-lang.org/t/request-for-prioritization-fast-thread-locals/13982
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 
 # Manual optimizations
 
