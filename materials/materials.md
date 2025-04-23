@@ -1742,9 +1742,11 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
                vtables get duplicated between CGUs and are sometimes different between different CGUs (possibly a bug)
     * Solution: Discussion suggests using `linkonce_odr` in LLVM IR as a partial solution.
 - Some possibly interesting benchmark (low cgu and fat lto not always better) https://github.com/ggwpez/substrate-bench/tree/master/reports/01-first-findings
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - Performance regressions of compiled code over the last year https://github.com/rust-lang/rust/issues/47561
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - 2x benchmark loss in rayon-hash from multiple codegen-units https://github.com/rust-lang/rust/issues/47665
     * Assignee: zakhar
     * Status: DONE (10m)
@@ -1752,9 +1754,11 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
     * Reason: Inlining is not performed across multiple CGUs
     * Solution: Use LTO or compile with one CGU (adding inline tag into stdlib isn't feasible for a user)
 - rustc: Default 32 codegen units at O0 https://github.com/rust-lang/rust/pull/44853
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - 32 codegen units may not always be better at -O0 https://github.com/rust-lang/rust/issues/44941
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - Back-end parallelism in the Rust compiler: https://nnethercote.github.io/2023/07/11/back-end-parallelism-in-the-rust-compiler.html
     - https://news.ycombinator.com/item?id=36678457
     - https://www.reddit.com/r/rust/comments/14wcezs/backend_parallelism_in_the_rust_compiler/
@@ -1766,7 +1770,8 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
     * Status: DONE (25m)
     * Problem: A prolonged discussion about default number of codegen units. Brings up a point about builds with multiple CGUs being non-deterministic. Contains some perf overhead measurements.
 - codegen-units + ThinLTO is not as good as codegen-units = 1 https://github.com/rust-lang/rust/issues/47745
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - Adding --emit=asm speeds up generated code because of codegen units https://github.com/rust-lang/rust/issues/57235
     * Assignee: zakhar
     * Status: DONE (10m)
@@ -1774,7 +1779,8 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
     * Root cause: `--emit-asm` disables CGUs; with multiple codegen units compiler is unable to detect that loop does not do anything
     * Solution: Use cgu=1 for building (especially for small projects)
 - Speeding up rustc by being lazy https://www.reddit.com/r/rust/comments/1d9b36j/speeding_up_rustc_by_being_lazy/
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 
 # Other
 
