@@ -62,3 +62,4 @@ pub fn foo() -> u32 {
 }
 ```
   codes do not generate matching asm ? One reason is different default tls model but even with initial-exec for both Rust matches GCC's `-fPIC` (not `-fPIE`).
+  This may be due to `-C relocation-model=pic` being default for (even static) libs ?!

@@ -20,8 +20,12 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Just general overview of compiler internals (infra, type checking, etc.)
   * No info about performance
 - Rust design patterns: https://softwarepatternslexicon.com/patterns-rust/
-  * Status: backlog
-  * No previously unknown perf hints (e.g. slices vs containers, etc.)
+  * Assignee: yugr
+  * Status: in progress (5m)
+  * A set of very high-level advices
+  * Perf-related patterns are [here](https://softwarepatternslexicon.com/patterns-rust/23/)
+  * Codegen-related advices:
+    + [Match exprs](https://softwarepatternslexicon.com/patterns-rust/23/11/)
   * More materials: no new links
 - Rust Performance Book (by Nethercote): https://nnethercote.github.io/perf-book/
   * Assignee: yugr
@@ -918,10 +922,6 @@ pub fn foo(p: Box<S>) {
     + A general overview of new features
     + Discusses CGU problem (and how ThinLTO fixes it), PGO, aliasing, various LLVM fixes
   * More materials: no new links
-- Inspecting rustc LLVM optimization remarks using cargo-remark: https://kobzol.github.io/rust/cargo/2023/08/12/rust-llvm-optimization-remarks.html
-  * Status: backlog
-  * This is an important feature
-  * need to run `cargo remark` on some real projects
 - Improving crypto code in Rust using LLVM’s optnone: https://blog.trailofbits.com/2022/02/01/part-2-rusty-crypto/
   * Assignee: yugr
   * Status: DONE (5m)
@@ -1016,6 +1016,10 @@ pub fn foo(p: Box<S>) {
   * This is not always working as well as LTO because Rust may export unnecessary symbols
     + post is old, not clear if this problem is still relevant ?
     + i wasn't able to find relevant discussions...
+- Inspecting rustc LLVM optimization remarks using cargo-remark: https://kobzol.github.io/rust/cargo/2023/08/12/rust-llvm-optimization-remarks.html
+  * Status: backlog
+  * This is an important feature
+  * need to run `cargo remark` on some real projects
 
 # Data structures performance
 
@@ -1481,13 +1485,22 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
   * Remaining info added to [feature](../features/cons/tls)
 - Request for prioritization: fast thread locals: https://internals.rust-lang.org/t/request-for-prioritization-fast-thread-locals/13982
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (5m)
+  * Two things:
+    + do not pay for runtime check for vars w/o destructor (already done)
+    + change default TLS model (already available)
+  * Nothing was decided
+  * Other materials: no links
 - Tracking issue for thread-local stabilization: https://github.com/rust-lang/rust/issues/29594
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (10m)
+  * Issue about stabilizing `#[thread_local]`
+  * In general there does not seem to be much interest across maintainers
+  * More materials: no links
 - Fast thread locals: TLS model: https://internals.rust-lang.org/t/fast-thread-locals-tls-model/17032
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (5m)
+  * Just some random discussion of `-Z tls-model` without any insights or conclusions
 
 # Manual optimizations
 
