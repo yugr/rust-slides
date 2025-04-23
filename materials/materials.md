@@ -1445,19 +1445,47 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
 
 - Rust thread_local bad performance? https://users.rust-lang.org/t/rust-thread-local-bad-performance/4385
   * Assignee: yugr
-  * Status: in progress
-- More efficient alternative to thread_local! and lazy_static? https://stackoverflow.com/questions/63433547/more-efficient-alternative-to-thread-local-and-lazy-static
-  * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (5m)
+  * Problem: Rust version with `thread_local!` is much slower than C `__thread`
+  * Root cause: `borrow_mut` on every iteration
+  * Solution: remove borrowing, use `Cell`, use `#[thread_local]`
+  * More materials: no new links
 - Rust `thread_local!`s are surprisingly expensive: https://swatinem.de/blog/slow-thread-local/
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (10m)
+  * Problem: `thread_local!` too slow
+  * No details, investigation or explanation
+  * More materials: no relevant links in blog
 - Fast Thread Locals In Rust: https://matklad.github.io/2020/10/03/fast-thread-locals-in-rust.html
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (30m)
+  * There are 2 APIs for TLS in Rust:
+    + `#[thread_local]`
+      - transforms directly to LLVM attribute but not stable/finalized
+      - hint for compiler, basically just forwards to LLVM IR
+    + `thread_local!` macro
+      - has perf overhead due to lazy creation (this was fixed since then via `const {}` syntax)
+      - uses `#[thread_local]` internally
+  * Contains good example of custom `build.rs` to link C part to Rust program
+  * C version is 2x faster:
+    + in C memory accesses moved out of loop
+    + in Rust init checks prevent this
   * More materials:
     + [Reddit](https://www.reddit.com/r/rust/comments/j4iy50/blog_post_fast_thread_locals_in_rust/)
+- TLS implementation: https://github.com/rust-lang/rust/blob/master/library/std/src/thread/local.rs
+  * Assignee: yugr
+  * Status: DONE (75m)
+  * `thread_local!` based on `#[thread_local]` internally
+  * Runtime checks for non-trivial init or destructor
+  * Can be implemented via native LLVM support (if available) or OS
+  * Remaining info added to [feature](../features/cons/tls)
 - Request for prioritization: fast thread locals: https://internals.rust-lang.org/t/request-for-prioritization-fast-thread-locals/13982
+  * Assignee: yugr
+  * Status: in progress
+- Tracking issue for thread-local stabilization: https://github.com/rust-lang/rust/issues/29594
+  * Assignee: yugr
+  * Status: in progress
+- Fast thread locals: TLS model: https://internals.rust-lang.org/t/fast-thread-locals-tls-model/17032
   * Assignee: yugr
   * Status: in progress
 
