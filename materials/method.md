@@ -35,6 +35,8 @@ Look for any mentions of `/performance|optimizations|compiler|inefficient|code ?
         - https://www.reddit.com/user/simonask_/search/?q=performance&type=comments
       + Lucretiel (gh-14):
         - https://www.reddit.com/user/Lucretiel/search/?q=performance&type=comments
+      + VorpalWay :
+        - https://www.reddit.com/user/VorpalWay/search/?q=performance&type=comments
     * other known maintainers:
       + nikic:
         - https://www.reddit.com/user/nikic/search/?q=rust&type=comments (nothing found)
@@ -48,3 +50,7 @@ Check compiler team repo (gh-8) :
 
 Check compiler RFCs (gh-10) :
   - https://github.com/rust-lang/rfcs/tree/master/text
+
+Check compiler Zulip chats :
+  - t-compiler/mir-opts: https://rust-lang.zulipchat.com/#narrow/channel/189540-t-compiler.2Fmir-opts
+  - t-compiler/performance: https://rust-lang.zulipchat.com/#narrow/channel/247081-t-compiler.2Fperformance

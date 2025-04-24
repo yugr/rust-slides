@@ -37,6 +37,8 @@ There are several reasons for this:
     * `cargo bloat` can be used to identify the most problematic dependencies
     * need to watch out for different versions of same library (see example [here](https://oknozor.github.io/blog/optimize-rust-binary-size/))
   - global enum values may not fit into `.bss` due to discriminators
+  - use CGU=1 to avoid [duplicated monomorphizations](https://davidlattimore.github.io/posts/2024/06/05/speeding-up-rustc-by-being-lazy.html)
+    (`-Z share-generics` does not fully solve this)
 
 LTO and opt-level Z may also help (see [here](https://rustwasm.github.io/docs/book/reference/code-size.html)).
 

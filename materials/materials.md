@@ -21,8 +21,8 @@ On the other hand, once all materials are analyzed we won't care about this file
   * No info about performance
 - Rust design patterns: https://softwarepatternslexicon.com/patterns-rust/
   * Assignee: yugr
-  * Status: in progress (5m)
-  * A set of very high-level advices
+  * Status: Wontfix (5m)
+  * A set of very high-level advices (ChatGPT ?)
   * Perf-related patterns are [here](https://softwarepatternslexicon.com/patterns-rust/23/)
   * Codegen-related advices:
     + [Match exprs](https://softwarepatternslexicon.com/patterns-rust/23/11/)
@@ -1669,17 +1669,23 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
   * LLVM: N/A
   * More materials: added P2544R0 link
 - C++ exceptions are becoming more and more problematic: https://open-std.org/JTC1/SC22/WG21/docs/papers/2022/p2544r0.html
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - Panics in rust consuming some extra resources. Can we disable it? https://www.reddit.com/r/rust/comments/12qhynj/panics_in_rust_consuming_some_extra_resources_can/
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - RFC 1513: Less unwinding: https://github.com/rust-lang/rfcs/blob/master/text/1513-less-unwinding.md
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - Is Rust leaving performance on the table by eliminating exceptions? https://www.reddit.com/r/rust/comments/k5wk7r/is_rust_leaving_performance_on_the_table_by/
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - How to Panic in Rust: https://www.ralfj.de/blog/2019/11/25/how-to-panic-in-rust.html
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - Сompiler can't remove panic locations if they are not used in panic handler: https://github.com/rust-lang/rust/issues/129330
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
   * This gives some info on `panic_immediate_abort`
 
 # Unsafe
@@ -1741,24 +1747,33 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
     * Reasons: Seems that uniqueness of vtables is not guaranteed, so strange behaviour is expected
                vtables get duplicated between CGUs and are sometimes different between different CGUs (possibly a bug)
     * Solution: Discussion suggests using `linkonce_odr` in LLVM IR as a partial solution.
-- Some possibly interesting benchmark (low cgu and fat lto not always better) https://github.com/ggwpez/substrate-bench/tree/master/reports/01-first-findings
+- Compiler flag's impact on benchmarks: https://github.com/ggwpez/substrate-bench/tree/master/reports/01-first-findings
   * Assignee: yugr
-  * Status: in progress
-- Performance regressions of compiled code over the last year https://github.com/rust-lang/rust/issues/47561
+  * Status: Wontfix (5m)
+  * Some possibly interesting benchmark (low CGU and fat LTO not always better) ?
+  * Unfortunately I (yugr) couldn't make sense of graphs in this post
+- Performance regressions of compiled code over the last year: https://github.com/rust-lang/rust/issues/47561
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (10m)
+  * An old regression caused insufficient inlining (perf can be restored with inline threshold and CGU=1)
+  * Nothing new here
 - 2x benchmark loss in rayon-hash from multiple codegen-units https://github.com/rust-lang/rust/issues/47665
     * Assignee: zakhar
     * Status: DONE (10m)
     * Problem: Using multiple CGUs reduces benchmark performance by half
     * Reason: Inlining is not performed across multiple CGUs
     * Solution: Use LTO or compile with one CGU (adding inline tag into stdlib isn't feasible for a user)
-- rustc: Default 32 codegen units at O0 https://github.com/rust-lang/rust/pull/44853
+- rustc: Default 32 codegen units at O0: https://github.com/rust-lang/rust/pull/44853
   * Assignee: yugr
-  * Status: in progress
-- 32 codegen units may not always be better at -O0 https://github.com/rust-lang/rust/issues/44941
+  * Status: Wontfix (0m)
+  * This is about debug builds, not relevant for us
+- 32 codegen units may not always be better at -O0: https://github.com/rust-lang/rust/issues/44941
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (5m)
+  * Problem: compile time increases with CGU=16/32
+  * Root cause: "Increasing the number of codegen units is not purely dividing the work, it's also increasing the total amount of work being done"
+  * Solution: some fixes were done
+  * More materials: added linked issue
 - Back-end parallelism in the Rust compiler: https://nnethercote.github.io/2023/07/11/back-end-parallelism-in-the-rust-compiler.html
     - https://news.ycombinator.com/item?id=36678457
     - https://www.reddit.com/r/rust/comments/14wcezs/backend_parallelism_in_the_rust_compiler/
@@ -1769,18 +1784,38 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
     * Assignee: zakhar
     * Status: DONE (25m)
     * Problem: A prolonged discussion about default number of codegen units. Brings up a point about builds with multiple CGUs being non-deterministic. Contains some perf overhead measurements.
-- codegen-units + ThinLTO is not as good as codegen-units = 1 https://github.com/rust-lang/rust/issues/47745
+- codegen-units + ThinLTO is not as good as codegen-units=1: https://github.com/rust-lang/rust/issues/47745
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (5m)
+  * General discussion that ThinLTO is not always better than CGU=1
+  * No technical investigation
+  * More materials: a lot of linked use-cases
 - Adding --emit=asm speeds up generated code because of codegen units https://github.com/rust-lang/rust/issues/57235
     * Assignee: zakhar
     * Status: DONE (10m)
     * Problem: `--emit=asm` flag drastically improves small benchmark performance
     * Root cause: `--emit-asm` disables CGUs; with multiple codegen units compiler is unable to detect that loop does not do anything
     * Solution: Use cgu=1 for building (especially for small projects)
-- Speeding up rustc by being lazy https://www.reddit.com/r/rust/comments/1d9b36j/speeding_up_rustc_by_being_lazy/
+- Speeding up rustc by being lazy: https://davidlattimore.github.io/posts/2024/06/05/speeding-up-rustc-by-being-lazy.html
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (15m)
+  * Explores various issues in rustc which slow down compile time or generate worse code:
+    + monomorphization duplication (due to CGU=32 and separate compilation)
+      - could be solved by various means: CGU=1, LTO, weak symbols, `-Z share-generics`, etc.
+    + compiler produces dead code which is later dropped at link-time (due to `--gc-sections`)
+      - could be solved by MIR-only rlibs
+    + CGUs are too large
+      - ideally per-function CGU (that's what Cranelift does)
+  * Conclusion: could improve efficiency by deferring compilation to link time when all deps are known
+  * More materials:
+    + [Reddit](https://www.reddit.com/r/rust/comments/1d9b36j/speeding_up_rustc_by_being_lazy/)
+    + No relevant materials in blog
+- Tracking issue for enabling multiple CGUs in release mode by default: https://github.com/rust-lang/rust/issues/45320
+  * Assignee: yugr
+  * Status: DONE (15m)
+  * General perf data discussion of various combinations of ThinLTO, CGUs, etc. for various codebases
+  * A common case is that CGUs distribute work very unevenly and compile time is totally dominated by single CGU
+  * More materials: no relevant links
 
 # Other
 
