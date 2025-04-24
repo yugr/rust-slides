@@ -41,6 +41,8 @@ As a workaround, developers need to use manual `assert!`'s (or `core::hint::unre
 What is `panic_immediate_abort` ?
 
 Does `panic=abort` remove landing pads and libunwind ?
+  - `-Z no-landing-pads`, `-Zbuild-std-features=panic_immediate_abort` and `-Zlocation-detail=none` may be needed as well
+  - It seems that `panic=abort` still calls the (blackbox) panic hooks (handlers)
 
 Does `panic=abort` avoid all overheads ? I couldn't get it to do anything in [this](https://news.ycombinator.com/item?id=30867188) example.
 

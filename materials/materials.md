@@ -1670,23 +1670,42 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
   * More materials: added P2544R0 link
 - C++ exceptions are becoming more and more problematic: https://open-std.org/JTC1/SC22/WG21/docs/papers/2022/p2544r0.html
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (5m)
+  * Problem: exceptions are very slow in mulithreaded programs
+  * Root cause: stack unwinding is done in global critical section
+  * Solution: alternative exception implementations or no exceptions at all
+  * More materials: no relevant links
 - Panics in rust consuming some extra resources. Can we disable it? https://www.reddit.com/r/rust/comments/12qhynj/panics_in_rust_consuming_some_extra_resources_can/
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (10m)
+  * OP wonders whether he can disable safety checks to avoid overheads
+  * He is educated that safety is whole point of Rust and is given alternative solutions:
+    + `assert`'s
+    + unsafe
 - RFC 1513: Less unwinding: https://github.com/rust-lang/rfcs/blob/master/text/1513-less-unwinding.md
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (5m)
+  * This is a proposal to add `panic=abort`
+  * More materials: no new links
 - Is Rust leaving performance on the table by eliminating exceptions? https://www.reddit.com/r/rust/comments/k5wk7r/is_rust_leaving_performance_on_the_table_by/
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (30m)
+  * General discussion of exceptions (panics) vs. error codes (`Option` or `Result`)
+  * Point is that error codes hurt I$ and BTB and prevent optimizations, whereas exceptions do not
+  * On the other hand exceptions call blackbox personality functions which hurt optimizer's abilities
+  * A very important comment: Rust marks `Some()` and `Ok()` branches as likely
+  * Other materials:
+    + [video](https://youtu.be/NH1Tta7purM?t=1152)
+    + No new links
 - How to Panic in Rust: https://www.ralfj.de/blog/2019/11/25/how-to-panic-in-rust.html
   * Assignee: yugr
   * Status: in progress
+  * More materials: no more relevant posts in blog
 - Сompiler can't remove panic locations if they are not used in panic handler: https://github.com/rust-lang/rust/issues/129330
   * Assignee: yugr
-  * Status: in progress
-  * This gives some info on `panic_immediate_abort`
+  * Status: DONE (5m)
+  * Just a random bug in compiler but it mentions `panic_immediate_abort` which gets cheapest possible panics
+  * More materials: none
 
 # Unsafe
 
