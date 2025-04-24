@@ -26,6 +26,11 @@ We need at least the following information:
   - unusual compile flags in Cargo.toml (`panic=abort`, etc.)
   - what else ???
 
+# Building benchmarks
+
+Make sure that incremental compilation is not used after changes
+(by removing build dir or using `export CARGO_INCREMENTAL=0`).
+
 # Running benchmarks
 
 Benchmarks need to run via standard approach

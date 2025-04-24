@@ -1,0 +1,39 @@
+diff --git a/ext/napi/lib.rs b/ext/napi/lib.rs
+index bb3dc7a81..9a5765cea 100644
+--- a/ext/napi/lib.rs
++++ b/ext/napi/lib.rs
+@@ -661,19 +661,19 @@ pub fn print_linker_flags(name: &str) {
+     symbols_path,
+   );
+
+-  #[cfg(any(
+-    target_os = "linux",
+-    target_os = "freebsd",
+-    target_os = "openbsd"
+-  ))]
+-  println!(
+-    "cargo:rustc-link-arg-bin={name}=-Wl,--export-dynamic-symbol-list={}",
+-    symbols_path,
+-  );
+-
+-  #[cfg(target_os = "android")]
+-  println!(
+-    "cargo:rustc-link-arg-bin={name}=-Wl,--export-dynamic-symbol-list={}",
+-    symbols_path,
+-  );
++  //#[cfg(any(
++  //  target_os = "linux",
++  //  target_os = "freebsd",
++  //  target_os = "openbsd"
++  //))]
++  //println!(
++  //  "cargo:rustc-link-arg-bin={name}=-Wl,--export-dynamic-symbol-list={}",
++  //  symbols_path,
++  //);
++
++  //#[cfg(target_os = "android")]
++  //println!(
++  //  "cargo:rustc-link-arg-bin={name}=-Wl,--export-dynamic-symbol-list={}",
++  //  symbols_path,
++  //);
+ }
