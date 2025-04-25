@@ -63,6 +63,7 @@ This may be fixed as part of [RFC 3550](https://github.com/rust-lang/rfcs/pull/3
 which changes `RangeInclusive` to be `IntoIterator` and
 internally changing `x..=y` to `x..(y + 1)` in `RangeInclusive::into_iter`
 but that's only for 2027 edition and also not clear there may be code bloat.
+There will be a huge size hit in this case due to duplication of loop bodies though...
 
 # TODO
 

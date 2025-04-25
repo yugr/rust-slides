@@ -12,3 +12,11 @@ allocating them on heap. One example of this is IO in stdlib -
 unlike C (which returns heap-allocated `FILE *`) Rust just returns `File` by value.
 Of course this prohibits dynamic update of shared stdlib (if it's ever used in future)
 (without recompiling the whole world).
+
+Rust associative containers allow find-or-insert-like method
+(entry methods) which are faster than C++
+```
+it = map.find(...);
+if (it == map.end())
+  map.insert(...);
+```

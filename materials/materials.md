@@ -8,7 +8,6 @@ On the other hand, once all materials are analyzed we won't care about this file
   * MIR opts: https://github.com/rust-lang/rust/issues?q=state%3Aopen%20label%3A%22A-mir-opt%22
 - TODO(gh-8) add more interesting materials from
   * https://github.com/rust-lang/compiler-team
-- TODO(gh-10) add more interesting materials from RFCs
 - TODO(gh-15) survey project goals for perf-related stuff
   * https://rust-lang.github.io/rust-project-goals
 
@@ -416,6 +415,8 @@ On the other hand, once all materials are analyzed we won't care about this file
   * More materials:
     + added links
     + failed to locate info on symbol visibility issue...
+- RFC 1909: Unsized locals: https://github.com/rust-lang/rfcs/blob/master/text/1909-unsized-rvalues.md
+  * Status: backlog
 
 # Expression templates
 
@@ -1875,4 +1876,6 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
 - Rust должен умереть, МГУ сделал замеры: https://habr.com/ru/articles/598219/
   * Status: backlog
 -  Rust and Scientific/High-Performance Computing: https://www.reddit.com/r/rust/comments/smdl3m/rust_and_scientifichighperformance_computing/
+  * Status: backlog
+- RFC 1884: Sort unstable: https://github.com/rust-lang/rfcs/blob/master/text/1884-unstable-sort.md
   * Status: backlog
