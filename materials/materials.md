@@ -417,6 +417,12 @@ On the other hand, once all materials are analyzed we won't care about this file
     + failed to locate info on symbol visibility issue...
 - RFC 1909: Unsized locals: https://github.com/rust-lang/rfcs/blob/master/text/1909-unsized-rvalues.md
   * Status: backlog
+- Exploiting Undefined Behavior in C/C++ Programs for Optimization: A Study on the Performance Impact: https://web.ist.utl.pt/nuno.lopes/pubs/ub-pldi25.pdf
+  * Status: backlog
+  * This is very similar to our goal but for C++
+  * Be sure to study links
+  * More materials:
+    + [Reddit](https://www.reddit.com/r/Compilers/comments/1k658fw/exploiting_undefined_behavior_in_cc_programs_for/)
 
 # Expression templates
 
@@ -577,6 +583,10 @@ ET's is an important patern for writing linear algebra code in C++. Can it be us
   * OP asks what are the overheads of Rust language
   * People suggest various issues (UFT8 checks, `Rc`, error checking, etc.) but all known by us
   * More materials: nothing new
+- Story-time: C++, bounds checking, performance, and compilers: https://chandlerc.blog/posts/2024/11/story-time-bounds-checking/
+  * Status: backlog
+  * More materials:
+    + [Reddit](https://www.reddit.com/r/cpp/comments/1gtos7w/storytime_c_bounds_checking_performance_and/)
 
 # Copy elision/NRVO and placement new
 
@@ -872,6 +882,8 @@ pub fn foo(p: Box<S>) {
   * Problem: iterator version is much faster than loop
   * Root cause: one of combinators includes a reservation for `collect` call
   * Solution: do manual `with_capacity` in raw loop
+- Optimizing Rust's RangeInclusive external iteration: https://www.reddit.com/r/Compilers/comments/afmhgq/how_to_debug_missed_optimization_in_llvm/
+  * Status: backlog
 
 # Noalias
 
