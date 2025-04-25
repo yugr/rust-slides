@@ -35,3 +35,4 @@ Architecture and design choices are discussed by Nethercote [here](https://nneth
 - Check compile slowdown (`O(N^2)` ?) and perf improvements when disabling CGUs (`-C codegen-units=1`) for large/performance-sensitive packages
   * We can reuse data from [Let's talk about parallel codegen](https://internals.rust-lang.org/t/lets-talk-about-parallel-codegen/2759/1) but maybe it is too old ?
 - Is CGU number fixed or depends on build PC ? If latter, Rust builds are non-reproducible...
+- @zack suggests that crates are generally largers than C/C++ TUs (more like full programs i.e. unity builds)

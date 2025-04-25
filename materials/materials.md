@@ -1699,8 +1699,12 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
     + No new links
 - How to Panic in Rust: https://www.ralfj.de/blog/2019/11/25/how-to-panic-in-rust.html
   * Assignee: yugr
-  * Status: in progress
-  * More materials: no more relevant posts in blog
+  * Status: DONE (5m)
+  * Describes how panics are handled in stdlib, unrelated to performance
+  * More materials:
+    + [IRLO](https://internals.rust-lang.org/t/how-to-panic-in-rust/11368)
+    + Another post on panic internals: https://github.com/rust-lang/rustc-dev-guide/pull/521
+    + no more relevant posts in blog
 - Сompiler can't remove panic locations if they are not used in panic handler: https://github.com/rust-lang/rust/issues/129330
   * Assignee: yugr
   * Status: DONE (5m)
