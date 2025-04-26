@@ -111,6 +111,7 @@ and some are consequences (e.g. disabled autovec).
 - No gotos, computed or otherwise
   * This is a real problem for writing efficient state machines
     (see [this](https://github.com/rust-lang/rfcs/pull/3720) RFC proposal)
+- Mandatory initialization of all variables
 
 # Rust-specific optimization opportunities
 

@@ -727,6 +727,8 @@ pub fn foo(p: Box<S>) {
   * OP asks whether he should prefer pass by copy or by reference
   * No good answers
   * More materials: no links
+- RFC: Placement by return: https://github.com/rust-lang/rfcs/pull/2884
+  * Status: backlog
 
 # Iterators
 
@@ -1051,6 +1053,13 @@ pub fn foo(p: Box<S>) {
   * Status: backlog
   * This is an important feature
   * need to run `cargo remark` on some real projects
+
+# Niches
+
+- RFC: Alignment niches for references types: https://github.com/rust-lang/rfcs/pull/3204
+  * Status: backlog
+- Niches: https://github.com/rust-lang/rfcs/pull/3334
+  * Status: backlog
 
 # Data structures performance
 
@@ -1741,6 +1750,25 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
   * Status: DONE (5m)
   * Just a random bug in compiler but it mentions `panic_immediate_abort` which gets cheapest possible panics
   * More materials: none
+- RFC: Abort by default: https://github.com/rust-lang/rfcs/pull/1759
+  * Status: backlog
+- Abort by default v2: https://github.com/rust-lang/rfcs/pull/1765
+  * Status: backlog
+
+# Uninit
+
+- Uninitialized Memory: Unsafe Rust is Too Hard: https://lucumr.pocoo.org/2022/1/30/unsafe-rust/
+  * Status: backlog
+  * More materials:
+    + [HN](https://news.ycombinator.com/item?id=30135758)
+- Fast vector initialization without default value: https://users.rust-lang.org/t/fast-vector-initialization-without-default-value/34857/3
+  * Status: backlog
+- Is there a way to express buffer need not be zeroed? https://users.rust-lang.org/t/is-there-a-way-to-express-a-buffer-need-not-be-zeroed/65785
+  * Status: backlog
+- Idiomatic way of working with uninitialized dynamic memory: https://users.rust-lang.org/t/idiomatic-way-of-working-with-uninitialized-dynamic-memory/50642
+  * Status: backlog
+- Nomicon: Unchecked Uninitialized Memory: https://doc.rust-lang.org/nomicon/unchecked-uninit.html
+  * Status: backlog
 
 # Unsafe
 
