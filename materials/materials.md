@@ -432,6 +432,23 @@ On the other hand, once all materials are analyzed we won't care about this file
     + Continuation of [RFC 1808](https://github.com/rust-lang/rfcs/pull/1808)
     + [Tracking issue](https://github.com/rust-lang/rust/issues/48055)
     + [Pull request](https://github.com/rust-lang/rfcs/pull/1909)
+
+# UB in C++
+
+-  libc++ documentation: Hardening Modes: https://libcxx.llvm.org/Hardening.html
+  * Assignee: yugr
+  * Status: in progress
+- Retrofitting spatial safety to hundreds of millions of lines of C++: https://security.googleblog.com/2024/11/retrofitting-spatial-safety-to-hundreds.html
+  * Assignee: yugr
+  * Status: in progress
+  * More materials:
+    + [Reddit](https://www.reddit.com/r/cpp/comments/1gs5bvr/retrofitting_spatial_safety_to_hundreds_of/)
+    + [Reddit 2](https://www.reddit.com/r/cpp/comments/1h9hsax/google_retrofits_spatial_memory_safety_onto_c/)
+- Story-time: C++, bounds checking, performance, and compilers: https://chandlerc.blog/posts/2024/11/story-time-bounds-checking/
+  * Assignee: yugr
+  * Status: in progress
+  * More materials:
+    + [Reddit](https://www.reddit.com/r/cpp/comments/1gtos7w/storytime_c_bounds_checking_performance_and/)
 - Exploiting Undefined Behavior in C/C++ Programs for Optimization: A Study on the Performance Impact: https://web.ist.utl.pt/nuno.lopes/pubs/ub-pldi25.pdf
   * Assignee: yugr
   * Status: in progress
@@ -599,13 +616,6 @@ ET's is an important patern for writing linear algebra code in C++. Can it be us
   * OP asks what are the overheads of Rust language
   * People suggest various issues (UFT8 checks, `Rc`, error checking, etc.) but all known by us
   * More materials: nothing new
-- Story-time: C++, bounds checking, performance, and compilers: https://chandlerc.blog/posts/2024/11/story-time-bounds-checking/
-  * Assignee: yugr
-  * Status: in progress
-  * More materials:
-    + [Reddit](https://www.reddit.com/r/cpp/comments/1gtos7w/storytime_c_bounds_checking_performance_and/)
-    + [Libc++ Harderning](https://security.googleblog.com/2024/11/retrofitting-spatial-safety-to-hundreds.html)
-    + [Libc++ Hardening 2](https://libcxx.llvm.org/Hardening.html)
 
 # Copy elision/NRVO and placement new
 
