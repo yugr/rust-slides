@@ -90,6 +90,8 @@ and some are consequences (e.g. disabled autovec).
     + https://github.com/Voultapher/sort-research-rs/blob/main/writeup/sort_safety/text.md
     + https://www.youtube.com/watch?v=rZ7QQWKP8Rk
 - No dynamic stack allocation (`alloca`, VLAs)
+  * Some work done in [RFC 1909](https://github.com/rust-lang/rfcs/blob/master/text/1909-unsized-rvalues.md)
+    but not much work since 2018
 - Panic unwinding overhead
 - Lack of type-based aliasing like in C (`-fstrict-aliasing`)
   * not considered important due to reference aliasing rules

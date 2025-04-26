@@ -417,7 +417,21 @@ On the other hand, once all materials are analyzed we won't care about this file
     + failed to locate info on symbol visibility issue...
 - RFC 1909: Unsized locals: https://github.com/rust-lang/rfcs/blob/master/text/1909-unsized-rvalues.md
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (90m)
+  * Proposes to add dynamic arrays to Rust (to avoid using `Box`'es)
+  * Not fully equivalent to C's VLAs: values allocated inside block are destroyed at `}`:
+    + this is necessary for constructing [complex data structures](https://github.com/rust-lang/rfcs/pull/1808#issuecomment-266225999)
+      (e.g. ASTs, arrays of arrays, etc.)
+    + [citation](https://github.com/rust-lang/rfcs/pull/1808#issuecomment-266200526):
+> ... this is less powerful than a proper alloca;
+> the lifetimes are restricted to just the closure body
+> whereas in reality they are the same as the entire calling function's frame.
+  * Pros: locality, no alloc overhead
+  * Alternatives: `SmallVec`
+  * Other materials:
+    + Continuation of [RFC 1808](https://github.com/rust-lang/rfcs/pull/1808)
+    + [Tracking issue](https://github.com/rust-lang/rust/issues/48055)
+    + [Pull request](https://github.com/rust-lang/rfcs/pull/1909)
 - Exploiting Undefined Behavior in C/C++ Programs for Optimization: A Study on the Performance Impact: https://web.ist.utl.pt/nuno.lopes/pubs/ub-pldi25.pdf
   * Assignee: yugr
   * Status: in progress
