@@ -604,6 +604,8 @@ ET's is an important patern for writing linear algebra code in C++. Can it be us
   * Status: in progress
   * More materials:
     + [Reddit](https://www.reddit.com/r/cpp/comments/1gtos7w/storytime_c_bounds_checking_performance_and/)
+    + [Libc++ Harderning](https://security.googleblog.com/2024/11/retrofitting-spatial-safety-to-hundreds.html)
+    + [Libc++ Hardening 2](https://libcxx.llvm.org/Hardening.html)
 
 # Copy elision/NRVO and placement new
 
@@ -901,9 +903,6 @@ pub fn foo(p: Box<S>) {
   * Problem: iterator version is much faster than loop
   * Root cause: one of combinators includes a reservation for `collect` call
   * Solution: do manual `with_capacity` in raw loop
-- Optimizing Rust's RangeInclusive external iteration: https://www.reddit.com/r/Compilers/comments/afmhgq/how_to_debug_missed_optimization_in_llvm/
-  * Assignee: yugr
-  * Status: in progress
 
 # Noalias
 
