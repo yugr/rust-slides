@@ -416,9 +416,11 @@ On the other hand, once all materials are analyzed we won't care about this file
     + added links
     + failed to locate info on symbol visibility issue...
 - RFC 1909: Unsized locals: https://github.com/rust-lang/rfcs/blob/master/text/1909-unsized-rvalues.md
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - Exploiting Undefined Behavior in C/C++ Programs for Optimization: A Study on the Performance Impact: https://web.ist.utl.pt/nuno.lopes/pubs/ub-pldi25.pdf
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
   * This is very similar to our goal but for C++
   * Be sure to study links
   * More materials:
@@ -584,7 +586,8 @@ ET's is an important patern for writing linear algebra code in C++. Can it be us
   * People suggest various issues (UFT8 checks, `Rc`, error checking, etc.) but all known by us
   * More materials: nothing new
 - Story-time: C++, bounds checking, performance, and compilers: https://chandlerc.blog/posts/2024/11/story-time-bounds-checking/
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
   * More materials:
     + [Reddit](https://www.reddit.com/r/cpp/comments/1gtos7w/storytime_c_bounds_checking_performance_and/)
 
@@ -883,7 +886,8 @@ pub fn foo(p: Box<S>) {
   * Root cause: one of combinators includes a reservation for `collect` call
   * Solution: do manual `with_capacity` in raw loop
 - Optimizing Rust's RangeInclusive external iteration: https://www.reddit.com/r/Compilers/comments/afmhgq/how_to_debug_missed_optimization_in_llvm/
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 
 # Noalias
 
@@ -1880,9 +1884,7 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
     + rust-brotli rewrite for vectorization example
     + Why you should, actually, rewrite some of it in Rust
     + Discussion about explicit SIMD in Rust
-    + Reddit comments to the same post (https://codecs.multimedia.cx/2017/07/rust-not-so-great-for-codec-implementing/)
-- Reddit comments to 'Rust: Not So Great For Codec Implementing': https://www.reddit.com/r/rust/comments/6qv2s5/rust_not_so_great_for_codec_implementing/
-  * Status: backlog
+    + [Reddit](https://www.reddit.com/r/rust/comments/6qv2s5/rust_not_so_great_for_codec_implementing/)
 - Why you should, actually, rewrite some of it in Rust: https://news.ycombinator.com/item?id=14753201
   * Status: backlog
 - Rust должен умереть, МГУ сделал замеры: https://habr.com/ru/articles/598219/
