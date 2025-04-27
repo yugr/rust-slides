@@ -435,15 +435,74 @@ On the other hand, once all materials are analyzed we won't care about this file
 
 # UB in C++
 
--  libc++ documentation: Hardening Modes: https://libcxx.llvm.org/Hardening.html
+- Visual C++: Iterator Checks and Slow STL Code: https://codeyarns.com/tech/2010-09-10-visual-c-iterator-checks-and-slow-stl-code.html#gsc.tab=0 (pre-2010)
+  * Assignee: yugr
+  * Status: DONE (15m)
+  * Debug (not hardening) feature
+  * One of the first debug STLs
+  * Performs some iterator checks but interestingly does not check `operator[]`
+  * Controlled via
+    + high-level flags (`_SECURE_SCL`, `_HAS_ITERATOR_DEBUGGING`)
+    + low-level flag (`_ITERATOR_DEBUG_LEVEL`)
+  * `_ITERATOR_DEBUG_LEVEL=1` is for hardening and `2` is for debug (`2` is 100x slower)
+- RFC: C++ Buffer Hardening: https://discourse.llvm.org/t/rfc-c-buffer-hardening/65734 (2022)
+  * Assignee: yugr
+  * Status: DONE (2h)
+  * Has been replaced by follow-up hardening RFC (?)
+  * Replacement for pre-existing libc++ debug mode (`_LIBCPP_ENABLE_DEBUG_MODE` ?)
+    + ABI changing
+    + too slow
+  * Two proposals:
+    + hardened C++ dialect to avoid potentially unsafe pointer arithmetic (warnings, fixits)
+      - Dergachev [argues](https://discourse.llvm.org/t/rfc-c-buffer-hardening/65734/8) that (massive) fixits is a distinguishing feature of this proposal
+    + debug checks in STL containers
+      - Very similar to `_GLIBCXX_ASSERTIONS`
+  * Explicitly allow ABI changes in containers but make them controllable via macro
+  * Perf difference between `std::vector::operator[]` and `std::vector::at` is non-trivial:
+    + [20%](https://quick-bench.com/q/o9du22dYmO0BCs5YqJ9gEKPyQ10) on simple benchmark
+    + loops no longer vectorized (hello Rust!)
+    + finally no real consensus on perf implications (whether compiler with "catch up")
+  + Strong support from kcc and many others
+  + Positive comments on similar feature in MSVC
+  + Bounds checks are similar to common C++ opt: replace `reserve` + `push_back` with `resize`
+  + `__builtin_assume` are [not always beneficial](https://discourse.llvm.org/t/llvm-assume-blocks-optimization/71609)
+  * Conclusion: general push back from AaronBallman in fear of experimental language dialect which will not be broadly used
+  * More materials:
+    + [Video](https://www.youtube.com/watch?v=nPRY8-FtzZg)
+    + [Reddit](https://www.reddit.com/r/cpp/comments/xwtzro/rfc_c_buffer_hardening_clang_frontend/)
+    + [HN](https://news.ycombinator.com/item?id=33103464)
+    + Added tons of links
+- [-Wunsafe-buffer-usage] WIP: RFC: NFC: User documentation: https://reviews.llvm.org/D136811
   * Assignee: yugr
   * Status: in progress
+  * Formal RFC for previous discussion
+- Updated Field Experience With Annex K — Bounds Checking Interfaces: https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1969.htm
+  * Assignee: yugr
+  * Status: in progress
+- RFC: Hardening in libc++: https://discourse.llvm.org/t/rfc-hardening-in-libc/73925
+  * Assignee: yugr
+  * Status: in progress
+  * Update on previous RFC
+- libc++ documentation: Hardening Modes: https://libcxx.llvm.org/Hardening.html
+  * Assignee: yugr
+  * Status: DONE (30m)
+  * A bunch of hardening (not debug) checks in libc++:
+    - `operator[]`, strict weak order, etc.
+    - full list [here](https://libcxx.llvm.org/Hardening.html#id12)
+  * Controlled via macro `_LIBCPP_HARDENING_MODE`
+  * Similar checks available in GCC's libstdc++ (under `_GLIBCXX_ASSERTIONS`)
+  * Most likely misses many types of bugs
 - Retrofitting spatial safety to hundreds of millions of lines of C++: https://security.googleblog.com/2024/11/retrofitting-spatial-safety-to-hundreds.html
   * Assignee: yugr
   * Status: in progress
   * More materials:
     + [Reddit](https://www.reddit.com/r/cpp/comments/1gs5bvr/retrofitting_spatial_safety_to_hundreds_of/)
     + [Reddit 2](https://www.reddit.com/r/cpp/comments/1h9hsax/google_retrofits_spatial_memory_safety_onto_c/)
+- LLVM's 'RFC: C++ Buffer Hardening' at Google: https://bughunters.google.com/blog/6368559657254912/llvm-s-rfc-c-buffer-hardening-at-google
+  * Assignee: yugr
+  * Status: in progress
+  * More materials:
+    + [Reddit](https://www.reddit.com/r/cpp/comments/1b6zxee/llvms_rfc_c_buffer_hardening_at_google/)
 - Story-time: C++, bounds checking, performance, and compilers: https://chandlerc.blog/posts/2024/11/story-time-bounds-checking/
   * Assignee: yugr
   * Status: in progress
@@ -456,6 +515,9 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Be sure to study links
   * More materials:
     + [Reddit](https://www.reddit.com/r/Compilers/comments/1k658fw/exploiting_undefined_behavior_in_cc_programs_for/)
+- Historical Clang Language WG Meeting Minutes (Apr 2024 - Mar 2025): https://discourse.llvm.org/t/historical-clang-language-wg-meeting-minutes-apr-2024-mar-2025/85638
+  * Assignee: yugr
+  * Status: in progress
 
 # Expression templates
 
@@ -1763,6 +1825,9 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
   * Status: backlog
 - Abort by default v2: https://github.com/rust-lang/rfcs/pull/1765
   * Status: backlog
+- Pros and cons of catch_unwind: https://users.rust-lang.org/t/pros-and-cons-of-std-catch-unwind/65417
+  * Status: backlog
+  * Is catch_unwind equivalent of C++ catch ?
 
 # Uninit
 

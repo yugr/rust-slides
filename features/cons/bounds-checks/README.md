@@ -6,11 +6,14 @@ matklad [claims](https://github.com/matklad/bounds-check-cost) that main problem
 is blockage of autovec (and maybe other optimizations) and check themselves are cheap.
 Another example of blocked autovec: https://rust.godbolt.org/z/hccWGv889
 
-burntsushi [claims](https://news.ycombinator.com/item?id=14903258) that bounds checking is not the only problem with autovectorization
+burntsushi [claims](https://news.ycombinator.com/item?id=14903258) that bounds checking is not the only problem with autovectorization.
 
 Feedback from Servo devs on bounds checks overhead: https://news.ycombinator.com/item?id=10268151
 
-Note that bounds checks also take some I$ and branch predictor slots.
+Note that even though bounds checks are predictable
+they also take some I$ and branch predictor slots.
+E.g. Daniel Lemire [shows](https://lemire.me/blog/2019/11/06/adding-a-predictable-branch-to-existing-code-can-increase-branch-mispredictions/)
+that addition of predictable branch in hot loop increases branch mispredicts 2x-4x.
 
 # Solutions
 
@@ -57,6 +60,22 @@ For workarounds like this keep in mind that
 > since it changes how compiles the stuff,
 > sometimes it gains performance while others take a hit 
 (from [here](https://www.reddit.com/r/rust/comments/10edmjf/comment/j4qhgeo/)).
+
+# C++
+
+C++ also has checking methods e.g. `std::vector::at` but more importantly
+it supports hardening mode (both Libstdc++ and Libc++,
+under `_GLIBCXX_ASSERTIONS` and `_LIBCPP_HARDENING_MODE` resp.,
+also MSVC with `_ITERATOR_DEBUG_LEVEL`)
+which implements checks like bounds, strict weak ordering, etc.
+
+Bounds checking overhead can be equated to replacing
+`reserve` + `push_back` with `resize`
+([here](https://source.chromium.org/chromium/chromium/src/+/63dbcdf2bfd553bc91524ec0a77dfd32a4d4a427)
+it brought up to 50% performance)
+or `operator[]` with `at` ([20%](https://quick-bench.com/q/o9du22dYmO0BCs5YqJ9gEKPyQ10) perf loss).
+
+All Linux distros use `_FORTIFY_SOURCE` and some (Fedora, RHEL) also `_GLIBCXX_ASSERTIONS`.
 
 # Links
 
