@@ -16,3 +16,8 @@ for h in `grep DONE materials.md | grep -o '[0-9]\+h' | tr -d 'h'`; do
 done
 
 echo "Spent $(((s + 7) / 8)) workdays"
+
+done=$(grep -c 'Status:.*DONE\|Wontfix' materials.md)
+all=$(grep -c Status: materials.md)
+
+echo "$((100 * done / all))% done"
