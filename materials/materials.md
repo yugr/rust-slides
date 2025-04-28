@@ -432,6 +432,8 @@ On the other hand, once all materials are analyzed we won't care about this file
     + Continuation of [RFC 1808](https://github.com/rust-lang/rfcs/pull/1808)
     + [Tracking issue](https://github.com/rust-lang/rust/issues/48055)
     + [Pull request](https://github.com/rust-lang/rfcs/pull/1909)
+- Impact of Undefined Behavior on Performance: https://news.ycombinator.com/item?id=27745755
+  * Status: backlog
 
 # UB in C++
 
@@ -565,11 +567,12 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Be sure to study links
   * More materials:
     + [Reddit](https://www.reddit.com/r/Compilers/comments/1k658fw/exploiting_undefined_behavior_in_cc_programs_for/)
+    + [HN](https://news.ycombinator.com/item?id=43766263)
 - C++ Safe Buffers: https://clang.llvm.org/docs/SafeBuffers.html
   * Assignee: yugr
   * Status: DONE (5m)
   * Docs for `-Wunsafe-buffer-usage`
-  * Just warns on any unsafe pointer arithmetic
+  * Basically just warns on any unsafe pointer arithmetic
   * Experimental `-fsafe-buffer-usage-suggestions` to generate fixits
   * Bunch of pragmas to turn off
   * More materials: no new links
