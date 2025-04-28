@@ -435,6 +435,25 @@ On the other hand, once all materials are analyzed we won't care about this file
 
 # UB in C++
 
+- Updated Field Experience With Annex K — Bounds Checking Interfaces: https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1969.htm (2015)
+  * Assignee: yugr
+  * Status: DONE (20m)
+  * Field report on integration of `XXX_s` APIs from Annex K of C standard
+  * Not very portable (MSVC has slightly different APIs)
+  * Adopting is non-trivial:
+    + need to get buffer size somewhere, somehow
+    + need to check return codes
+  * Common mistakes:
+    + passing size of wrong buffers (e.g. source instead of dst)
+    + just use `strlen` to compute buffer size in `strcpy_s` (this is useless)
+    + duplicated `strlen` calls
+    + return values are hard to check (need new error handling strategy across app) and are poorly tested
+  * Design problems:
+    + allow custom design handlers (instead of pure trap)
+  * Conclusions:
+> The design of the Bounds checking interfaces, though well-intentioned, suffers from far too many problems to correct.
+> Using the APIs has been seen to lead to worse quality, less secure software than relying on established approaches or modern technologies.
+> More effective and less intrusive approaches have become commonplace and are often preferred by users and security experts alike.
 - Visual C++: Iterator Checks and Slow STL Code: https://codeyarns.com/tech/2010-09-10-visual-c-iterator-checks-and-slow-stl-code.html#gsc.tab=0 (pre-2010)
   * Assignee: yugr
   * Status: DONE (15m)
@@ -448,18 +467,19 @@ On the other hand, once all materials are analyzed we won't care about this file
 - RFC: C++ Buffer Hardening: https://discourse.llvm.org/t/rfc-c-buffer-hardening/65734 (2022)
   * Assignee: yugr
   * Status: DONE (2h)
-  * Has been replaced by follow-up hardening RFC (?)
+  * Proposal by Apple
   * Replacement for pre-existing libc++ debug mode (`_LIBCPP_ENABLE_DEBUG_MODE` ?)
     + ABI changing
     + too slow
   * Two proposals:
     + hardened C++ dialect to avoid potentially unsafe pointer arithmetic (warnings, fixits)
+      - later became [Safe Buffers](https://clang.llvm.org/docs/SafeBuffers.html)
       - Dergachev [argues](https://discourse.llvm.org/t/rfc-c-buffer-hardening/65734/8) that (massive) fixits is a distinguishing feature of this proposal
     + debug checks in STL containers
       - Very similar to `_GLIBCXX_ASSERTIONS`
   * Explicitly allow ABI changes in containers but make them controllable via macro
   * Perf difference between `std::vector::operator[]` and `std::vector::at` is non-trivial:
-    + [20%](https://quick-bench.com/q/o9du22dYmO0BCs5YqJ9gEKPyQ10) on simple benchmark
+    + [20%](https://quick-bench.com/q/o9du22dYmO0BCs5YqJ9gEKPyQ10) on simple benchmark (but this may be due to exception overhead)
     + loops no longer vectorized (hello Rust!)
     + finally no real consensus on perf implications (whether compiler with "catch up")
   + Strong support from kcc and many others
@@ -472,42 +492,67 @@ On the other hand, once all materials are analyzed we won't care about this file
     + [Reddit](https://www.reddit.com/r/cpp/comments/xwtzro/rfc_c_buffer_hardening_clang_frontend/)
     + [HN](https://news.ycombinator.com/item?id=33103464)
     + Added tons of links
-- [-Wunsafe-buffer-usage] WIP: RFC: NFC: User documentation: https://reviews.llvm.org/D136811
+- [-Wunsafe-buffer-usage] WIP: RFC: NFC: User documentation: https://reviews.llvm.org/D136811 (2022)
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (20m)
   * Formal RFC for previous discussion
-- Updated Field Experience With Annex K — Bounds Checking Interfaces: https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1969.htm
+  * RFC does not touch the actual libc++ hardening part, only warnings and fixits
+  * This is specifically a buffer overflow solution (not UAF, UAR, etc.)
+  * Other materials: no links
+- RFC: Hardening in libc++: https://discourse.llvm.org/t/rfc-hardening-in-libc/73925 (2023)
   * Assignee: yugr
-  * Status: in progress
-- RFC: Hardening in libc++: https://discourse.llvm.org/t/rfc-hardening-in-libc/73925
-  * Assignee: yugr
-  * Status: in progress
-  * Update on previous RFC
+  * Status: DONE (15m)
+  * Update on previous RFC, concentrates specifically at libc++ isntrumentation
+  * By default ABI is not changed (unless `_LIBCPP_ABI_BOUNDED_ITERATORS_...` is defined)
+  * Many operations are not hardened and it's unclear whether it's possible in future
+  * Plan for compatibility with GCC's `-fhardened`
+  * Already used by [Chrome](https://issues.chromium.org/issues/40228527) and Gentoo Hardened
+  * Discusses minor questions e.g. naming, how to override handlers
 - libc++ documentation: Hardening Modes: https://libcxx.llvm.org/Hardening.html
   * Assignee: yugr
   * Status: DONE (30m)
   * A bunch of hardening (not debug) checks in libc++:
     - `operator[]`, strict weak order, etc.
     - full list [here](https://libcxx.llvm.org/Hardening.html#id12)
-  * Controlled via macro `_LIBCPP_HARDENING_MODE`
-  * Similar checks available in GCC's libstdc++ (under `_GLIBCXX_ASSERTIONS`)
+  * Controlled via macro `_LIBCPP_HARDENING_MODE` (or `-flibc++-hardening` flag)
+  * Similar checks available in GCC's libstdc++ (under `_GLIBCXX_ASSERTIONS` i.e. `-fhardened`)
   * Most likely misses many types of bugs
-- Retrofitting spatial safety to hundreds of millions of lines of C++: https://security.googleblog.com/2024/11/retrofitting-spatial-safety-to-hundreds.html
+- Retrofitting spatial safety to hundreds of millions of lines of C++: https://security.googleblog.com/2024/11/retrofitting-spatial-safety-to-hundreds.html (2024)
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (1h)
+  * Post about hardened Libc++ integration to Google codebase
+  * Report just 0.3% performance overhead and 0.5% size increase in Chrome binary !
+  * Plan to use [Safe Buffers](https://clang.llvm.org/docs/SafeBuffers.html) in future
   * More materials:
     + [Reddit](https://www.reddit.com/r/cpp/comments/1gs5bvr/retrofitting_spatial_safety_to_hundreds_of/)
     + [Reddit 2](https://www.reddit.com/r/cpp/comments/1h9hsax/google_retrofits_spatial_memory_safety_onto_c/)
-- LLVM's 'RFC: C++ Buffer Hardening' at Google: https://bughunters.google.com/blog/6368559657254912/llvm-s-rfc-c-buffer-hardening-at-google
+    + [HN](https://news.ycombinator.com/item?id=42150550)
+- Security in C++ - Hardening Techniques From the Trenches - Louis Dionne - C++Now 2024: https://www.youtube.com/watch?v=t7EJTO0-reg
   * Assignee: yugr
   * Status: in progress
+- LLVM's 'RFC: C++ Buffer Hardening' at Google: https://bughunters.google.com/blog/6368559657254912/llvm-s-rfc-c-buffer-hardening-at-google
+  * Assignee: yugr
+  * Status: DONE (15m)
+  * Hardening integration report for Google Cloud Platform
+  * Report 1-2.5% perf degradation (bandwidth, latency) but 4x improved with FDO
+  * Can work around hardening overhead via `std::vector::data` or iterators (instead of indices)
   * More materials:
     + [Reddit](https://www.reddit.com/r/cpp/comments/1b6zxee/llvms_rfc_c_buffer_hardening_at_google/)
 - Story-time: C++, bounds checking, performance, and compilers: https://chandlerc.blog/posts/2024/11/story-time-bounds-checking/
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (40m)
+  * Driving factors for spatial safety checks:
+    + improvements in LLVM due to support for safe languages (Azul, Rust, Swift, etc.), UBsan adoption
+    + PGO infra and improvements
+> Without PGO infrastructure, I do not think the overhead of these checks would be tolerable for most performance sensitive workloads
+    + eventually
+> radically reduce the practical costs of these kinds of checks and make them affordable by default and pervasively
+  * Temporal safety can be enabled by refcounting but overheads need to be checked
+  * Unfortunately not too many tech. details
   * More materials:
     + [Reddit](https://www.reddit.com/r/cpp/comments/1gtos7w/storytime_c_bounds_checking_performance_and/)
+      - Huge discussion of Rust `unsafe`
+    + No more links
 - Exploiting Undefined Behavior in C/C++ Programs for Optimization: A Study on the Performance Impact: https://web.ist.utl.pt/nuno.lopes/pubs/ub-pldi25.pdf
   * Assignee: yugr
   * Status: in progress
@@ -516,6 +561,9 @@ On the other hand, once all materials are analyzed we won't care about this file
   * More materials:
     + [Reddit](https://www.reddit.com/r/Compilers/comments/1k658fw/exploiting_undefined_behavior_in_cc_programs_for/)
 - Historical Clang Language WG Meeting Minutes (Apr 2024 - Mar 2025): https://discourse.llvm.org/t/historical-clang-language-wg-meeting-minutes-apr-2024-mar-2025/85638
+  * Assignee: yugr
+  * Status: in progress
+- C++ Safe Buffers: https://clang.llvm.org/docs/SafeBuffers.html
   * Assignee: yugr
   * Status: in progress
 
@@ -1860,6 +1908,7 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
   * Russian translation: https://habr.com/ru/companies/ruvds/articles/858246/
   * More materials:
     + [Reddit](https://news.ycombinator.com/item?id=41944121)
+- Comments for "Story-time: C++, bounds checking, performance, and compilers": https://www.reddit.com/r/cpp/comments/1gtos7w/storytime_c_bounds_checking_performance_and/
 
 # Code size
 

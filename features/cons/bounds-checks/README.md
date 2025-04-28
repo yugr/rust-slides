@@ -1,5 +1,19 @@
 All info about problems with bounds checks at runtime.
 
+Memory safety issues account for [76%](https://security.googleblog.com/2024/09/eliminating-memory-safety-vulnerabilities-Android.html)
+of vulnerabilities in Android.
+
+Important note is that most problems reported by users are
+in perf-critical code (codecs, math, autovec, etc.)
+Real-world codebases have much smaller average overhead
+E.g. Google reports [report](https://security.googleblog.com/2024/11/retrofitting-spatial-safety-to-hundreds.html)
+just 0.3% performance overhead for services and ~0.5% size increase of Chrome binary:
+  - caveat - the numbers were measured with FDO enabled
+    (w/o FDO penalty is [4x larger](https://bughunters.google.com/blog/6368559657254912/llvm-s-rfc-c-buffer-hardening-at-google))
+
+It's important to keep an eye on compiler as some bounds check optimizations
+may regress across versions.
+
 # Problems caused by bounds checks
 
 matklad [claims](https://github.com/matklad/bounds-check-cost) that main problem with bounds checks
@@ -65,8 +79,8 @@ For workarounds like this keep in mind that
 
 C++ also has checking methods e.g. `std::vector::at` but more importantly
 it supports hardening mode (both Libstdc++ and Libc++,
-under `_GLIBCXX_ASSERTIONS` and `_LIBCPP_HARDENING_MODE` resp.,
-also MSVC with `_ITERATOR_DEBUG_LEVEL`)
+`-fhardened` (aka `_GLIBCXX_ASSERTIONS`) and `-fhardened-libc++` (`_LIBCPP_HARDENING_MODE`) resp.,
+also MSVC with `_ITERATOR_DEBUG_LEVEL` and EASTL with its own checks)
 which implements checks like bounds, strict weak ordering, etc.
 
 Bounds checking overhead can be equated to replacing
@@ -76,6 +90,13 @@ it brought up to 50% performance)
 or `operator[]` with `at` ([20%](https://quick-bench.com/q/o9du22dYmO0BCs5YqJ9gEKPyQ10) perf loss).
 
 All Linux distros use `_FORTIFY_SOURCE` and some (Fedora, RHEL) also `_GLIBCXX_ASSERTIONS`.
+
+There is also proposal for language dialect eo prevent raw pointer arithmetic
+and provide fixits for easier migration
+([-Wunsafe-buffer-usage](https://discourse.llvm.org/t/rfc-c-buffer-hardening/65734))
+
+Pascal/Delphi also had [range checking](http://www.pascal.helpov.net/index/pascal_$R)
+long ago.
 
 # Links
 

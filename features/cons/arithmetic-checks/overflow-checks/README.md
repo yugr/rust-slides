@@ -69,6 +69,10 @@ Some people (e.g. John Regehr) argue that HW support for overflow checking would
 But arhictects [claim](https://news.ycombinator.com/item?id=8766264) that
 this will cause a big (~5%) increase of clock cycle.
 
+# Other languages
+
+C++ has UBsan/Isan and Pascal has long had `$Q+` (e.g. [here](https://www.freepascal.org/docs-html/prog/progsu64.html)).
+
 # Links
 
 * [RFC 560](https://github.com/rust-lang/rfcs/blob/master/text/0560-integer-overflow.md)
