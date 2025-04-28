@@ -529,7 +529,12 @@ On the other hand, once all materials are analyzed we won't care about this file
     + [HN](https://news.ycombinator.com/item?id=42150550)
 - Security in C++ - Hardening Techniques From the Trenches - Louis Dionne - C++Now 2024: https://www.youtube.com/watch?v=t7EJTO0-reg
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (45m)
+  * Overview of libc++ hardening, generall follows the docs
+  * WebKit also uses hardened libc++
+  * More materials:
+    + [Reddit](https://www.reddit.com/r/cpp/comments/1g8pgzu/security_in_c_hardening_techniques_from_the/)
+    + no new links
 - LLVM's 'RFC: C++ Buffer Hardening' at Google: https://bughunters.google.com/blog/6368559657254912/llvm-s-rfc-c-buffer-hardening-at-google
   * Assignee: yugr
   * Status: DONE (15m)
@@ -562,7 +567,12 @@ On the other hand, once all materials are analyzed we won't care about this file
     + [Reddit](https://www.reddit.com/r/Compilers/comments/1k658fw/exploiting_undefined_behavior_in_cc_programs_for/)
 - C++ Safe Buffers: https://clang.llvm.org/docs/SafeBuffers.html
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (5m)
+  * Docs for `-Wunsafe-buffer-usage`
+  * Just warns on any unsafe pointer arithmetic
+  * Experimental `-fsafe-buffer-usage-suggestions` to generate fixits
+  * Bunch of pragmas to turn off
+  * More materials: no new links
 - Historical Clang Language WG Meeting Minutes (Apr 2024 - Mar 2025): https://discourse.llvm.org/t/historical-clang-language-wg-meeting-minutes-apr-2024-mar-2025/85638
   * Status: backlog
 - WG21 proposal: Standard library hardening: https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2024/p3471r0.html
