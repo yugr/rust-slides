@@ -53,6 +53,11 @@ Also we may need to
   - fix CPU frequency (in BIOS or, if not available, by setting `scaling_governor` to `performance`)
   - disable HW prefetching in BIOS
 
+It would be great to test both on X86 and on AArch64 because
+according to "Exploiting Undefined Behavior in C/C++ Programs for Optimization"
+paper AArch64 is more sensitive to UB-related optimizations.
+Also according to paper performance is very sensitive to LTO.
+
 # Common benchmarking tools
 
 Most popular Rust benchmarking crate is the `Criterion.rs` crate. Nightly version of Rust also has built-in `[#bench]` attribute. There also may be other benchmarking frameworks, but for a well-structured crate cargo should provide a simple `cargo bench` abstraction that will run all the available benchmarks (and tests) automatically.

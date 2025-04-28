@@ -562,12 +562,45 @@ On the other hand, once all materials are analyzed we won't care about this file
     + No more links
 - Exploiting Undefined Behavior in C/C++ Programs for Optimization: A Study on the Performance Impact: https://web.ist.utl.pt/nuno.lopes/pubs/ub-pldi25.pdf
   * Assignee: yugr
-  * Status: in progress
+  * Status: in progress (70m)
+    + TODO: I'm not closing this just yet because Reddit/HN posts have just been published; need time to get all comments
   * This is very similar to our goal but for C++
-  * Be sure to study links
+  * Investigates perf effects when disabling different types of UB in C++:
+    + integer/shift overflows (masking + remove `nsw`)
+    + strict aliasing
+    + `__builtin_assume`/`__builtin_unreachable`
+    + const/pure annotations
+    + `restrict` annotations
+    + etc.
+  * Somehow used Alive2 to detect missing disabled UBs
+  * Benchmarks based on Phoronix testsuite
+  * Results are weird:
+    + UB is much more critical for AArch64 than for X86 (most likely X86 machines are more powerful and can compensate for perf loss)
+    + non-LTO AArch64:
+      - average: 3% loss for each UB type, 5% net
+      - worst: up to 10% for each UB type, up to 13% net
+    + LTO AArch64:
+      - average: 3% gain (!) for each UB type, 0% net
+      - worst: up to 5% for each type, up to 5% net
+  * Also contains analysis of some regressions:
+    + some can be fixed by more clever LLVM opts (e.g. more aggressive CSE caused more spills)
+    + some are totally random (e.g. loop align)
   * More materials:
     + [Reddit](https://www.reddit.com/r/Compilers/comments/1k658fw/exploiting_undefined_behavior_in_cc_programs_for/)
     + [HN](https://news.ycombinator.com/item?id=43766263)
+    + Also cites some relevant papers (in "Related work: Performance studies" section):
+      - (Secure compiler) Prevention of vulnerabilities arising from optimization of code with Undefined Behavior
+        * has too few perf measurements
+      - (Secure compiler) Developing a clang-based safe compiler
+        * has too few perf measurements
+      - Doerfert's papers on optimistic annotations and ORAQL
+        * rely on unsafe optimizations so are not relevant
+      - (Autovec) Performance Left on the Table: An Evaluation of Compiler Autovectorization for RISC-V
+      - (Autovec) Evaluating Auto-Vectorizing Compilers through Objective Withdrawal of Useful Information
+- Performance Left on the Table: An Evaluation of Compiler Autovectorization for RISC-V: https://par.nsf.gov/servlets/purl/10426592
+  * Status: backlog
+- Evaluating Auto-Vectorizing Compilers through Objective Withdrawal of Useful Information: https://ora.ox.ac.uk/objects/uuid:eac7b135-e92b-48dc-a1f7-4de66a441390/files/szg64tk95s
+  * Status: backlog
 - C++ Safe Buffers: https://clang.llvm.org/docs/SafeBuffers.html
   * Assignee: yugr
   * Status: DONE (5m)

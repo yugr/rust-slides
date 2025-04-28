@@ -52,7 +52,7 @@ When commiting changes
 
 # Research
 
-Each performance feature neeeds to contain
+For each performance feature we neeed to provide
   - clear example (Rust microbenchmark, asm code)
   - info whether LLVM can potentially optimize it (and with what limitations)
   - info on how developer can work around it and with how much effort/ugliness (unsafe, wrapping operations, reslicing, etc.)
@@ -61,9 +61,18 @@ Each performance feature neeeds to contain
     * may need to write analysis passes to scan real Rust code (libs, big projects) for occurences
   - links to important articles (design, etc.)
   - (need to collect prooflinks with timecodes, reprocases for everything)
+  - performance impact:
+    * determine how to enable/disable feature in compiler/stdlib
+      + there may be flags (e.g. for interger overflows) but sometimes may need patch code (e.g. for bounds checks)
+    * collect perf measurements for benchmarks:
+     + runtime
+     + PMU counters (inst count, I$/D$/branch misses)
+     + compiler stats
+       - depend on feature
+       - e.g. SLP/loop autovec for bounds checking feature
+       - e.g. NoAlias returns from AA manager for alias feature
+       - e.g. CSE/GVN/LICM for alias feature
+       - TODO: check `-print-stats` for interesting counters
+    * x86/AArch64, normal/ThinLTO/FatLTO, cgu=default/1
 
 Hopefully in many cases all above will be obtained from collected materials.
-But in some cases we will need to make our own analysis:
-  - prepare reasonable microbenchmarks
-  - collect statistics for real-world code (via LLVM/asm analysis) if some safety feature is disabled
-  - TODO

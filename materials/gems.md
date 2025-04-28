@@ -18,3 +18,8 @@ which all team members need to be aware of.
 - [What languages (other than Rust) have "zero cost abstraction"?](https://www.reddit.com/r/rust/comments/zkr3xm/what_languages_other_than_rust_have_zero_cost/)
   * Good discussion of what 0-cost means in different languages
 - [Rust Performance Book](https://nnethercote.github.io/perf-book)
+- [Exploiting Undefined Behavior in C/C++ Programs: The Performance Impact](https://web.ist.utl.pt/nuno.lopes/pubs/ub-pldi25.pdf) (check Wayback Machine if files does not download)
+  * Analyzes performance impact of different UB types in C++
+  * Very relevant for us
+- [RFC: C++ Buffer Hardening](https://discourse.llvm.org/t/rfc-c-buffer-hardening/65734)
+  * Adds Rust-like safety checks to STL library
