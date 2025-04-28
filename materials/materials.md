@@ -560,12 +560,25 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Be sure to study links
   * More materials:
     + [Reddit](https://www.reddit.com/r/Compilers/comments/1k658fw/exploiting_undefined_behavior_in_cc_programs_for/)
-- Historical Clang Language WG Meeting Minutes (Apr 2024 - Mar 2025): https://discourse.llvm.org/t/historical-clang-language-wg-meeting-minutes-apr-2024-mar-2025/85638
-  * Assignee: yugr
-  * Status: in progress
 - C++ Safe Buffers: https://clang.llvm.org/docs/SafeBuffers.html
   * Assignee: yugr
   * Status: in progress
+- Historical Clang Language WG Meeting Minutes (Apr 2024 - Mar 2025): https://discourse.llvm.org/t/historical-clang-language-wg-meeting-minutes-apr-2024-mar-2025/85638
+  * Status: backlog
+- WG21 proposal: Standard library hardening: https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2024/p3471r0.html
+  * Status: backlog
+- Legacy Safety: The Wrocław C++ Meeting: https://cor3ntin.github.io/posts/profiles/
+  * Status: backlog
+- Sutter's Mill: Trip report: November 2024 ISO C++ standards meeting: https://herbsutter.com/2024/11/24/wg21-2024-11/
+  * Status: backlog
+- Sutter's Mill: Trip report: February 2025 ISO C++ standards meeting: https://herbsutter.com/2025/02/17/trip-report-february-2025-iso-c-standards-meeting-hagenberg-austria/
+  * Status: backlog
+- ThinkCell: Trip Report: Fall ISO C++ Meeting in Wrocław, Poland: https://www.think-cell.com/en/career/devblog/trip-report-fall-iso-cpp-meeting-in-wroclaw-poland
+  * Status: backlog
+  * Other materials:
+    + [Reddit](https://www.reddit.com/r/cpp/comments/1h33srd/trip_report_fall_iso_c_meeting_in_wroc%C5%82aw_poland/)
+- ThinkCell: Trip Report: Winter ISO C++ Meeting in Hagenberg, Austria: https://www.think-cell.com/en/career/devblog/trip-report-winter-iso-cpp-meeting-in-hagenberg-austria
+  * Status: backlog
 
 # Expression templates
 
