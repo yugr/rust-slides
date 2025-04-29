@@ -82,6 +82,8 @@ it supports hardening mode (both Libstdc++ and Libc++,
 `-fhardened` (aka `_GLIBCXX_ASSERTIONS`) and `-fhardened-libc++` (`_LIBCPP_HARDENING_MODE`) resp.,
 also MSVC with `_ITERATOR_DEBUG_LEVEL` and EASTL with its own checks)
 which implements checks like bounds, strict weak ordering, etc.
+Moreover STL hardening [has been accepted](https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2025/p3471r4.html)
+for Standard.
 
 Bounds checking overhead can be equated to replacing
 `reserve` + `push_back` with `resize`

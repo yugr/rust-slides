@@ -619,10 +619,25 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Discussed various topics: profiles, state of the language, etc.
   * No discussion of performance
   * More materials: added one more post by Herb
-- WG21 proposal: Standard library hardening: https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2024/p3471r0.html
-  * Status: backlog
+- WG21 proposal: Standard library hardening: https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2025/p3471r4.html
+  * Status: DONE (20m)
+  * Based on C++ hardening work
+  * In general repeats LLVM RFCs
+  * Proposes to add special Hardened Preconditions to spec
+  * Some useful discussions in FAQ:
+    + Admits that checks are not exhaustive:
+  * More materials: no new links
+> [some] precondition[s] can only be checked for some containers and not others
+    + Omitted checks: `erase` methods, associative containers, limited checking of algorithms, `valarray` (planned to cover in dedicated papers...)
 - Legacy Safety: The Wrocław C++ Meeting: https://cor3ntin.github.io/posts/profiles/
-  * Status: backlog
+  * Status: DONE (20m)
+  * Confirms that effort is due to US government's recommendations
+  * Making sets of small changes [works](https://security.googleblog.com/2024/09/eliminating-memory-safety-vulnerabilities-Android.html)
+  * Large companies are (rapidly?) [moving from C++](https://security.googleblog.com/2022/12/memory-safe-languages-in-android-13.html)
+  * Commitee is clear that moving to borrow checker is not possible (e.g. [Safe C++](https://safecpp.org/draft.html))
+  * Profiles generally accepted as solution to safety problem
+    + aimed at C++26
+    + mix of static analysis and runtime checks
 - Sutter's Mill: Trip report: November 2024 ISO C++ standards meeting: https://herbsutter.com/2024/11/24/wg21-2024-11/
   * Status: backlog
 - Sutter's Mill: Trip report: February 2025 ISO C++ standards meeting: https://herbsutter.com/2025/02/17/trip-report-february-2025-iso-c-standards-meeting-hagenberg-austria/
