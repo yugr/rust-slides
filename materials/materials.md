@@ -619,16 +619,16 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Discussed various topics: profiles, state of the language, etc.
   * No discussion of performance
   * More materials: added one more post by Herb
-- WG21 proposal: Standard library hardening: https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2025/p3471r4.html
+- P3471: Standard library hardening: https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2025/p3471r4.html
   * Status: DONE (20m)
   * Based on C++ hardening work
   * In general repeats LLVM RFCs
-  * Proposes to add special Hardened Preconditions to spec
+  * Proposes to add special Hardened Preconditions to Standard (accepted for C++26)
   * Some useful discussions in FAQ:
     + Admits that checks are not exhaustive:
-  * More materials: no new links
 > [some] precondition[s] can only be checked for some containers and not others
     + Omitted checks: `erase` methods, associative containers, limited checking of algorithms, `valarray` (planned to cover in dedicated papers...)
+  * More materials: no new links
 - Legacy Safety: The Wrocław C++ Meeting: https://cor3ntin.github.io/posts/profiles/
   * Status: DONE (20m)
   * Confirms that effort is due to US government's recommendations
@@ -639,15 +639,23 @@ On the other hand, once all materials are analyzed we won't care about this file
     + aimed at C++26
     + mix of static analysis and runtime checks
 - Sutter's Mill: Trip report: November 2024 ISO C++ standards meeting: https://herbsutter.com/2024/11/24/wg21-2024-11/
-  * Status: backlog
+  * Status: DONE (10m)
+  * Just briefly mentions P3471 and [basic safety profiles proposal](https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2025/p3081r2.pdf)
+  * Confirms that Safe C++ will not be part of Standard in foreseeable future
+  * More materials: no more new/relevant links
 - Sutter's Mill: Trip report: February 2025 ISO C++ standards meeting: https://herbsutter.com/2025/02/17/trip-report-february-2025-iso-c-standards-meeting-hagenberg-austria/
-  * Status: backlog
+  * Status: DONE (5m)
+  * Cites parts of P3471 but does not add any new info
+  * More materials: no more new/relevant links
 - ThinkCell: Trip Report: Fall ISO C++ Meeting in Wrocław, Poland: https://www.think-cell.com/en/career/devblog/trip-report-fall-iso-cpp-meeting-in-wroclaw-poland
-  * Status: backlog
+  * Status: DONE (0m)
+  * Irrelevant - does not mention P3471 at all
   * Other materials:
     + [Reddit](https://www.reddit.com/r/cpp/comments/1h33srd/trip_report_fall_iso_c_meeting_in_wroc%C5%82aw_poland/)
 - ThinkCell: Trip Report: Winter ISO C++ Meeting in Hagenberg, Austria: https://www.think-cell.com/en/career/devblog/trip-report-winter-iso-cpp-meeting-in-hagenberg-austria
-  * Status: backlog
+  * Status: DONE (5m)
+  * A brief discussion of profiles and P3471, nothing new
+  * More materials: none
 - Sutter's Mill: C++ safety, in context: https://herbsutter.com/2024/03/11/safety-in-context/
   * Status: backlog
 
