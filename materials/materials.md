@@ -598,9 +598,14 @@ On the other hand, once all materials are analyzed we won't care about this file
       - (Autovec) Performance Left on the Table: An Evaluation of Compiler Autovectorization for RISC-V
       - (Autovec) Evaluating Auto-Vectorizing Compilers through Objective Withdrawal of Useful Information
 - Performance Left on the Table: An Evaluation of Compiler Autovectorization for RISC-V: https://par.nsf.gov/servlets/purl/10426592
-  * Status: backlog
+  * Status: DONE (5m)
+  * Investigates RISCV-specific autovec issues
+  * Not relevant
 - Evaluating Auto-Vectorizing Compilers through Objective Withdrawal of Useful Information: https://ora.ox.ac.uk/objects/uuid:eac7b135-e92b-48dc-a1f7-4de66a441390/files/szg64tk95s
-  * Status: backlog
+  * Status: DONE (5m)
+  * Investigates how various additional info influences efficacy of vectorization in TSVC:
+    + conditions, potential aliasing, non-trivial indexing
+  * Not very useful for us
 - C++ Safe Buffers: https://clang.llvm.org/docs/SafeBuffers.html
   * Assignee: yugr
   * Status: DONE (5m)
@@ -610,7 +615,10 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Bunch of pragmas to turn off
   * More materials: no new links
 - Historical Clang Language WG Meeting Minutes (Apr 2024 - Mar 2025): https://discourse.llvm.org/t/historical-clang-language-wg-meeting-minutes-apr-2024-mar-2025/85638
-  * Status: backlog
+  * Status: DONE (15m)
+  * Discussed various topics: profiles, state of the language, etc.
+  * No discussion of performance
+  * More materials: added one more post by Herb
 - WG21 proposal: Standard library hardening: https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2024/p3471r0.html
   * Status: backlog
 - Legacy Safety: The Wrocław C++ Meeting: https://cor3ntin.github.io/posts/profiles/
@@ -624,6 +632,8 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Other materials:
     + [Reddit](https://www.reddit.com/r/cpp/comments/1h33srd/trip_report_fall_iso_c_meeting_in_wroc%C5%82aw_poland/)
 - ThinkCell: Trip Report: Winter ISO C++ Meeting in Hagenberg, Austria: https://www.think-cell.com/en/career/devblog/trip-report-winter-iso-cpp-meeting-in-hagenberg-austria
+  * Status: backlog
+- Sutter's Mill: C++ safety, in context: https://herbsutter.com/2024/03/11/safety-in-context/
   * Status: backlog
 
 # Expression templates
