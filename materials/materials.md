@@ -433,7 +433,11 @@ On the other hand, once all materials are analyzed we won't care about this file
     + [Tracking issue](https://github.com/rust-lang/rust/issues/48055)
     + [Pull request](https://github.com/rust-lang/rfcs/pull/1909)
 - Impact of Undefined Behavior on Performance: https://news.ycombinator.com/item?id=27745755
-  * Status: backlog
+  * Status: DONE (3h)
+  * Makes a classical example of loop where undefinedness of signed overflow allows better codegen in C
+  * Compares with Rust which is much worse
+    + Unfortunately no investigation why Rust is so bad
+  * More materials: added to respective feature
 
 # UB in C++
 
@@ -657,6 +661,8 @@ On the other hand, once all materials are analyzed we won't care about this file
   * A brief discussion of profiles and P3471, nothing new
   * More materials: none
 - Sutter's Mill: C++ safety, in context: https://herbsutter.com/2024/03/11/safety-in-context/
+  * Status: backlog
+- Meaning of Undefined and Justification for UB: https://github.com/rust-lang/unsafe-code-guidelines/issues/253
   * Status: backlog
 
 # Expression templates

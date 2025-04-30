@@ -73,6 +73,61 @@ this will cause a big (~5%) increase of clock cycle.
 
 C++ has UBsan/Isan and Pascal has long had `$Q+` (e.g. [here](https://www.freepascal.org/docs-html/prog/progsu64.html)).
 
+# Overflow UB in C++
+
+Undefining signed integer overflow is relevant for some important usecases in C/C++.
+
+Consider a loop like
+```
+for (T i = 0; i <= n; ++i) {
+  p[i] = 1.0;
+}
+```
+([Godbolt link](https://godbolt.org/z/MEhfEdb9z)).
+
+On 64-bit platforms pointers are 64-bit but indices are often 32-bit.
+
+For `T == int` this loop will execute forever for `n == INT_MAX`
+(considering wrapping arithmetic).
+Also due to wrap-around it's not possible to promote `i` to 64-bit -
+we have to sign-extend it in loop to preserve the wrap-around semantics.
+
+Same problem occurs for unsigned indices (and signed under `-fwrapv`)
+but unfortunately overflow is defined for them
+(so above loop is significantly slower for `T == unsigned`).
+
+Another example: without UB it would be impossible to replace
+other induction variables:
+```
+for (i = lo; i <= hi; i++)
+  sum ^= i * 53;
+```
+with
+```
+for (ic = lo * 53; ic <= hic; ic += 53)
+  sum ^= ic;
+```
+
+In this case using unsigned's also does not allow compiler
+to fuse index variables to pointers (due to potential overflow):
+```
+    for (;;) {
+        int c1 = buf[i1];
+        int c2 = buf[i2];
+        if (c1 != c2)
+            return c1 - c2;
+        i1++;
+        i2++;
+    }
+```
+This is similar to infamous Carruth's example in
+[Garbage In, Garbage Out](https://youtu.be/yG1OZ69H_-o?t=2358) talk.
+Basically any program where indices do not have a fixed upper bound
+has this issue.
+
+Finally signed overflow UB also allows for better
+[range tracking](https://kristerw.blogspot.com/2016/02/how-undefined-signed-overflow-enables.html).
+
 # Links
 
 * [RFC 560](https://github.com/rust-lang/rfcs/blob/master/text/0560-integer-overflow.md)
@@ -84,6 +139,17 @@ C++ has UBsan/Isan and Pascal has long had `$Q+` (e.g. [here](https://www.freepa
 - Measure overhead via `-Z force-overflow-checks` (or `-C overflow-checks=on`)
   * See [RFC 1535](https://github.com/rust-lang/rfcs/blob/master/text/1535-stable-overflow-checks.md) for some details
   * Does it add `nsw`/`nuw` and enable loop optimizations ?
+- Why Rust produces such bad asm for code from [here](https://softwarebits.substack.com/p/impact-of-undefined-behavior-on-performance) ?
+```
+#[no_mangle]
+pub fn sum_of_n_unsigned(n: usize) -> usize {
+    let mut total = 0;
+    for i in 1..=n {
+        total += i;
+    }
+    total
+}
+```
 
 # Inclusive ranges are slower than exclusive ones
 
