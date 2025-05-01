@@ -1299,6 +1299,9 @@ pub fn foo(p: Box<S>) {
 
 # Data structures performance
 
+If a common advice for complex (self-ref) structs is to use `Rc`/`Arc`,
+we should add them to overheads.
+
 - Learn Rust With Entirely Too Many Linked Lists: https://rust-unofficial.github.io/too-many-lists/
   * Status: backlog
 - Nine Rules for Creating Fast, Safe, and Compatible Data Structures in Rust:
