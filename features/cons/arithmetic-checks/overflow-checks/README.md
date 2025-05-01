@@ -79,7 +79,7 @@ Undefining signed integer overflow is relevant for some important usecases in C/
 
 Consider a loop like
 ```
-for (T i = 0; i <= n; ++i) {
+for (T i = 0; i <= n; ++i) {  // Also 'i != n'
   p[i] = 1.0;
 }
 ```

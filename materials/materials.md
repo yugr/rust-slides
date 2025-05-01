@@ -1988,14 +1988,21 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
   * More materials: none
 - RFC: Abort by default: https://github.com/rust-lang/rfcs/pull/1759
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (15m)
+  * Proposal to make `panic=abort` the default choice
+  * Rejected because that will be a disrupting change
+  * More materials: no new links
 - Abort by default v2: https://github.com/rust-lang/rfcs/pull/1765
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (15m)
+  * Proposal suggested to make panic=abort default for new Cargo projects
+  * Rejected for lack of benchmarks and clear arguments against panicking
+  * More materials: no new links
 - Pros and cons of catch_unwind: https://users.rust-lang.org/t/pros-and-cons-of-std-catch-unwind/65417
   * Assignee: yugr
-  * Status: in progress
-  * Is catch_unwind equivalent of C++ catch ?
+  * Status: DONE (10m)
+  * Just general discussion of when to use panics (invariant violations, programmer errors) and error handling (logical errors, env errors)
+  * More materials: no new links
 
 # Uninit
 

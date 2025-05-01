@@ -8,6 +8,10 @@ E.g. they complicate compiler analyses due to presence of landing pads.
 
 Panicking causes significant code bloat in small functions (e.g. [here](https://www.rottedfrog.co.uk/?p=24)).
 
+It's not clear how they influence performance (or whether they do at all).
+Note that exceptions may actually be _beneficial_ for performance
+because no BTB is wasted on error handling code.
+
 Panics make leaf functions no longer leaf (see [this](https://www.reddit.com/r/programming/comments/2po703/comment/cmym6jk/))
 which may harm optimizations (e.g. inlining) and introduce unnecessary reg spills.
 
