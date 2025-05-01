@@ -108,7 +108,8 @@ for (ic = lo * 53; ic <= hic; ic += 53)
   sum ^= ic;
 ```
 
-In this case using unsigned's also does not allow compiler
+In [this case](https://nullprogram.com/blog/2018/07/20/)
+using unsigned's also does not allow compiler
 to fuse index variables to pointers (due to potential overflow):
 ```
     for (;;) {
@@ -150,6 +151,7 @@ pub fn sum_of_n_unsigned(n: usize) -> usize {
     total
 }
 ```
+  (most likely because equivalent C code may loop forever)
 
 # Inclusive ranges are slower than exclusive ones
 

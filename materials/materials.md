@@ -436,7 +436,8 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Status: DONE (3h)
   * Makes a classical example of loop where undefinedness of signed overflow allows better codegen in C
   * Compares with Rust which is much worse
-    + Unfortunately no investigation why Rust is so bad
+    + unfortunately no investigation why Rust is so bad
+    + (most likely because equivalent C code may loop forever)
   * More materials: added to respective feature
 
 # UB in C++
@@ -660,10 +661,11 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Status: DONE (5m)
   * A brief discussion of profiles and P3471, nothing new
   * More materials: none
-- Sutter's Mill: C++ safety, in context: https://herbsutter.com/2024/03/11/safety-in-context/
-  * Status: backlog
 - Meaning of Undefined and Justification for UB: https://github.com/rust-lang/unsafe-code-guidelines/issues/253
-  * Status: backlog
+  * Status: DONE (10m)
+  * Just general discussion of UB concept in Rust and C++
+  * Mentions some optimizations but overall nothing new
+  * More materials: no new links
 
 # Expression templates
 
@@ -948,7 +950,8 @@ pub fn foo(p: Box<S>) {
   * No good answers
   * More materials: no links
 - RFC: Placement by return: https://github.com/rust-lang/rfcs/pull/2884
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 
 # Iterators
 
@@ -1274,9 +1277,11 @@ pub fn foo(p: Box<S>) {
 # Niches
 
 - RFC: Alignment niches for references types: https://github.com/rust-lang/rfcs/pull/3204
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - Niches: https://github.com/rust-lang/rfcs/pull/3334
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 
 # Data structures performance
 
