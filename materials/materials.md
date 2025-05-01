@@ -2011,10 +2011,12 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
 
 - Uninitialized Memory: Unsafe Rust is Too Hard: https://lucumr.pocoo.org/2022/1/30/unsafe-rust/
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (30m)
+  * An example of how to uninitialize a struct with non-trivial fields
   * More materials:
     + [Reddit](https://www.reddit.com/r/rust/comments/sg6pp5/uninitialized_memory_unsafe_rust_is_too_hard/)
     + [HN](https://news.ycombinator.com/item?id=30135758)
+    + no more materials in blog
 - Fast vector initialization without default value: https://users.rust-lang.org/t/fast-vector-initialization-without-default-value/34857
   * Assignee: yugr
   * Status: DONE (10m)
@@ -2035,6 +2037,11 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
   * Solution: `Vec::with_capacity` + `Vec::spare_capacity_mut` + `Vec::set_len`
   * More materials: no new links
 - Nomicon: Unchecked Uninitialized Memory: https://doc.rust-lang.org/nomicon/unchecked-uninit.html
+  * Assignee: yugr
+  * Status: DONE (5m)
+  * Gives some more examples of `MaybeUninit` but nothing new overall
+  * More materials: no new links
+- RFC 2930: Do not require initialized inputs to Read: https://github.com/rust-lang/rfcs/blob/master/text/2930-read-buf.md
   * Assignee: yugr
   * Status: in progress
 

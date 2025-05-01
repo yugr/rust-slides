@@ -5,14 +5,40 @@ but compiler will still require dummy initialization.
 In some cases it can be optimized later,
 in some this will be unnecessary overhead.
 
+Unfortunately APIs to avoid redundant inits are complex.
+
 # Solutions
 
-The most common solution for simple arrays is to use `MaybeUninit`:
+Note that it's UB to access data before it's initialized (e.g. call `Vec::set_len` on it).
+Also it is not valid to construct (mutable) reference to uninitialized memory:
+> Creating a reference with &/&mut is only allowed if the pointer
+> is properly aligned and points to initialized data. 
+(from [here](https://doc.rust-lang.org/std/ptr/macro.addr_of_mut.html)).
+Only pointers should be used to avoid UB.
+
+The suggested solution for simple types is `MaybeUninit`.
+E.g. for arrays:
 ```
-let mut buf: MaybeUninit<[u8; 4]> = MaybeUninit::uninit();
-let mut_ref = unsafe { &mut *buf.as_mut_ptr() };
-// Initialize mut_ref
-let buf = unsafe { buf.assume_init() };
+let buf = unsafe {
+    let mut buf = MaybeUninit::<[u8; 4]>::uninit();
+    let ptr = buf.as_mut_ptr();
+    for i in ... {
+        ptr.offset(i).write(...);
+    }
+    buf.assume_init()
+};
+```
+and for structs:
+```
+let role = unsafe {
+    let mut uninit = MaybeUninit::<Role>::uninit();
+    let ptr = uninit.as_mut_ptr();
+    // Need write (instead of explicit assign) to avoid dropping uninitialized String
+    addr_of_mut!((*ptr).name).write("basic".to_string());
+    (*ptr).flag = 1;
+    (*ptr).disabled = false;
+    uninit.assume_init()
+};
 ```
 
 For vectors can also construct slice from raw parts:
@@ -23,25 +49,12 @@ let old_len = buf.len();
 buf.reserve(data.len());
 
 unsafe {
-    let s = std::slice::from_raw_parts_mut(
-        buf.as_mut_ptr().add(old_len),  // Or buf.spare_capacity_mut()
-        data.len()
-    );
-}
-
-// Initialize s
-
-unsafe {
+    let ptr = buf.spare_capacity_mut();
+    for i in ... {
+        ptr[idx].write(...);
+    }
     buf.set_len(len + data.len());
 }
-```
-or can use (safe)
-```
-buf.spare_capacity_mut()[idx].write(...)
-```
-to avoid constucting `&mut` to uninitialized memory which may be UB ?
-
-Note that it's UB to access data before it's initialized (e.g. call `Vec::set_len` on it).
 
 # TODO
 
