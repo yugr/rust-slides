@@ -2010,17 +2010,33 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
 # Uninit
 
 - Uninitialized Memory: Unsafe Rust is Too Hard: https://lucumr.pocoo.org/2022/1/30/unsafe-rust/
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
   * More materials:
+    + [Reddit](https://www.reddit.com/r/rust/comments/sg6pp5/uninitialized_memory_unsafe_rust_is_too_hard/)
     + [HN](https://news.ycombinator.com/item?id=30135758)
-- Fast vector initialization without default value: https://users.rust-lang.org/t/fast-vector-initialization-without-default-value/34857/3
-  * Status: backlog
+- Fast vector initialization without default value: https://users.rust-lang.org/t/fast-vector-initialization-without-default-value/34857
+  * Assignee: yugr
+  * Status: DONE (10m)
+  * Problem: OP claimed that he had a slowdown due to unnecessary vector initialization
+  * Root cause: not clear because kernel code wasn't provided
+  * Solution: use `vec![MaybeUninit::uninit(); n]`, `Vec::set_len`, `Vec::with_capacity`
+  * More materials: no relevant suggested links
 - Is there a way to express buffer need not be zeroed? https://users.rust-lang.org/t/is-there-a-way-to-express-a-buffer-need-not-be-zeroed/65785
-  * Status: backlog
+  * Assignee: yugr
+  * Status: DONE (5m)
+  * OP wondered how to avoid initializing buffer with values which won't be read
+  * Solution: `MaybeUninit<[u8; 1024]>`
+  * More materials: no new links
 - Idiomatic way of working with uninitialized dynamic memory: https://users.rust-lang.org/t/idiomatic-way-of-working-with-uninitialized-dynamic-memory/50642
-  * Status: backlog
+  * Assignee: yugr
+  * Status: DONE (10m)
+  * OP wondered about recommended way to work with uninitialized vector
+  * Solution: `Vec::with_capacity` + `Vec::spare_capacity_mut` + `Vec::set_len`
+  * More materials: no new links
 - Nomicon: Unchecked Uninitialized Memory: https://doc.rust-lang.org/nomicon/unchecked-uninit.html
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 
 # Unsafe
 
