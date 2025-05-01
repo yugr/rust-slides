@@ -26,6 +26,8 @@ but according to [this](https://www.reddit.com/r/rust/comments/1eeuqtc/c_vectore
 there is nothing officially accepted.
 Maintainers consider it [a low priority feature](https://www.reddit.com/r/rust/comments/1eeuqtc/comment/lfhqob6/).
 
+Current effort to implement C++-like guaranteed (unnamed) RVO is in [RFC 2884](https://github.com/rust-lang/rfcs/pull/2884).
+
 # Solutions
 
 One could argue that lack of placement new may be alleivated

@@ -951,7 +951,12 @@ pub fn foo(p: Box<S>) {
   * More materials: no links
 - RFC: Placement by return: https://github.com/rust-lang/rfcs/pull/2884
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (35m)
+  * A follow-up for [issue #27779](https://github.com/rust-lang/rust/issues/27779)
+  * Proposes
+    + C++-like guaranteed (unnamed) RVO (i.e. elide copies in function returns)
+    + `new_with(|| MyStruct { ... })` methods in containers for inplace construction
+  * RFC still not accepted but overall positive
 
 # Iterators
 
@@ -1278,10 +1283,19 @@ pub fn foo(p: Box<S>) {
 
 - RFC: Alignment niches for references types: https://github.com/rust-lang/rfcs/pull/3204
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (15m)
+  * Proposal to extend niche optimizer to use alignment padding in references for discriminators
+  * Prototype available under [-Z reference-niches](https://github.com/rust-lang/rust/pull/113166)
+  * More materials: no new links
 - Niches: https://github.com/rust-lang/rfcs/pull/3334
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (30m)
+  * Proposal to allow users to specify "invalid" values in their types via annotations (to be used by niche optimization)
+  * Also contains ideas on other niche opportunities:
+    + use pointer/reference alignment padding
+    + Use invalid pointer/reference ranges (e.g. addresses in zero memory page)
+    + Various invalid OS-specific pointer patterns
+  * Closed in favor of [#103724](https://github.com/rust-lang/rust/pull/103724)
 
 # Data structures performance
 
@@ -2125,7 +2139,7 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
   * A common case is that CGUs distribute work very unevenly and compile time is totally dominated by single CGU
   * More materials: no relevant links
 
-# Other
+# TCO
 
 - Explicit Tail Call RFC https://github.com/rust-lang/rfcs/pull/3407
     * Assignee: zakhar
@@ -2137,6 +2151,9 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
     * Problem: Rust does not have TCO
     * Solution: Some crates (tco, tramp) provide macros to optimize tail-calling functions.
         + These crates are not well-developed and are either in POC state or do not provide 'real' (constant memory usage) TCO
+
+# Other
+
 - Leaving Rust gamedev after 3 years: https://loglog.games/blog/leaving-rust-gamedev/ (also comments in https://news.ycombinator.com/item?id=40172033 and https://habr.com/ru/articles/813597/)
   * Status: backlog
 - Why I hate Rust programming language? https://www.reddit.com/r/programming/comments/n9l68o/why_i_hate_rust_programming_language/ (comments)
