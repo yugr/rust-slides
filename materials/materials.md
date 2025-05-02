@@ -1842,23 +1842,32 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
   * Solution: use 32-bit `%` in Rust code
   * More materials: no new links
 - Why my Rust multithreaded solution is slow as compared: https://users.rust-lang.org/t/why-my-rust-multithreaded-solution-is-slow-as-compared-to-the-same-c-solution/95581
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - A performance problem compared with Julia: https://users.rust-lang.org/t/a-performance-problem-compared-with-julia/51871
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - Help comparing Rust vs Julia speed: https://users.rust-lang.org/t/help-comparing-rust-vs-julia-speed/54514
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - Optimizing linear algebra code: https://users.rust-lang.org/t/optimizing-linear-algebra-code/39433
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - Rust program has only 42% the speed of similar c++ program: https://users.rust-lang.org/t/rust-program-has-only-42-the-speed-of-similar-c-program/73738
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - Performance issue - High complexity code: https://users.rust-lang.org/t/performance-issue-high-complexity-code/40241
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - Performance question: https://users.rust-lang.org/t/performance-question/54977
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - Rust performance help (convolution): https://users.rust-lang.org/t/rust-performance-help-convolution/44075
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - Optimization comparison: Vec vs array and for vs while: https://internals.rust-lang.org/t/optimization-comparison-vec-vs-array-and-for-vs-while/16410
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - Performance optimization, and how to do it wrong: https://genna.win/blog/convolution-simd/
   * Status: backlog
   * comments: https://www.reddit.com/r/rust/comments/1j2iqhq/performance_optimization_and_how_to_do_it_wrong/
