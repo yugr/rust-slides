@@ -439,6 +439,19 @@ On the other hand, once all materials are analyzed we won't care about this file
     + unfortunately no investigation why Rust is so bad
     + (most likely because equivalent C code may loop forever)
   * More materials: added to respective feature
+- Why my Rust multithreaded solution is slow as compared: https://users.rust-lang.org/t/why-my-rust-multithreaded-solution-is-slow-as-compared-to-the-same-c-solution/95581
+  * Assignee: yugr
+  * Status: DONE (5m)
+  * Problem: multithreaded Rust program is much slower than equivalent C
+  * Root cause: `--release` and `f64::to_int_unchecked`
+  * More materials: no new links
+- Rust program has only 42% the speed of similar c++ program: https://users.rust-lang.org/t/rust-program-has-only-42-the-speed-of-similar-c-program/73738
+  * Assignee: yugr
+  * Status: DONE (5m)
+  * Problem: Rust code slower than C++
+  * Root cause: different PRNG, bounds checks
+  * Solution: iterators, `SmallRng`, replace `&Vec<T>` with `&[T]` (that actually gave perf in 2022!), make some params `const`
+  * More materials: no new links
 
 # UB in C++
 
@@ -1841,21 +1854,31 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
   * Root cause: not defined but it seems that JS JIT replaces 64-bit `%` with 32-bit one
   * Solution: use 32-bit `%` in Rust code
   * More materials: no new links
-- Why my Rust multithreaded solution is slow as compared: https://users.rust-lang.org/t/why-my-rust-multithreaded-solution-is-slow-as-compared-to-the-same-c-solution/95581
-  * Assignee: yugr
-  * Status: in progress
 - A performance problem compared with Julia: https://users.rust-lang.org/t/a-performance-problem-compared-with-julia/51871
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (5m)
+  * Problem: nested Rust loop slower than equivalent Julia code
+  * Root cause: lack of autovec
+  * Solution: replace `..=` with `..`, `for_each` for inner loops, `-C target-cpu=native`
+    + Julia is a JIT to optimizes for `native`
+  * More materials: no new links
 - Help comparing Rust vs Julia speed: https://users.rust-lang.org/t/help-comparing-rust-vs-julia-speed/54514
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (5m)
+  * Problem: Rust loop slower than equivalent Julia code
+  * Root cause: `powi` should be replaced with manual accumulation (not clear if LLVM can do this because Rust prohibits FP associativity changes)
+  * Solution: code change
+  * More materials: no new links
 - Optimizing linear algebra code: https://users.rust-lang.org/t/optimizing-linear-algebra-code/39433
   * Assignee: yugr
-  * Status: in progress
-- Rust program has only 42% the speed of similar c++ program: https://users.rust-lang.org/t/rust-program-has-only-42-the-speed-of-similar-c-program/73738
-  * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (10m)
+  * Problem: math code with complex indexing much slower in Rust than in C++/Julia
+  * Root cause: bounds checks, `..=`
+  * Solution: `get_unchecked`, replace `..=`, fast FP operations
+  * Nice but sad quote:
+> Rust bounds checking is the HPC killer.
+  * More materials:
+    + [Followup issue](https://github.com/rust-lang/rust/issues/45222) about `..=`
 - Performance issue - High complexity code: https://users.rust-lang.org/t/performance-issue-high-complexity-code/40241
   * Assignee: yugr
   * Status: in progress

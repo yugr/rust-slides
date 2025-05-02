@@ -34,6 +34,7 @@ that addition of predictable branch in hot loop increases branch mispredicts 2x-
 Often compiler may remove bounds checks itself
 but this is not always the case even in [simple](https://users.rust-lang.org/t/performance-of-array-access-vs-c/43522)
 examples.
+Experts [suggest](https://users.rust-lang.org/t/optimizing-linear-algebra-code/39433/2) to avoid explicit indexing (`a[i]`) if possible.
 
 Bounds checks can be removed via
   - using iterators instead of indexes (this is not always possible)
@@ -66,6 +67,7 @@ sums[bounded_i] = ...
     * this is useful to tell compiler that two slices have the same range (by subslicing them to `min` of lengths, e.g. [here](https://shnatsel.medium.com/how-to-avoid-bounds-checks-in-rust-without-unsafe-f65e618b4c1e)) although [using zip](https://www.reddit.com/r/rust/comments/154vowr/comment/jsr0b51/) also works
   - forcing index into bounds via `& (len - 1)` (`len` must be power-of-2)
   - avoid complex (actually [any nontrivial](https://www.nickwilcox.com/blog/autovec/)) arithmetic on indexes
+  - unchecked loads (`get_unchecked`)
 
 For workarounds like this keep in mind that
 > The thing is that using unsafe not bound checking access

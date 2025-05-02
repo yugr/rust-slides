@@ -8,6 +8,9 @@ In particular:
   - shared references are guaranteed to point to immutable data (and thus are different from C++ `const T &` !)
   - all references are guaranteed to be non-null
 
+Important note: prefer to use (e.g. pass to functions) `&[T]` instead of `&Vec<T>`
+(as LLVM [can optimize the former better](https://users.rust-lang.org/t/rust-program-has-only-42-the-speed-of-similar-c-program/73738/24)).
+
 Note that aliasing optimizations are NOT applied to pointers.
 Moreover, Rust does not have any kind of strict aliasing so
 `*mut i32` and `*mut f32` may alias.
