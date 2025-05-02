@@ -1799,9 +1799,18 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
   * Status: backlog
 - I sped up serde_json strings by 20%: https://purplesyringa.moe/blog/i-sped-up-serde-json-strings-by-20-percent/
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (1h)
+  * Opts:
+    + replace simple string parsing loop with `memchr` (library function, implemented in asm and heavy SIMD)
+      - weird that compiler was unable to autovec the loop...
+    + manual SWAR (SIMD-within-a-register) vectorization
+    + manual LUTs for hex conversion
+    + avoid redundant initialization for `encode_utf8`
   * More materials:
     + [Russian translation](https://habr.com/ru/articles/838404/)
+    + [Reddit](https://www.reddit.com/r/rust/comments/1eyxspu/i_sped_up_serde_json_strings_by_20/)
+    + [HN](https://news.ycombinator.com/item?id=41316807)
+    + added more posts from blog to this file
 - Improve an algorithm performance step by step: https://blog.mapotofu.org/blogs/rabitq-bench/
   * Assignee: yugr
   * Status: DONE (15m)
@@ -2029,6 +2038,15 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
   * Status: DONE (10m)
   * Just general discussion of when to use panics (invariant violations, programmer errors) and error handling (logical errors, env errors)
   * More materials: no new links
+- You might want to use panics for error handling: https://purplesyringa.moe/blog/you-might-want-to-use-panics-for-error-handling/
+  * Status: backlog
+- Bringing faster exceptions to Rust: https://purplesyringa.moe/blog/bringing-faster-exceptions-to-rust/
+  * Status: backlog
+- The Error Model: https://joeduffyblog.com/2016/02/07/the-error-model/
+  * Status: backlog
+  * Only check performance-related parts
+- Efficiently bubbling Results: https://internals.rust-lang.org/t/efficiently-bubbling-results/20120/1
+  * Status: backlog
 
 # Uninit
 

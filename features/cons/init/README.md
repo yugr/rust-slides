@@ -77,6 +77,10 @@ if buf.len() == 0 {
 ```
 (new API proposals [keep coming up](https://blog.sunfishcode.online/writingintouninitializedbuffersinrust/)).
 
+Another common case is `char::encode_utf8(&mut [u8]) -> &mut str`.
+It requires _initialized_ slice as input and LLVM is not clever enough
+to realize that initialization is redundant (because UTF-8 is variable-length).
+
 # TODO
 
 It's not clear how to benchmark Rust without initialization but we can benchmark GCC (via `-ftrivial-auto-var-init=zero`)

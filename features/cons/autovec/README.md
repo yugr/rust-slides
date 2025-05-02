@@ -35,3 +35,4 @@ but currently people have to do it [by hand](https://tweedegolf.nl/en/blog/153/s
 
 - For all problematic features (e.g. bounds checks) collect how they influence autovec (via LLVM debug)
 - Check SLP vs loop autovec stats
+- Try autovec for simple ubenchmarks (DOALL, DOACROSS e.g. reduce/strlen)
