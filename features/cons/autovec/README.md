@@ -7,10 +7,12 @@ On the other hand it's positively affected by
   - [noalias](../../pros/alias/README.md)
   - [chained iterators](../iterators/README.md)
 
-To facilitate vectorization use
+To facilitate vectorization [use](https://www.reddit.com/r/rust/comments/1hk0bry/comment/m3b76gn/)
   - `chunks_exact` iterator (even if length is not divisable, see [this](https://github.com/nnethercote/perf-book/issues/52))
 
-Autovec is unreliable but can be tested at compile-time
+Autovec is [unreliable](https://www.reddit.com/r/rust/comments/1hk0bry/comment/m3c4s6s/)
+> risks bad code-gen depending on surrounding code, architectures, types, compiler versions, etc.
+but can be tested at compile-time
 via `-C remark=loop-vectorize` or `-C llvm-args='--pass-remarks=vectorize'`
 (sadly [not showing](https://github.com/rust-lang/rust/issues/54048) good location for iterators,
 similar to Clang's `-Rpass=loop-vectorize -Rpass-missed=loop-vectorize`).

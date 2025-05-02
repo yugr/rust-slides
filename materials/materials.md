@@ -1490,6 +1490,14 @@ we should add them to overheads.
     + then manually multiversion (via `target_feature` and const template param) for AVX2 vector size (dispatched via wrapper)
   * More materials:
     + Added "zlib-rs is faster than C" post
+- Unnecessary Optimization in Rust: https://emschwartz.me/unnecessary-optimization-in-rust-hamming-distances-simd-and-auto-vectorization/
+  * Assignee: yugr
+  * Status: DONE (10m)
+  * Compares several SIMD implementations of Hamming distance
+  * The fastest uses autovec (based on `exact_chunks`)
+  * More materials:
+    + no more perf-relevant posts in blog
+    + [Reddit](https://www.reddit.com/r/rust/comments/1hk0bry/unnecessary_optimization_in_rust_hamming/)
 
 # Stack probing
 
@@ -1795,23 +1803,36 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
   * Status: in progress
   * More materials:
     + [Russian translation](https://habr.com/ru/articles/838404/)
-- Unnecessary Optimization in Rust: https://emschwartz.me/unnecessary-optimization-in-rust-hamming-distances-simd-and-auto-vectorization/
-  * Assignee: yugr
-  * Status: in progress
 - Improve an algorithm performance step by step: https://blog.mapotofu.org/blogs/rabitq-bench/
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (15m)
+  * Contains several optimizations of some math code
+  * Contains some useful info on profiling Rust apps
+  * Starts with nalgebra-based implementation
+  * Some interesting notes:
+    + `if` faster than `f32::min` (?)
+    + joining multiple iterators into single loop is faster
+    + manual SIMD
+    + strategic `#[inline]`'s may improve perf
+    + no improvements with common techniques (CGU=1, LTO, PGO, BOLT, jemalloc)
   * More materials:
+    + [Reddit](https://www.reddit.com/r/rust/comments/1g4ums2/improve_an_algorithm_performance_step_by_step/)
     + [Russian translation](https://habr.com/ru/articles/852974/)
-- Bringing runtime checks to compile time in Rust: https://ktkaufman03.github.io/blog/2023/04/20/rust-compile-time-checks
+- Benchmarking and Optimization of Rust Libraries by Paul Mason: https://youtu.be/d2ZQ9-4ZJmQ?t=1001
   * Assignee: yugr
-  * Status: in progress
-- Optimization story - quantum mechanics simulation speedup: https://tinkering.xyz/fmo-optimization-story
-  * Status: backlog
-- Benchmarking and Optimization of Rust Libraries by Paul Mason: https://www.youtube.com/watch?v=d2ZQ9-4ZJmQ&t=749s
-  * Status: backlog
+  * Status: DONE (15m)
+  * Author optimizes small kernels using various techniques
+  * Notable optimization suggestions:
+    + use fixed size slices (`&[u32; 3]` instead of `&[u32]`) to allow LLVM to hoist bounds checks
+    + avoid copies
+  * More materials: no new links
 - Rust newbie: Algorithm performance question: https://users.rust-lang.org/t/rust-newbie-algorithm-performance-question/47413
-  * Status: backlog
+  * Assignee: yugr
+  * Status: DONE (5m)
+  * Problem: prime numbers computation is much slower than JS
+  * Root cause: not defined but it seems that JS JIT replaces 64-bit `%` with 32-bit one
+  * Solution: use 32-bit `%` in Rust code
+  * More materials: no new links
 - Why my Rust multithreaded solution is slow as compared: https://users.rust-lang.org/t/why-my-rust-multithreaded-solution-is-slow-as-compared-to-the-same-c-solution/95581
   * Status: backlog
 - A performance problem compared with Julia: https://users.rust-lang.org/t/a-performance-problem-compared-with-julia/51871
@@ -1860,9 +1881,6 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
   * More materials:
     + [Reddit](https://www.reddit.com/r/rust/comments/10edmjf/how_to_avoid_bounds_checks_in_rust_without_unsafe/)
     + [Russian translation](https://habr.com/ru/companies/otus/articles/718012/)
-- Unnecessary Optimization in Rust: https://www.reddit.com/r/rust/comments/1hk0bry/unnecessary_optimization_in_rust_hamming/
-  * Status: backlog
-  * check comments
 - From 'Very Fast' to '~Fastest': Helping rust unleash compiler optimizations: https://blog.anubhab.me/tech/optimizing-diff-match-patch/
   * Status: backlog
   * More materials:
