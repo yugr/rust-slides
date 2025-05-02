@@ -1796,8 +1796,7 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
 # Manual optimizations
 
 - Inviting God's Wrath with Cursed Rust: http://troubles.md/abusing-rustc/
-  * Assignee: yugr
-  * Status: in progress
+  * Status: backlog
 - I sped up serde_json strings by 20%: https://purplesyringa.moe/blog/i-sped-up-serde-json-strings-by-20-percent/
   * Assignee: yugr
   * Status: in progress
