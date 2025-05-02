@@ -1314,6 +1314,8 @@ we should add them to overheads.
   * Status: backlog
   * Translation: https://habr.com/ru/companies/beget/articles/842868/
   * Comments: https://www.reddit.com/r/rust/comments/1f87siw/an_optimization_thats_impossible_in_rust/
+- Safe and efficient bidirectional trees: https://www.reddit.com/r/rust/comments/55ns2m/safe_and_efficient_bidirectional_trees/
+  * Status: backlog
 
 # Fast math
 
@@ -1403,6 +1405,8 @@ we should add them to overheads.
   * Suggests using flat data structures and `chunks_exact` iterator and avoiding dependencies across iterations (e.g. `&&`, `break`)
   * More materials:
     + [Reddit](https://www.reddit.com/r/rust/comments/15f5p94/can_you_trust_a_compiler_to_optimize_your_code/)
+    + [Russian translation](https://habr.com/ru/companies/timeweb/articles/759326/)
+  * Status: backlog
     + no new links
 - Iterator::max with reference-type items cannot leverage SIMD instructions: https://github.com/rust-lang/rust/issues/106539
   * Assignee: yugr
@@ -1784,21 +1788,18 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
 # Manual optimizations
 
 - http://troubles.md/abusing-rustc/
+  * Assignee: yugr
+  * Status: in progress
+- I sped up serde_json strings by 20%: https://purplesyringa.moe/blog/i-sped-up-serde-json-strings-by-20-percent/
   * Status: backlog
-- Можно ли доверить компилятору оптимизацию вашего кода? https://habr.com/ru/companies/timeweb/articles/759326/
-  * Status: backlog
-- Как избавиться от проверок выхода за границы: https://habr.com/ru/companies/otus/articles/718012/
-  * Status: backlog
-- Портируем декодер AV1 с С на Rust: https://habr.com/ru/companies/ruvds/articles/842970
-  * Status: backlog
-- Как я ускорила парсинг строк в serde_json на 20%: https://habr.com/ru/articles/838404/
-  * Status: backlog
-- Пошаговое повышение производительности алгоритма: https://habr.com/ru/articles/852974/
-  * Status: backlog
+  * More materials:
+    + [Russian translation](https://habr.com/ru/articles/838404/)
 - Unnecessary Optimization in Rust: https://emschwartz.me/unnecessary-optimization-in-rust-hamming-distances-simd-and-auto-vectorization/
   * Status: backlog
 - Improve an algorithm performance step by step: https://blog.mapotofu.org/blogs/rabitq-bench/
   * Status: backlog
+  * More materials:
+    + [Russian translation](https://habr.com/ru/articles/852974/)
 - Bringing runtime checks to compile time in Rust: https://ktkaufman03.github.io/blog/2023/04/20/rust-compile-time-checks
   * Status: backlog
 - Optimization story - quantum mechanics simulation speedup: https://tinkering.xyz/fmo-optimization-story
@@ -1854,6 +1855,7 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
   * this article is very important for bounds checking part
   * More materials:
     + [Reddit](https://www.reddit.com/r/rust/comments/10edmjf/how_to_avoid_bounds_checks_in_rust_without_unsafe/)
+    + [Russian translation](https://habr.com/ru/companies/otus/articles/718012/)
 - Unnecessary Optimization in Rust: https://www.reddit.com/r/rust/comments/1hk0bry/unnecessary_optimization_in_rust_hamming/
   * Status: backlog
   * check comments
@@ -1871,6 +1873,8 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
 - Porting C to Rust for a Fast and Safe AV1 Media Decoder: https://www.memorysafety.org/blog/porting-c-to-rust-for-av1/
   * Status: backlog
   * this contains example of efficient implementation of self-referential struct
+  * More materials:
+    + [Russian translation](https://habr.com/ru/companies/ruvds/articles/842970)
 - Safe elimination of unnecessary bound checks: https://www.reddit.com/r/rust/comments/1iqev5s/safe_elimination_of_unnecessary_bound_checks/
   * Status: backlog
 - Rust loop speed: https://www.reddit.com/r/rust/comments/1aumq2h/rust_loop_speed/
@@ -1892,8 +1896,6 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
 - Porting EBU R128 audio loudness analysis from C to Rust: https://coaxion.net/blog/2020/09/porting-ebu-r128-audio-loudness-analysis-from-c-to-rust-porting-details/
   * Status: backlog
   * Was part 3 ever written ?
-- Safe and efficient bidirectional trees: https://www.reddit.com/r/rust/comments/55ns2m/safe_and_efficient_bidirectional_trees/
-  * Status: backlog
 - Pursuit of Performance on Building a JavaScript Compiler: https://oxc.rs/docs/learn/performance.html
   * Status: backlog
   * More materials:
@@ -2240,8 +2242,6 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
     + Discussion about explicit SIMD in Rust
     + [Reddit](https://www.reddit.com/r/rust/comments/6qv2s5/rust_not_so_great_for_codec_implementing/)
 - Why you should, actually, rewrite some of it in Rust: https://news.ycombinator.com/item?id=14753201
-  * Status: backlog
-- Rust должен умереть, МГУ сделал замеры: https://habr.com/ru/articles/598219/
   * Status: backlog
 -  Rust and Scientific/High-Performance Computing: https://www.reddit.com/r/rust/comments/smdl3m/rust_and_scientifichighperformance_computing/
   * Status: backlog
