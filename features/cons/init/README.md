@@ -7,14 +7,23 @@ in some this will be unnecessary overhead.
 
 Unfortunately APIs to avoid redundant inits are complex.
 
+One of the most common examples where this hurts is reading files.
+Performance overhead may be non-trivial:
+  - [7% in stdlib file read](https://github.com/rust-lang/rust/pull/26950)
+  - [20-30% in Hyper HTTP library](https://github.com/tokio-rs/tokio/pull/1744#issuecomment-554543881)
+  - [30% in shadow simulator](https://github.com/shadow/shadow/issues/1643)
+  - [25% for TCP stream](https://github.com/rust-lang/rfcs/pull/837#issuecomment-75497481)
+(from [here](https://github.com/rust-lang/rfcs/blob/master/text/2930-read-buf.md#why-not-just-initialize)).
+
 # Solutions
 
 Note that it's UB to access data before it's initialized (e.g. call `Vec::set_len` on it).
 Also it is not valid to construct (mutable) reference to uninitialized memory:
 > Creating a reference with &/&mut is only allowed if the pointer
 > is properly aligned and points to initialized data. 
-(from [here](https://doc.rust-lang.org/std/ptr/macro.addr_of_mut.html)).
-Only pointers should be used to avoid UB.
+(from [here](https://doc.rust-lang.org/std/ptr/macro.addr_of_mut.html),
+also see [this](https://github.com/rust-lang/rfcs/blob/master/text/2930-read-buf.md#but-how-bad-are-undefined-values-really)
+for example of real UB). Only pointers should be used to avoid UB.
 
 The suggested solution for simple types is `MaybeUninit`.
 E.g. for arrays:
@@ -41,7 +50,7 @@ let role = unsafe {
 };
 ```
 
-For vectors can also construct slice from raw parts:
+For vectors we have dedicated `spare_capacity_mut` API :
 ```
 let mut buf: Vec<u8> = ...;
 
@@ -56,8 +65,19 @@ unsafe {
     buf.set_len(len + data.len());
 }
 
+For reading from files into uninitialized buffers we can use `Read::read_buf` APIs:
+```
+let mut buf = [MaybeUninit::uninit(); 4096];
+let mut buf = BorrowedBuf::from(&mut buf[..]);
+rd.read_buf(buf.unfilled())?;
+if buf.len() == 0 {
+    break Ok(());
+}
+// Work with buf.filled()
+```
+(new API proposals [keep coming up](https://blog.sunfishcode.online/writingintouninitializedbuffersinrust/)).
+
 # TODO
 
 It's not clear how to benchmark Rust without initialization but we can benchmark GCC (via `-ftrivial-auto-var-init=zero`)
 
-Is it UB to construct `&mut [T]` on uninitialized part of `Vec` for the purpose of initializing it ?

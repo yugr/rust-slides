@@ -2041,9 +2041,42 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
   * Status: DONE (5m)
   * Gives some more examples of `MaybeUninit` but nothing new overall
   * More materials: no new links
-- RFC 2930: Do not require initialized inputs to Read: https://github.com/rust-lang/rfcs/blob/master/text/2930-read-buf.md
+- RFC 2930: Reading into uninitialized buffers: https://github.com/rust-lang/rfcs/pull/2930
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (40m)
+  * Proposes new API in `Read` trait to support uninitialized buffers
+  * Cites some performance numbers
+  * The feature has been merged and available in nightly
+  * More materials:
+    + [Tracking issue](https://github.com/rust-lang/rust/issues/78485)
+    + [Discussion in IRLO](https://internals.rust-lang.org/t/readbuf-as-part-of-rust-edition-2021/14256)
+    + [Read::initializer (old solution)](https://github.com/rust-lang/rust/pull/42002)
+    + [Implementation](https://github.com/rust-lang/rust/pull/81156)
+- Uninit Read/Write: https://blog.yoshuawuyts.com/uninit-read-write/
+  * Assignee: yugr
+  * Status: DONE (10m)
+  * An overview of `read_buf` and `spare_capacity_mut`
+  * Discusses some more ideas on hwo uninitialized buffers could be used
+  * More materials: no new links or perf-relevant articles in blog
+- "What The Hardware Does" is not What Your Program Does: Uninitialized Memory: https://www.ralfj.de/blog/2019/07/14/uninit.html
+  * Assignee: yugr
+  * Status: DONE (5m)
+  * Discusses the concept of uninitialized memory in high-level languages and how it's different from hardware
+    + not just random bytes
+    + e.g. `x + 0 != x` for uninitialized x
+  * More materials: no new perf-relevant links
+- Rust's worst feature: https://mina86.com/2025/rusts-worst-feature/
+  * Assignee: yugr
+  * Status: DONE (15m)
+  * Critique of `BorrowedBuf`:
+    + optionality: many `Read` instances do not implement it
+    + not generic: provides `[u8]` for underlying contents
+    + hard to use
+  * Alternative: concept of "freezing" for `MaybeUninit` values
+    + but this may cause info leaks
+    + also need to write every page due to potential `MADV_FREE`
+  * More materials:
+    + [Reddit](https://www.reddit.com/r/rust/comments/1iad0lk/rusts_worst_feature_spoiler_its_borrowedbuf_i/)
 
 # Unsafe
 
