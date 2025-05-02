@@ -1787,21 +1787,25 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
 
 # Manual optimizations
 
-- http://troubles.md/abusing-rustc/
+- Inviting God's Wrath with Cursed Rust: http://troubles.md/abusing-rustc/
   * Assignee: yugr
   * Status: in progress
 - I sped up serde_json strings by 20%: https://purplesyringa.moe/blog/i-sped-up-serde-json-strings-by-20-percent/
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
   * More materials:
     + [Russian translation](https://habr.com/ru/articles/838404/)
 - Unnecessary Optimization in Rust: https://emschwartz.me/unnecessary-optimization-in-rust-hamming-distances-simd-and-auto-vectorization/
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - Improve an algorithm performance step by step: https://blog.mapotofu.org/blogs/rabitq-bench/
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
   * More materials:
     + [Russian translation](https://habr.com/ru/articles/852974/)
 - Bringing runtime checks to compile time in Rust: https://ktkaufman03.github.io/blog/2023/04/20/rust-compile-time-checks
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - Optimization story - quantum mechanics simulation speedup: https://tinkering.xyz/fmo-optimization-story
   * Status: backlog
 - Benchmarking and Optimization of Rust Libraries by Paul Mason: https://www.youtube.com/watch?v=d2ZQ9-4ZJmQ&t=749s
