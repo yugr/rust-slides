@@ -94,7 +94,8 @@ it brought up to 50% performance)
 or `operator[]` with `at` ([20%](https://quick-bench.com/q/o9du22dYmO0BCs5YqJ9gEKPyQ10) perf loss).
 This should not be a surprise - people who practice LeetCode know that
 `std::vector::resize` with direct indexing is _faster_ than
-`std::vector::reserve` with `push_back`'s.
+`std::vector::reserve` with `push_back`'s
+(see [attached example](push-dominoes)).
 
 All Linux distros use `_FORTIFY_SOURCE` and some (Fedora, RHEL) also `_GLIBCXX_ASSERTIONS`.
 
