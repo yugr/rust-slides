@@ -1915,9 +1915,30 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
   * More materials: no new links
 - Performance optimization, and how to do it wrong: https://genna.win/blog/convolution-simd/
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (40m)
+  * OP optimized 2D-convolution code
+  * Code already implemented via intrinsics
+  * Several interesting techniques:
+    + poor-man's function specialization: replace
+```
+f(x, y, z);
+```
+      with
+```
+if (x, y) == (1, 1) {
+  f(x, y, z);
+} else {
+  f(x, y, z);
+}
+```
+    + split loop to aligned part and remainder to avoid `if`'s
+      - no more than 1 branch in single fetch/decode block on most microarches => may limit FMA saturation
+    + all funs must be annotated with `#[target_feature(enable = "avx2")]`
+      - otherwise lack of inlining may prevent attribute propagation to callees
   * More materials:
     + [Reddit](https://www.reddit.com/r/rust/comments/1j2iqhq/performance_optimization_and_how_to_do_it_wrong/)
+    + [HN](https://news.ycombinator.com/item?id=43257460)
+    + no more blogposts :(
 - Code critique/review request: https://www.reddit.com/r/learnrust/comments/xllzqm/code_critiquereview_request/ (comments)
   * Assignee: yugr
   * Status: DONE (5m)
@@ -1943,7 +1964,9 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
   * More materials: no new links
 - From 48s to 5s - optimizing a 350 line raytracer in Rust: https://medium.com/@cfsamson/from-48s-to-5s-optimizing-a-350-line-pathtracer-in-rust-191ab4a1a412
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (5m)
+  * Just few opt advices: use multithreading, iterators
+  * More materials: no new links
 - Using break in for loop takes even 100ms in release mode: https://www.reddit.com/r/rust/comments/1738kd7/using_break_in_for_loop_takes_even_100ms_in/
   * Assignee: yugr
   * Status: in progress

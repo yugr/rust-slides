@@ -43,8 +43,8 @@ Rust targets same problem area:
   - same optimizer (LLVM)
 
 Important caveats:
-  - make sure that (default) target CPU is the same
   - make sure to build with `--release` :)
+  - make sure that (default) target CPU is the same (especially JIT languages like Java are equivalent to `-C target-cpu=native`)
 
 # Rust performance issues
 
