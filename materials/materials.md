@@ -1441,7 +1441,6 @@ we should add them to overheads.
   * More materials:
     + [Reddit](https://www.reddit.com/r/rust/comments/15f5p94/can_you_trust_a_compiler_to_optimize_your_code/)
     + [Russian translation](https://habr.com/ru/companies/timeweb/articles/759326/)
-  * Status: backlog
     + no new links
 - Iterator::max with reference-type items cannot leverage SIMD instructions: https://github.com/rust-lang/rust/issues/106539
   * Assignee: yugr
