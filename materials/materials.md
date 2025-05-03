@@ -5,9 +5,8 @@ Please refactor mercilessly if you think it makes sense.
 On the other hand, once all materials are analyzed we won't care about this file.
 
 - TODO add more interesting materials from
-  * MIR opts: https://github.com/rust-lang/rust/issues?q=state%3Aopen%20label%3A%22A-mir-opt%22
-- TODO(gh-8) add more interesting materials from
-  * https://github.com/rust-lang/compiler-team
+  * MIR opts (gh-16): compiler/rustc_mir_transform/src and https://github.com/rust-lang/rust/issues?q=state%3Aopen%20label%3A%22A-mir-opt%22
+  * compiler-team repo (gh-8): https://github.com/rust-lang/compiler-team
 - TODO(gh-15) survey project goals for perf-related stuff
   * https://rust-lang.github.io/rust-project-goals
 
@@ -452,6 +451,20 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Root cause: different PRNG, bounds checks
   * Solution: iterators, `SmallRng`, replace `&Vec<T>` with `&[T]` (that actually gave perf in 2022!), make some params `const`
   * More materials: no new links
+- Performance question: https://users.rust-lang.org/t/performance-question/54977
+  * Assignee: yugr
+  * Status: DONE (5m)
+  * Problem: Rust code is much slower than C
+  * Root cause: lack of autovec
+  * Solution: iterators, `assert!`
+  * More materials: no new links
+- Rust performance help (convolution): https://users.rust-lang.org/t/rust-performance-help-convolution/44075
+  * Assignee: yugr
+  * Status: DONE (5m)
+  * Problem: Rust code much slower than C `-Ofast`
+  * Root cause: lack of autovec
+  * Solutions: iterators (`windows` instead of `exact_chunks`), `target-cpu=native`, fast FP operations
+  * More materials: no new links
 
 # UB in C++
 
@@ -770,7 +783,9 @@ ET's is an important patern for writing linear algebra code in C++. Can it be us
     + does not provide any analysis of results, asm, etc.
     + no noticeable changes on her machine but up to 4x according to comments on Reddit
   * More materials:
-    + a lot of comments on [Reddit](https://www.reddit.com/r/rust/comments/z92vid/measuring_how_much_rusts_bounds_checking_actually/), [Reddit](https://www.reddit.com/r/programming/comments/z9hjpk/how_much_does_rusts_bounds_checking_actually_cost/) and [HackerNews](https://news.ycombinator.com/item?id=33805419)
+    + [Reddit](https://www.reddit.com/r/rust/comments/z92vid/measuring_how_much_rusts_bounds_checking_actually/)
+    + [Reddit](https://www.reddit.com/r/programming/comments/z9hjpk/how_much_does_rusts_bounds_checking_actually_cost/)
+    + [HackerNews](https://news.ycombinator.com/item?id=33805419)
     + added new materials
 - Inefficient codegen when accessing a vector with literal indices: https://github.com/rust-lang/rust/issues/50759
   * Assignee: yugr
@@ -1210,6 +1225,7 @@ pub fn foo(p: Box<S>) {
     + [Reddit](https://www.reddit.com/r/rust/comments/173wr86/why_rust_doesnt_need_a_standard_div_rem_an_llvm)
     + no more relevants posts
 - Asm snippets: https://www.eventhelix.com/rust/
+  * Status: backlog
 - A cool Rust optimization story: https://quickwit.io/blog/search-a-sorted-block
   * Assignee: yugr
   * Status: DONE (10m)
@@ -1881,16 +1897,17 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
     + [Followup issue](https://github.com/rust-lang/rust/issues/45222) about `..=`
 - Performance issue - High complexity code: https://users.rust-lang.org/t/performance-issue-high-complexity-code/40241
   * Assignee: yugr
-  * Status: in progress
-- Performance question: https://users.rust-lang.org/t/performance-question/54977
-  * Assignee: yugr
-  * Status: in progress
-- Rust performance help (convolution): https://users.rust-lang.org/t/rust-performance-help-convolution/44075
-  * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (5m)
+  * Problem: Rust code much slower than Java
+  * Root cause: fix `! x == y` to `x != y`
+  * More materials: no new links
 - Optimization comparison: Vec vs array and for vs while: https://internals.rust-lang.org/t/optimization-comparison-vec-vs-array-and-for-vs-while/16410
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (5m)
+  * Problem: Rust code with `Vec` slower than slice
+  * Root cause: `Vec`'s are known to not optimize well
+  * Solution: reslicing
+  * More materials: no new links
 - Performance optimization, and how to do it wrong: https://genna.win/blog/convolution-simd/
   * Status: backlog
   * comments: https://www.reddit.com/r/rust/comments/1j2iqhq/performance_optimization_and_how_to_do_it_wrong/

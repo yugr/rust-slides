@@ -4,6 +4,8 @@ Rust's UTF-8 `String`s have invariant checks which make code slower (compared to
 
 IO is not buffered by default in Rust.
 
+Rust default PRNG is of higher quality but slower.
+
 Compiler fails to optimize some stdlib operator adapter combinations (https://github.com/rust-lang/rust/issues/80416)
 
 # TODO
