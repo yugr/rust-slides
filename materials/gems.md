@@ -3,6 +3,7 @@ which all team members need to be aware of.
 
 - [What makes Rust faster than C/C++?](https://www.reddit.com/r/rust/comments/px72r1/what_makes_rust_faster_than_cc/)
   * A lot of high quality comments (a must-read for us):
+- [Why ISN'T Rust faster than C?](https://www.reddit.com/r/rust/comments/1at3r6d/why_isnt_rust_faster_than_c_given_it_can_leverage/)
 - [Interesting discussion](https://www.reddit.com/r/rust/comments/ab7hsi/comment/ed0u11h/) of how well integer checks can be optimized
 - [Myths and Legends about Integer Overflow in Rust](https://huonw.github.io/blog/2016/04/myths-and-legends-about-integer-overflow-in-rust/)
   * Oft-cited article about status of integer overflows in Rust
@@ -11,7 +12,6 @@ which all team members need to be aware of.
   * Oft-cited article on bounds checks and how to avoid them
 - [Back-end parallelism in the Rust compiler](https://nnethercote.github.io/2023/07/11/back-end-parallelism-in-the-rust-compiler.html)
   * How CGUs work
-- [Nethercote's posts](https://blog.mozilla.org/nnethercote/category/rust/)
 - [Understanding Rusts Auto-Vectorization and Methods for speed](https://users.rust-lang.org/t/understanding-rusts-auto-vectorization-and-methods-for-speed-increase/84891)
 - [Memory-safe PNG decoders now vastly outperform C PNG libraries](https://www.reddit.com/r/rust/comments/1ha7uyi/memorysafe_png_decoders_now_vastly_outperform_c/)
   * Good overview of autovec situation
@@ -23,3 +23,10 @@ which all team members need to be aware of.
   * Very relevant for us
 - [RFC: C++ Buffer Hardening](https://discourse.llvm.org/t/rfc-c-buffer-hardening/65734)
   * Adds Rust-like safety checks to STL library
+- [Speed of Rust vs C](https://kornel.ski/rust-c-speed)
+- [zlib-rs is faster than C](https://trifectatech.org/blog/zlib-rs-is-faster-than-c/)
+- [Uninit Read/Write](https://blog.yoshuawuyts.com/uninit-read-write/)
+- [Bringing Stack Clash Protection to Clang / X86](https://blog.llvm.org/posts/2021-01-05-stack-clash-protection/)
+- [Imprecise floating point operations](https://github.com/rust-lang/rust/issues/21690)
+- [Rust loves LLVM](https://llvm.org/devmtg/2024-10/slides/keynote/Popov-Rust_Heart_LLVM.pdf)
+  * [Video](https://www.youtube.com/watch?v=Kqz-umsAnk8)
