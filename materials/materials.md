@@ -1914,7 +1914,8 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
   * Solution: reslicing
   * More materials: no new links
 - Performance optimization, and how to do it wrong: https://genna.win/blog/convolution-simd/
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
   * More materials:
     + [Reddit](https://www.reddit.com/r/rust/comments/1j2iqhq/performance_optimization_and_how_to_do_it_wrong/)
 - Code critique/review request: https://www.reddit.com/r/learnrust/comments/xllzqm/code_critiquereview_request/ (comments)
@@ -1941,14 +1942,18 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
   * Low-level opts: `assert!` to void bounds checks
   * More materials: no new links
 - From 48s to 5s - optimizing a 350 line raytracer in Rust: https://medium.com/@cfsamson/from-48s-to-5s-optimizing-a-350-line-pathtracer-in-rust-191ab4a1a412
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - Using break in for loop takes even 100ms in release mode: https://www.reddit.com/r/rust/comments/1738kd7/using_break_in_for_loop_takes_even_100ms_in/
-  * Status: backlog
-  * overhead of consuming iterators
+  * Assignee: yugr
+  * Status: in progress
+  * Overhead of consuming iterators
 - 5x Slower than Go? Optimizing Rust Protobuf Decoding Performance: https://www.greptime.com/blogs/2024-04-09-rust-protobuf-performance
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - Rust Performance Pitfalls: https://llogiq.github.io/2017/06/01/perf-pitfalls.html
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
   * More materials:
     + [HN](https://news.ycombinator.com/item?id=14514591)
     + [Reddit](https://www.reddit.com/r/rust/comments/6ep1ao/blog_rust_performance_pitfalls/)
