@@ -19,6 +19,11 @@ So using raw pointers has a performance hit compared to C++.
 Note that aggressive noaliasing is also the main reason
 for high performance of Fortran.
 
+# Problems
+
+Alias info is not propagated to LLVM in all possible cases due to limitations of LLVM IR
+(see e.g. [this case](https://blog.polybdenum.com/2017/02/19/how-copying-an-int-made-my-code-11-times-faster.html)).
+
 # Examples
 
 - [Rust Optimizations That C++ Can't Do](https://robert.ocallahan.org/2017/04/rust-optimizations-that-c-cant-do_5.html)
@@ -42,3 +47,5 @@ Good summary from [HN](https://news.ycombinator.com/item?id=14042318):
 - A lot of [mentions](https://www.reddit.com/r/rust/comments/acjcbp/comment/ed8nkmj/) that
   `&mut Vec<T>` does not allow noalias for contained buffer and `&[T]` should be used instead.
   Need to investigate this.
+- Search for cases where alias info is not utilized
+  (e.g. [here](https://blog.polybdenum.com/2017/02/19/how-copying-an-int-made-my-code-11-times-faster.html))

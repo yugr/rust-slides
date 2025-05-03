@@ -465,6 +465,10 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Root cause: lack of autovec
   * Solutions: iterators (`windows` instead of `exact_chunks`), `target-cpu=native`, fast FP operations
   * More materials: no new links
+- n times faster than C: https://ipthomas.com/blog/2023/07/n-times-faster-than-c-where-n-128/
+  * Status: backlog
+  * More materials:
+    + [Reddit](https://www.reddit.com/r/rust/comments/14yvlc9/n_times_faster_than_c_where_n_128/)
 
 # UB in C++
 
@@ -1157,6 +1161,8 @@ pub fn foo(p: Box<S>) {
   * Problem: iterator version is much faster than loop
   * Root cause: one of combinators includes a reservation for `collect` call
   * Solution: do manual `with_capacity` in raw loop
+- We all know iter is faster than loop: https://users.rust-lang.org/t/we-all-know-iter-is-faster-than-loop-but-why/51486?u=scottmcm
+  * Status: backlog
 
 # Noalias
 
@@ -1910,14 +1916,31 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
   * More materials: no new links
 - Performance optimization, and how to do it wrong: https://genna.win/blog/convolution-simd/
   * Status: backlog
-  * comments: https://www.reddit.com/r/rust/comments/1j2iqhq/performance_optimization_and_how_to_do_it_wrong/
+  * More materials:
+    + [Reddit](https://www.reddit.com/r/rust/comments/1j2iqhq/performance_optimization_and_how_to_do_it_wrong/)
 - Code critique/review request: https://www.reddit.com/r/learnrust/comments/xllzqm/code_critiquereview_request/ (comments)
-  * Status: backlog
-- When Zero Cost Abstractions Aren’t Zero Cost: https://www.reddit.com/r/rust/comments/p0ul6b/when_zero_cost_abstractions_arent_zero_cost/
-  * Status: backlog
+  * Assignee: yugr
+  * Status: DONE (5m)
+  * Request to review Rust code
+  * Mostly code style comments except
+    + use `Vec::with_capacity`
+    + use `&[T]` instead of `&Vec<T>`
+  * More materials: no new links
+- When Zero Cost Abstractions Aren’t Zero Cost: https://blog.polybdenum.com/2021/08/09/when-zero-cost-abstractions-aren-t-zero-cost.html
+  * Assignee: yugr
+  * Status: DONE (20m)
+  * Discusses how newtype pattern sometimes disables optimizations:
+    + zero-init is faster w/o newtype due to stdlib specialization
+    + spurious spills for newtype in some cases (no asm proof given and can't repro in current rustc)
+  * More materials:
+    + [Reddit](https://www.reddit.com/r/rust/comments/p0ul6b/when_zero_cost_abstractions_arent_zero_cost/)
+    + added other relevant links from blog
 - Achieving warp speed with Rust: https://gist.github.com/jFransham/369a86eff00e5f280ed25121454acec1
-  * Status: backlog
-  * pay attention to `assert` hint
+  * Assignee: yugr
+  * Status: DONE (10m)
+  * Various high-level suggestions about optimization (caches, LTO, parallelization, `#[inline]`, etc.)
+  * Low-level opts: `assert!` to void bounds checks
+  * More materials: no new links
 - From 48s to 5s - optimizing a 350 line raytracer in Rust: https://medium.com/@cfsamson/from-48s-to-5s-optimizing-a-350-line-pathtracer-in-rust-191ab4a1a412
   * Status: backlog
 - Using break in for loop takes even 100ms in release mode: https://www.reddit.com/r/rust/comments/1738kd7/using_break_in_for_loop_takes_even_100ms_in/
@@ -1987,6 +2010,19 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
   * Status: backlog
   * More materials:
     + [Reddit](https://www.reddit.com/r/rust/comments/14y2kej/maximizing_your_rust_codes_performance/)
+- How copying an int made my code 11 times faster: https://blog.polybdenum.com/2017/02/19/how-copying-an-int-made-my-code-11-times-faster.html
+  * Assignee: yugr
+  * Status: DONE (30m)
+  * Article is old but the issue still reproduces on trunk rustc
+  * Passing local variable to `println!` macro implicitly borrows it (i.e. applies `&`, regardless of `Copy`)
+  * After that LLVM fails to realize that the variable remains constant
+  * Can be solved via
+    + resetting variable after `println!`
+    + using `{var}` (or `var + 0`, or `var.clone()`) when calling `println!`
+  * More materials:
+    + [Reddit](https://www.reddit.com/r/rust/comments/5uvwur/how_copying_an_int_made_my_code_11_times_faster/)
+    + [HN](https://news.ycombinator.com/item?id=13682929)
+    + no new links
 
 # Panics
 
