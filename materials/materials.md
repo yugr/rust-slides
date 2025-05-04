@@ -2056,10 +2056,16 @@ if (x, y) == (1, 1) {
     + [Reddit](https://www.reddit.com/r/rust/comments/1fdzu7z/optimizing_rav1d_an_av1_decoder_in_rust/)
     + added more mats
 - Porting C to Rust for a Fast and Safe AV1 Media Decoder: https://www.memorysafety.org/blog/porting-c-to-rust-for-av1/
-  * Status: backlog
-  * This contains example of efficient implementation of self-referential struct
+  * Assignee: yugr
+  * Status: DONE (15m)
+  * Predecessor to previous post
+  * Explains overall approach (c2rust, then rewrite to idiomatic Rust)
+  * In general no info on perf optimizations
+  * Explains how shared parallel state was changed for Rust
   * More materials:
     + [Russian translation](https://habr.com/ru/companies/ruvds/articles/842970)
+    + [Reddit](https://www.reddit.com/r/rust/comments/1fcxxg5/porting_c_to_rust_for_a_fast_and_safe_av1_media/)
+    + [HN](https://news.ycombinator.com/item?id=41493568)
 - Rust loop speed: https://www.reddit.com/r/rust/comments/1aumq2h/rust_loop_speed/
   * Status: backlog
 - Why is this functional version faster than my for loop? https://www.reddit.com/r/rust/comments/xtiqj8/why_is_this_functional_version_faster_than_my_for/
