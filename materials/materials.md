@@ -2070,6 +2070,8 @@ if (x, y) == (1, 1) {
   * Status: backlog
 - Acheiving warp speed with Rust: http://troubles.md/posts/rust-optimization/
   * Status: backlog
+- Rust faster! https://llogiq.github.io/2015/10/03/fast.html
+  * Status: backlog
 
 # Panics
 
@@ -2268,6 +2270,9 @@ if (x, y) == (1, 1) {
   * More materials:
     + [Reddit](https://news.ycombinator.com/item?id=41944121)
 - Comments for "Story-time: C++, bounds checking, performance, and compilers": https://www.reddit.com/r/cpp/comments/1gtos7w/storytime_c_bounds_checking_performance_and/
+  * Status: backlog
+- Unsafe Rust: How and when (not) to use it: https://blog.logrocket.com/unsafe-rust-how-and-when-not-to-use-it
+  * Status: backlog
 
 # Code size
 

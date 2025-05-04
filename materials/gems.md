@@ -30,3 +30,4 @@ which all team members need to be aware of.
 - [Imprecise floating point operations](https://github.com/rust-lang/rust/issues/21690)
 - [Rust loves LLVM](https://llvm.org/devmtg/2024-10/slides/keynote/Popov-Rust_Heart_LLVM.pdf)
   * [Video](https://www.youtube.com/watch?v=Kqz-umsAnk8)
+- [How to avoid bounds checks in Rust](https://shnatsel.medium.com/how-to-avoid-bounds-checks-in-rust-without-unsafe-f65e618b4c1e)
