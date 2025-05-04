@@ -1969,19 +1969,35 @@ if (x, y) == (1, 1) {
   * More materials: no new links
 - Using break in for loop takes even 100ms in release mode: https://www.reddit.com/r/rust/comments/1738kd7/using_break_in_for_loop_takes_even_100ms_in/
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (5m)
+  * Problem: `break` in `for`-loop over container was taking a lot of time
+  * Root cause: iteration was done using owning iterator so `break` had to drop all remaining elements
+  * Solution: N/A
+  * More materials: no new links
   * Overhead of consuming iterators
 - 5x Slower than Go? Optimizing Rust Protobuf Decoding Performance: https://www.greptime.com/blogs/2024-04-09-rust-protobuf-performance
   * Assignee: yugr
   * Status: in progress
 - Rust Performance Pitfalls: https://llogiq.github.io/2017/06/01/perf-pitfalls.html
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (20m)
+  * Goes over common Rust perf caveats:
+    + lack of `--release` or `-C target-cpu=native`
+    + unbuffered IO
+    + stream locking in `print!`
+    + `Read::lines()` constructs new `String` for every line (this can be avoided)
+    + overhead of `String` construction (to check invariants)
+    + use iterators
+    + avoid intermediate `collect()`'s in iterator chains
   * More materials:
     + [HN](https://news.ycombinator.com/item?id=14514591)
     + [Reddit](https://www.reddit.com/r/rust/comments/6ep1ao/blog_rust_performance_pitfalls/)
 - Where should I start if I want to squeeze out as much performance as I can from my rust code? https://www.reddit.com/r/rust/comments/bb5lnj/where_should_i_start_if_i_want_to_squeeze_out_as/
-  * Status: backlog
+  * Assignee: yugr
+  * Status: DONE (5m)
+  * OP asks for general methods for improving perf of Rust programs
+  * General advices: iterators, `#[inline]`, `Vec::with_capacity`, avoid `clone()`
+  * More materials: added links
 - How to avoid bounds checks in Rust: https://shnatsel.medium.com/how-to-avoid-bounds-checks-in-rust-without-unsafe-f65e618b4c1e
   * Status: backlog
   * this article is very important for bounds checking part
@@ -2050,6 +2066,10 @@ if (x, y) == (1, 1) {
     + [Reddit](https://www.reddit.com/r/rust/comments/5uvwur/how_copying_an_int_made_my_code_11_times_faster/)
     + [HN](https://news.ycombinator.com/item?id=13682929)
     + no new links
+- Map of a Lifetime: https://llogiq.github.io/2017/03/06/lifetime.html
+  * Status: backlog
+- Acheiving warp speed with Rust: http://troubles.md/posts/rust-optimization/
+  * Status: backlog
 
 # Panics
 
