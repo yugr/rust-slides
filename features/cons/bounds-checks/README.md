@@ -55,7 +55,9 @@ for i in 0..len {
     slice[i] // no bounds check
 }
 ```
-  (also [here](https://users.rust-lang.org/t/possible-rust-specific-optimizations/79895/5)).
+  (also [here](https://users.rust-lang.org/t/possible-rust-specific-optimizations/79895/5)
+  and [here](https://github.com/dropbox/rust-brotli/blob/238c9c539b446d7d980e0a50795752c45dd3359e/src/enc/static_dict.rs) -
+  lines 122 and 131)
     * a handy variant of this when performing multiple accesses at once (from [here](https://www.reddit.com/r/rust/comments/10edmjf/comment/j4ufzxk/)):
 ```
 let [a, b, c, d] = data[..4] else { panic!() }

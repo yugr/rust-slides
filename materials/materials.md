@@ -876,6 +876,9 @@ ET's is an important patern for writing linear algebra code in C++. Can it be us
     + [Reddit](https://www.reddit.com/r/rust/comments/10edmjf/how_to_avoid_bounds_checks_in_rust_without_unsafe/)
     + [Russian translation](https://habr.com/ru/companies/otus/articles/718012/)
     + [GitHub](https://github.com/Shnatsel/bounds-check-cookbook)
+    + no more relevant posts in blog
+- Safe elimination of unnecessary bound checks: https://www.reddit.com/r/rust/comments/1iqev5s/safe_elimination_of_unnecessary_bound_checks/
+  * Status: backlog
 
 # Copy elision/NRVO and placement new
 
@@ -2020,20 +2023,21 @@ if (x, y) == (1, 1) {
   * Status: backlog
   * More materials:
     + [Reddit](https://www.reddit.com/r/rust/comments/1hsnnat/40_boost_in_text_diff_flow_just_by_facilitating/)
-- Example of loop rewrite for vectorization https://github.com/dropbox/rust-brotli/blob/238c9c539b446d7d980e0a50795752c45dd3359e/src/enc/static_dict.rs lines 122 and 131
-  * Status: backlog
-- Discussion about explicit SIMD in Rust https://internals.rust-lang.org/t/getting-explicit-simd-on-stable-rust/4380/133
+- Example of loop rewrite for vectorization: https://github.com/dropbox/rust-brotli/blob/238c9c539b446d7d980e0a50795752c45dd3359e/src/enc/static_dict.rs lines 122 and 131
+  * Assignee: yugr
+  * Status: DONE (5m)
+  * In both cases two string were resliced to common length
+- Discussion about explicit SIMD in Rust: https://internals.rust-lang.org/t/getting-explicit-simd-on-stable-rust/4380
   * Status: backlog
 - Optimizing rav1d, an AV1 Decoder in Rust: https://www.memorysafety.org/blog/rav1d-performance-optimization/
   * Status: backlog
-  * comments in https://www.reddit.com/r/rust/comments/1fdzu7z/optimizing_rav1d_an_av1_decoder_in_rust/
+  * More materials:
+    + [Reddit](https://www.reddit.com/r/rust/comments/1fdzu7z/optimizing_rav1d_an_av1_decoder_in_rust/)
 - Porting C to Rust for a Fast and Safe AV1 Media Decoder: https://www.memorysafety.org/blog/porting-c-to-rust-for-av1/
   * Status: backlog
-  * this contains example of efficient implementation of self-referential struct
+  * This contains example of efficient implementation of self-referential struct
   * More materials:
     + [Russian translation](https://habr.com/ru/companies/ruvds/articles/842970)
-- Safe elimination of unnecessary bound checks: https://www.reddit.com/r/rust/comments/1iqev5s/safe_elimination_of_unnecessary_bound_checks/
-  * Status: backlog
 - Rust loop speed: https://www.reddit.com/r/rust/comments/1aumq2h/rust_loop_speed/
   * Status: backlog
 - Why is this functional version faster than my for loop? https://www.reddit.com/r/rust/comments/xtiqj8/why_is_this_functional_version_faster_than_my_for/
@@ -2041,8 +2045,6 @@ if (x, y) == (1, 1) {
 - Huge performance gap in simple loop. Explanations? https://www.reddit.com/r/rust/comments/11f00kc/huge_performance_gap_in_simple_loop_explanations/
   * Status: backlog
 - Memory-safe PNG decoders now vastly outperform C PNG libraries: https://www.reddit.com/r/programming/comments/1hak25t/memorysafe_png_decoders_now_vastly_outperform_c/
-  * Status: backlog
-- Rust performance help (convolution): https://users.rust-lang.org/t/rust-performance-help-convolution/44075
   * Status: backlog
 - Rust: A better C++ than C++: Safety and performance: https://www.thecodedmessage.com/rust-c-book/safety.html
   * Status: backlog
