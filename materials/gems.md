@@ -18,16 +18,23 @@ which all team members need to be aware of.
 - [What languages (other than Rust) have "zero cost abstraction"?](https://www.reddit.com/r/rust/comments/zkr3xm/what_languages_other_than_rust_have_zero_cost/)
   * Good discussion of what 0-cost means in different languages
 - [Rust Performance Book](https://nnethercote.github.io/perf-book)
+  * List of performance hints from Nethercote
 - [Exploiting Undefined Behavior in C/C++ Programs: The Performance Impact](https://web.ist.utl.pt/nuno.lopes/pubs/ub-pldi25.pdf) (check Wayback Machine if files does not download)
   * Analyzes performance impact of different UB types in C++
   * Very relevant for us
 - [RFC: C++ Buffer Hardening](https://discourse.llvm.org/t/rfc-c-buffer-hardening/65734)
   * Adds Rust-like safety checks to STL library
 - [Speed of Rust vs C](https://kornel.ski/rust-c-speed)
+  * General comparison of C/Rust performance
 - [zlib-rs is faster than C](https://trifectatech.org/blog/zlib-rs-is-faster-than-c/)
 - [Uninit Read/Write](https://blog.yoshuawuyts.com/uninit-read-write/)
 - [Bringing Stack Clash Protection to Clang / X86](https://blog.llvm.org/posts/2021-01-05-stack-clash-protection/)
+  * Overview of stack probing in Rust/LLVM
 - [Imprecise floating point operations](https://github.com/rust-lang/rust/issues/21690)
 - [Rust loves LLVM](https://llvm.org/devmtg/2024-10/slides/keynote/Popov-Rust_Heart_LLVM.pdf)
+  * Info about Rust-LLVM integration
   * [Video](https://www.youtube.com/watch?v=Kqz-umsAnk8)
 - [How to avoid bounds checks in Rust](https://shnatsel.medium.com/how-to-avoid-bounds-checks-in-rust-without-unsafe-f65e618b4c1e)
+  * Bible of bounds checking optimization in Rust
+- [Optimizing rav1d, an AV1 Decoder in Rust](https://www.memorysafety.org/blog/rav1d-performance-optimization/)
+  * Good example of problems and solutions when porting performance-sensitive code to Rust

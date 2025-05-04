@@ -13,6 +13,8 @@ just 0.3% performance overhead for services and ~0.5% size increase of Chrome bi
 Also Shnatsel [here](https://shnatsel.medium.com/how-to-avoid-bounds-checks-in-rust-without-unsafe-f65e618b4c1e)
 reports typical savings of 1-3% (max. 15%) which are nothing like
 4-8x reported in URLO microbenches.
+Also [rav1d](https://www.memorysafety.org/blog/rav1d-performance-optimization) decoder
+had only 1% perf reduction.
 
 It's important to keep an eye on compiler as some bounds check optimizations
 may regress across versions.
@@ -42,11 +44,12 @@ Experts [suggest](https://users.rust-lang.org/t/optimizing-linear-algebra-code/3
 Bounds checks can be removed via
   - using iterators instead of indexes (this is not always possible)
     * [example](https://www.reddit.com/r/rust/comments/154vowr/comment/jsr0b51/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button)
-  - using asserts (https://rust.godbolt.org/z/GPMcYd371) or `core::hint::unreachable_unchecked`
+  - using asserts (https://rust.godbolt.org/z/GPMcYd371) or `core::hint::unreachable_unchecked` or `core::hint::assert_unchecked`
     * [example](https://github.com/rust-random/rand/pull/960)
     * [examples in Nethercote's book](https://nnethercote.github.io/perf-book/bounds-checks.html)
     * [example](https://github.com/image-rs/jpeg-decoder/pull/167)
     * note that plain `assert!` should be used (e.g. `assert_eq!` may cause [slowdown](https://coaxion.net/blog/2018/01/speeding-up-rgb-to-grayscale-conversion-in-rust-by-a-factor-of-2-2-and-various-other-multimedia-related-processing-loops/) !)
+  - use enums or bools to express limited range of integer (see [rav1d article](https://www.memorysafety.org/blog/rav1d-performance-optimization/))
   - constructing pre-checked slices (reslicing, subslicing):
 ```
 let len = vec.len();
@@ -62,6 +65,15 @@ for i in 0..len {
 ```
 let [a, b, c, d] = data[..4] else { panic!() }
 ```
+    * when both lower and upper indices are sliced, prefer
+```
+a[i..][..n]
+```
+to
+```
+a[i..(i + n)]
+```
+    to avoid problems with wrapping for optimizer (see [rav1d article](https://www.memorysafety.org/blog/rav1d-performance-optimization/))
   - slicing i.e. using slices instead of e.g. `Vec`'s or `String`'s; particularly good for `&mut [T]` vs `&mut Vec<T>`
     * see [issue](https://github.com/nnethercote/perf-book/issues/50) and [clippy check](https://github.com/rust-lang/rust-clippy/issues/10269)
   - using `cmp::min` to force index into safe range:
@@ -123,6 +135,7 @@ long ago.
 
 - Disable index checks in compiler and compare perf of large and/or performance sensitive projects
   * patch to disable checks: https://blog.readyset.io/bounds-checks
+  * can ask [rav1d](https://www.memorysafety.org/blog/rav1d-performance-optimization/) guys for their patch
   * also some info [here](https://users.rust-lang.org/t/a-way-to-turn-off-all-bounds-checks-for-exploring-optimisation-potential/117528/4)
   * disables [in stdlib](https://github.com/rust-lang/rust/pull/119440)
   * [unchecked_math](https://github.com/rust-lang/rfcs/issues/2508) feature may be relevant

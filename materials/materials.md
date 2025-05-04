@@ -2030,9 +2030,31 @@ if (x, y) == (1, 1) {
 - Discussion about explicit SIMD in Rust: https://internals.rust-lang.org/t/getting-explicit-simd-on-stable-rust/4380
   * Status: backlog
 - Optimizing rav1d, an AV1 Decoder in Rust: https://www.memorysafety.org/blog/rav1d-performance-optimization/
-  * Status: backlog
+  * Assignee: yugr
+  * Status: DONE (70m)
+  * Porting done in 2 steps:
+    + c2rust conversion of existing dav1d codec (implemented in C)
+    + rewrite c2rust output to idiomatic Rust (remove unsafe, etc.)
+  * c2rust code had 4% perf loss
+    + c2rust compiles C indexing to unchecked Rust indexing
+    + tried to verify reasons for perf loss via compiler patching:
+      - bounds checks - 1%
+      - wrapping signed overflow - no influence
+  * Safe code initially had 11% overhead which was reduced to 6%
+  * Main perf issue was bounds checking
+    + iterators were too simple for complex decoder loops
+    + used reslicing and `assert_unchecked` to inform compiler about valid indexing
+    + in final (idiomatic) code bounds checking resulted in "small" (1%?) perf loss (verified using compiler patch)
+  * Other optimizations:
+    + move error checking code to `#[inline(never)]` helpers (improves inlining of hot code and cache utilization)
+    + avoid redundant initialization via `MaybeUninit`
+  * Remaining problems:
+    + Rust has overall higher stack usage (most likely due to panics)
+    + some conditional assignments are implemented via branches instead of `csel` (for unclear reasons)
+    + a lot of manually written asm; maybe it could be replaced with Rust SIMD? Codec people share different opinions in comments.
   * More materials:
     + [Reddit](https://www.reddit.com/r/rust/comments/1fdzu7z/optimizing_rav1d_an_av1_decoder_in_rust/)
+    + added more mats
 - Porting C to Rust for a Fast and Safe AV1 Media Decoder: https://www.memorysafety.org/blog/porting-c-to-rust-for-av1/
   * Status: backlog
   * This contains example of efficient implementation of self-referential struct

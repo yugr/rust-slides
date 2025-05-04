@@ -25,6 +25,25 @@ approach is about rigorously removing _all_ panic calls from your program.
 Ideally panics should be moved to cold functions to reduce overhead
 but this is [not done](https://github.com/rust-lang/rust/issues/111866) now.
 
+Outline panics via techniques like [this](https://www.reddit.com/r/rust/comments/1fdzu7z/comment/lmqfb49/):
+```
+#[inline(always)]
+pub fn cheap_index<T>(slice: &[T], idx: usize) -> &T {
+    match slice.get(idx) {
+        Some(val) => val,
+        None => outlined_panic(),
+    }
+}
+
+#[cold]
+#[inline(never)]
+fn outlined_panic() -> ! {
+    panic!("Index out of bounds")
+}
+```
+Unfortunately many language constructs (e.g. `assert!` but see [issue #111866](https://github.com/rust-lang/rust/issues/111866))
+do not outline.
+
 # Combining panics
 
 In some cases Rust needs to perform several checks at once
@@ -49,10 +68,12 @@ Does `panic=abort` remove landing pads and libunwind ?
   - It seems that `panic=abort` still calls the (blackbox) panic hooks (handlers)
 
 Does `panic=abort` avoid all overheads ? I couldn't get it to do anything in [this](https://news.ycombinator.com/item?id=30867188) example.
+  - we need to find way to reduce it to `ud2`
 
 Check if optimizations from https://www.youtube.com/watch?v=ItemByR4PRg (LICM, ADCE, etc.) are also disabled for Rust ?
 
 Check if C++ also has same overhead due to exceptions: https://www.rottedfrog.co.uk/?p=24
   - If not, we need a slide on this
 
-Measure increase of BTB and I$ misses PMUs vs panics disabled
+Measure increase of BTB/I$ misses PMUs and [stack usage](https://www.memorysafety.org/blog/rav1d-performance-optimization)
+when panics are disabled
