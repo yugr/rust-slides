@@ -4,12 +4,15 @@ Memory safety issues account for [76%](https://security.googleblog.com/2024/09/e
 of vulnerabilities in Android.
 
 Important note is that most problems reported by users are
-in perf-critical code (codecs, math, autovec, etc.)
-Real-world codebases have much smaller average overhead
+in perf-critical code (codecs, HPC math, autovec, etc.)
+Real-world codebases have much smaller average overhead.
 E.g. Google reports [report](https://security.googleblog.com/2024/11/retrofitting-spatial-safety-to-hundreds.html)
 just 0.3% performance overhead for services and ~0.5% size increase of Chrome binary:
   - caveat - the numbers were measured with FDO enabled
     (w/o FDO penalty is [4x larger](https://bughunters.google.com/blog/6368559657254912/llvm-s-rfc-c-buffer-hardening-at-google))
+Also Shnatsel [here](https://shnatsel.medium.com/how-to-avoid-bounds-checks-in-rust-without-unsafe-f65e618b4c1e)
+reports typical savings of 1-3% (max. 15%) which are nothing like
+4-8x reported in URLO microbenches.
 
 It's important to keep an eye on compiler as some bounds check optimizations
 may regress across versions.
@@ -42,6 +45,7 @@ Bounds checks can be removed via
   - using asserts (https://rust.godbolt.org/z/GPMcYd371) or `core::hint::unreachable_unchecked`
     * [example](https://github.com/rust-random/rand/pull/960)
     * [examples in Nethercote's book](https://nnethercote.github.io/perf-book/bounds-checks.html)
+    * [example](https://github.com/image-rs/jpeg-decoder/pull/167)
     * note that plain `assert!` should be used (e.g. `assert_eq!` may cause [slowdown](https://coaxion.net/blog/2018/01/speeding-up-rgb-to-grayscale-conversion-in-rust-by-a-factor-of-2-2-and-various-other-multimedia-related-processing-loops/) !)
   - constructing pre-checked slices (reslicing, subslicing):
 ```
@@ -66,8 +70,11 @@ sums[bounded_i] = ...
     * this approach may be unstable in removing the checks, see [this](https://users.rust-lang.org/t/rust-vs-c-vs-go-runtime-speed-comparison/104107/15) and [this](https://users.rust-lang.org/t/rust-vs-c-vs-go-runtime-speed-comparison/104107/20) for details
     * this is useful to tell compiler that two slices have the same range (by subslicing them to `min` of lengths, e.g. [here](https://shnatsel.medium.com/how-to-avoid-bounds-checks-in-rust-without-unsafe-f65e618b4c1e)) although [using zip](https://www.reddit.com/r/rust/comments/154vowr/comment/jsr0b51/) also works
   - forcing index into bounds via `& (len - 1)` (`len` must be power-of-2)
+    * it's handy to use `usize::next_power_of_two()`
   - avoid complex (actually [any nontrivial](https://www.nickwilcox.com/blog/autovec/)) arithmetic on indexes
   - unchecked loads (`get_unchecked`)
+  - access largest index first; use `x[i..][..2]` idiom to work around potential integer overflow
+    (from [here](https://www.reddit.com/r/rust/comments/10edmjf/comment/j4sfxyl/))
 
 For workarounds like this keep in mind that
 > The thing is that using unsafe not bound checking access

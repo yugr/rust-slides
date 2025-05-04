@@ -858,6 +858,24 @@ ET's is an important patern for writing linear algebra code in C++. Can it be us
   * OP asks what are the overheads of Rust language
   * People suggest various issues (UFT8 checks, `Rc`, error checking, etc.) but all known by us
   * More materials: nothing new
+- How to avoid bounds checks in Rust: https://shnatsel.medium.com/how-to-avoid-bounds-checks-in-rust-without-unsafe-f65e618b4c1e
+  * Assignee: yugr
+  * Status: DONE (30m)
+  * This article is very important for bounds checking part
+  * It contains
+    + motivation behind bounds checks (example, Heartbleed)
+    + overheads (avg. 1-3%, max. 15% so nothing like 4-8x in microbenches)
+    + all examples are based on Fibonacci
+    + how to remove (use explicit `Vec::len()`), reslicing, iterators, `for_each`, `assert!`
+    + profiling primer
+    + anti-patterns: `debug_assert!`, unsafe
+  * Some interesting points:
+> I’ve found the optimizations that remove bounds checks to be very reliable —
+> once you get them working, they tend to keep workin
+  * More materials:
+    + [Reddit](https://www.reddit.com/r/rust/comments/10edmjf/how_to_avoid_bounds_checks_in_rust_without_unsafe/)
+    + [Russian translation](https://habr.com/ru/companies/otus/articles/718012/)
+    + [GitHub](https://github.com/Shnatsel/bounds-check-cookbook)
 
 # Copy elision/NRVO and placement new
 
@@ -1998,12 +2016,6 @@ if (x, y) == (1, 1) {
   * OP asks for general methods for improving perf of Rust programs
   * General advices: iterators, `#[inline]`, `Vec::with_capacity`, avoid `clone()`
   * More materials: added links
-- How to avoid bounds checks in Rust: https://shnatsel.medium.com/how-to-avoid-bounds-checks-in-rust-without-unsafe-f65e618b4c1e
-  * Status: backlog
-  * this article is very important for bounds checking part
-  * More materials:
-    + [Reddit](https://www.reddit.com/r/rust/comments/10edmjf/how_to_avoid_bounds_checks_in_rust_without_unsafe/)
-    + [Russian translation](https://habr.com/ru/companies/otus/articles/718012/)
 - From 'Very Fast' to '~Fastest': Helping rust unleash compiler optimizations: https://blog.anubhab.me/tech/optimizing-diff-match-patch/
   * Status: backlog
   * More materials:
