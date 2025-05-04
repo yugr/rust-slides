@@ -2108,6 +2108,8 @@ if (x, y) == (1, 1) {
   * Status: backlog
 - Rust faster! https://llogiq.github.io/2015/10/03/fast.html
   * Status: backlog
+- Опыт переноса cpu-bound задач дата-аналитики с Python на Rust: https://www.youtube.com/watch?v=7vE6T5UX2Hc
+  * Status: backlog
 
 # Panics
 
