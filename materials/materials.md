@@ -469,6 +469,12 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Status: backlog
   * More materials:
     + [Reddit](https://www.reddit.com/r/rust/comments/14yvlc9/n_times_faster_than_c_where_n_128/)
+- Rust loop speed: https://www.reddit.com/r/rust/comments/1aumq2h/rust_loop_speed/
+  * Status: DONE (5m)
+  * Problem: loop much slower in Rust
+  * Root cause: no `--release` and inclusive range
+  * Solution: use `--release` and `..`
+  * More materials: no new links
 
 # UB in C++
 
@@ -2066,23 +2072,40 @@ if (x, y) == (1, 1) {
     + [Russian translation](https://habr.com/ru/companies/ruvds/articles/842970)
     + [Reddit](https://www.reddit.com/r/rust/comments/1fcxxg5/porting_c_to_rust_for_a_fast_and_safe_av1_media/)
     + [HN](https://news.ycombinator.com/item?id=41493568)
-- Rust loop speed: https://www.reddit.com/r/rust/comments/1aumq2h/rust_loop_speed/
-  * Status: backlog
-- Why is this functional version faster than my for loop? https://www.reddit.com/r/rust/comments/xtiqj8/why_is_this_functional_version_faster_than_my_for/
-  * Status: backlog
 - Huge performance gap in simple loop. Explanations? https://www.reddit.com/r/rust/comments/11f00kc/huge_performance_gap_in_simple_loop_explanations/
-  * Status: backlog
-- Memory-safe PNG decoders now vastly outperform C PNG libraries: https://www.reddit.com/r/programming/comments/1hak25t/memorysafe_png_decoders_now_vastly_outperform_c/
-  * Status: backlog
+  * Assignee: yugr
+  * Status: DONE (5m)
+  * Problem: a loop much faster in C
+  * Root cause: not defined (many people can't repro + benchmarks changed several times)
+  * Solution: `chunk_exact`/`array_chunks`
+  * More materials: no new links
 - Rust: A better C++ than C++: Safety and performance: https://www.thecodedmessage.com/rust-c-book/safety.html
-  * Status: backlog
+  * Assignee: yugr
+  * Status: DONE (5m)
+  * A more philosophical post about safe vs unsafe operations in Rust vs C++
+  * No relevant info
+  * More materials: no new links
 - The Humble For Loop in Rust: https://blog.startifact.com/posts/humble-for-loop-rust/
-  * Status: backlog
+  * Assignee: yugr
+  * Status: DONE (5m)
+  * Discussion of iterator capabilities, unrelated to performance
+  * No relevant info
+  * More materials: no perf-relevant posts in blog
 - Why can deriving Copy pessimize performance by 60%? https://www.reddit.com/r/rust/comments/1h8dj64/why_can_deriving_copy_pessimize_performance_by_60/
-  * Status: backlog
+  * Assignee: yugr
+  * Status: DONE (10m)
+  * [Known issue](https://github.com/memorysafety/rav1d/issues/1332) with `Copy` traits
+  * Most likely will be fixed soon so no need to investigate/mention in slides
+  * More materials: no new links
 - Porting EBU R128 audio loudness analysis from C to Rust: https://coaxion.net/blog/2020/09/porting-ebu-r128-audio-loudness-analysis-from-c-to-rust-porting-details/
-  * Status: backlog
-  * Was part 3 ever written ?
+  * Assignee: yugr
+  * Status: DONE (10m)
+  * Another approach to porting (instead of `c2rust`): rewrite one function at a time
+  * Just outlines some porting hints (binding, iterators, data structures, etc.)
+  * No perf-relevant info
+  * More materials:
+    + Sadly part 3 (about optimizations) was not written
+    + No more perf-relevant posts
 - Pursuit of Performance on Building a JavaScript Compiler: https://oxc.rs/docs/learn/performance.html
   * Status: backlog
   * More materials:

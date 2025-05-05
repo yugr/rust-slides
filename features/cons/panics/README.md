@@ -61,6 +61,9 @@ As a workaround, developers need to use manual `assert!`'s (or `core::hint::unre
 
 # TODO
 
+Check overhead on panics in benches
+  - can only be done in benches w/o `catch_unwind` (in bench itself and deps)
+
 What is `panic_immediate_abort` ?
 
 Does `panic=abort` remove landing pads and libunwind ?
