@@ -1854,6 +1854,15 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
   * Status: DONE (5m)
   * Just some random discussion of `-Z tls-model` without any insights or conclusions
 
+# Stdlib
+
+- stdin and stdout performance considerations are not documented: https://github.com/rust-lang/rust/issues/106133
+  * Status: backlog
+- io::Stdout should use block bufferring when appropriate: https://github.com/rust-lang/rust/issues/60673
+  * Status: backlog
+- RFC 1884: Sort unstable: https://github.com/rust-lang/rfcs/blob/master/text/1884-unstable-sort.md
+  * Status: backlog
+
 # Manual optimizations
 
 - Inviting God's Wrath with Cursed Rust: http://troubles.md/abusing-rustc/
@@ -2107,17 +2116,29 @@ if (x, y) == (1, 1) {
     + Sadly part 3 (about optimizations) was not written
     + No more perf-relevant posts
 - Pursuit of Performance on Building a JavaScript Compiler: https://oxc.rs/docs/learn/performance.html
-  * Status: backlog
+  * Assignee: yugr
+  * Status: DONE (10m)
+  * Various high-level optimization techniques: string interning, string inlining, copy-on-write, SIMD
+  * Good links about IO performance
   * More materials:
     + [Reddit](https://www.reddit.com/r/rust/comments/1fuj0qg/rust_performance_tricks_from_a_javascript_compiler/)
+    + added link on IO perf
 - Cheap tricks for high-performance Rust: https://deterministic.space/high-performance-rust.html
-  * Status: backlog
+  * Assignee: yugr
+  * Status: DONE (5m)
+  * Just general stuff: LTO, PGO, CGU, target-cpu=native, panic=abort, allocators
   * More materials:
     + [Reddit](https://www.reddit.com/r/rust/comments/fdbszu/cheap_tricks_for_highperformance_rust/)
+    + [Reddit](https://www.reddit.com/r/rust/comments/he8zky/cheap_tricks_for_highperformance_rust/)
+    + no new links
 - On Maximizing Your Rust Code's Performance: https://jbecker.dev/research/on-writing-performant-rust
-  * Status: backlog
+  * Assignee: yugr
+  * Status: DONE (5m)
+  * Various high-level suggestions: right data structs, parallelization, algorithms
+  * Rust-specific suggestions: `with_capacity`, reuse `Vec`'s, avoid intermediate `collect`'s, LTO, allocators, CGUs, `target-cpu=native`, `panic=abort`
   * More materials:
     + [Reddit](https://www.reddit.com/r/rust/comments/14y2kej/maximizing_your_rust_codes_performance/)
+    + no new links
 - How copying an int made my code 11 times faster: https://blog.polybdenum.com/2017/02/19/how-copying-an-int-made-my-code-11-times-faster.html
   * Assignee: yugr
   * Status: DONE (30m)
@@ -2365,24 +2386,24 @@ if (x, y) == (1, 1) {
 # Codegen unit
 
 - Huge performance gap between lto="fat",cgu=1 and default release profile https://github.com/rust-lang/rust/issues/93321
-    * Assignee: zakhar
-    * Status: DONE (15m)
-    * Problem: 4x perf difference between base compile flags and lto="fat", cgu=1
-    * Root cause: Different inlining with different number of CGUs
-    * Solution: Careful addition of extra `[#inline]` tags and/or using fat LTO.
-      Possible future "become" keyword (tail call optimization) is stated as a fix from the issue creator.
-    * More materials:
-        + Some possibly interesting benchmark https://github.com/ggwpez/substrate-bench/tree/master/reports/01-first-findings
-        + CGUs may cause unpredictable behaviour when comparing pointers https://github.com/rust-lang/rust/issues/46139
-        + TCO in Rust blogpost https://seanchen1991.github.io/posts/tco-story/
-        + Explicit Tail Call RFC https://github.com/rust-lang/rfcs/pull/3407
+  * Assignee: zakhar
+  * Status: DONE (15m)
+  * Problem: 4x perf difference between base compile flags and lto="fat", cgu=1
+  * Root cause: Different inlining with different number of CGUs
+  * Solution: Careful addition of extra `[#inline]` tags and/or using fat LTO.
+    Possible future "become" keyword (tail call optimization) is stated as a fix from the issue creator.
+  * More materials:
+    + Some possibly interesting benchmark https://github.com/ggwpez/substrate-bench/tree/master/reports/01-first-findings
+    + CGUs may cause unpredictable behaviour when comparing pointers https://github.com/rust-lang/rust/issues/46139
+    + TCO in Rust blogpost https://seanchen1991.github.io/posts/tco-story/
+    + Explicit Tail Call RFC https://github.com/rust-lang/rfcs/pull/3407
 - CGUs may cause unpredictable behaviour when comparing pointers https://github.com/rust-lang/rust/issues/46139
-    * Assignee: zakhar
-    * Status: DONE (15m)
-    * Problem: Comparison of vtable pointers can be true or false depending of number of CGU in build configuration
-    * Reasons: Seems that uniqueness of vtables is not guaranteed, so strange behaviour is expected
-               vtables get duplicated between CGUs and are sometimes different between different CGUs (possibly a bug)
-    * Solution: Discussion suggests using `linkonce_odr` in LLVM IR as a partial solution.
+  * Assignee: zakhar
+  * Status: DONE (15m)
+  * Problem: Comparison of vtable pointers can be true or false depending of number of CGU in build configuration
+  * Reasons: Seems that uniqueness of vtables is not guaranteed, so strange behaviour is expected
+             vtables get duplicated between CGUs and are sometimes different between different CGUs (possibly a bug)
+  * Solution: Discussion suggests using `linkonce_odr` in LLVM IR as a partial solution.
 - Compiler flag's impact on benchmarks: https://github.com/ggwpez/substrate-bench/tree/master/reports/01-first-findings
   * Assignee: yugr
   * Status: Wontfix (5m)
@@ -2394,11 +2415,11 @@ if (x, y) == (1, 1) {
   * An old regression caused insufficient inlining (perf can be restored with inline threshold and CGU=1)
   * Nothing new here
 - 2x benchmark loss in rayon-hash from multiple codegen-units https://github.com/rust-lang/rust/issues/47665
-    * Assignee: zakhar
-    * Status: DONE (10m)
-    * Problem: Using multiple CGUs reduces benchmark performance by half
-    * Reason: Inlining is not performed across multiple CGUs
-    * Solution: Use LTO or compile with one CGU (adding inline tag into stdlib isn't feasible for a user)
+  * Assignee: zakhar
+  * Status: DONE (10m)
+  * Problem: Using multiple CGUs reduces benchmark performance by half
+  * Reason: Inlining is not performed across multiple CGUs
+  * Solution: Use LTO or compile with one CGU (adding inline tag into stdlib isn't feasible for a user)
 - rustc: Default 32 codegen units at O0: https://github.com/rust-lang/rust/pull/44853
   * Assignee: yugr
   * Status: Wontfix (0m)
@@ -2411,15 +2432,16 @@ if (x, y) == (1, 1) {
   * Solution: some fixes were done
   * More materials: added linked issue
 - Back-end parallelism in the Rust compiler: https://nnethercote.github.io/2023/07/11/back-end-parallelism-in-the-rust-compiler.html
-    - https://news.ycombinator.com/item?id=36678457
-    - https://www.reddit.com/r/rust/comments/14wcezs/backend_parallelism_in_the_rust_compiler/
-    * Assignee: zakhar
-    * Status: DONE (30m)
-    * Problem: Nethercote's investigation on how to improve compilation times using CGUs. He also confirms that multiple CGUs with thin LTO is still worse than using one CGU.
+  * Assignee: zakhar
+  * Status: DONE (30m)
+  * Problem: Nethercote's investigation on how to improve compilation times using CGUs. He also confirms that multiple CGUs with thin LTO is still worse than using one CGU.
+  * More materials:
+    + [Reddit](https://news.ycombinator.com/item?id=36678457)
+    + [HN](https://www.reddit.com/r/rust/comments/14wcezs/backend_parallelism_in_the_rust_compiler/)
 - Let’s talk about parallel codegen https://internals.rust-lang.org/t/lets-talk-about-parallel-codegen/2759
-    * Assignee: zakhar
-    * Status: DONE (25m)
-    * Problem: A prolonged discussion about default number of codegen units. Brings up a point about builds with multiple CGUs being non-deterministic. Contains some perf overhead measurements.
+  * Assignee: zakhar
+  * Status: DONE (25m)
+  * Problem: A prolonged discussion about default number of codegen units. Brings up a point about builds with multiple CGUs being non-deterministic. Contains some perf overhead measurements.
 - codegen-units + ThinLTO is not as good as codegen-units=1: https://github.com/rust-lang/rust/issues/47745
   * Assignee: yugr
   * Status: DONE (5m)
@@ -2427,11 +2449,11 @@ if (x, y) == (1, 1) {
   * No technical investigation
   * More materials: a lot of linked use-cases
 - Adding --emit=asm speeds up generated code because of codegen units https://github.com/rust-lang/rust/issues/57235
-    * Assignee: zakhar
-    * Status: DONE (10m)
-    * Problem: `--emit=asm` flag drastically improves small benchmark performance
-    * Root cause: `--emit-asm` disables CGUs; with multiple codegen units compiler is unable to detect that loop does not do anything
-    * Solution: Use cgu=1 for building (especially for small projects)
+  * Assignee: zakhar
+  * Status: DONE (10m)
+  * Problem: `--emit=asm` flag drastically improves small benchmark performance
+  * Root cause: `--emit-asm` disables CGUs; with multiple codegen units compiler is unable to detect that loop does not do anything
+  * Solution: Use cgu=1 for building (especially for small projects)
 - Speeding up rustc by being lazy: https://davidlattimore.github.io/posts/2024/06/05/speeding-up-rustc-by-being-lazy.html
   * Assignee: yugr
   * Status: DONE (15m)
@@ -2456,15 +2478,15 @@ if (x, y) == (1, 1) {
 # TCO
 
 - Explicit Tail Call RFC https://github.com/rust-lang/rfcs/pull/3407
-    * Assignee: zakhar
-    * Status: DONE (10m)
-    * Problem: RFC for explicit tail calls. Still in development
+  * Assignee: zakhar
+  * Status: DONE (10m)
+  * Problem: RFC for explicit tail calls. Still in development
 - TCO in Rust blogpost https://seanchen1991.github.io/posts/tco-story/
-    * Assignee: zakhar
-    * Status: DONE (15m)
-    * Problem: Rust does not have TCO
-    * Solution: Some crates (tco, tramp) provide macros to optimize tail-calling functions.
-        + These crates are not well-developed and are either in POC state or do not provide 'real' (constant memory usage) TCO
+  * Assignee: zakhar
+  * Status: DONE (15m)
+  * Problem: Rust does not have TCO
+  * Solution: Some crates (tco, tramp) provide macros to optimize tail-calling functions.
+    + These crates are not well-developed and are either in POC state or do not provide 'real' (constant memory usage) TCO
 
 # Other
 
@@ -2487,6 +2509,4 @@ if (x, y) == (1, 1) {
 - Why you should, actually, rewrite some of it in Rust: https://news.ycombinator.com/item?id=14753201
   * Status: backlog
 -  Rust and Scientific/High-Performance Computing: https://www.reddit.com/r/rust/comments/smdl3m/rust_and_scientifichighperformance_computing/
-  * Status: backlog
-- RFC 1884: Sort unstable: https://github.com/rust-lang/rfcs/blob/master/text/1884-unstable-sort.md
   * Status: backlog
