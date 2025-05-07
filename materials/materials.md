@@ -2295,10 +2295,19 @@ if (x, y) == (1, 1) {
     + no new links
 - Bringing faster exceptions to Rust: https://purplesyringa.moe/blog/bringing-faster-exceptions-to-rust/
   * Assignee: yugr
-  * Status: in progress (20m)
+  * Status: DONE (90m)
+  * Continuation of previous article
+  * Contains highly-technical analysis of implementation of panics in Rust and how it can be sped up
+  * New exceptions are 2-4x faster
+  * Some interesting takes in comments:
+    + a lot of hate/downvotes from fans of traditional error handling
+    + `Result`'s are currently very inefficient due to enum calling convention
+    + whether exceptions inhibit other optimizations (no clear and proved conclusion)
+    + Alisa says she has draft impl of exceptions not based on exception tables which are 100x (!) faster
   * More materials:
     + [Reddit](https://www.reddit.com/r/rust/comments/1gl050z/bringing_faster_exceptions_to_rust/)
     + [HN](https://news.ycombinator.com/item?id=42072750)
+    + [GitHub](https://github.com/iex-rs/lithium)
 - The Error Model: https://joeduffyblog.com/2016/02/07/the-error-model/
   * Status: backlog
   * Only check performance-related parts
@@ -2306,7 +2315,13 @@ if (x, y) == (1, 1) {
   * Status: backlog
 - C++ Exceptions for Smaller Firmware: https://www.youtube.com/watch?v=bY2FlayomlE&t=2671s
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (40m)
+  * Overview of C++ Itanium ABI exceptions implementation
+  * Discusses centralized vs distributed error handling (i.e. exceptions vs retcodes) from code size POV
+  * In comments also [mentions](https://www.reddit.com/r/cpp/comments/1ejpgbe/comment/lhqecdg/) ~20% performance improvement
+  * More materials:
+    + [Reddit](https://www.reddit.com/r/cpp/comments/1fkvj00/c_exceptions_for_smaller_firmware_khalil_estell/)
+    + [Reddit](https://www.reddit.com/r/cpp/comments/1ejpgbe/c_exceptions_reduce_firmware_code_size_khalil/)
 - Is it okay to let some errors panic? https://www.reddit.com/r/rust/comments/1ad7xyn/is_it_okay_to_let_some_errors_panic/
   * Status: backlog
   * Leave some comments about iex ?

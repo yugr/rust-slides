@@ -42,3 +42,4 @@ which all team members need to be aware of.
   * A case study of micro-optimizing a benchmark
 - [You might want to use panics for error handling](https://purplesyringa.moe/blog/you-might-want-to-use-panics-for-error-handling/)
   * Rust's preferred error handling may be less efficient than exceptions
+  * [Useful Reddit comments](https://www.reddit.com/r/rust/comments/1gl050z/bringing_faster_exceptions_to_rust/)
