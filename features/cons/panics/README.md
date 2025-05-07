@@ -21,6 +21,9 @@ If error case is _very_ rare panics can give better performance than
 Rust's preferred error handling (`Result`, `Option`) as
 demononstrated by [iex](https://purplesyringa.moe/blog/you-might-want-to-use-panics-for-error-handling/)
 crate (5-20% improvement on real projects).
+This could be improved by 4x with [different implementation](https://purplesyringa.moe/blog/bringing-faster-exceptions-to-rust/)
+of panics (author [claims](https://www.reddit.com/r/rust/comments/1gl050z/comment/lvrowre/)
+that 100x savings are possible).
 
 This generally goes against [popular guidelines](https://doc.rust-lang.org/book/ch09-03-to-panic-or-not-to-panic.html).
 
