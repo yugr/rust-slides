@@ -38,3 +38,7 @@ which all team members need to be aware of.
   * Bible of bounds checking optimization in Rust
 - [Optimizing rav1d, an AV1 Decoder in Rust](https://www.memorysafety.org/blog/rav1d-performance-optimization/)
   * Good example of problems and solutions when porting performance-sensitive code to Rust
+- [From 'Very Fast' to '~Fastest': Helping rust unleash compiler optimizations](https://blog.anubhab.me/tech/optimizing-diff-match-patch/)
+  * A case study of micro-optimizing a benchmark
+- [You might want to use panics for error handling](https://purplesyringa.moe/blog/you-might-want-to-use-panics-for-error-handling/)
+  * Rust's preferred error handling may be less efficient than exceptions

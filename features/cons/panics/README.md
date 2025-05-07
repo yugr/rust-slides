@@ -15,6 +15,15 @@ because no BTB is wasted on error handling code.
 Panics make leaf functions no longer leaf (see [this](https://www.reddit.com/r/programming/comments/2po703/comment/cmym6jk/))
 which may harm optimizations (e.g. inlining) and introduce unnecessary reg spills.
 
+# Advantages of panics
+
+If error case is _very_ rare panics can give better performance than
+Rust's preferred error handling (`Result`, `Option`) as
+demononstrated by [iex](https://purplesyringa.moe/blog/you-might-want-to-use-panics-for-error-handling/)
+crate (5-20% improvement on real projects).
+
+This generally goes against [popular guidelines](https://doc.rust-lang.org/book/ch09-03-to-panic-or-not-to-panic.html).
+
 # Solutions
 
 Rust has `panic=abort` (similar to C++ `-fno-exceptions`, ex. `-Z no-landing-pads`)

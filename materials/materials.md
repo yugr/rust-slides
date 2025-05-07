@@ -465,10 +465,14 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Root cause: lack of autovec
   * Solutions: iterators (`windows` instead of `exact_chunks`), `target-cpu=native`, fast FP operations
   * More materials: no new links
-- n times faster than C: https://ipthomas.com/blog/2023/07/n-times-faster-than-c-where-n-128/
-  * Status: backlog
+- n times faster than C: https://ipthomas.com/blog/n-times-faster-than-c/
+  * Assignee: yugr
+  * Status: DONE (10m)
+  * Rewriting the code in several steps: use iterators (14x improvement for unclear reasons), remove branches, manual SIMD
+  * No asm analysis and no general recommendations
   * More materials:
     + [Reddit](https://www.reddit.com/r/rust/comments/14yvlc9/n_times_faster_than_c_where_n_128/)
+    + no more relevant posts in blog
 - Rust loop speed: https://www.reddit.com/r/rust/comments/1aumq2h/rust_loop_speed/
   * Status: DONE (5m)
   * Problem: loop much slower in Rust
@@ -884,7 +888,13 @@ ET's is an important patern for writing linear algebra code in C++. Can it be us
     + [GitHub](https://github.com/Shnatsel/bounds-check-cookbook)
     + no more relevant posts in blog
 - Safe elimination of unnecessary bound checks: https://www.reddit.com/r/rust/comments/1iqev5s/safe_elimination_of_unnecessary_bound_checks/
-  * Status: backlog
+  * Assignee: yugr
+  * Status: DONE (30m)
+  * Problem: OP loads index from one const table and uses it to index another; he wonders how to get rid of bounds checks in this case
+  * Usual suggestions: unsafe, extend tables to power-of-two and use `&`, `cmp::min`
+  * Finally he just used power-of-two approach
+  * More materials:
+    + no new links
 
 # Copy elision/NRVO and placement new
 
@@ -1189,7 +1199,12 @@ pub fn foo(p: Box<S>) {
   * Root cause: one of combinators includes a reservation for `collect` call
   * Solution: do manual `with_capacity` in raw loop
 - We all know iter is faster than loop: https://users.rust-lang.org/t/we-all-know-iter-is-faster-than-loop-but-why/51486?u=scottmcm
-  * Status: backlog
+  * Assignee: yugr
+  * Status: DONE (5m)
+  * OP wonders why iterators are generally faster than loops
+  * Not all people agree that they are
+  * Iterators may be faster because they avoid bounds checks
+  * Bounds checks are not expensive on their own but may hinder other opts
 
 # Noalias
 
@@ -2035,9 +2050,20 @@ if (x, y) == (1, 1) {
   * General advices: iterators, `#[inline]`, `Vec::with_capacity`, avoid `clone()`
   * More materials: added links
 - From 'Very Fast' to '~Fastest': Helping rust unleash compiler optimizations: https://blog.anubhab.me/tech/optimizing-diff-match-patch/
-  * Status: backlog
+  * Assignee: yugr
+  * Status: DONE (25m)
+  * Good log of low-level optimizations in computation-heavy benchmark
+  * Contains several low-level opts:
+    + replace `* 2^n`, `/ 2^n`, `x % 2 != 0` with shifts
+      - already optimized by modern rustc
+    + replace 2 `Vec`'s with one + `split_at_mut`
+    + replace `while` loop with `chunk_exact` iterators to foster autovec
+      - didn't result in improvement/autovec
+      - asm is better with iterators so it's unclear what went wrong
+    + replace bounds checks with explicit index checks
   * More materials:
     + [Reddit](https://www.reddit.com/r/rust/comments/1hsnnat/40_boost_in_text_diff_flow_just_by_facilitating/)
+    + no more relevant posts in blog
 - Example of loop rewrite for vectorization: https://github.com/dropbox/rust-brotli/blob/238c9c539b446d7d980e0a50795752c45dd3359e/src/enc/static_dict.rs lines 122 and 131
   * Assignee: yugr
   * Status: DONE (5m)
@@ -2261,14 +2287,26 @@ if (x, y) == (1, 1) {
   * Just general discussion of when to use panics (invariant violations, programmer errors) and error handling (logical errors, env errors)
   * More materials: no new links
 - You might want to use panics for error handling: https://purplesyringa.moe/blog/you-might-want-to-use-panics-for-error-handling/
-  * Status: backlog
+  * Assignee: yugr
+  * Status: DONE (15m)
+  * Introduces `iex` - a drop-in solution which replaces distributed error handling (`Result`, `?`) with exceptions (panics)
+  * Show that happy path for real-world code may speed up a lot (5-20%)
+  * More materials:
+    + no new links
 - Bringing faster exceptions to Rust: https://purplesyringa.moe/blog/bringing-faster-exceptions-to-rust/
   * Status: backlog
+  * More materials:
+    + [Reddit](https://www.reddit.com/r/rust/comments/1gl050z/bringing_faster_exceptions_to_rust/)
 - The Error Model: https://joeduffyblog.com/2016/02/07/the-error-model/
   * Status: backlog
   * Only check performance-related parts
 - Efficiently bubbling Results: https://internals.rust-lang.org/t/efficiently-bubbling-results/20120/1
   * Status: backlog
+- C++ Exceptions for Smaller Firmware: https://www.youtube.com/watch?v=bY2FlayomlE&t=2671s
+  * Status: backlog
+- Is it okay to let some errors panic? https://www.reddit.com/r/rust/comments/1ad7xyn/is_it_okay_to_let_some_errors_panic/
+  * Status: backlog
+  * Leave some comments about iex
 
 # Uninit
 

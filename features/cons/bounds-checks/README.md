@@ -83,8 +83,9 @@ sums[bounded_i] = ...
 ```
     * this approach may be unstable in removing the checks, see [this](https://users.rust-lang.org/t/rust-vs-c-vs-go-runtime-speed-comparison/104107/15) and [this](https://users.rust-lang.org/t/rust-vs-c-vs-go-runtime-speed-comparison/104107/20) for details
     * this is useful to tell compiler that two slices have the same range (by subslicing them to `min` of lengths, e.g. [here](https://shnatsel.medium.com/how-to-avoid-bounds-checks-in-rust-without-unsafe-f65e618b4c1e)) although [using zip](https://www.reddit.com/r/rust/comments/154vowr/comment/jsr0b51/) also works
-  - forcing index into bounds via `& (len - 1)` (`len` must be power-of-2)
+  - manually force index into bounds via `& (len - 1)` (`len` must be power-of-2)
     * it's handy to use `usize::next_power_of_two()`
+  - manually force index into bounds via `cmp::min` (should compile to `cmov`)
   - avoid complex (actually [any nontrivial](https://www.nickwilcox.com/blog/autovec/)) arithmetic on indexes
   - unchecked loads (`get_unchecked`)
   - access largest index first; use `x[i..][..2]` idiom to work around potential integer overflow
