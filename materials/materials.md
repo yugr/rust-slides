@@ -2298,6 +2298,7 @@ if (x, y) == (1, 1) {
   * Status: in progress (20m)
   * More materials:
     + [Reddit](https://www.reddit.com/r/rust/comments/1gl050z/bringing_faster_exceptions_to_rust/)
+    + [HN](https://news.ycombinator.com/item?id=42072750)
 - The Error Model: https://joeduffyblog.com/2016/02/07/the-error-model/
   * Status: backlog
   * Only check performance-related parts
@@ -2308,7 +2309,10 @@ if (x, y) == (1, 1) {
   * Status: in progress
 - Is it okay to let some errors panic? https://www.reddit.com/r/rust/comments/1ad7xyn/is_it_okay_to_let_some_errors_panic/
   * Status: backlog
-  * Leave some comments about iex
+  * Leave some comments about iex ?
+- Optimisation of Exceptions and Repeated Return of Error Types: https://www.reddit.com/r/rust/comments/13fqdcs/optimisation_of_exceptions_and_repeated_return_of/
+  * Status: backlog
+  * Leave some comments about iex ?
 
 # Uninit
 
