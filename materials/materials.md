@@ -2294,7 +2294,8 @@ if (x, y) == (1, 1) {
   * More materials:
     + no new links
 - Bringing faster exceptions to Rust: https://purplesyringa.moe/blog/bringing-faster-exceptions-to-rust/
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress (20m)
   * More materials:
     + [Reddit](https://www.reddit.com/r/rust/comments/1gl050z/bringing_faster_exceptions_to_rust/)
 - The Error Model: https://joeduffyblog.com/2016/02/07/the-error-model/
@@ -2303,7 +2304,8 @@ if (x, y) == (1, 1) {
 - Efficiently bubbling Results: https://internals.rust-lang.org/t/efficiently-bubbling-results/20120/1
   * Status: backlog
 - C++ Exceptions for Smaller Firmware: https://www.youtube.com/watch?v=bY2FlayomlE&t=2671s
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - Is it okay to let some errors panic? https://www.reddit.com/r/rust/comments/1ad7xyn/is_it_okay_to_let_some_errors_panic/
   * Status: backlog
   * Leave some comments about iex
