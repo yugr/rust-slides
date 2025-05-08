@@ -4,7 +4,11 @@ Associative containers (`BTreeSet`, `HashSet`) are much faster than C++.
 Same goes for regexes (`std::regex` is known to be very slow).
 
 Sort implementations are [significantly faster](https://github.com/Voultapher/sort-research-rs/blob/main/writeup/sort_safety/text.md)
-despite doing more work due to safety guarantees.
+despite doing more work (e.g. allocate which other langs [don't do](https://github.com/rust-lang/rfcs/pull/1884))
+due to safety guarantees and stability.
+Unstable sort is also available (`slice::sort_unstable`) and
+can be [up to 1.5x faster](https://github.com/rust-lang/rfcs/blob/master/text/1884-unstable-sort.md)
+that `slice::sort`.
 
 Rust encapsulation rules allow library authors to hide details of their types.
 This allows returning values of internal types on stack, rather than

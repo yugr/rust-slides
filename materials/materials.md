@@ -1872,16 +1872,49 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
 # Stdlib
 
 - stdin and stdout performance considerations are not documented: https://github.com/rust-lang/rust/issues/106133
-  * Status: backlog
+  * Assignee: yugr
+  * Status: DONE (20m)
+  * OP was interested in locking but others also mentioned
+    + buffering
+    + unnecessary allocations in `BufRead`
+  * More materials:
+    + added relevant links
 - io::Stdout should use block bufferring when appropriate: https://github.com/rust-lang/rust/issues/60673
-  * Status: backlog
+  * Assignee: yugr
+  * Status: DONE (30m)
+  * Issue created by BurntSushi
+  * Problem: Rust's non-interactive stdout is much slower than Python
+  * Root cause: Rust line-buffers stdout both for interactive and non-interactive output whereas Python/Glibc block-buffer for non-interactive
+  * Solution:
+    + PR to change default behavior [exists](https://github.com/rust-lang/rust/pull/60904) but was abandoned
+    + More broad [PR](https://github.com/rust-lang/rust/pull/78515) which
+      - adds API to control buffering and enable it for Stdout
+      - committee requested large refactor and PR was abandoned
+    + Use `grep_cli` crate instead of stdlib
+  * More materials:
+    + [Fix in Voila](https://github.com/Alonely0/Voila/issues/2)
+    + [Fix in inferno](https://github.com/jonhoo/inferno/issues/193)
+    + [URLO report](https://users.rust-lang.org/t/reading-and-writing-file-speed-problems/34498)
 - RFC 1884: Sort unstable: https://github.com/rust-lang/rfcs/blob/master/text/1884-unstable-sort.md
+  * Assignee: yugr
+  * Status: DONE (15m)
+  * RFC proposes to add unstable sort API to stdlib because
+    + it can be efficiently implemented without allocation
+    + can be 1.5x faster
+  * `slice::sort_unstable` has been merged
+  * More materials:
+    + [Original issue](https://github.com/rust-lang/rfcs/issues/790)
+    + [PR](https://github.com/rust-lang/rfcs/pull/1884)
+- Extend io::BufRead to read multiple lines at once: https://internals.rust-lang.org/t/extend-io-bufread-to-read-multiple-lines-at-once/10196
+  * Status: backlog
+- Why using read_lines iterator is much slower than using read_line? https://users.rust-lang.org/t/why-using-the-read-lines-iterator-is-much-slower-than-using-read-line/92815
   * Status: backlog
 
 # Manual optimizations
 
 - Inviting God's Wrath with Cursed Rust: http://troubles.md/abusing-rustc/
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - I sped up serde_json strings by 20%: https://purplesyringa.moe/blog/i-sped-up-serde-json-strings-by-20-percent/
   * Assignee: yugr
   * Status: DONE (1h)
@@ -2311,7 +2344,7 @@ if (x, y) == (1, 1) {
 - The Error Model: https://joeduffyblog.com/2016/02/07/the-error-model/
   * Status: backlog
   * Only check performance-related parts
-- Efficiently bubbling Results: https://internals.rust-lang.org/t/efficiently-bubbling-results/20120/1
+- Efficiently bubbling Results: https://internals.rust-lang.org/t/efficiently-bubbling-results/20120
   * Status: backlog
 - C++ Exceptions for Smaller Firmware: https://www.youtube.com/watch?v=bY2FlayomlE&t=2671s
   * Assignee: yugr

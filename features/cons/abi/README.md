@@ -3,7 +3,7 @@ Rust ABI is very inefficient in some important cases.
 # Enums
 
 As explained [here](https://www.reddit.com/r/rust/comments/1gl050z/comment/lvqzdcf/)
-enums are usually passed on stack.
+enums are usually passed on stack (unlike e.g. slices which are passed in regs).
 This is particularly bad for traditional Rust error handling
 (based on `Result`/`Option`).
 
