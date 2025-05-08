@@ -1906,9 +1906,11 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
     + [Original issue](https://github.com/rust-lang/rfcs/issues/790)
     + [PR](https://github.com/rust-lang/rfcs/pull/1884)
 - Extend io::BufRead to read multiple lines at once: https://internals.rust-lang.org/t/extend-io-bufread-to-read-multiple-lines-at-once/10196
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - Why using read_lines iterator is much slower than using read_line? https://users.rust-lang.org/t/why-using-the-read-lines-iterator-is-much-slower-than-using-read-line/92815
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 
 # Manual optimizations
 
@@ -2099,7 +2101,8 @@ if (x, y) == (1, 1) {
   * Status: DONE (5m)
   * In both cases two string were resliced to common length
 - Discussion about explicit SIMD in Rust: https://internals.rust-lang.org/t/getting-explicit-simd-on-stable-rust/4380
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - Optimizing rav1d, an AV1 Decoder in Rust: https://www.memorysafety.org/blog/rav1d-performance-optimization/
   * Assignee: yugr
   * Status: DONE (70m)
