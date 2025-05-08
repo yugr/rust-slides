@@ -1911,6 +1911,21 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
 - Why using read_lines iterator is much slower than using read_line? https://users.rust-lang.org/t/why-using-the-read-lines-iterator-is-much-slower-than-using-read-line/92815
   * Assignee: yugr
   * Status: in progress
+- My gripes with BufReader and BufWriter: https://users.rust-lang.org/t/my-gripes-with-bufreader-and-bufwriter/108557
+  * Assignee: yugr
+  * Status: in progress
+- How to do Fast File IO: https://users.rust-lang.org/t/how-to-do-fast-file-io/8278
+  * Assignee: yugr
+  * Status: in progress
+- BetterBufRead: Faster Reads in Rust: https://graphallthethings.com/posts/better-buf-read
+  * Assignee: yugr
+  * Status: in progress
+- Read::bytes() is a performance trap: https://github.com/rust-lang/rust/issues/28073
+  * Assignee: yugr
+  * Status: in progress
+- Performance reading file: https://users.rust-lang.org/t/performance-reading-file-parse-from-io-read-vs-from-u8/91948
+  * Assignee: yugr
+  * Status: in progress
 
 # Manual optimizations
 
