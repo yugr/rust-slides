@@ -1965,7 +1965,13 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
   * More materials:
     + no new links
 - Parsing 20MB file using from_reader is slow: https://github.com/serde-rs/json/issues/160#issuecomment-349943856
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
+  * Problem: JSON deserialization is very slow
+  * Root cause: lack of buffering
+  * Solution: `BufReader` is still slow (2x slower than Python) so read-at-once (`from_slice`) is suggested
+  * More materials:
+    + no more relevant links
 
 # Manual optimizations
 

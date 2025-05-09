@@ -14,7 +14,7 @@ Some standard streams always come as buffered so check the docs.
 `BufReader` will only fetch more data when [internal buffer is exhausted](https://graphallthethings.com/posts/better-buf-read)
 which may be suboptimal.
 Of course [nothing can beat](https://users.rust-lang.org/t/performance-reading-file-parse-from-io-read-vs-from-u8/91948)
-single complete file read.
+single complete file read (10x reported [here](https://github.com/serde-rs/json/issues/160#issuecomment-253446892)).
 
 `io::stdout()` is line-buffered [both for TTY and for non-TTY streams](https://github.com/rust-lang/rust/issues/60673)
 (it's [wrapped in LineWriter](https://users.rust-lang.org/t/why-is-this-rust-loop-3x-slower-when-writing-to-disk/30489/3)).
