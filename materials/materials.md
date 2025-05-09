@@ -1907,25 +1907,65 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
     + [PR](https://github.com/rust-lang/rfcs/pull/1884)
 - Extend io::BufRead to read multiple lines at once: https://internals.rust-lang.org/t/extend-io-bufread-to-read-multiple-lines-at-once/10196
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (20m)
+  * OP complains that default Rust BufRead method `lines` is returning `String`'s:
+    + cost of allocation
+    + cost of UTF-8 verification
+  * More materials:
+    + no new links
 - Why using read_lines iterator is much slower than using read_line? https://users.rust-lang.org/t/why-using-the-read-lines-iterator-is-much-slower-than-using-read-line/92815
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (15m)
+  * Problem: `BufRead::read_line` is much faster than `BufRead::lines`
+  * Root cause: `lines()` allocate every returned element
+  * Solution: use `read_line`, update docs to mention it
+  * More materials:
+    + no new links
 - My gripes with BufReader and BufWriter: https://users.rust-lang.org/t/my-gripes-with-bufreader-and-bufwriter/108557
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (5m)
+  * OP suggests to make buffering (`BufReader`, `BufWriter`) default
+  * Comments are that Rust's policy is to avoid leaky abstractions
+    + buffers are leaky because they do not improve perf in all cases (e.g. due to additional copies from internal to user's buffer)
+  * More materials:
+    + no relevant links
 - How to do Fast File IO: https://users.rust-lang.org/t/how-to-do-fast-file-io/8278
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (5m)
+  * Problem: `BufReader`-based IO was slower than unbuffered
+  * Root cause: not identified because OP didn't present his code
+  * In general `BufReader` should never slow down the code
 - BetterBufRead: Faster Reads in Rust: https://graphallthethings.com/posts/better-buf-read
   * Assignee: yugr
-  * Status: in progress
-- Read::bytes() is a performance trap: https://github.com/rust-lang/rust/issues/28073
+  * Status: DONE (15m)
+  * OP implements alternative `BufRead`-like interface:
+    + allow user to request arbitrary number of bytes
+    + direct access to underlying buffer to avoid zero-copy
+  * More materials:
+    + no relevant links in blog
+- Read::bytes() is a performance trap: https://github.com/rust-lang/rust/issues/28073 (2015)
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (5m)
+  * efriedman reports 20x improvement when using `BufReader` (implying that it should be the default ?)
+  * Docs updated to recommend using `BufRead` on top of `Read`
+  * More materials:
+    + no new links
 - Performance reading file: https://users.rust-lang.org/t/performance-reading-file-parse-from-io-read-vs-from-u8/91948
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (10m)
+  * OP wonders at perf different between `BufReader` and read-file-at-once approaches
+  * No clear conclusions or advices in follow-up discussion
+  * More materials:
+    + added relevant link
+- Is it possible to parse the file line by line without doing an allocation per line: https://users.rust-lang.org/t/is-it-possible-to-parse-the-file-line-by-line-without-doing-an-allocation-per-line/68639
+  * Assignee: yugr
+  * Status: DONE (5m)
+  * OP wonders why `lines()` return `String`'s instead of `&str`
+  * Instructed to use `read_line()` for such interface
+  * More materials:
+    + no new links
+- Parsing 20MB file using from_reader is slow: https://github.com/serde-rs/json/issues/160#issuecomment-349943856
+  * Status: backlog
 
 # Manual optimizations
 
@@ -2075,7 +2115,14 @@ if (x, y) == (1, 1) {
   * Overhead of consuming iterators
 - 5x Slower than Go? Optimizing Rust Protobuf Decoding Performance: https://www.greptime.com/blogs/2024-04-09-rust-protobuf-performance
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (5m)
+  * Performance of protobuf decoding is sifnificantly faster in Go
+  * Eventually optimized via high-level transformations to match Go implementation:
+    * reuse allocations
+    * avoid using Strings
+    * avoid refcounting via unsafe
+  * More materials:
+    + no new links
 - Rust Performance Pitfalls: https://llogiq.github.io/2017/06/01/perf-pitfalls.html
   * Assignee: yugr
   * Status: DONE (20m)
@@ -2118,6 +2165,7 @@ if (x, y) == (1, 1) {
 - Discussion about explicit SIMD in Rust: https://internals.rust-lang.org/t/getting-explicit-simd-on-stable-rust/4380
   * Assignee: yugr
   * Status: in progress
+  * A long multi-year discussion
 - Optimizing rav1d, an AV1 Decoder in Rust: https://www.memorysafety.org/blog/rav1d-performance-optimization/
   * Assignee: yugr
   * Status: DONE (70m)
