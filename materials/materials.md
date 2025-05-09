@@ -2429,6 +2429,9 @@ if (x, y) == (1, 1) {
   * Assignee: yugr
   * Status: in progress
   * Leave some comments about iex ?
+- In realistic scenarios, exceptions are a much faster way to handle rare errors than error codes: https://www.reddit.com/r/cpp/comments/k08g89/in_realistic_scenarios_exceptions_are_a_much/
+  * Assignee: yugr
+  * Status: in progress
 
 # Uninit
 
