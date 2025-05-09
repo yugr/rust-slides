@@ -1966,7 +1966,7 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
     + no new links
 - Parsing 20MB file using from_reader is slow: https://github.com/serde-rs/json/issues/160#issuecomment-349943856
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (20m)
   * Problem: JSON deserialization is very slow
   * Root cause: lack of buffering
   * Solution: `BufReader` is still slow (2x slower than Python) so read-at-once (`from_slice`) is suggested
@@ -2410,7 +2410,8 @@ if (x, y) == (1, 1) {
   * Status: backlog
   * Only check performance-related parts
 - Efficiently bubbling Results: https://internals.rust-lang.org/t/efficiently-bubbling-results/20120
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
 - C++ Exceptions for Smaller Firmware: https://www.youtube.com/watch?v=bY2FlayomlE&t=2671s
   * Assignee: yugr
   * Status: DONE (40m)
@@ -2421,10 +2422,12 @@ if (x, y) == (1, 1) {
     + [Reddit](https://www.reddit.com/r/cpp/comments/1fkvj00/c_exceptions_for_smaller_firmware_khalil_estell/)
     + [Reddit](https://www.reddit.com/r/cpp/comments/1ejpgbe/c_exceptions_reduce_firmware_code_size_khalil/)
 - Is it okay to let some errors panic? https://www.reddit.com/r/rust/comments/1ad7xyn/is_it_okay_to_let_some_errors_panic/
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
   * Leave some comments about iex ?
 - Optimisation of Exceptions and Repeated Return of Error Types: https://www.reddit.com/r/rust/comments/13fqdcs/optimisation_of_exceptions_and_repeated_return_of/
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
   * Leave some comments about iex ?
 
 # Uninit
