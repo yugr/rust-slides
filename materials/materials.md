@@ -2423,12 +2423,16 @@ if (x, y) == (1, 1) {
     + [Reddit](https://www.reddit.com/r/cpp/comments/1ejpgbe/c_exceptions_reduce_firmware_code_size_khalil/)
 - Is it okay to let some errors panic? https://www.reddit.com/r/rust/comments/1ad7xyn/is_it_okay_to_let_some_errors_panic/
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (10m)
   * Leave some comments about iex ?
 - Optimisation of Exceptions and Repeated Return of Error Types: https://www.reddit.com/r/rust/comments/13fqdcs/optimisation_of_exceptions_and_repeated_return_of/
   * Assignee: yugr
   * Status: in progress
-  * Leave some comments about iex ?
+  * OP wonders whether exceptions are more beneficial than error codes
+  * Various opinions but no clear benchmarks or evidence
+  * `Result` calling convention is inefficient
+  * More materials:
+    + no new links
 - In realistic scenarios, exceptions are a much faster way to handle rare errors than error codes: https://www.reddit.com/r/cpp/comments/k08g89/in_realistic_scenarios_exceptions_are_a_much/
   * Assignee: yugr
   * Status: in progress
