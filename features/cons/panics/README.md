@@ -22,7 +22,8 @@ Rust's preferred error handling (`Result`, `Option`) as
 demononstrated by [iex](https://purplesyringa.moe/blog/you-might-want-to-use-panics-for-error-handling/)
 crate (5-20% improvement on real projects).
 [Here](https://web.archive.org/web/20230605115838/https://lordsoftech.com/programming/error-codes-are-far-slower-than-exceptions/)
-5% improvement is obtained for C++.
+and [here](https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2019/p1886r0.html)
+5-10% improvement is obtained for C++.
 This could be improved by 4x with [different implementation](https://purplesyringa.moe/blog/bringing-faster-exceptions-to-rust/)
 of panics (author [claims](https://www.reddit.com/r/rust/comments/1gl050z/comment/lvrowre/)
 that 100x savings are possible).

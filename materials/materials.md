@@ -1205,6 +1205,13 @@ pub fn foo(p: Box<S>) {
   * Not all people agree that they are
   * Iterators may be faster because they avoid bounds checks
   * Bounds checks are not expensive on their own but may hinder other opts
+- Map of a Lifetime: https://llogiq.github.io/2017/03/06/lifetime.html
+  * Assignee: yugr
+  * Status: DONE (5m)
+  * Problem: `flat_map` much slower than simple nested loop
+  * Root cause: not analyzed but most likely a slowdown due to state handling
+  * More materials:
+    + no new links
 
 # Noalias
 
@@ -2276,12 +2283,21 @@ if (x, y) == (1, 1) {
     + [Reddit](https://www.reddit.com/r/rust/comments/5uvwur/how_copying_an_int_made_my_code_11_times_faster/)
     + [HN](https://news.ycombinator.com/item?id=13682929)
     + no new links
-- Map of a Lifetime: https://llogiq.github.io/2017/03/06/lifetime.html
-  * Status: backlog
 - Acheiving warp speed with Rust: http://troubles.md/posts/rust-optimization/
-  * Status: backlog
+  * Assignee: yugr
+  * Status: DONE (5m)
+  * A bunch of generic advices (better cache utilization, etc.)
+  * Only Rust-specific advice is to `assert!` to avoid bounds checks
+  * More materials:
+    + no new links
 - Rust faster! https://llogiq.github.io/2015/10/03/fast.html
-  * Status: backlog
+  * Assignee: yugr
+  * Status: DONE (15m)
+  * Analysis of benchmarks from Benchmarks Game:
+    + fasta: cache results for each RNG output and some manual string printing opt
+    + spectralnorm: manual vectorization via tuple structs
+    + k_nucleotide: replace linked-list hash map with open addressing, replace `lines()` with `read_until()`, replace match-based encoding with byte manipulation
+    + thread_ring: improve synchronization between threads
 - Опыт переноса cpu-bound задач дата-аналитики с Python на Rust: https://www.youtube.com/watch?v=7vE6T5UX2Hc
   * Status: backlog
 
@@ -2453,9 +2469,23 @@ if (x, y) == (1, 1) {
   * More materials:
     + [Reddit](https://www.reddit.com/r/cpp/comments/k08g89/in_realistic_scenarios_exceptions_are_a_much/)
     + added links from [this comment](https://www.reddit.com/r/cpp/comments/k08g89/comment/gektp1k/)
+    + site has been wiped out so can't survey
 - Measuring execution performance of C++ exceptions vs error codes: https://nibblestew.blogspot.com/2017/01/measuring-execution-performance-of-c.html
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (10m)
+  * Compares exceptions vs error codes performance on synthetic benchmark
+  * Exceptions are faster as stack depths increase and error rates decrease
+  * More materials:
+    + no new links
+- P1886R0: Error speed benchmarking: https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2019/p1886r0.html
+  * Assignee: yugr
+  * Status: DONE (15m)
+  * Another comparison of exceptions vs error codes
+  * Results match other posts: exceptions are 5-10% faster on happy path, 100x slower on sad path
+    + For some reason exceptions are slower in MSVC 32-bit
+  * More materials:
+    + [P1640R1: Error size benchmarking: Redux](https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2019/p1640r1.html)
+    + no new links
 
 # Uninit
 
