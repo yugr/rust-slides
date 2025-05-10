@@ -2411,7 +2411,11 @@ if (x, y) == (1, 1) {
   * Only check performance-related parts
 - Efficiently bubbling Results: https://internals.rust-lang.org/t/efficiently-bubbling-results/20120
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (15m)
+  * OP notes that passing of `Result`'s is done on stack which makes work with them very inefficient
+  * Propose to pass separate pointers to arms but commenters point out problems with aliasing
+  * More materials:
+    + no new links
 - C++ Exceptions for Smaller Firmware: https://www.youtube.com/watch?v=bY2FlayomlE&t=2671s
   * Assignee: yugr
   * Status: DONE (40m)
@@ -2424,16 +2428,32 @@ if (x, y) == (1, 1) {
 - Is it okay to let some errors panic? https://www.reddit.com/r/rust/comments/1ad7xyn/is_it_okay_to_let_some_errors_panic/
   * Assignee: yugr
   * Status: DONE (10m)
-  * Leave some comments about iex ?
+  * OP wonders if it's ok to use exceptions for rare errors
+  * Most commenters (e.g. [burntsushi](https://burntsushi.net/unwrap/#why-are-panics-so-great)
+    and [algesten](https://github.com/algesten/str0m#panics-errors-and-unwraps))
+    exceptions to be appropriate only for bugs (violation of invariants)
+  * More materials:
+    + added links
 - Optimisation of Exceptions and Repeated Return of Error Types: https://www.reddit.com/r/rust/comments/13fqdcs/optimisation_of_exceptions_and_repeated_return_of/
   * Assignee: yugr
-  * Status: in progress
+  * Status: DONE (10m)
   * OP wonders whether exceptions are more beneficial than error codes
-  * Various opinions but no clear benchmarks or evidence
+  * Various opinions (inhibit opts, overhead too large, etc.) but no clear benchmarks or evidence
   * `Result` calling convention is inefficient
   * More materials:
     + no new links
-- In realistic scenarios, exceptions are a much faster way to handle rare errors than error codes: https://www.reddit.com/r/cpp/comments/k08g89/in_realistic_scenarios_exceptions_are_a_much/
+- In realistic scenarios, exceptions are a much faster way to handle rare errors than error codes: https://web.archive.org/web/20230605115838/https://lordsoftech.com/programming/error-codes-are-far-slower-than-exceptions/
+  * Assignee: yugr
+  * Status: DONE (40m)
+  * OP measures typical gamedev scenarios for overhead of branches (5% on average)
+  * Criteria for using exceptions for error handling: error frequency >= 0.01%
+  * Commenters mention that
+    + exceptions block optimizations: inlining is harder due to code bloat and `throw` is a blackbox
+    + likely directives not used (but most code does not use them)
+  * More materials:
+    + [Reddit](https://www.reddit.com/r/cpp/comments/k08g89/in_realistic_scenarios_exceptions_are_a_much/)
+    + added links from [this comment](https://www.reddit.com/r/cpp/comments/k08g89/comment/gektp1k/)
+- Measuring execution performance of C++ exceptions vs error codes: https://nibblestew.blogspot.com/2017/01/measuring-execution-performance-of-c.html
   * Assignee: yugr
   * Status: in progress
 

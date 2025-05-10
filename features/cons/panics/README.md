@@ -21,9 +21,13 @@ If error case is _very_ rare panics can give better performance than
 Rust's preferred error handling (`Result`, `Option`) as
 demononstrated by [iex](https://purplesyringa.moe/blog/you-might-want-to-use-panics-for-error-handling/)
 crate (5-20% improvement on real projects).
+[Here](https://web.archive.org/web/20230605115838/https://lordsoftech.com/programming/error-codes-are-far-slower-than-exceptions/)
+5% improvement is obtained for C++.
 This could be improved by 4x with [different implementation](https://purplesyringa.moe/blog/bringing-faster-exceptions-to-rust/)
 of panics (author [claims](https://www.reddit.com/r/rust/comments/1gl050z/comment/lvrowre/)
 that 100x savings are possible).
+In [this post](https://web.archive.org/web/20230605115838/https://lordsoftech.com/programming/error-codes-are-far-slower-than-exceptions/)
+author suggests that exceptions are beneficial if error frequency is < 0.01%.
 
 This generally goes against [popular guidelines](https://doc.rust-lang.org/book/ch09-03-to-panic-or-not-to-panic.html).
 
