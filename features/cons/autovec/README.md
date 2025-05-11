@@ -31,6 +31,14 @@ Rust also does not yet support multiversioning.
 There are [proposals](https://rust-lang.github.io/rust-project-goals/2025h1/simd-multiversioning.html)
 but currently people have to do it [by hand](https://tweedegolf.nl/en/blog/153/simd-in-zlib-rs-part-1-autovectorization-and-target-features).
 
+# Remarks
+
+Optimization remarks can be used to diagnose reasons for missing autovec:
+  - Use [cargo remark](https://kobzol.github.io/rust/cargo/2023/08/12/rust-llvm-optimization-remarks.html) tool
+  - Or `RUSTFLAGS="-Cdebuginfo=1 -Cremark=all -Zremark-dir=/tmp/remarks" cargo build --release`
+  - Or Specifically for autovec: `-g -O -C llvm-args='--pass-remarks-missed=loop-vectorize --pass-remarks-analysis=loop-vectorize'`
+Results can be viewed with optview2 tool.
+
 # TODO
 
 - For all problematic features (e.g. bounds checks) collect how they influence autovec (via LLVM debug)

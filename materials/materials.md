@@ -1359,9 +1359,16 @@ pub fn foo(p: Box<S>) {
     + post is old, not clear if this problem is still relevant ?
     + i wasn't able to find relevant discussions...
 - Inspecting rustc LLVM optimization remarks using cargo-remark: https://kobzol.github.io/rust/cargo/2023/08/12/rust-llvm-optimization-remarks.html
-  * Status: backlog
-  * This is an important feature
-  * need to run `cargo remark` on some real projects
+  * Assignee: yugr
+  * Status: DONE (15m)
+  * Author has added `cargo remark` tool for emitting opt. remarks for Rust code
+    + Wrapper for `RUSTFLAGS="-Cdebuginfo=1 -Cremark=all -Zremark-dir=/tmp/remarks" cargo build --release`
+    + Specifically for autovec: `-g -O -C llvm-args='--pass-remarks-missed=loop-vectorize --pass-remarks-analysis=loop-vectorize'`
+    + Compatible with optview2 tool
+  * Experience in real projects: too many remarks, hard to understand how to fix code
+  * Little interest/adoption in community
+  * More materials:
+    + [Reddit](https://www.reddit.com/r/rust/comments/15p4thi/cargoremark_examine_rustc_llvm_optimization/)
 
 # Niches
 
@@ -2300,6 +2307,8 @@ if (x, y) == (1, 1) {
     + thread_ring: improve synchronization between threads
 - Опыт переноса cpu-bound задач дата-аналитики с Python на Rust: https://www.youtube.com/watch?v=7vE6T5UX2Hc
   * Status: backlog
+- Using &v instead of v arg in format! does not inline: https://github.com/rust-lang/rust/issues/112156
+  * Status: backlog
 
 # Panics
 
@@ -2423,8 +2432,15 @@ if (x, y) == (1, 1) {
     + [HN](https://news.ycombinator.com/item?id=42072750)
     + [GitHub](https://github.com/iex-rs/lithium)
 - The Error Model: https://joeduffyblog.com/2016/02/07/the-error-model/
-  * Status: backlog
-  * Only check performance-related parts
+  * Assignee: yugr
+  * Status: DONE (10m)
+  * (Only checked performance-related parts)
+  * A general discussion of error handling in new language
+  * Just briefly touches on performance issues:
+    + error codes may be slower due to I$/TLB pressure, additional code (cmp + branch), confusing optimizer
+    + exceptions are implemented in inefficient way
+  * More materials:
+    + no new links
 - Efficiently bubbling Results: https://internals.rust-lang.org/t/efficiently-bubbling-results/20120
   * Assignee: yugr
   * Status: DONE (15m)
