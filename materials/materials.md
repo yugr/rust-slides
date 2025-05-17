@@ -1404,6 +1404,60 @@ we should add them to overheads.
 - Safe and efficient bidirectional trees: https://www.reddit.com/r/rust/comments/55ns2m/safe_and_efficient_bidirectional_trees/
   * Status: backlog
 - How can we teach people about self-referential types? https://users.rust-lang.org/t/how-can-we-teach-people-about-self-referential-types/65362
+  * Assignee: yugr
+  * Status: DONE (30m)
+  * List of general methods for dealing with self-ref:
+    + dedicated object for owning referenced entities (e.g. allocator) in caller
+      - the most recommended approach
+      - e.g. Parser does not need to own the buffer
+    + indices
+      - e.g. store graph as array of nodes + pred/succ indices
+    + Rc/RefCell
+    + (for performance-critical code) raw pointers and unsafe
+      - easy to make mistakes even when using wrappers like Pin
+  * More materials:
+    + no relevant links
+- Is RefCell a zero-cost abstraction: https://users.rust-lang.org/t/is-refcell-a-zero-cost-abstraction/61888
+  * Assignee: yugr
+  * Status: DONE (20m)
+  * General conclusion is RefCell/Rc are not zero-cost abstractions because they exist to verify language invariants
+  * Discussion then devolved into how non-trivial reference graphs are/should be represented in language (not relevant for us)
+  * More materials:
+    + no relevant links
+- Optimization of RefCell borrow operations: https://users.rust-lang.org/t/optimisation-of-refcell-borrow-operations/65214
+  * Assignee: yugr
+  * Status: DONE (5m)
+  * OP wondered whether RefCell's checks could be removed if compiler can prove (via global analysis) that they are not needed
+  * Answers are that
+    + language designers try not to rely on global analyses
+    + it'll not work in many practical cases
+    + whenever access can be proven user can simply use normal refs
+- RefCell, why borrowing is checked only in runtime: https://users.rust-lang.org/t/refcell-why-borrowing-is-checked-only-in-runtime/52721/5
+  * Assignee: yugr
+  * Status: DONE (5m)
+  * Very similar to "Optimization of RefCell borrow operations"
+  * "RefCell is specifically intended for the cases that are too complicated for the compiler's checks to verify"
+  * "RefCell is for those times it is NOT provable"
+  * More materials:
+    + no relevant links
+- How heavy is Rc<RefCell<T>? https://www.reddit.com/r/rust/comments/jkh99u/how_heavy_is_rcrefcellt/
+  * Assignee: yugr
+  * Status: DONE (15m)
+  * Just some general comments w/o concrete numbers:
+    + e.g. also suggest to use dedicated owners e.g. [slabs](https://www.reddit.com/r/rust/comments/jkh99u/comment/gajrru9/)
+      or [arenas](https://www.reddit.com/r/rust/comments/jkh99u/comment/gakm1bn/)
+    + a user claims that dedicated ownership is ["slightly faster"](https://www.reddit.com/r/rust/comments/jkh99u/comment/lw33boh/)
+  * More materials:
+    + no new links
+- How expensive is Rc<RefCell> + .borrow_mut() ? https://users.rust-lang.org/t/how-expensive-is-rc-refcell-borrow-mut/26713
+  * Assignee: yugr
+  * Status: DONE (10m)
+  * Lists out [overheads](https://users.rust-lang.org/t/how-expensive-is-rc-refcell-borrow-mut/26713/5)
+    but no concrete measurements:
+    + calls to borrow/borrow_mut require a write so an exclusive cache-line access
+    + it's ok for borrow_mut (it'll likely write anyway) but not for read-only borrow
+    + extra fields may increase D$ pressure
+- Rust — performance overhead of RefCell: https://medium.com/@techhara/rust-performance-overhead-of-refcell-adaa634b6490
   * Status: backlog
 
 # Fast math
@@ -2304,7 +2358,20 @@ if (x, y) == (1, 1) {
     + k_nucleotide: replace linked-list hash map with open addressing, replace `lines()` with `read_until()`, replace match-based encoding with byte manipulation
     + thread_ring: improve synchronization between threads
 - Опыт переноса cpu-bound задач дата-аналитики с Python на Rust: https://www.youtube.com/watch?v=7vE6T5UX2Hc
-  * Status: backlog
+  * Assignee: yugr
+  * Status: DONE (30m)
+  * Compares 3 data analytics tasks on Python vs Rust (comb. optimization, linear programming, linear regression)
+  * Development costs ~5x
+  * Speed up via parallelism (+15%, don't forget to use `-C target-cpu=... -C target-feature=...`):
+    + threads:
+      * author suggests to use Rayon (a work-stealing thread pool)
+    + SIMD:
+      * autovec does not not work for floats
+      * explicit intrinsics from std::arch are unsafe and target-specific
+      * author recommends safe cross-platform std::SIMD
+    + ILP:
+      * iterator_ilp crate
+  * Speed up via PGO (+6%)
 
 # Panics
 
@@ -2585,10 +2652,12 @@ if (x, y) == (1, 1) {
   * Status: backlog
   * Russian translation: https://habr.com/ru/companies/ruvds/articles/858246/
   * More materials:
-    + [Reddit](https://news.ycombinator.com/item?id=41944121)
+    + [HN](https://news.ycombinator.com/item?id=41944121)
 - Comments for "Story-time: C++, bounds checking, performance, and compilers": https://www.reddit.com/r/cpp/comments/1gtos7w/storytime_c_bounds_checking_performance_and/
   * Status: backlog
 - Unsafe Rust: How and when (not) to use it: https://blog.logrocket.com/unsafe-rust-how-and-when-not-to-use-it
+  * Status: backlog
+- Unsafe Rust is not C: https://www.youtube.com/watch?v=DG-VLezRkYQ
   * Status: backlog
 
 # Code size
