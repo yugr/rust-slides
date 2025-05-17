@@ -2638,10 +2638,21 @@ if (x, y) == (1, 1) {
 # Unsafe
 
 - Being Fair about Memory Safety and Performance: https://www.thecodedmessage.com/posts/unsafe/
-  * Status: backlog
-  * need to be super-attentive to this post, this may be key to how we treat unsafe in our talk
+  * Assignee: yugr
+  * Status: DONE (5m)
+  * A rather long artile which boils down to
+    + Rust indexing being equivalent of `at` (not `operator []`) in C++
+    + `unsafe` (e.g. `get_unchecked`) being ok because it's usage is limited
+  * Basically Rust makes safer defaults in hope that this is what's needed most of them time
+  * More materials:
+    + no more relevant links in blog
 - Implementing a VM: how unsafe should I go? https://www.reddit.com/r/rust/comments/n8yy7z/implementing_a_vm_how_unsafe_should_i_go/
-  * Status: backlog
+  * Assignee: yugr
+  * Status: DONE (5m)
+  * OP wonders how to avoid large amount of unsafe code needed for GC and other low-level VM stuff
+  * No definite answers, some people arguing that unsafe is inevitable and some that it should only be needed in very few places
+  * More materials:
+    + no new links
 - Good example of high performance Rust project without unsafe code? https://www.reddit.com/r/rust/comments/we91es/good_example_of_high_performance_rust_project/
   * Status: backlog
 - How do you all think about the `unsafe` vs zero-cost trade off? https://www.reddit.com/r/rust/comments/f5wgsn/how_do_you_all_think_about_the_unsafe_vs_zerocost/
