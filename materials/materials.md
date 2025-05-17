@@ -1403,6 +1403,8 @@ we should add them to overheads.
   * Comments: https://www.reddit.com/r/rust/comments/1f87siw/an_optimization_thats_impossible_in_rust/
 - Safe and efficient bidirectional trees: https://www.reddit.com/r/rust/comments/55ns2m/safe_and_efficient_bidirectional_trees/
   * Status: backlog
+- How can we teach people about self-referential types? https://users.rust-lang.org/t/how-can-we-teach-people-about-self-referential-types/65362
+  * Status: backlog
 
 # Fast math
 
