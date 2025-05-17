@@ -1395,10 +1395,6 @@ we should add them to overheads.
 
 - Learn Rust With Entirely Too Many Linked Lists: https://rust-unofficial.github.io/too-many-lists/
   * Status: backlog
-- Nine Rules for Creating Fast, Safe, and Compatible Data Structures in Rust:
-  * Status: backlog
-  * https://towardsdatascience.com/nine-rules-for-creating-fast-safe-and-compatible-data-structures-in-rust-part-1-c0973092e0a3
-  * https://towardsdatascience.com/nine-rules-for-creating-fast-safe-and-compatible-data-structures-in-rust-part-2-da5e6961a0b7
 - https://dev.to/arunanshub/self-referential-structs-in-rust-33cm
   * Status: backlog
 - An Optimization That’s Impossible in Rust! https://tunglevo.com/note/an-optimization-thats-impossible-in-rust/
@@ -2306,8 +2302,6 @@ if (x, y) == (1, 1) {
     + k_nucleotide: replace linked-list hash map with open addressing, replace `lines()` with `read_until()`, replace match-based encoding with byte manipulation
     + thread_ring: improve synchronization between threads
 - Опыт переноса cpu-bound задач дата-аналитики с Python на Rust: https://www.youtube.com/watch?v=7vE6T5UX2Hc
-  * Status: backlog
-- Using &v instead of v arg in format! does not inline: https://github.com/rust-lang/rust/issues/112156
   * Status: backlog
 
 # Panics
