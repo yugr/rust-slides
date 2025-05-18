@@ -2654,9 +2654,24 @@ if (x, y) == (1, 1) {
   * More materials:
     + no new links
 - Good example of high performance Rust project without unsafe code? https://www.reddit.com/r/rust/comments/we91es/good_example_of_high_performance_rust_project/
-  * Status: backlog
+  * Assignee: yugr
+  * Status: DONE (20m)
+  * OP asked whether some high-perf crates are written w/o unsafe and whether it's possible in general
+  * Useful comments:
+    + SIMD is unsafe but mandatory for any HPC algo
+    + unsafe code can typically be hidden behind safe abstractions
+      - e.g. many parts of stdlib are unsafe
+    + small amount of unsafe is typically needed
+    + unsafe if hard to get right (too many cases for UB e.g. create reference to uninit data to initialize it)
+  * More materials:
+    + added links
 - How do you all think about the `unsafe` vs zero-cost trade off? https://www.reddit.com/r/rust/comments/f5wgsn/how_do_you_all_think_about_the_unsafe_vs_zerocost/
-  * Status: backlog
+  * Assignee: yugr
+  * Status: DONE (20m)
+  * OP wonders what are the criteria for using unsafe
+  * No general guidance except that unsafe is indeed sometimes needed for performance
+  * More materials:
+    + no links
 - Unsafe Rust is Harder Than C: https://www.reddit.com/r/rust/comments/1gbqy6c/unsafe_rust_is_harder_than_c/
   * Status: backlog
   * Russian translation: https://habr.com/ru/companies/ruvds/articles/858246/
@@ -2667,6 +2682,8 @@ if (x, y) == (1, 1) {
 - Unsafe Rust: How and when (not) to use it: https://blog.logrocket.com/unsafe-rust-how-and-when-not-to-use-it
   * Status: backlog
 - Unsafe Rust is not C: https://www.youtube.com/watch?v=DG-VLezRkYQ
+  * Status: backlog
+- Learn Rust the Dangerous Way: https://cliffle.com/p/dangerust/
   * Status: backlog
 
 # Code size
