@@ -607,7 +607,7 @@ On the other hand, once all materials are analyzed we won't care about this file
     + No more links
 - Exploiting Undefined Behavior in C/C++ Programs for Optimization: A Study on the Performance Impact: https://web.ist.utl.pt/nuno.lopes/pubs/ub-pldi25.pdf
   * Assignee: yugr
-  * Status: in progress (70m)
+  * Status: DONE (70m)
     + TODO: I'm not closing this just yet because Reddit/HN posts have just been published; need time to get all comments
   * This is very similar to our goal but for C++
   * Investigates perf effects when disabling different types of UB in C++:
@@ -2680,9 +2680,15 @@ if (x, y) == (1, 1) {
 - Comments for "Story-time: C++, bounds checking, performance, and compilers": https://www.reddit.com/r/cpp/comments/1gtos7w/storytime_c_bounds_checking_performance_and/
   * Status: backlog
 - Unsafe Rust: How and when (not) to use it: https://blog.logrocket.com/unsafe-rust-how-and-when-not-to-use-it
-  * Status: backlog
+  * Assignee: yugr
+  * Status: in progress
+  * Less than 1% of code on crates.io us unsafe
 - Unsafe Rust is not C: https://www.youtube.com/watch?v=DG-VLezRkYQ
-  * Status: backlog
+  * Assignee: yugr
+  * Status: DONE (15m)
+  * Some examples of why unsafe Rust is hard (need to ensure that reference rules are still not violated) and how this allows compiler to optimize code
+  * More materials:
+    + no new links
 - Learn Rust the Dangerous Way: https://cliffle.com/p/dangerust/
   * Status: backlog
 
