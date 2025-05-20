@@ -18,7 +18,7 @@ Performance overhead may be non-trivial:
 # Solutions
 
 Note that it's UB to access data before it's initialized (e.g. call `Vec::set_len` on it).
-Also it is not valid to construct (mutable) reference to uninitialized memory:
+Also it is not valid to construct (shared or mutable) reference to uninitialized memory:
 > Creating a reference with &/&mut is only allowed if the pointer
 > is properly aligned and points to initialized data. 
 (from [here](https://doc.rust-lang.org/std/ptr/macro.addr_of_mut.html),
@@ -26,6 +26,8 @@ also see [this](https://github.com/rust-lang/rfcs/blob/master/text/2930-read-buf
 for example of real UB). Only pointers should be used to avoid UB.
 
 The suggested solution for simple types is `MaybeUninit`.
+There once was `std::mem::uninitialized()` but it's no longer recommended.
+
 E.g. for arrays:
 ```
 let buf = unsafe {
@@ -49,6 +51,7 @@ let role = unsafe {
     uninit.assume_init()
 };
 ```
+(see more examples [here](https://blog.logrocket.com/unsafe-rust-how-and-when-not-to-use-it/#dealingwithuninitializedmemory)).
 
 For vectors we have dedicated `spare_capacity_mut` API :
 ```
@@ -64,6 +67,7 @@ unsafe {
     }
     buf.set_len(len + data.len());
 }
+```
 
 For reading from files into uninitialized buffers we can use `Read::read_buf` APIs:
 ```

@@ -608,7 +608,6 @@ On the other hand, once all materials are analyzed we won't care about this file
 - Exploiting Undefined Behavior in C/C++ Programs for Optimization: A Study on the Performance Impact: https://web.ist.utl.pt/nuno.lopes/pubs/ub-pldi25.pdf
   * Assignee: yugr
   * Status: DONE (70m)
-    + TODO: I'm not closing this just yet because Reddit/HN posts have just been published; need time to get all comments
   * This is very similar to our goal but for C++
   * Investigates perf effects when disabling different types of UB in C++:
     + integer/shift overflows (masking + remove `nsw`)
@@ -2634,6 +2633,8 @@ if (x, y) == (1, 1) {
     + also need to write every page due to potential `MADV_FREE`
   * More materials:
     + [Reddit](https://www.reddit.com/r/rust/comments/1iad0lk/rusts_worst_feature_spoiler_its_borrowedbuf_i/)
+- Rustonomicon: Working With Uninitialized Memory: https://doc.rust-lang.org/nomicon/uninitialized.html
+  * Status: backlog
 
 # Unsafe
 
@@ -2678,11 +2679,29 @@ if (x, y) == (1, 1) {
   * More materials:
     + [HN](https://news.ycombinator.com/item?id=41944121)
 - Comments for "Story-time: C++, bounds checking, performance, and compilers": https://www.reddit.com/r/cpp/comments/1gtos7w/storytime_c_bounds_checking_performance_and/
-  * Status: backlog
+  * Assignee: yugr
+  * Status: DONE (90m)
+  * General comments:
+    + Lots of language safety discussions
+    + Many claim that Rust unsafe is harder than C++
+    + Some claim that unsafe is (often, sometimes ?) mandatory for high-performance code
+  * More materials:
+    + added links
 - Unsafe Rust: How and when (not) to use it: https://blog.logrocket.com/unsafe-rust-how-and-when-not-to-use-it
   * Assignee: yugr
-  * Status: in progress
-  * Less than 1% of code on crates.io us unsafe
+  * Status: DONE (15m)
+  * Debunks some myths about unsafe:
+    + Less than 1% of code on crates.io is unsafe
+    + Unsafe does not turn off borrow checker
+    + Unsafe is not always faster because compiler has less info
+  * Also provide examples on dealing with some unsafe usecases:
+    + uninit memory
+    + intrinsics
+    + inline asm
+    + FFI
+  * More materials:
+    + added links
+    + no more relevant posts in blog in past 3 years
 - Unsafe Rust is not C: https://www.youtube.com/watch?v=DG-VLezRkYQ
   * Assignee: yugr
   * Status: DONE (15m)
@@ -2690,6 +2709,10 @@ if (x, y) == (1, 1) {
   * More materials:
     + no new links
 - Learn Rust the Dangerous Way: https://cliffle.com/p/dangerust/
+  * Status: backlog
+- Unsafe in Rust: Syntactic Patterns: https://cs.stanford.edu/~aozdemir/blog/unsafe-rust-syntax/
+  * Status: backlog
+- Stdlib: optimization of reverse: https://github.com/rust-lang/rust/commit/71f5cfb21f3fd2f1740bced061c66ff112fec259
   * Status: backlog
 
 # Code size
