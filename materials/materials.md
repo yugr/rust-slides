@@ -2711,7 +2711,14 @@ if (x, y) == (1, 1) {
 - Learn Rust the Dangerous Way: https://cliffle.com/p/dangerust/
   * Status: backlog
 - Unsafe in Rust: Syntactic Patterns: https://cs.stanford.edu/~aozdemir/blog/unsafe-rust-syntax/
-  * Status: backlog
+  * Assignee: yugr
+  * Status: DONE (15m)
+  * Statistics about unsafe usage in crates.io:
+    + 30% crates use unsafe at least once
+    + 5% of code is unsafe
+  * Unfortunately no data about types of unsafe (intrinsics, indexing, etc.)
+  * More materials:
+    + no more relevant posts in blog
 - Stdlib: optimization of reverse: https://github.com/rust-lang/rust/commit/71f5cfb21f3fd2f1740bced061c66ff112fec259
   * Status: backlog
 
