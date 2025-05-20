@@ -19,7 +19,7 @@ On the other hand, once all materials are analyzed we won't care about this file
   * No info about performance
 - Rust design patterns: https://softwarepatternslexicon.com/patterns-rust/
   * Assignee: yugr
-  * Status: Wontfix (5m)
+  * Status: wontfix (5m)
   * A set of very high-level advices (ChatGPT ?)
   * Perf-related patterns are [here](https://softwarepatternslexicon.com/patterns-rust/23/)
   * Codegen-related advices:
@@ -992,7 +992,7 @@ pub fn foo(p: Box<S>) {
     + [BTreeMap](https://github.com/rust-lang/rust/issues/81444)
     + [rust-gamedev](https://github.com/rust-gamedev/wg/issues/48)
 - Semantics of MIR function calls: https://github.com/rust-lang/rust/issues/71117
-  * Status: Wontfix
+  * Status: wontfix
   * Highly technical, low priority
 - Move semantics in C and Rust: https://radekvit.medium.com/move-semantics-in-c-and-rust-the-case-for-destructive-moves-d816891c354b
   * Assignee: yugr
@@ -2759,7 +2759,7 @@ if (x, y) == (1, 1) {
   * Solution: Discussion suggests using `linkonce_odr` in LLVM IR as a partial solution.
 - Compiler flag's impact on benchmarks: https://github.com/ggwpez/substrate-bench/tree/master/reports/01-first-findings
   * Assignee: yugr
-  * Status: Wontfix (5m)
+  * Status: wontfix (5m)
   * Some possibly interesting benchmark (low CGU and fat LTO not always better) ?
   * Unfortunately I (yugr) couldn't make sense of graphs in this post
 - Performance regressions of compiled code over the last year: https://github.com/rust-lang/rust/issues/47561
@@ -2775,7 +2775,7 @@ if (x, y) == (1, 1) {
   * Solution: Use LTO or compile with one CGU (adding inline tag into stdlib isn't feasible for a user)
 - rustc: Default 32 codegen units at O0: https://github.com/rust-lang/rust/pull/44853
   * Assignee: yugr
-  * Status: Wontfix (0m)
+  * Status: wontfix (0m)
   * This is about debug builds, not relevant for us
 - 32 codegen units may not always be better at -O0: https://github.com/rust-lang/rust/issues/44941
   * Assignee: yugr
