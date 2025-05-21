@@ -10,4 +10,4 @@ Built and tested with `rustc` version `rustc 1.84.0 (9fc6b4312 2025-01-07)` and 
 
 # Run
 
-Change folder to `SpacetimeDB\crates\bench` and execute `cargo bench --bench generic --bench special --no-fail-fast` (approx 30m on x86 12-core machine to build and run the benchmarks)
+Change folder to `SpacetimeDB/crates/bench` and execute `cargo bench --bench generic --bench special --no-fail-fast` (approx 30m on x86 12-core machine to build and run the benchmarks)
