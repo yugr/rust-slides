@@ -74,6 +74,15 @@ to
 a[i..(i + n)]
 ```
     to avoid problems with wrapping for optimizer (see [rav1d article](https://www.memorysafety.org/blog/rav1d-performance-optimization/))
+    * a variant of this approach (from library/alloc/src/slice.rs):
+```
+            // .take(slots.len()) is necessary for LLVM to remove bounds checks
+            // and has better codegen than zip.
+            for (i, b) in s.iter().enumerate().take(slots.len()) {
+                guard.num_init = i;
+                slots[i].write(b.clone());
+            }
+```
   - slicing i.e. using slices instead of e.g. `Vec`'s or `String`'s; particularly good for `&mut [T]` vs `&mut Vec<T>`
     * see [issue](https://github.com/nnethercote/perf-book/issues/50) and [clippy check](https://github.com/rust-lang/rust-clippy/issues/10269)
   - using `cmp::min` to force index into safe range:
