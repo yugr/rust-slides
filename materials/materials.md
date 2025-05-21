@@ -2673,11 +2673,18 @@ if (x, y) == (1, 1) {
   * No general guidance except that unsafe is indeed sometimes needed for performance
   * More materials:
     + no links
-- Unsafe Rust is Harder Than C: https://www.reddit.com/r/rust/comments/1gbqy6c/unsafe_rust_is_harder_than_c/
-  * Status: backlog
-  * Russian translation: https://habr.com/ru/companies/ruvds/articles/858246/
+- Unsafe Rust is Harder Than C: https://chadaustin.me/2024/10/intrusive-linked-list-in-rust/
+  * Assignee: yugr
+  * Status: DONE (30m)
+  * Post contains
+    + example of intrusive linked list implementation (via Pin)
+    + discussion of problems that author met (UBs due to accidental reference creation, etc.)
+    + no perf-related info
   * More materials:
+    + [Reddit](https://www.reddit.com/r/rust/comments/1gbqy6c/unsafe_rust_is_harder_than_c/)
     + [HN](https://news.ycombinator.com/item?id=41944121)
+    + [Russian translation](https://habr.com/ru/companies/ruvds/articles/858246/)
+    + Link to [Security Cryptography Whatever post](Security Cryptography Whatever) about Rust in Android
 - Comments for "Story-time: C++, bounds checking, performance, and compilers": https://www.reddit.com/r/cpp/comments/1gtos7w/storytime_c_bounds_checking_performance_and/
   * Assignee: yugr
   * Status: DONE (90m)
@@ -2720,7 +2727,14 @@ if (x, y) == (1, 1) {
   * More materials:
     + no more relevant posts in blog
 - Stdlib: optimization of reverse: https://github.com/rust-lang/rust/commit/71f5cfb21f3fd2f1740bced061c66ff112fec259
-  * Status: backlog
+  * Assignee: yugr
+  * Status: DONE (5m)
+  * Optimization of slice::reverse:
+    + split range to 2 disjoint mutable parts (via unsafe)
+    + pass both to isolated function to promote noalias annotations in LLVM
+    + reslicing
+  * More materials:
+    + no new links
 
 # Code size
 

@@ -24,6 +24,10 @@ for high performance of Fortran.
 Alias info is not propagated to LLVM in all possible cases due to limitations of LLVM IR
 (see e.g. [this case](https://blog.polybdenum.com/2017/02/19/how-copying-an-int-made-my-code-11-times-faster.html)).
 
+In [some cases](https://github.com/rust-lang/rust/commit/71f5cfb21f3fd2f1740bced061c66ff112fec259)
+people even pass references to dummy functions to force LLVM noalias annotations on them
+to promote optimization.
+
 # Examples
 
 - [Rust Optimizations That C++ Can't Do](https://robert.ocallahan.org/2017/04/rust-optimizations-that-c-cant-do_5.html)
