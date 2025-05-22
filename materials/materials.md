@@ -2369,6 +2369,20 @@ if (x, y) == (1, 1) {
     + ILP:
       * iterator_ilp crate
   * Speed up via PGO (+6%)
+- What makes ripgrep so fast ? https://www.reddit.com/r/rust/comments/sr02aj/what_makes_ripgrep_so_fast/
+  * Status: backlog
+- Data-driven performance optimization with Rust and Miri: https://medium.com/source-and-buggy/data-driven-performance-optimization-with-rust-and-miri-70cb6dde0d35
+  * Status: backlog
+  * More materials:
+    + [HN](https://news.ycombinator.com/item?id=33921731)
+- Making the rav1d Video Decoder 1% Faster: https://ohadravid.github.io/posts/2025-05-rav1d-faster/
+  * Status: backlog
+  * More materials:
+    + [Reddit](https://www.reddit.com/r/rust/comments/1ksnljw/making_the_rav1d_video_decoder_1_faster/)
+- Why do I find Rust inadequate for codecs? https://palaiologos.rocks/posts/rust-codecs/
+  * Status: backlog
+  * More materials:
+    + [Reddit](https://www.reddit.com/r/rust/comments/1j669bm/why_do_i_find_rust_inadequate_for_codecs_in/)
 
 # Panics
 
