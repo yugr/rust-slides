@@ -39,6 +39,7 @@ TODO
 
 # TODO
 
+- Investigate bad codegen [here](https://godbolt.org/z/rYsz5f4n7)
 - Why `#[thread_local]` is not widely used ?
 - Why these [C++](https://godbolt.org/z/7Pc8sWvWo)
 ```

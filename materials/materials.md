@@ -1397,9 +1397,16 @@ we should add them to overheads.
 - https://dev.to/arunanshub/self-referential-structs-in-rust-33cm
   * Status: backlog
 - An Optimization That’s Impossible in Rust! https://tunglevo.com/note/an-optimization-thats-impossible-in-rust/
-  * Status: backlog
-  * Translation: https://habr.com/ru/companies/beget/articles/842868/
-  * Comments: https://www.reddit.com/r/rust/comments/1f87siw/an_optimization_thats_impossible_in_rust/
+  * Assignee: yugr
+  * Status: DONE (40m)
+  * SSO ("German strings") implementation in Rust via enums and unsafe
+  * Some comments on Rust limitations:
+    + no placement new (and MaybeUninit is not a replacement)
+    + inefficient TLS (added example to todo)
+    + "std::string SSO implementations use a self-referential pointer rather than a branch on the capacity. That sort of optimization would be impossible to do ergonomically in Rust"
+  * More materials:
+    + [Reddit](https://www.reddit.com/r/rust/comments/1f87siw/an_optimization_thats_impossible_in_rust/)
+    + [Russian translation](https://habr.com/ru/companies/beget/articles/842868/)
 - How can we teach people about self-referential types? https://users.rust-lang.org/t/how-can-we-teach-people-about-self-referential-types/65362
   * Assignee: yugr
   * Status: DONE (30m)
