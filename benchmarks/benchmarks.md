@@ -1,10 +1,17 @@
 # List of projects for benchmarking
 
 - [Bevy](bevy/README.md)
+    - Benchmarks mostly are some game world operations (e.g. spawning entities)
 - [Deno](deno/README.md)
 - [uv](uv/README.md)
+    - Benchmarks are resolution of environment for different packages
 - [Veloren](veloren/README.md)
+    - Benchmarks are different game engine operations (chunk operations, loot distribution) and linear <-> srgb color conversions.
 - [SpacetimeDB](SpacetimeDB/README.md)
+    - Benchmarks include expected DB operations (e.g. insert/delete) as well as (de)serealization benchmarks
 - [Zed](zed/README.md)
+    - Benchmarks (in rope crate) are measuring rope data structure performance
 - [Ruff](ruff/README.md)
+    - Benchmarks are linting and formatting separate files
 - [Meilisearch](meilisearch/README.md)
+    - Benchmarks are indexing of different files
