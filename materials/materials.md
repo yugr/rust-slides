@@ -801,8 +801,6 @@ ET's is an important patern for writing linear algebra code in C++. Can it be us
       - `panic`'s make leaf functions non-leaf which may hurt optimizations, introduce reg spills, etc.
     + [Reddit](https://www.reddit.com/r/rust/comments/2pp9lh/the_performance_cost_of_integer_overflow_checking/)
       - just reiterates on previous post
-- Floating point to integer casts can cause undefined behaviour: https://github.com/rust-lang/rust/issues/10184
-  * Status: backlog
 - Help us benchmark saturating float casts! https://internals.rust-lang.org/t/help-us-benchmark-saturating-float-casts/6231
   * Assignee: yugr
   * Status: DONE (15m)
@@ -811,6 +809,13 @@ ET's is an important patern for writing linear algebra code in C++. Can it be us
   * Not panicking because saturation can be vectorized
   * More materials:
     + [Reddit](https://www.reddit.com/r/rust/comments/7cwi3v/help_us_benchmark_saturating_float_casts/)
+- Floating point to integer casts can cause undefined behaviour: https://github.com/rust-lang/rust/issues/10184
+  * Assignee: yugr
+  * Status: DONE (20m)
+  * Discussion of design choices about FP saturated casts
+  * No discussion of performance issues
+  * More materials:
+    + no new links
 
 # Bounds checks
 
@@ -2966,10 +2971,11 @@ MIRIFLAGS="-Zmiri-disable-isolation -Zmiri-measureme=crox" cargo +nightly miri r
 
 # Other
 
-- Leaving Rust gamedev after 3 years: https://loglog.games/blog/leaving-rust-gamedev/ (also comments in https://news.ycombinator.com/item?id=40172033 and https://habr.com/ru/articles/813597/)
+- Leaving Rust gamedev after 3 years: https://loglog.games/blog/leaving-rust-gamedev/
   * Status: backlog
-- Why I hate Rust programming language? https://www.reddit.com/r/programming/comments/n9l68o/why_i_hate_rust_programming_language/ (comments)
-  * Status: backlog
+  * More materials:
+    + [HN](https://news.ycombinator.com/item?id=40172033)
+    + [Habr](https://habr.com/ru/articles/813597/)
 - Why you should, actually, rewrite some of it in Rust: https://news.ycombinator.com/item?id=14753201
   * Status: backlog
 -  Rust and Scientific/High-Performance Computing: https://www.reddit.com/r/rust/comments/smdl3m/rust_and_scientifichighperformance_computing/
