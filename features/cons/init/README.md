@@ -5,6 +5,8 @@ but compiler will still require dummy initialization.
 In some cases it can be optimized later,
 in some this will be unnecessary overhead.
 
+This is similar to GCC's `-ftrivial-auto-var-init=zero`.
+
 Unfortunately APIs to avoid redundant inits are complex.
 
 One of the most common examples where this hurts is reading files.
@@ -14,6 +16,9 @@ Performance overhead may be non-trivial:
   - [30% in shadow simulator](https://github.com/shadow/shadow/issues/1643)
   - [25% for TCP stream](https://github.com/rust-lang/rfcs/pull/837#issuecomment-75497481)
 (from [here](https://github.com/rust-lang/rfcs/blob/master/text/2930-read-buf.md#why-not-just-initialize)).
+
+Here's another example for video decoder:
+  - [Making the rav1d Video Decoder 1% Faster](https://ohadravid.github.io/posts/2025-05-rav1d-faster/)
 
 # Solutions
 

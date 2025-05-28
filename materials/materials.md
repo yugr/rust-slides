@@ -479,6 +479,23 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Root cause: no `--release` and inclusive range
   * Solution: use `--release` and `..`
   * More materials: no new links
+- Towards Understanding the Runtime Performance of Rust: https://dl.acm.org/doi/pdf/10.1145/3551349.3559494 (2022)
+  * Assignee: yugr
+  * Status: DONE (45m)
+  * Compares Rust and C impls on set of microbenches from https://the-algorithms.com/ and Benchmarks Game
+  * Average slowdowns were significant (2x and 35% resp.)
+  * Overheads:
+    + Bounds checks, overflow checks (but they are not enabled in release anyways ?!), div-by-zero checks
+    + Half of overhead is due to bounds checks
+    + Removing all above checks results in 20% in both cases
+    + _Some_ remaining sources of overheads:
+      * saturating fp2int conversions
+      * String to Vec conversions (but those should not be needed ?)
+  * Reviews:
+    + Rust code is not idiomatic (e.g. does not use iterators)
+    + Not equivalent C/Rust code (e.g. allocations inside loop)
+  * More materials:
+    + [Reddit](https://www.reddit.com/r/rust/comments/1b6duf5/towards_understanding_the_runtime_performance_of/)
 
 # UB in C++
 
@@ -784,6 +801,16 @@ ET's is an important patern for writing linear algebra code in C++. Can it be us
       - `panic`'s make leaf functions non-leaf which may hurt optimizations, introduce reg spills, etc.
     + [Reddit](https://www.reddit.com/r/rust/comments/2pp9lh/the_performance_cost_of_integer_overflow_checking/)
       - just reiterates on previous post
+- Floating point to integer casts can cause undefined behaviour: https://github.com/rust-lang/rust/issues/10184
+  * Status: backlog
+- Help us benchmark saturating float casts! https://internals.rust-lang.org/t/help-us-benchmark-saturating-float-casts/6231
+  * Assignee: yugr
+  * Status: DONE (15m)
+  * Discussion of perf overheads from enabling saturated casts:
+    + 1% in some benches, 10-20% in more cast-heavy ones
+  * Not panicking because saturation can be vectorized
+  * More materials:
+    + [Reddit](https://www.reddit.com/r/rust/comments/7cwi3v/help_us_benchmark_saturating_float_casts/)
 
 # Bounds checks
 
@@ -2042,6 +2069,14 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
   * Solution: `BufReader` is still slow (2x slower than Python) so read-at-once (`from_slice`) is suggested
   * More materials:
     + no more relevant links
+- Fast I/O in Rust: https://users.rust-lang.org/t/fast-i-o-in-rust/61714
+  * Assignee: yugr
+  * Status: DONE (15m)
+  * Discusses issues with Rust IO:
+    + stdout is line-buffered even for non-terminal devices (also mentions already seen issues/PRs on this)
+    + should use stream locking + `BufRead::read_line`
+  * More materials:
+    + no new links
 
 # Manual optimizations
 
@@ -2377,19 +2412,67 @@ if (x, y) == (1, 1) {
       * iterator_ilp crate
   * Speed up via PGO (+6%)
 - What makes ripgrep so fast ? https://www.reddit.com/r/rust/comments/sr02aj/what_makes_ripgrep_so_fast/
-  * Status: backlog
+  * Assignee: yugr
+  * Status: DONE (15m)
+  * Mainly discusses how to read file lines fast
+    + `BufReader::lines` is slow due to allocations
+    + manual `BufReader::read_line` is better but there's still a copy
+    + solution is memory maps and custom buffering
+  * More materials:
+    + added link
 - Data-driven performance optimization with Rust and Miri: https://medium.com/source-and-buggy/data-driven-performance-optimization-with-rust-and-miri-70cb6dde0d35
-  * Status: backlog
+  * Assignee: yugr
+  * Status: DONE (20m)
+  * Uses flamegraphs and Miri to identify hotspots:
+```
+MIRIFLAGS="-Zmiri-disable-isolation -Zmiri-measureme=crox" cargo +nightly miri run
+```
+  * Two issues:
+    + library overhead (replaced with manual impl)
+    + compiler failing to optimize per-char processing to avoid slicing
+      - this one is dubious - it was found using Miri but this profiles unoptimized MIR
+      - from HN: "Miri was never a helpful guide for profiling"
   * More materials:
     + [HN](https://news.ycombinator.com/item?id=33921731)
+    + no more relevant mats on blog
 - Making the rav1d Video Decoder 1% Faster: https://ohadravid.github.io/posts/2025-05-rav1d-faster/
-  * Status: backlog
+  * Assignee: yugr
+  * Status: DONE (1h)
+  * Compares performance of each function in C and Rust impls
+  * Identified two issues:
+    + Rust impl sometimes initializes buffers to avoid bothering with `MaybeUninit`'s
+    + Rust/LLVM currently generate inefficient code for comparing `struct { x: i16, y: i16 }`
+      - compares each field instead of single `i32` compare
+      - seems to be fixable in LLVM but for now just worked around in Rust code (via `std::transmute`)
+        * also issue for [C](https://github.com/rust-lang/rust/issues/140167#issuecomment-2821829932)
   * More materials:
     + [Reddit](https://www.reddit.com/r/rust/comments/1ksnljw/making_the_rav1d_video_decoder_1_faster/)
+    + [GitHub issue](https://github.com/rust-lang/rust/issues/140167)
 - Why do I find Rust inadequate for codecs? https://palaiologos.rocks/posts/rust-codecs/
-  * Status: backlog
+  * Assignee: yugr
+  * Status: DONE (15m)
+  * General overview of language pros and cons
+  * Claims that
+    + bounds checks overhead is too large by compiling existing C codec with and without assertions (`NDEBUG`) and getting 13% overhead
+      - burntsushi claims 5-8% in regex
+    + codecs require too much low-level byte manipulations and invariants are too complex for compiler to proove (to hoist checks out of loops)
   * More materials:
     + [Reddit](https://www.reddit.com/r/rust/comments/1j669bm/why_do_i_find_rust_inadequate_for_codecs_in/)
+    + [HN](https://news.ycombinator.com/item?id=43295908)
+- Finding Performance Issues in Rust Projects: https://dl.acm.org/doi/10.1145/3691620.3695368
+  * Status: backlog
+- On the Dual Nature of Necessity in Use of Rust Unsafe Code: https://dl.acm.org/doi/10.1145/3611643.3613878
+  * Status: backlog
+- Rust: Not So Great For Codec Implementing: https://codecs.multimedia.cx/2017/07/rust-not-so-great-for-codec-implementing/
+  * Assignee: zakhar
+  * Status: DONE (80m)
+  * Problem: Borrow-checker limitations, not enough allocation control, weak macro system
+  * Solution: Wait until all the RFCs fixing these problems are implemented
+  * More materials:
+    + rust-brotli rewrite for vectorization example
+    + Why you should, actually, rewrite some of it in Rust
+    + Discussion about explicit SIMD in Rust
+    + [Reddit](https://www.reddit.com/r/rust/comments/6qv2s5/rust_not_so_great_for_codec_implementing/)
 
 # Panics
 
@@ -2654,8 +2737,6 @@ if (x, y) == (1, 1) {
     + also need to write every page due to potential `MADV_FREE`
   * More materials:
     + [Reddit](https://www.reddit.com/r/rust/comments/1iad0lk/rusts_worst_feature_spoiler_its_borrowedbuf_i/)
-- Rustonomicon: Working With Uninitialized Memory: https://doc.rust-lang.org/nomicon/uninitialized.html
-  * Status: backlog
 
 # Unsafe
 
@@ -2889,18 +2970,6 @@ if (x, y) == (1, 1) {
   * Status: backlog
 - Why I hate Rust programming language? https://www.reddit.com/r/programming/comments/n9l68o/why_i_hate_rust_programming_language/ (comments)
   * Status: backlog
-- Rust inadequate for text compression codecs? https://news.ycombinator.com/item?id=43295908
-  * Status: backlog
-- Rust: Not So Great For Codec Implementing: https://codecs.multimedia.cx/2017/07/rust-not-so-great-for-codec-implementing/
-  * Assignee: zakhar
-  * Status: DONE (80m)
-  * Problem: Borrow-checker limitations, not enough allocation control, weak macro system
-  * Solution: Wait until all the RFCs fixing these problems are implemented
-  * More materials:
-    + rust-brotli rewrite for vectorization example
-    + Why you should, actually, rewrite some of it in Rust
-    + Discussion about explicit SIMD in Rust
-    + [Reddit](https://www.reddit.com/r/rust/comments/6qv2s5/rust_not_so_great_for_codec_implementing/)
 - Why you should, actually, rewrite some of it in Rust: https://news.ycombinator.com/item?id=14753201
   * Status: backlog
 -  Rust and Scientific/High-Performance Computing: https://www.reddit.com/r/rust/comments/smdl3m/rust_and_scientifichighperformance_computing/
