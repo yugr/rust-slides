@@ -1,4 +1,3 @@
-
 # Build
 
 Built and tested with `rustc` version `rustc 1.86.0 (05f9846f8 2025-03-31)` (stable) and `cargo` version `cargo 1.86.0 (adf9b6ad1 2025-02-28)`

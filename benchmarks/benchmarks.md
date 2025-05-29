@@ -2,7 +2,6 @@
 
 - [Bevy](bevy/README.md)
     - Benchmarks mostly are some game world operations (e.g. spawning entities)
-- [Deno](deno/README.md)
 - [uv](uv/README.md)
     - Benchmarks are resolution of environment for different packages
 - [Veloren](veloren/README.md)
@@ -15,3 +14,9 @@
     - Benchmarks are linting and formatting separate files
 - [Meilisearch](meilisearch/README.md)
     - Benchmarks are indexing of different files
+- [Oxipng](oxipng/README.md)
+    - Benchmarks are different image compression and filtering operations
+- [Tokio](tokio/README.md)
+    - Benchmarks are testing Tokio's async platform
+- [rav1e](rav1e/README.md)
+    - Benchmarks are different AV1 encoding tasks
