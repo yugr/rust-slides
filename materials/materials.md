@@ -2478,6 +2478,14 @@ MIRIFLAGS="-Zmiri-disable-isolation -Zmiri-measureme=crox" cargo +nightly miri r
     + Why you should, actually, rewrite some of it in Rust
     + Discussion about explicit SIMD in Rust
     + [Reddit](https://www.reddit.com/r/rust/comments/6qv2s5/rust_not_so_great_for_codec_implementing/)
+- Rust and Scientific/High-Performance Computing: https://www.reddit.com/r/rust/comments/smdl3m/rust_and_scientifichighperformance_computing/
+  * Assignee: yugr
+  * Status: DONE (5m)
+  * Mentions only lack of `-ffast-math`
+  * More materials:
+    + added links
+- Rust programming language in the high-performance computing environment: https://www.research-collection.ethz.ch/bitstream/handle/20.500.11850/474922/thesis.pdf
+  * Status: backlog
 
 # Panics
 
@@ -2976,7 +2984,3 @@ MIRIFLAGS="-Zmiri-disable-isolation -Zmiri-measureme=crox" cargo +nightly miri r
   * More materials:
     + [HN](https://news.ycombinator.com/item?id=40172033)
     + [Habr](https://habr.com/ru/articles/813597/)
-- Why you should, actually, rewrite some of it in Rust: https://news.ycombinator.com/item?id=14753201
-  * Status: backlog
--  Rust and Scientific/High-Performance Computing: https://www.reddit.com/r/rust/comments/smdl3m/rust_and_scientifichighperformance_computing/
-  * Status: backlog
