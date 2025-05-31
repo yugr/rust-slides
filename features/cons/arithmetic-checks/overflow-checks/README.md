@@ -140,6 +140,7 @@ Finally signed overflow UB also allows for better
 - Measure overhead via `-Z force-overflow-checks` (or `-C overflow-checks=on`)
   * See [RFC 1535](https://github.com/rust-lang/rfcs/blob/master/text/1535-stable-overflow-checks.md) for some details
   * Does it add `nsw`/`nuw` and enable loop optimizations ?
+  * For libstd we can force overflow checks in `bootstrap.toml` via `overflow-checks-std`
 - Why Rust produces such bad asm for code from [here](https://softwarebits.substack.com/p/impact-of-undefined-behavior-on-performance) ?
 ```
 #[no_mangle]
