@@ -144,6 +144,8 @@ long ago.
 # TODO
 
 - Disable index checks in compiler and compare perf of large and/or performance sensitive projects
+  * arrays, slices, string slices, Vecs, Strings
+  * can only do best-effort here because there are a lot of custom bounds checks (grep for `panic!`/`assert!`/`assert_unchecked` in std)
   * patch to disable checks: https://blog.readyset.io/bounds-checks
   * can ask [rav1d](https://www.memorysafety.org/blog/rav1d-performance-optimization/) guys for their patch
   * also some info [here](https://users.rust-lang.org/t/a-way-to-turn-off-all-bounds-checks-for-exploring-optimisation-potential/117528/4)

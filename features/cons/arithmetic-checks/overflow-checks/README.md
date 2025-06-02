@@ -1,7 +1,7 @@
 Rust does not check overflows in release (so I'm not sure we need this directory).
 
 Overflows are evaluated via 2's complement wrapping (https://doc.rust-lang.org/book/ch03-02-data-types.html#integer-overflow)
-in release but panic in debug
+in release but panic in debug.
 This is allowed by [RFC 560](https://github.com/rust-lang/rfcs/blob/master/text/0560-integer-overflow.md)
 (panicking is also permitted in release so its suggested to NOT rely on wrapping semantics
 in release and use explicit `wrapping_*` methods / `Wrapping` types if needed).
@@ -48,6 +48,11 @@ Also Swift language has overflow checks on by default even in optimized builds.
 
 Note that overhead here is not the checks themselves but disabling of optimizations
 (e.g. vectorization due to potential wrapping).
+
+# Index overflow checks
+
+String slices also check that upper limit is not `usize::MAX`
+(see e.g. `SliceIndex<str>::index` in `core/src/str/traits.rs`).
 
 # Solutions
 
@@ -141,6 +146,7 @@ Finally signed overflow UB also allows for better
   * See [RFC 1535](https://github.com/rust-lang/rfcs/blob/master/text/1535-stable-overflow-checks.md) for some details
   * Does it add `nsw`/`nuw` and enable loop optimizations ?
   * For libstd we can force overflow checks in `bootstrap.toml` via `overflow-checks-std`
+  * Also don't forget to disable in stdlib via `[rust] overflow-checks-std` in bootstrap.toml
 - Why Rust produces such bad asm for code from [here](https://softwarebits.substack.com/p/impact-of-undefined-behavior-on-performance) ?
 ```
 #[no_mangle]

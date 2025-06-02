@@ -80,6 +80,9 @@ As a workaround, developers need to use manual `assert!`'s (or `core::hint::unre
 
 Check overhead on panics in benches
   - can only be done in benches w/o `catch_unwind` (in bench itself and deps)
+  - don't forget to disable panicking in stdlib:
+    * update `[rust] std-features' in bootstrap.toml
+    * or use `-Z build-std -Z build-std-features` in cargo
 
 What is `panic_immediate_abort` ?
 

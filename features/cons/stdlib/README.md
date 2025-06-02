@@ -6,6 +6,21 @@ Rust's UTF-8 `String`s have invariant checks which make code slower (compared to
 
 Rust default PRNG is of higher quality but slower.
 
+# Checks
+
+In general Rust's stdlib checks many invariants even in release
+e.g. in `library/core/src/slice/mod.rs`:
+```
+    pub const fn chunks(&self, chunk_size: usize) -> Chunks<'_, T> {
+        assert!(chunk_size != 0, "chunk size must be non-zero");
+        Chunks::new(self, chunk_size)
+    }
+```
+
+Also many APIs force you to perform the necessary checks
+e.g. forced "NULL checks" (via `Option::unwrap` or `Option::expect`)
+for APIs that return `Option`.
+
 # IO
 
 IO is not buffered by default in Rust so wrap files into `BufWriter`/`BufReader` adaptors
@@ -40,4 +55,5 @@ explicit locking.
 
 # TODO
 
-- Benchmark disabling of invariant checks in `String`.
+- Benchmark disabling of invariant checks in `String`
+- Benchmark disable of checks in `Option::unwrap` and `Option::expect`

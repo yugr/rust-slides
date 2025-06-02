@@ -53,8 +53,10 @@ Rust seems to put safety ahead of performance:
   - "Rust prioritizes memory safety above all else. But speed is a close second" ([Steven Klabnik](https://users.rust-lang.org/t/what-kind-of-performance-rust-is-trying-to-achieve/1674/2))
   - more on tradeoffs [here](https://www.infoq.com/presentations/rust-tradeoffs/) and [here](https://www.youtube.com/watch?v=2wZ1pCpJUIM)
   - manifests e.g. in inability to enable fast math or turn off bounds checking
-  - but at the same time things which would have incurred too much overhead are disabled
-    * e.g. integer overflows not checked in release
+  - but at the same time things which would have incurred too much overhead are disabled e.g.
+    * integer overflows not checked in release (because overhead is unacceptable)
+    * result of sort is not checked (may cause unpredictable results for bad comparators)
+    * some checks are hidden under `-Z ub-checks` (alignment and NULL)
 
 Some Rust's abstractions are NOT zero-cost (or at least less zero-cost than in C++) :
   - are by design more expensive than C++ equivalents
@@ -66,7 +68,7 @@ Main source of performance overhead: UB avoidance
 Note that some overheads are basic (e.g. bounds checking)
 and some are consequences (e.g. disabled autovec).
 
-- Runtime checks:
+- Runtime checks (see `AssertKind` enum in `compiler/rustc_middle/src/mir/syntax.rs`):
   * index accesses:
     + LLVM may not always remove them which will break autovec
       - TODO: we need to collect statistics on autovec improvements if checking is disabled
