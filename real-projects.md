@@ -1,3 +1,6 @@
+Note that mature projects may have already been optimized
+in critical spots (via unsafe, etc.).
+
 # Large perf-sensitive projects written in Rust
 
 - rustc
