@@ -49,7 +49,7 @@ unsigned foo() {
   return x++;
 }
 ```
-and [Rust](https://godbolt.org/z/W4vP6Mnd4)
+  and [Rust](https://godbolt.org/z/W4vP6Mnd4)
 ```
 use std::cell::Cell;
 use std::thread;
