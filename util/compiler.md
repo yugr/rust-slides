@@ -18,6 +18,14 @@ $ ./x build -jN library
 ```
 (set `N` according to your quota).
 
+Default settings (in `src/bootstrap/src/core/config/config.rs`) are reasonable:
+  - build optimized compiler and std
+  - no incremental build
+  - default codegen units for std (16 ?)
+    * this is overridden in `src/ci/run.sh`
+  - no overflow checks unless debug
+  - build std with `panic_unwind`
+
 Disk consumption:
   - sources: 750M
   - release build: 10G
