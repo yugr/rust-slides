@@ -64,6 +64,8 @@ For each performance feature we neeed to provide
   - performance impact:
     * determine how to enable/disable feature in compiler/stdlib
       + there may be flags (e.g. for interger overflows) but sometimes may need patch code (e.g. for bounds checks)
+        - patch for each feature needs to be implemented in separate branch (in private compiler repo)
+      + make sure that found solution works on real examples
     * collect perf measurements for benchmarks:
      + runtime
      + PMU counters (inst count, I$/D$/branch misses)

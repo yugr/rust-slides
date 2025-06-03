@@ -33,3 +33,4 @@ where it's valid. Can use `Option<NonZeroU32>`:
 
 - Benchmark some big/performance critical project w/o niche opts (check Rss, cache, wall time)
   * Be sure to check with and without `-Z reference-niches`
+- Check if structs with bool fields are optimized to bitfields

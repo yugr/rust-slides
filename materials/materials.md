@@ -114,7 +114,7 @@ On the other hand, once all materials are analyzed we won't care about this file
     + aliasing
     + non-nullability of references
   * More materials: added some more linked mats and started looking at Shnatsel's posts
-- Looking for help understanding Rust’s performance vs C++: https://users.rust-lang.org/t/looking-for-help-understanding-rusts-performance-vs-c/30469
+- Looking for help understanding Rust’s performance vs C++: https://users.rust-lang.org/t/looking-for-help-understanding-rusts-performance-vs-c/30469 (2019)
   * Assignee: yugr
   * Status: DONE (15m)
   * Problem: matrix multiply code is slower than C++
@@ -122,7 +122,7 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Solution: suggested to construct custom slice or use `get_unchecked`
   * LLVM: can not be optimized (data struct is too complex: `Vec<Vec<f64>>`)
   * More materials: 
-- Performance of array access vs C: https://users.rust-lang.org/t/performance-of-array-access-vs-c/43522
+- Performance of array access vs C: https://users.rust-lang.org/t/performance-of-array-access-vs-c/43522 (2020)
   * Assignee: yugr
   * Status: DONE (10m)
   * Problem: code slower than C++ equivalent
@@ -130,7 +130,7 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Solution: rewrite to allow LLVM to better optimize it
   * LLVM: most likely could be fixed
   * More materials: N/A
-- Executable size and performance vs. C? https://users.rust-lang.org/t/executable-size-and-performance-vs-c/4496
+- Executable size and performance vs. C? https://users.rust-lang.org/t/executable-size-and-performance-vs-c/4496 (2016)
   * Assignee: yugr
   * Status: DONE (10m)
   * Problem: code slower than C++ equivalent
@@ -138,7 +138,7 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Solution: rewrite to use iterators
   * LLVM: most likely have been fixed (the post is very old)
   * More materials: N/A
-- Rust vs. C vs. Go runtime speed comparison: https://users.rust-lang.org/t/rust-vs-c-vs-go-runtime-speed-comparison/104107
+- Rust vs. C vs. Go runtime speed comparison: https://users.rust-lang.org/t/rust-vs-c-vs-go-runtime-speed-comparison/104107 (2023)
   * Assignee: zakhar
   * Status: DONE (10m)
   * Problem: Rust benchmark 10x slower than C
@@ -191,7 +191,7 @@ On the other hand, once all materials are analyzed we won't care about this file
     + niche opts
     + ZSTs
   * More materials: now new links
-- How to speed up this rust code? I’m measuring a 30% slowdown versus the C++ version: https://users.rust-lang.org/t/how-to-speed-up-this-rust-code-im-measuring-a-30-slowdown-versus-the-c-version/1488
+- How to speed up this rust code? I’m measuring a 30% slowdown versus the C++ version: https://users.rust-lang.org/t/how-to-speed-up-this-rust-code-im-measuring-a-30-slowdown-versus-the-c-version/1488 (2015)
   * Assignee: yugr
   * Status: DONE (20m)
   * Problem: Rust code is slower than C++
@@ -819,7 +819,7 @@ ET's is an important patern for writing linear algebra code in C++. Can it be us
 
 # Bounds checks
 
-- How much does Rust's bounds checking actually cost? https://blog.readyset.io/bounds-checks/
+- How much does Rust's bounds checking actually cost? https://blog.readyset.io/bounds-checks/ (2023 ?)
   * Assignee: yugr
   * Status: DONE (75m)
   * Problem: investigates overhead of bounds checking operations
@@ -832,7 +832,7 @@ ET's is an important patern for writing linear algebra code in C++. Can it be us
     + [Reddit](https://www.reddit.com/r/programming/comments/z9hjpk/how_much_does_rusts_bounds_checking_actually_cost/)
     + [HackerNews](https://news.ycombinator.com/item?id=33805419)
     + added new materials
-- Inefficient codegen when accessing a vector with literal indices: https://github.com/rust-lang/rust/issues/50759
+- Inefficient codegen when accessing a vector with literal indices: https://github.com/rust-lang/rust/issues/50759 (2018)
   * Assignee: yugr
   * Status: DONE (20-30m)
   * Problem: repetative indexing checks when Vec/slice is accessed multiple times
@@ -840,7 +840,7 @@ ET's is an important patern for writing linear algebra code in C++. Can it be us
   * Solution: can be worked around via `assert!` hint (looks like generic solution for such situations)
   * LLVM: no good/generic way to solve this in LLVM
   * More materials: NA
-- How are bounds checks optimized away? https://users.rust-lang.org/t/how-are-bounds-checks-optimized-away/91737
+- How are bounds checks optimized away? https://users.rust-lang.org/t/how-are-bounds-checks-optimized-away/91737 (2023)
   * Status: DONE (10m)
   * Assignee: yugr
   * OP asks how bounds checking elimination works
@@ -856,12 +856,12 @@ ET's is an important patern for writing linear algebra code in C++. Can it be us
     + limit iteration count by vector length
     + code is much better in trunk
   * More materials: added relevant info
-- Iterators and eliminating all runtime bounds checks: https://users.rust-lang.org/t/iterators-and-eliminating-all-runtime-bounds-checks/13935
+- Iterators and eliminating all runtime bounds checks: https://users.rust-lang.org/t/iterators-and-eliminating-all-runtime-bounds-checks/13935 (2017)
   * Assignee: yugr
   * Status: DONE (5m)
   * Compares Rust to some other language, no relevant info
   * More materials: no new links
-- How to zip two slices efficiently: https://users.rust-lang.org/t/how-to-zip-two-slices-efficiently/2048
+- How to zip two slices efficiently: https://users.rust-lang.org/t/how-to-zip-two-slices-efficiently/2048 (2015)
   * Assignee: yugr
   * Status: DONE (5m)
   * Problem: `iter1.zip(iter2)` does not optimize very well
@@ -887,7 +887,7 @@ ET's is an important patern for writing linear algebra code in C++. Can it be us
       - interesting trick to replaced `x[i..(i + 2)]` with `x[i..][..2]` to avoid potential overflow; not sure how it's used though
       - another trick: `let [a, b, c] = data[..3] else { panic!() }`
     + no more relevant articles in blog
-- How to avoid bounds checking: https://users.rust-lang.org/t/how-to-avoid-bounds-checking/4433
+- How to avoid bounds checking: https://users.rust-lang.org/t/how-to-avoid-bounds-checking/4433 (2016)
   * Status: DONE (5m)
   * Assignee: yugr
   * OP asks how to disable bounds checks to measure overhead
@@ -918,7 +918,7 @@ ET's is an important patern for writing linear algebra code in C++. Can it be us
     + [Russian translation](https://habr.com/ru/companies/otus/articles/718012/)
     + [GitHub](https://github.com/Shnatsel/bounds-check-cookbook)
     + no more relevant posts in blog
-- Safe elimination of unnecessary bound checks: https://www.reddit.com/r/rust/comments/1iqev5s/safe_elimination_of_unnecessary_bound_checks/
+- Safe elimination of unnecessary bound checks: https://www.reddit.com/r/rust/comments/1iqev5s/safe_elimination_of_unnecessary_bound_checks/ (2025)
   * Assignee: yugr
   * Status: DONE (30m)
   * Problem: OP loads index from one const table and uses it to index another; he wonders how to get rid of bounds checks in this case

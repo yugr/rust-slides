@@ -45,6 +45,8 @@ Rust targets same problem area:
 Important caveats:
   - make sure to build with `--release` :)
   - make sure that (default) target CPU is the same (especially JIT languages like Java are equivalent to `-C target-cpu=native`)
+  - `--emit=asm` may change codegen due to implied [-C codegen-units=1](https://github.com/rust-lang/rust/issues/57235)
+    * so it's more reliable to compile to .rlib and use `objdump -d`
 
 # Rust performance issues
 

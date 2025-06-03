@@ -32,7 +32,7 @@ There are several reasons for this:
     * hard to spot (transparent to programmer)
     * can be fixed by not-template-base hack from C++: [What’s the name of this technique for cutting down compile times from monomorphization?](https://users.rust-lang.org/t/whats-the-name-of-this-technique-for-cutting-down-compile-times-from-monomorphization/89172) (also mentioned [here](https://dl.acm.org/doi/pdf/10.1145/3519941.3535075))
     * or just use dynamic polymorphism
-    * or splitting non-monomorphic part to separate function (e.g. `copy_from_slice` in `library/core/src/slice/mod.rs`)
+    * or splitting non-monomorphic part to separate (cold, size-optimized) function (e.g. `copy_from_slice` in `library/core/src/slice/mod.rs` or `capacity_overflow` in `raw_vec/mod.rs` or panics in `alloc/src/vec/mod.rs`)
   - shared libraries are not widely used (if at all)
     * unfixable until stable ABI and binary package distributions are introduced
     * `cargo bloat` can be used to identify the most problematic dependencies

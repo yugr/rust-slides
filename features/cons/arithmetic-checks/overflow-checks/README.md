@@ -49,10 +49,26 @@ Also Swift language has overflow checks on by default even in optimized builds.
 Note that overhead here is not the checks themselves but disabling of optimizations
 (e.g. vectorization due to potential wrapping).
 
-# Index overflow checks
+# Explicit overflow checks in stdlib
+
+Even when overflow checks are disabled, stdlib performs them in some APIs.
 
 String slices also check that upper limit is not `usize::MAX`
 (see e.g. `SliceIndex<str>::index` in `core/src/str/traits.rs`).
+
+Also in `library/alloc/src/slice.rs`:
+```
+let capacity = self.len().checked_mul(n).expect("capacity overflow");
+```
+or `alloc/src/str.rs`:
+```
+    let reserved_len = sep_len
+        .checked_mul(iter.len())
+        .and_then(|n| {
+            slice.iter().map(|s| s.borrow().as_ref().len()).try_fold(n, usize::checked_add)
+        })
+        .expect("attempt to join into collection with len > usize::MAX");
+```
 
 # Solutions
 

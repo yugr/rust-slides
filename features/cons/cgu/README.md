@@ -8,6 +8,8 @@ but this [does not always](https://github.com/rust-lang/rust/issues/47745) resto
 
 This may not be a huge downside compared to C++ because Rust TU's are generally much larger (how much ?).
 
+Note that `--emit=asm` automatically enables `-C codegen-units=1` which may change generated code.
+
 # Known performance hits
 
 - Inlining requires explicit annotation (`#[inline]`) and LTO but is still not perfect with these solutions:
