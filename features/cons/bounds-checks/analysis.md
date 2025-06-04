@@ -1,7 +1,8 @@
 # Administrivia
 
 Parent task: gh-20
-Effort: 12h
+
+Effort: 15h
 
 # Background
 
@@ -55,7 +56,7 @@ pub fn f1(v: &mut [i32], n: usize) {
     }
 }
 ```
-all is done in LoopVectorize (probly on `createReplacement` in `LoopVectorize.cpp).
+all is done in LoopVectorize (probly on `createReplacement` in `LoopVectorize.cpp`).
 If vectorizer is disabled (via `-Cllvm-args=-vectorize-loops=false`)
 BCs will not be removed.
 
@@ -85,7 +86,7 @@ TODO:
 
 ## Disabling the check
 
-Compiler patch is in branch yugr/disable-bounds-checks/1 .
+Compiler patch is in branch [yugr/disable-bounds-checks/1](https://github.com/yugr/rust-private/tree/yugr/disable-bounds-checks/1).
 It
   - disables checks in compiler
   - removes relevant `panic!` / `assert!` / etc. in stdlib
