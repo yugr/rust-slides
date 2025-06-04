@@ -1,43 +1,87 @@
-# Motivating example
+# Administrivia
 
-URLO discussions of huge perf regressions caused by bounds checks
+Parent task: gh-20
+Effort: 12h
+
+# Background
+
+See [README](README.md).
+
+# Examples
+
+URLO discussions of huge perf regressions caused by bounds checks (BCs)
+that are before ~2022 are largely irrelevant
 (also [matklad's examples](https://github.com/matklad/bounds-check-cost/blob/master/src/main.rs))
-date back for pre 2020-s times.
+because LLVM optimizer has significantly improved since then.
 
-LLVM optimizer has significantly improved since then.
-All loops that do simple `0..n`-like iterations (`f1`-`f4`, `f7`) optimize well
+LLVM can LICM bounds checks from loop very well now.
+E.g. all loops that do simple `0..n`-like iterations (`f1`-`f4`, `f7`, `f10` (!), `f12`) over slices of Vecs optimize well
 i.e. checks are removed from loops and loops are vectorized.
 
 More complex examples that require non-trivial arithmetic still break optimizer
-(e.g. `f5` or `f6`).
+(e.g. `f5`, `f6`, `f8`, `f11`, `f13`).
+Also unnecessary bounds checks are not always eliminated (`f10`).
 
 TODO:
-  - more examples where checks are not removed
-  - also check `Vec`
+  - add info about (size) overheads in more complex examples (convolution, fibonacci)
 
 # Optimizations
 
+Unnecessary BCs are removed via value tracking in passes like InstCombine.
+
+Optimization of BCs in loops may happen in several ways.
+For example for
+```
+$ cat min.rs
+pub fn f1(v: &[i32], n: usize) -> i32 {
+    let mut ans = 0;
+    for i in 0..n {
+        ans += v[i];
+    }
+    ans
+}
+$ rustc --crate-type=rlib -O -C codegen-units=1 -C target-cpu=native -Cllvm-args=-print-after-all min.rs
+```
+it's done by two passes:
+  - IndVarSimplifyPass - moves condition computation from loop
+  - SimpleLoopUnswitchPass - removes condition from loop
+
+On the other hand for
+```
+$ cat min.rs
+pub fn f1(v: &mut [i32], n: usize) {
+    for i in 0..n {
+        v[i] = i as i32;
+    }
+}
+```
+all is done in LoopVectorize (probly on `createReplacement` in `LoopVectorize.cpp).
+If vectorizer is disabled (via `-Cllvm-args=-vectorize-loops=false`)
+BCs will not be removed.
+
 TODO:
-  - info whether LLVM can potentially optimize it (and with what limitations)
+  - list limitations ?
 
 # Workarounds for bounds checks
 
-TODO:
-  - info on how developer can work around it and with how much effort/ugliness (unsafe, wrapping operations, reslicing, etc.)
-    * pay special attention to cases which can not be optimized at all
-
-# Analysis of real code
-
-TODO:
-  - info on whether this error is a common case in practice
-    * may need to write analysis passes to scan real Rust code (libs, big projects) for occurences
+See [README](README.md#solutions).
 
 # Suggested reading
 
-TODO:
-  - links to important articles
+[How to avoid bounds checks in Rust without unsafe](https://shnatsel.medium.com/how-to-avoid-bounds-checks-in-rust-without-unsafe-f65e618b4c1e)
+  * Bible of Rust bounds checks
+
+[Story-time: C++, bounds checking, performance, and compilers](https://chandlerc.blog/posts/2024/11/story-time-bounds-checking/) (and links)
+  * Bounds checking in C++
 
 # Performance impact
+
+## Prevalence
+
+TODO:
+  - identify functions which contain calls to `core::panicking::panic_bounds_check` (or `core::slice::index::slice_index_order_fail`)
+    * should we disable inlining ? Probably not because many BCs will not be removable after that.
+  - identify loops which have branch to block with panics
 
 ## Disabling the check
 
@@ -83,10 +127,10 @@ in library/core and library/alloc for most important types:
     * can't update because it depends on hashbrown
 
 TODO:
-  - analyze optional asserts in library/core/src/ub_checks.rs (assert_unsafe_precondition and friends)
-  - verify no bounds checks for `a[i]`, `a[i..j]`, `a[i..=j]` for arrays, slices, string slices, Vecs, Strings
+  - analyze optional asserts in library/core/src/ub_checks.rs
+    (assert_unsafe_precondition and friends)
 
-## Analyzing projects
+## Measurements
 
 TODO:
   - collect perf measurements for benchmarks:

@@ -53,15 +53,18 @@ When commiting changes
 # Research
 
 For each performance feature we neeed to provide
+  - why this feature is needed ?
+    * examples of errors (including known CVEs/exploits)
+    * situation in C++
   - clear example (Rust microbenchmark, asm code)
   - info whether LLVM can potentially optimize it (and with what limitations)
   - info on how developer can work around it and with how much effort/ugliness (unsafe, wrapping operations, reslicing, etc.)
     * pay special attention to cases which can not be optimized at all
-  - info on whether this error is a common case in practice
-    * may need to write analysis passes to scan real Rust code (libs, big projects) for occurences
   - links to important articles (design, etc.)
   - (need to collect prooflinks with timecodes, reprocases for everything)
   - performance impact:
+    * is this check is a common case in practice ?
+      * may need to write analysis passes to scan real Rust code (libs, big projects) for occurences
     * determine how to enable/disable feature in compiler/stdlib
       + there may be flags (e.g. for interger overflows) but sometimes may need patch code (e.g. for bounds checks)
         - patch for each feature needs to be implemented in separate branch (in private compiler repo)

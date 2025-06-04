@@ -2,6 +2,7 @@ All info about problems with bounds checks at runtime.
 
 Memory safety issues account for [76%](https://security.googleblog.com/2024/09/eliminating-memory-safety-vulnerabilities-Android.html)
 of vulnerabilities in Android.
+Also they usually are the top weaknesses in [CWE](https://cwe.mitre.org/top25/archive/2022/2022_cwe_top25.html).
 
 Important note is that most problems reported by users are
 in perf-critical code (codecs, HPC math, autovec, etc.)
@@ -44,7 +45,9 @@ Experts [suggest](https://users.rust-lang.org/t/optimizing-linear-algebra-code/3
 Bounds checks can be removed via
   - using iterators instead of indexes (this is not always possible)
     * [example](https://www.reddit.com/r/rust/comments/154vowr/comment/jsr0b51/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button)
-  - using asserts (https://rust.godbolt.org/z/GPMcYd371) or `core::hint::unreachable_unchecked` or `core::hint::assert_unchecked`
+  - using `unsafe` (`get_unchecked`, `core::hint::unreachable_unchecked` or `core::hint::assert_unchecked`)
+    * this is the only way for complex index expressions (e.g. indirect indexing, bitwise operations, etc.)
+  - using asserts (https://rust.godbolt.org/z/GPMcYd371)
     * [example](https://github.com/rust-random/rand/pull/960)
     * [examples in Nethercote's book](https://nnethercote.github.io/perf-book/bounds-checks.html)
     * [example](https://github.com/image-rs/jpeg-decoder/pull/167)
@@ -56,6 +59,12 @@ let len = vec.len();
 let slice = &vec[0..len];
 for i in 0..len {
     slice[i] // no bounds check
+}
+```
+  or even simpler:
+```
+for &x in &slice[0..len] {
+    *x  // no bounds check
 }
 ```
   (also [here](https://users.rust-lang.org/t/possible-rust-specific-optimizations/79895/5)
@@ -116,7 +125,7 @@ it supports hardening mode (both Libstdc++ and Libc++,
 also MSVC with `_ITERATOR_DEBUG_LEVEL` and EASTL with its own checks)
 which implements checks like bounds, strict weak ordering, etc.
 Moreover STL hardening [has been accepted](https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2025/p3471r4.html)
-for Standard.
+for Standard as part of promoting "modern (contemporary) C++".
 
 Bounds checking overhead can be equated to replacing
 `reserve` + `push_back` with `resize`
@@ -152,6 +161,8 @@ long ago.
   * disables [in stdlib](https://github.com/rust-lang/rust/pull/119440)
   * [unchecked_math](https://github.com/rust-lang/rfcs/issues/2508) feature may be relevant
 - Can we somehow measure how often compiler is able to remove index checks from loops ?
+  * Probably not, removal is done deep in several LLVM opt passes
+    when BCs can't be identified
 - Verify strange off-by-one behaviour of bounds checks (maybe a bug?) (https://users.rust-lang.org/t/rust-vs-c-vs-go-runtime-speed-comparison/104107/20)
 
 # Combining multiple checks not optimized

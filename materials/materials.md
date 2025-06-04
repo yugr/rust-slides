@@ -255,7 +255,7 @@ On the other hand, once all materials are analyzed we won't care about this file
     + bounds checks hurting autovec
   * Commenters conclude that it's not valid to compare Rust to pure C (C++ should be used)
   * More materials: nothing unseen before in links
-- Is bound checking the only runtime cost of Rust? https://users.rust-lang.org/t/is-bound-checking-the-only-runtime-cost-of-rust/66661
+- Is bound checking the only runtime cost of Rust? https://users.rust-lang.org/t/is-bound-checking-the-only-runtime-cost-of-rust/66661 (2021)
   * Assignee: zakhar
   * Status: DONE (10m)
   * Problems:
@@ -444,21 +444,21 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Problem: multithreaded Rust program is much slower than equivalent C
   * Root cause: `--release` and `f64::to_int_unchecked`
   * More materials: no new links
-- Rust program has only 42% the speed of similar c++ program: https://users.rust-lang.org/t/rust-program-has-only-42-the-speed-of-similar-c-program/73738
+- Rust program has only 42% the speed of similar c++ program: https://users.rust-lang.org/t/rust-program-has-only-42-the-speed-of-similar-c-program/73738 (2022)
   * Assignee: yugr
   * Status: DONE (5m)
   * Problem: Rust code slower than C++
   * Root cause: different PRNG, bounds checks
   * Solution: iterators, `SmallRng`, replace `&Vec<T>` with `&[T]` (that actually gave perf in 2022!), make some params `const`
   * More materials: no new links
-- Performance question: https://users.rust-lang.org/t/performance-question/54977
+- Performance question: https://users.rust-lang.org/t/performance-question/54977 (2021)
   * Assignee: yugr
   * Status: DONE (5m)
   * Problem: Rust code is much slower than C
   * Root cause: lack of autovec
   * Solution: iterators, `assert!`
   * More materials: no new links
-- Rust performance help (convolution): https://users.rust-lang.org/t/rust-performance-help-convolution/44075
+- Rust performance help (convolution): https://users.rust-lang.org/t/rust-performance-help-convolution/44075 (2020)
   * Assignee: yugr
   * Status: DONE (5m)
   * Problem: Rust code much slower than C `-Ofast`
@@ -473,7 +473,7 @@ On the other hand, once all materials are analyzed we won't care about this file
   * More materials:
     + [Reddit](https://www.reddit.com/r/rust/comments/14yvlc9/n_times_faster_than_c_where_n_128/)
     + no more relevant posts in blog
-- Rust loop speed: https://www.reddit.com/r/rust/comments/1aumq2h/rust_loop_speed/
+- Rust loop speed: https://www.reddit.com/r/rust/comments/1aumq2h/rust_loop_speed/ (2024)
   * Status: DONE (5m)
   * Problem: loop much slower in Rust
   * Root cause: no `--release` and inclusive range
@@ -846,7 +846,7 @@ ET's is an important patern for writing linear algebra code in C++. Can it be us
   * OP asks how bounds checking elimination works
   * Answers: unsafe code in iterators, polyhedral optimization in LLVM (?)
   * More materials: nothing interesting in suggested links
-- Rust's Vec indexing is bound-checked by default: https://news.ycombinator.com/item?id=30867188
+- Rust's Vec indexing is bound-checked by default: https://news.ycombinator.com/item?id=30867188 (2022)
   * Status: DONE (30m)
   * Assignee: yugr
   * Problem: Rust Vec's are bounds checked which hurts performance (corresponding C++ microbenchmarks shows 2x overhead)
@@ -870,39 +870,28 @@ ET's is an important patern for writing linear algebra code in C++. Can it be us
     + for slices use explicit subslicing to `len1.min(len2)` to tell compiler that bounds checks can be removed
     + (this is a common technique)
   * More materials: no new links
-- How to avoid bounds checks in Rust without unsafe: https://shnatsel.medium.com/how-to-avoid-bounds-checks-in-rust-without-unsafe-f65e618b4c1e
-  * Assignee: yugr
-  * Status: DONE (1h)
-  * And oft cited article on avoiding bounds checks
-  * Instructions for avoiding bounds checks in Rust programs:
-    + subslicing
-    + asserts
-    + iterators
-    + forcing index into bounds via `% len` or `& (len - 1)`
-  * Mentions that overhead is small in practice (10%) w/o hard evidence
-  * More materials:
-    + [bounds-check-cookbook](https://github.com/Shnatsel/bounds-check-cookbook/)
-      - companion code for the article
-    + [Reddit](https://www.reddit.com/r/rust/comments/10edmjf/how_to_avoid_bounds_checks_in_rust_without_unsafe/)
-      - interesting trick to replaced `x[i..(i + 2)]` with `x[i..][..2]` to avoid potential overflow; not sure how it's used though
-      - another trick: `let [a, b, c] = data[..3] else { panic!() }`
-    + no more relevant articles in blog
 - How to avoid bounds checking: https://users.rust-lang.org/t/how-to-avoid-bounds-checking/4433 (2016)
   * Status: DONE (5m)
   * Assignee: yugr
   * OP asks how to disable bounds checks to measure overhead
   * People suggest potential fixes in stdlib (added to bounds checking section)
   * More materials: nothing new
-- Is bound checking the only runtime cost of Rust? https://users.rust-lang.org/t/is-bound-checking-the-only-runtime-cost-of-rust/66661/19
+- Is bound checking the only runtime cost of Rust? https://users.rust-lang.org/t/is-bound-checking-the-only-runtime-cost-of-rust/66661/19 (2021)
   * Status: DONE (5m)
   * Assignee: yugr
   * OP asks what are the overheads of Rust language
   * People suggest various issues (UFT8 checks, `Rc`, error checking, etc.) but all known by us
   * More materials: nothing new
+
 - How to avoid bounds checks in Rust: https://shnatsel.medium.com/how-to-avoid-bounds-checks-in-rust-without-unsafe-f65e618b4c1e
   * Assignee: yugr
   * Status: DONE (30m)
   * This article is very important for bounds checking part
+  * Instructions for avoiding bounds checks in Rust programs:
+    + subslicing
+    + asserts
+    + iterators
+    + forcing index into bounds via `% len` or `& (len - 1)`
   * It contains
     + motivation behind bounds checks (example, Heartbleed)
     + overheads (avg. 1-3%, max. 15% so nothing like 4-8x in microbenches)
@@ -915,8 +904,11 @@ ET's is an important patern for writing linear algebra code in C++. Can it be us
 > once you get them working, they tend to keep workin
   * More materials:
     + [Reddit](https://www.reddit.com/r/rust/comments/10edmjf/how_to_avoid_bounds_checks_in_rust_without_unsafe/)
+      - interesting trick to replaced `x[i..(i + 2)]` with `x[i..][..2]` to avoid potential overflow; not sure how it's used though
+      - another trick: `let [a, b, c] = data[..3] else { panic!() }`
     + [Russian translation](https://habr.com/ru/companies/otus/articles/718012/)
     + [GitHub](https://github.com/Shnatsel/bounds-check-cookbook)
+      - companion code for the article
     + no more relevant posts in blog
 - Safe elimination of unnecessary bound checks: https://www.reddit.com/r/rust/comments/1iqev5s/safe_elimination_of_unnecessary_bound_checks/ (2025)
   * Assignee: yugr
@@ -1116,7 +1108,7 @@ pub fn foo(p: Box<S>) {
   * OP asks if there's difference between for-loop and external iteration
   * The only main difference is automatic prelloc for external iteration case
   * More materials: added link
-- Performance of iterator over for-loops without boundry check: https://users.rust-lang.org/t/performance-of-iterator-over-for-loops-without-boundry-checks/96162
+- Performance of iterator over for-loops without boundry check: https://users.rust-lang.org/t/performance-of-iterator-over-for-loops-without-boundry-checks/96162 (2023)
   * Assignee: yugr
   * Status: DONE (5m)
   * Problem: comparing slices is faster than comparing via per-element loop (unrelated to iterators really)
@@ -1146,7 +1138,7 @@ pub fn foo(p: Box<S>) {
   * OP asked about potential performance of iterators
   * The only suggestion was to replace `Vec<u8>` with `&mut [u8]
   * More materials: added link
-- We all know `iter` is faster than `loop`, but why: https://users.rust-lang.org/t/we-all-know-iter-is-faster-than-loop-but-why/51486
+- We all know `iter` is faster than `loop`, but why: https://users.rust-lang.org/t/we-all-know-iter-is-faster-than-loop-but-why/51486 (2020)
   * Assignee: yugr
   * Status: DONE (15m)
   * OP wonders why iterators (with `for_each`) are faster than loops
@@ -1515,7 +1507,7 @@ we should add them to overheads.
   * Status: DONE (10m)
   * Problem: there is not problem actually, the article just illustrates how autovec works, etc.
   * More materials: no more interesting mats on this blog
-- Taking Advantage of Auto-Vectorization in Rust: https://www.nickwilcox.com/blog/autovec/
+- Taking Advantage of Auto-Vectorization in Rust: https://www.nickwilcox.com/blog/autovec/ (2020)
   * Assignee: yugr
   * Status: DONE (20m)
   * OP investigates ways to improve simple loop with autovec
@@ -1549,7 +1541,7 @@ we should add them to overheads.
   * Root cause: lack fast math (so `fmadd` not used), `y/sqrt(x)` not replaced with `y * 1/sqrt(x)`
   * Solution: use `-C llvm-args=-ffast-math` (does not seem to work) and float intrinsics
   * More materials: added links
-- Understanding Rusts Auto-Vectorization and Methods for speed: https://users.rust-lang.org/t/understanding-rusts-auto-vectorization-and-methods-for-speed-increase/84891
+- Understanding Rusts Auto-Vectorization and Methods for speed: https://users.rust-lang.org/t/understanding-rusts-auto-vectorization-and-methods-for-speed-increase/84891 (2022)
   * Assignee: yugr
   * Status: DONE (25m)
   * OP wonders how to achieve autovec and optimize Rust numeric code in general
