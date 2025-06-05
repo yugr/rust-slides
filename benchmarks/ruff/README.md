@@ -1,6 +1,6 @@
 Ruff benchmarks are located in the `crates/ruff_benchmark` subdirectory of the [repo](https://github.com/astral-sh/ruff)
 
-Built and tested on `302d89da3325c705f87a8343a16aad1723b67ab` commit.
+Built and tested on `b302d89da3325c705f87a8343a16aad1723b67ab` commit.
 
 # Build
 

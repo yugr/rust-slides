@@ -47,11 +47,7 @@ taskset 0x1 setarch -R cargo bench
 ```
 (what abour multithreaded benchmarks though ?).
 
-Also we may need to
-  - boot to non-GUI mode (low runlevel) on systemd systems (https://linuxconfig.org/how-to-disable-enable-gui-in-ubuntu-22-04-jammy-jellyfish-linux-desktop)
-  - use `isolcpus`/`nohz_full` kernel boot flags
-  - fix CPU frequency (in BIOS or, if not available, by setting `scaling_governor` to `performance`)
-  - disable HW prefetching in BIOS
+Check instructions for setting up server to minimize OS jitter [here](server.md).
 
 It would be great to test both on X86 and on AArch64 because
 according to "Exploiting Undefined Behavior in C/C++ Programs for Optimization"
