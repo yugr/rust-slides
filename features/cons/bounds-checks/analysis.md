@@ -75,6 +75,9 @@ See [README](README.md#solutions).
 [Story-time: C++, bounds checking, performance, and compilers](https://chandlerc.blog/posts/2024/11/story-time-bounds-checking/) (and links)
   * Bounds checking in C++
 
+TODO:
+  - any other good posts ?
+
 # Performance impact
 
 ## Prevalence
