@@ -66,9 +66,9 @@ benches = {
         [("crates/bench", "cargo bench --bench generic --bench special --no-fail-fast")]
     ),
     "bevy": (
-        "https://github.com/TheBevyFlock/bevy-bencher",
-        "420b77b",
-        [("", "cargo bench")]
+        "https://github.com/bevyengine/bevy",
+        "de79d3f363e292489f2dbfdd22b6a9b93e7672ea",
+        [("benches", "cargo bench")]
     ),
     "meilisearch": (
         "https://github.com/meilisearch/meilisearch",
