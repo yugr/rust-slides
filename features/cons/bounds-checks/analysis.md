@@ -82,10 +82,41 @@ TODO:
 
 ## Prevalence
 
+We should measure reduction of panics in our benchmarks:
+  - overall count
+  - functions with panics (?)
+  - loops with panics
+
+Overall count may be detected by grepping disasm
+but beware of stripping in project's `Cargo.toml`:
+```
+$ cd oxipng
+
+# Project strips symbols so fix this
+$ sed -i -e 's/^\(strip\|panic\)/#\1/' Cargo.toml
+
+$ cargo +baseline b --release --target-dir=target-baseline
+$ count-panics target-baseline
+8744
+
+$ cargo +bounds b --release --target-dir=target-bounds
+# There should be no matches!
+$ grep -r panic_bounds_check target-bounds
+$ count-panics target-bounds
+7942
+```
+I think we should not disable inlining because many BCs will not be removable after that.
+
+Panics in loops may be found by analyzing LLVM via
+```
+export RUSTFLAGS='-Csave-temps'
+```
+which will store `.bc` files in target dir (we need `XXX.rcgu.bc`, without `no-opt`).
+Beware that this [overloads settings in Cargo.toml](https://internals.rust-lang.org/t/we-need-configurably-additive-rustflags/19851)
+and may break build.
+
 TODO:
-  - identify functions which contain calls to `core::panicking::panic_bounds_check` (or `core::slice::index::slice_index_order_fail`)
-    * should we disable inlining ? Probably not because many BCs will not be removable after that.
-  - identify loops which have branch to block with panics
+  - analyze loops using .bc approach
 
 ## Disabling the check
 
