@@ -172,5 +172,7 @@ TODO:
    * runtime
    * PMU counters (inst count, I$/D$/branch misses)
    * compiler stats
-     + SLP/loop autovec for bounds checking feature
-     + CSE/GVN/LICM for alias feature
+     + SLP/loop autovec
+     + CSE
+     + GVN
+     + LICM

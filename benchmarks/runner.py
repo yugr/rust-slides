@@ -168,6 +168,10 @@ def main():
     # See https://rust-lang.github.io/rustup/overrides.html
     os.environ["RUSTUP_TOOLCHAIN"] = args.toolchain
 
+    # Rust is always line-buffered so mimic this here to preserve order
+    sys.stdout.reconfigure(line_buffering=True)
+    sys.stderr.reconfigure(line_buffering=True)
+
     bench_names = sorted(benches.keys())
     if args.only is not None:
         bench_names = args.only.split(',')

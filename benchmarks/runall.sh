@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Simple wrapper for runner.py
 # which clones everything, builds and runs benchmarks
@@ -7,6 +7,7 @@
 #   $ RUNNER_ARGS="-j6 -r '' -o meilisearch,oxipng,rav1e,ruff,tokio" ./runall.sh
 
 set -eu
+set -o pipefail
 
 D=$(dirname $0)
 
