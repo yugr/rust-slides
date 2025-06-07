@@ -2,6 +2,7 @@
 
 import argparse
 import glob
+import os
 import os.path
 from pathlib import Path
 import subprocess
@@ -159,12 +160,20 @@ def main():
     )
     args = parser.parse_args()
 
-    base_path = Path(args.path)
+    base_path = Path(os.path.abspath(args.path))
+    os.makedirs(str(base_path), exist_ok=True)
     patch_root = Path(os.path.dirname(__file__))
+
+    os.environ["CARGO_INCREMENTAL"] = "0"
+    # See https://rust-lang.github.io/rustup/overrides.html
+    os.environ["RUSTUP_TOOLCHAIN"] = args.toolchain
 
     bench_names = sorted(benches.keys())
     if args.only is not None:
         bench_names = args.only.split(',')
+        unknown_names = [name for name in bench_names if name not in benches.keys()]
+        if unknown_names:
+            error(f"unknown benchmarks {', '.join(unknown_names)}")
 
     # Clone
 
@@ -173,12 +182,11 @@ def main():
             bench_repo, bench_branch, _ = benches[bench_name]
             print(f"Cloning {bench_repo}...")
             bench_path = base_path / os.path.basename(bench_repo)
-            # Should we just skip and continue instead ?
-            error_if(bench_path.exists(), f"bench {bench_name} already exists in {bench_path}")
-            run(f"git clone {bench_repo}", cwd=str(base_path), fatal=True)
-            run(f"git checkout {bench_branch}", cwd=str(bench_path), fatal=True)
-            for bench_patch in sorted(glob.glob(str(patch_root / bench_name / "*.patch"))):
-                run(f"patch -p1 -i {bench_patch}", fatal=True, cwd=str(bench_path))
+            if not bench_path.exists():
+                run(f"git clone {bench_repo}", cwd=str(base_path), fatal=True)
+                run(f"git checkout {bench_branch}", cwd=str(bench_path), fatal=True)
+                for bench_patch in sorted(glob.glob(str(patch_root / bench_name / "*.patch"))):
+                    run(f"patch -p1 -i {bench_patch}", fatal=True, cwd=str(bench_path))
 
     # Build
 
@@ -192,10 +200,6 @@ def main():
                      f"directory {bench_build_path} does not exist, did you forget to clone?")
 
             cargo_args = bench_params.split()
-            if args.toolchain is not None:
-                # See https://rust-lang.github.io/rustup/overrides.html
-                insert_idx = cargo_args.index("cargo") + 1
-                cargo_args.insert(insert_idx, "+" + args.toolchain)
 
             if args.jobs is not None:
                 cargo_args.extend(["-j", str(args.jobs)])
@@ -220,14 +224,10 @@ def main():
 
             cargo_args = args.run_options.split()
             cargo_args.extend(bench_params.split())
-            if args.toolchain is not None:
-                # See https://rust-lang.github.io/rustup/overrides.html
-                insert_idx = cargo_args.index("cargo") + 1
-                cargo_args.insert(insert_idx, "+" + args.toolchain)
 
             run(cargo_args, fatal=True, tee=True, cwd=str(bench_path))
 
-    # TODO: report summary table ?
+            # TODO: convert output to json
 
 if __name__ == "__main__":
     main()
