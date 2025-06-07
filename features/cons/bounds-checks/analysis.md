@@ -2,7 +2,7 @@
 
 Parent task: gh-20
 
-Effort: 15h
+Effort: 30h
 
 # Background
 
@@ -161,10 +161,6 @@ in library/core and library/alloc for most important types:
   - HashMap/HashSet
     * can't update because it depends on hashbrown
 
-TODO:
-  - analyze optional asserts in library/core/src/ub_checks.rs
-    (assert_unsafe_precondition and friends)
-
 ## Measurements
 
 TODO:
@@ -172,7 +168,8 @@ TODO:
    * runtime
    * PMU counters (inst count, I$/D$/branch misses)
    * compiler stats
-     + SLP/loop autovec
+     + loop autovec
+       * can just count successful applications via `-Cllvm-args=-debug-only=loop-vectorize` (or `--pass-remarks-missed`)
      + CSE
      + GVN
      + LICM
