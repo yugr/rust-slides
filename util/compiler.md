@@ -18,6 +18,13 @@ $ ./x build -jN library
 ```
 (set `N` according to your quota).
 
+Then add to `bootstrap.toml`
+```
+[llvm]
+assertions = true
+```
+for debug prints in LLVM.
+
 Default settings (in `src/bootstrap/src/core/config/config.rs`) are reasonable:
   - build optimized compiler and std
   - no incremental build
@@ -34,7 +41,7 @@ Disk consumption:
 
 Register toolchain with `rustup`:
 ```
-$ rustup toolchain link stage1 build/host/stage1
+$ rustup toolchain link MY_TOOLCHAIN_NAME build/host/stage1
 ```
 and make it default:
 ```

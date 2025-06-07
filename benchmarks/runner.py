@@ -48,8 +48,7 @@ def run(cmd, **kwargs):
   if isinstance(cmd, str):
     cmd = cmd.split(' ')
 #  print(cmd)
-  p = subprocess.run(cmd, stdin=None, stdout=subprocess.PIPE,
-                       stderr=subprocess.PIPE, **kwargs)
+  p = subprocess.run(cmd, stdin=None, capture_output=True, **kwargs)
   out = p.stdout.decode()
   err = p.stderr.decode()
   if fatal and p.returncode != 0:
