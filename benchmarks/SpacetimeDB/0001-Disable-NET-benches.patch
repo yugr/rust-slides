@@ -1,0 +1,37 @@
+diff --git a/crates/bench/benches/generic.rs b/crates/bench/benches/generic.rs
+index 231171c05..c6e5a0d7d 100644
+--- a/crates/bench/benches/generic.rs
++++ b/crates/bench/benches/generic.rs
+@@ -31,13 +31,13 @@ lazy_static! {
+ fn criterion_benchmark(c: &mut Criterion) {
+     bench_suite::<sqlite::SQLite>(c, true).unwrap();
+     bench_suite::<spacetime_raw::SpacetimeRaw>(c, true).unwrap();
+-    bench_suite::<spacetime_module::SpacetimeModule<Rust>>(c, true).unwrap();
+-    bench_suite::<spacetime_module::SpacetimeModule<Csharp>>(c, true).unwrap();
++//    bench_suite::<spacetime_module::SpacetimeModule<Rust>>(c, true).unwrap();
++//    bench_suite::<spacetime_module::SpacetimeModule<Csharp>>(c, true).unwrap();
+ 
+     bench_suite::<sqlite::SQLite>(c, false).unwrap();
+     bench_suite::<spacetime_raw::SpacetimeRaw>(c, false).unwrap();
+-    bench_suite::<spacetime_module::SpacetimeModule<Rust>>(c, false).unwrap();
+-    bench_suite::<spacetime_module::SpacetimeModule<Csharp>>(c, false).unwrap();
++//    bench_suite::<spacetime_module::SpacetimeModule<Rust>>(c, false).unwrap();
++//    bench_suite::<spacetime_module::SpacetimeModule<Csharp>>(c, false).unwrap();
+ }
+ 
+ #[inline(never)]
+diff --git a/crates/bench/benches/special.rs b/crates/bench/benches/special.rs
+index 73c66dc10..eb8e3da18 100644
+--- a/crates/bench/benches/special.rs
++++ b/crates/bench/benches/special.rs
+@@ -28,8 +28,8 @@ fn criterion_benchmark(c: &mut Criterion) {
+     serialize_benchmarks::<u32_u64_u64>(c);
+     serialize_benchmarks::<u64_u64_u32>(c);
+ 
+-    custom_benchmarks::<Rust>(c);
+-    custom_benchmarks::<Csharp>(c);
++//    custom_benchmarks::<Rust>(c);
++//    custom_benchmarks::<Csharp>(c);
+ }
+ 
+ fn custom_benchmarks<L: ModuleLanguage>(c: &mut Criterion) {

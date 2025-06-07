@@ -62,7 +62,7 @@ benches = {
     "SpacetimeDB": (
         "https://github.com/clockworklabs/SpacetimeDB",
         "69ec80331fe930c8c9160ab256b1858270d791ea",
-        [("crates/bench", "cargo bench --bench generic --bench special --no-fail-fast")]
+        [("crates/bench", "cargo bench --bench generic --bench special")]
     ),
     "bevy": (
         "https://github.com/bevyengine/bevy",
