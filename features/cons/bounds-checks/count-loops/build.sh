@@ -3,12 +3,16 @@
 set -eu
 set -x
 
+LLVM=$HOME/src/rust/baseline/build/x86_64-unknown-linux-gnu/ci-llvm
+
 CXX=g++
 
 CXXFLAGS='-std=c++17 -fno-rtti -fno-exceptions'
+CXXFLAGS="$CXXFLAGS -I$LLVM/include"
 CXXFLAGS="$CXXFLAGS -Wall -Werror"
 CXXFLAGS="$CXXFLAGS -g -O0"
 
-LLVM=$HOME/src/rust/baseline/build/x86_64-unknown-linux-gnu/ci-llvm
+LDFLAGS="-Wl,-rpath=$LLVM/lib"
+LIBS="$LLVM/lib/libLLVM-20-rust-1.87.0-nightly.so"
 
-$CXX $CXXFLAGS main.cpp -I$LLVM/include -Wl,-rpath=$LLVM/lib $LLVM/lib/libLLVM.so.20.1-rust-1.87.0-nightly
+$CXX $CXXFLAGS $LDFLAGS CountLoops.cpp $LIBS -o CountLoops

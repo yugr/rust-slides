@@ -69,6 +69,7 @@ For each performance feature we neeed to provide
       + there may be flags (e.g. for interger overflows) but sometimes may need patch code (e.g. for bounds checks)
         - patch for each feature needs to be implemented in separate branch (in private compiler repo)
       + make sure that found solution works on real examples
+      + note that simply using `RUSTFLAGS` isn't great because they override project settings in `Cargo.toml`
     * collect perf measurements for benchmarks:
      + runtime
      + PMU counters (inst count, I$/D$/branch misses)

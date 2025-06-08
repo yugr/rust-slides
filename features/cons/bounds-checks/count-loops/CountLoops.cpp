@@ -1,5 +1,6 @@
 // Simple tool to count loops with bounds checks in .bc files
 
+#include "llvm/Analysis/BlockFrequencyInfo.h"
 #include "llvm/Analysis/LoopAnalysisManager.h"
 #include "llvm/Bitcode/BitcodeReader.h"
 #include "llvm/IR/DiagnosticInfo.h"
@@ -20,6 +21,8 @@
 #include "llvm/Transforms/Scalar/LoopPassManager.h"
 #include <system_error>
 
+#define DEBUG_TYPE "count-panics"
+
 using namespace llvm;
 
 static cl::list<std::string> InputFilenames(cl::Positional,
@@ -34,10 +37,18 @@ struct LLVMDisDiagnosticHandler : public DiagnosticHandler {
     raw_ostream &OS = errs();
     OS << Prefix << ": ";
     switch (DI.getSeverity()) {
-      case DS_Error: WithColor::error(OS); break;
-      case DS_Warning: WithColor::warning(OS); break;
-      case DS_Remark: OS << "remark: "; break;
-      case DS_Note: WithColor::note(OS); break;
+    case DS_Error:
+      WithColor::error(OS);
+      break;
+    case DS_Warning:
+      WithColor::warning(OS);
+      break;
+    case DS_Remark:
+      OS << "remark: ";
+      break;
+    case DS_Note:
+      WithColor::note(OS);
+      break;
     }
 
     DiagnosticPrinterRawOStream DP(OS);
@@ -50,24 +61,24 @@ struct LLVMDisDiagnosticHandler : public DiagnosticHandler {
   }
 };
 
-class PanicAnalysisPass : public PassInfoMixin<PanicAnalysisPass> {
-  Regex PanicName;
+class PanicCounterPass : public PassInfoMixin<PanicCounterPass> {
+  static Regex PanicName;
 
   bool isBoundsCheckPanic(const Instruction &I) const {
-      auto *CI = dyn_cast<CallInst>(&I);
-      if (!CI)
-        return false;
+    auto *CI = dyn_cast<CallInst>(&I);
+    if (!CI)
+      return false;
 
-      auto *F = CI->getCalledFunction();
-      if (!F)
-        return false;
+    auto *F = CI->getCalledFunction();
+    if (!F)
+      return false;
 
-      if (!PanicName.match(F->getName()))
-        return false;
+    if (!PanicName.match(F->getName()))
+      return false;
 
-      errs() << "Found panic: " << I << "\n";
+    LLVM_DEBUG(errs() << "Found panic: " << I << "\n");
 
-      return true;
+    return true;
   }
 
   bool canPanic(const BasicBlock &BB) const {
@@ -76,27 +87,51 @@ class PanicAnalysisPass : public PassInfoMixin<PanicAnalysisPass> {
   }
 
   bool hasBoundsCheck(const BasicBlock &BB) const {
-    return any_of(successors(&BB), [this](auto *Succ) { return canPanic(*Succ); });
+    return any_of(successors(&BB),
+                  [this](auto *Succ) { return canPanic(*Succ); });
   }
 
 public:
-  PanicAnalysisPass(): PanicName("_ZN4core9panicking18panic_bounds_check|_ZN4core5slice.*_fail") {}
+  PanicCounterPass() {}
 
   PreservedAnalyses run(Loop &L, LoopAnalysisManager &LAM,
                         LoopStandardAnalysisResults &AR, LPMUpdater &U) {
-    if (L.isInnermost()) {
-      // TODO: skip loops w/ cold header ?
-      if (any_of(L.getBlocks(), [this](auto *BB) { return hasBoundsCheck(*BB); })) {
-        outs() << "BC in loop\n";
-      } else {
-        outs() << "No BC in loop\n";
+    const auto PA = PreservedAnalyses::all();
+
+    if (!L.isInnermost())
+      return PA;
+
+    auto *Header = L.getHeader();
+    auto *F = Header->getParent();
+
+    auto &OuterProxy = LAM.getResult<FunctionAnalysisManagerLoopProxy>(L, AR);
+    if (auto *BFI = OuterProxy.getCachedResult<BlockFrequencyAnalysis>(*F)) {
+      const BranchProbability ColdProb(5, 100);
+      auto LoopFreq = BFI->getBlockFreq(Header);
+      auto EntryFreq = BFI->getBlockFreq(&F->getEntryBlock());
+      if (LoopFreq < EntryFreq * ColdProb) {
+        LLVM_DEBUG(errs() << "Skipped cold loop\n");
+        return PA;
       }
     }
-    return PreservedAnalyses::all();
+
+    if (any_of(L.getBlocks(),
+               [this](auto *BB) { return hasBoundsCheck(*BB); })) {
+      outs() << "BC in loop\n";
+    } else {
+      outs() << "No BC in loop\n";
+    }
+
+    return PA;
   }
 };
 
-} // end anon namespace
+Regex PanicCounterPass::PanicName("_ZN4core9panicking"
+                                  "|_ZN4core5slice.*_fail"
+                                  "|_ZN4core6option13expect_failed"
+                                  "|_ZN4core6option13unwrap_failed");
+
+} // namespace
 
 static ExitOnError ExitOnErr;
 
@@ -116,7 +151,9 @@ void processModule(Module &M) {
   PB.crossRegisterProxies(LAM, FAM, CGAM, MAM);
 
   ModulePassManager MPM;
-  MPM.addPass(createModuleToFunctionPassAdaptor(createFunctionToLoopPassAdaptor(PanicAnalysisPass())));
+  MPM = PB.buildO0DefaultPipeline(OptimizationLevel::O0);
+  MPM.addPass(createModuleToFunctionPassAdaptor(
+      createFunctionToLoopPassAdaptor(PanicCounterPass())));
 
   MPM.run(M, MAM);
 }
@@ -154,8 +191,8 @@ int main(int argc, char **argv) {
     for (size_t I = 0; I < N; ++I) {
       BitcodeModule MB = IF.Mods[I];
 
-      auto M = ExitOnErr(
-          MB.getLazyModule(Context, /*MaterializeMetadata*/false, /*SetImporting*/false));
+      auto M = ExitOnErr(MB.getLazyModule(
+          Context, /*MaterializeMetadata*/ false, /*SetImporting*/ false));
       ExitOnErr(M->materializeAll());
 
       processModule(*M);
