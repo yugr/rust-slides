@@ -1,18 +1,27 @@
 #!/bin/sh
 
+# This is very ugly...
+# Basically we want to link against Rust's LLVM but
+# it's linked with `-Wl,-Bsymbolic` flag (too speed up runtime?).
+# 
+# This introduces a known (https://github.com/llvm/llvm-project/issues/50762)
+# subtle bug: IDs of passes in library do not match IDs of passes in client
+# which causes runtime assertions when LLVM fails to find them via `AM::getResult`-like APIs.
+# 
+# We work around this via intermediate dummy library (same way as rustc with rustc_driver library).
+
 set -eu
 set -x
 
-LLVM=$HOME/src/rust/baseline/build/x86_64-unknown-linux-gnu/ci-llvm
+rm -f libCountLoops.so CountLoops
 
 CXX=g++
+CFG=$HOME/src/rust/baseline/build/x86_64-unknown-linux-gnu/ci-llvm/bin/llvm-config
 
-CXXFLAGS='-std=c++17 -fno-rtti -fno-exceptions'
-CXXFLAGS="$CXXFLAGS -I$LLVM/include"
-CXXFLAGS="$CXXFLAGS -Wall -Werror"
-CXXFLAGS="$CXXFLAGS -g -O0"
+CXXFLAGS='-g -O2'
 
-LDFLAGS="-Wl,-rpath=$LLVM/lib"
-LIBS="$LLVM/lib/libLLVM-20-rust-1.87.0-nightly.so"
+LDFLAGS=" $($CFG --ldflags)"
+LIBS="$($CFG --libs)"
 
-$CXX $CXXFLAGS $LDFLAGS CountLoops.cpp $LIBS -o CountLoops
+$CXX $CXXFLAGS -fPIC -shared $($CFG --cxxflags --ldflags) -Wl,-rpath=$($CFG --libdir) CountLoops.cpp $($CFG --libs) -o libCountLoops.so
+$CXX $CXXFLAGS Driver.cpp -Wl,-rpath=$PWD libCountLoops.so -o CountLoops

@@ -158,7 +158,7 @@ void processModule(Module &M) {
   MPM.run(M, MAM);
 }
 
-int main(int argc, char **argv) {
+int libmain(int argc, char **argv) {
   InitLLVM X(argc, argv);
 
   ExitOnErr.setBanner(std::string(argv[0]) + ": error: ");
