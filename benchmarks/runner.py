@@ -31,20 +31,10 @@ def error_if(cond, msg):
   if cond:
     error(msg)
 
-def run(cmd, **kwargs):
+def run(cmd, fatal=False, tee=False, **kwargs):
   """
   Simple wrapper for subprocess.
   """
-  if 'fatal' in kwargs:
-    fatal = kwargs['fatal']
-    del kwargs['fatal']
-  else:
-    fatal = False
-  if 'tee' in kwargs:
-    tee = kwargs['tee']
-    del kwargs['tee']
-  else:
-    tee = False
   if isinstance(cmd, str):
     cmd = cmd.split(' ')
 #  print(cmd)
