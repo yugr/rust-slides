@@ -47,6 +47,8 @@ Bounds checks can be removed via
     * [example](https://www.reddit.com/r/rust/comments/154vowr/comment/jsr0b51/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button)
   - using `unsafe` (`get_unchecked`, `core::hint::unreachable_unchecked` or `core::hint::assert_unchecked`)
     * this is the only way for complex index expressions (e.g. indirect indexing, bitwise operations, etc.)
+    * [example](https://github.com/rust-lang/rust/pull/36072)
+    * [example](https://github.com/pola-rs/polars/pull/7938)
   - using asserts (https://rust.godbolt.org/z/GPMcYd371)
     * [example](https://github.com/rust-random/rand/pull/960)
     * [examples in Nethercote's book](https://nnethercote.github.io/perf-book/bounds-checks.html)
