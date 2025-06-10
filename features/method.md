@@ -82,3 +82,42 @@ For each performance feature we neeed to provide
     * x86/AArch64, normal/ThinLTO/FatLTO, cgu=default/1
 
 Hopefully in many cases all above will be obtained from collected materials.
+
+# Priorities
+
+Mandatory:
+  - cons/abi
+  - cons/arithmetic-checks
+  - cons/autovec
+  - cons/bounds-checks
+  - cons/cgu
+  - cons/copy-elision
+  - cons/data-structs
+  - cons/fastmath
+  - cons/init
+  - cons/panics
+  - cons/placement-new
+  - cons/stdlib
+  - pros/alias
+  - pros/stdlib
+
+Important:
+  - cons/iterators
+  - cons/tls
+  - pros/abi
+  - pros/move
+  - pros/inline
+  - pros/likely
+  - pros/niche
+  - pros/noplt
+  - pros/static
+  - pros/visibility
+
+Nice:
+  - cons/other
+  - cons/probestack
+  - cons/size
+  - pros/gc-sections
+  - pros/long-indices
+  - pros/other
+  - pros/vtable
