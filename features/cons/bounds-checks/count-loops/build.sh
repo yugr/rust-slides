@@ -18,10 +18,10 @@ rm -f libCountLoops.so CountLoops
 CXX=g++
 CFG=$HOME/src/rust/baseline/build/x86_64-unknown-linux-gnu/ci-llvm/bin/llvm-config
 
-CXXFLAGS='-g -O2'
+CXXFLAGS='-g -O0'
 
 LDFLAGS=" $($CFG --ldflags)"
 LIBS="$($CFG --libs)"
 
 $CXX $CXXFLAGS -fPIC -shared $($CFG --cxxflags --ldflags) -Wl,-rpath=$($CFG --libdir) CountLoops.cpp $($CFG --libs) -o libCountLoops.so
-$CXX $CXXFLAGS Driver.cpp -Wl,-rpath=$PWD libCountLoops.so -o CountLoops
+$CXX $CXXFLAGS -x c++ /dev/null -Wl,-rpath=$PWD -L. -lCountLoops -o CountLoops

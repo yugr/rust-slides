@@ -61,6 +61,15 @@ struct LLVMDisDiagnosticHandler : public DiagnosticHandler {
   }
 };
 
+class ForceAnalysesPass : public PassInfoMixin<ForceAnalysesPass> {
+public:
+  PreservedAnalyses run(Function &F, FunctionAnalysisManager &FAM) {
+    auto &BFI = FAM.getResult<BlockFrequencyAnalysis>(F);
+    asm("" :: "r"(&BFI));
+    return PreservedAnalyses::all();
+  }
+};
+
 class PanicCounterPass : public PassInfoMixin<PanicCounterPass> {
   static Regex PanicName;
 
@@ -104,6 +113,8 @@ public:
     auto *Header = L.getHeader();
     auto *F = Header->getParent();
 
+#if 0
+    // TODO: figure out why this crashes or returns NULL
     auto &OuterProxy = LAM.getResult<FunctionAnalysisManagerLoopProxy>(L, AR);
     if (auto *BFI = OuterProxy.getCachedResult<BlockFrequencyAnalysis>(*F)) {
       const BranchProbability ColdProb(5, 100);
@@ -114,6 +125,7 @@ public:
         return PA;
       }
     }
+#endif
 
     if (any_of(L.getBlocks(),
                [this](auto *BB) { return hasBoundsCheck(*BB); })) {
@@ -131,9 +143,7 @@ Regex PanicCounterPass::PanicName("_ZN4core9panicking"
                                   "|_ZN4core6option13expect_failed"
                                   "|_ZN4core6option13unwrap_failed");
 
-} // namespace
-
-static ExitOnError ExitOnErr;
+ExitOnError ExitOnErr;
 
 void processModule(Module &M) {
   LoopAnalysisManager LAM;
@@ -151,14 +161,16 @@ void processModule(Module &M) {
   PB.crossRegisterProxies(LAM, FAM, CGAM, MAM);
 
   ModulePassManager MPM;
-  MPM = PB.buildO0DefaultPipeline(OptimizationLevel::O0);
+  MPM.addPass(createModuleToFunctionPassAdaptor(ForceAnalysesPass()));
   MPM.addPass(createModuleToFunctionPassAdaptor(
       createFunctionToLoopPassAdaptor(PanicCounterPass())));
 
   MPM.run(M, MAM);
 }
 
-int libmain(int argc, char **argv) {
+} // namespace
+
+int main(int argc, char **argv) {
   InitLLVM X(argc, argv);
 
   ExitOnErr.setBanner(std::string(argv[0]) + ": error: ");
