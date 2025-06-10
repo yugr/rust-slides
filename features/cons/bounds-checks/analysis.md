@@ -169,7 +169,8 @@ TODO:
    * PMU counters (inst count, I$/D$/branch misses)
    * compiler stats
      + loop autovec
-       * can just count successful applications via `-Cllvm-args=-debug-only=loop-vectorize` (or `--pass-remarks-missed`)
+       * can just count successful applications via `-Cllvm-args=-debug-only=loop-vectorize`
+       * or optimization remarks but they seem to [not work](https://github.com/rust-lang/rust/issues/96705#issuecomment-2957005389)
      + CSE
      + GVN
      + LICM
