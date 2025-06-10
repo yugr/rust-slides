@@ -115,8 +115,22 @@ which will store `.bc` files in target dir (we need `XXX.rcgu.bc`, without `no-o
 Beware that this [overloads settings in Cargo.toml](https://internals.rust-lang.org/t/we-need-configurably-additive-rustflags/19851)
 and may break build.
 
+Here is example of analysis:
+```
+$ cd oxipng
+
+$ for f in `find -name *.rcgu.bc`; do CountLoops $f; done > results.txt
+
+$ grep -c '^No BC' results.txt
+1619
+
+$ grep -c '^BC' results.txt
+259
+```
+
 TODO:
-  - analyze loops using .bc approach
+  - support frequency checking in CountLoops
+  - apply to more/larger projects (rustc?)
 
 ## Disabling the check
 
