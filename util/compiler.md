@@ -37,6 +37,25 @@ Disk consumption:
   - sources: 750M
   - release build: 10G
 
+# Rebuilding LLVM
+
+To build LLVM for Rust add
+```
+[llvm]
+download-ci-llvm = false
+link-shared = true
+targets = "X86"
+experimental-targets = ""
+```
+and either
+```
+release-debuginfo = true
+```
+or
+```
+optimize = false
+```
+
 # Using built compiler
 
 Register toolchain with `rustup`:
