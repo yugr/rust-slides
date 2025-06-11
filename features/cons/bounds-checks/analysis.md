@@ -119,13 +119,22 @@ Here is example of analysis:
 ```
 $ cd oxipng
 
-$ for f in `find -name *.rcgu.bc`; do CountLoops $f; done > results.txt
+# For ThinLTO builds need
+#   find target-baseline -name *.thin-lto-after-pm.bc
 
+$ RUSTFLAGS='-Csave-temps' cargo +baseline b --target-dir=target-baseline --release
+$ for f in `find target-baseline -name *.rcgu.bc`; do ~/src/rust/llvm-tool/CountLoops $f; done > results.txt
 $ grep -c '^No BC' results.txt
 1619
-
 $ grep -c '^BC' results.txt
 259
+
+$ RUSTFLAGS='-Csave-temps' cargo +bounds b --target-dir=target-bounds --release
+$ for f in `find target-bounds -name *.rcgu.bc`; do ~/src/rust/llvm-tool/CountLoops $f; done > results.txt
+$ grep -c '^No BC' results.txt
+1710
+$ grep -c '^BC' results.txt
+189
 ```
 
 TODO:
@@ -184,7 +193,7 @@ TODO:
    * compiler stats
      + loop autovec
        * can just count successful applications via `-Cllvm-args=-debug-only=loop-vectorize`
-       * or optimization remarks but they seem to [not work](https://github.com/rust-lang/rust/issues/96705#issuecomment-2957005389)
+       * or optimization remarks when/if they are [fixed](https://github.com/rust-lang/rust/issues/142375)
      + CSE
      + GVN
      + LICM
