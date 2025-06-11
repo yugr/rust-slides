@@ -11,6 +11,7 @@ import subprocess
 import sys
 from dataclasses import dataclass
 from collections.abc import Callable
+import json
 
 me = os.path.basename(__file__)
 
@@ -47,27 +48,46 @@ class Bench:
     launch_info: list[tuple[str, str]]
     output_parser: Callable[str, str]
 
+
 def parser_stub(bench_output: str) -> str:
     return bench_output
+
+
+def criterion_parser(bench_output: str) -> str:
+    bench_runtimes = {}
+    lines = bench_output.splitlines()
+    for line_idx, line in enumerate(lines):
+        pieces = [word.strip() for word in line.split()]
+        if pieces and pieces[0] == "time:":
+            if lines[line_idx - 1].strip() == "change:":
+                continue
+            runtime = float(pieces[3])
+            units = pieces[4]
+            name = lines[line_idx - 1].strip()
+            if units == 'µs':
+                units = 'us'
+            bench_runtimes[name] = (runtime, units)
+    return json.dumps(bench_runtimes)
+
 
 benches = {
     "SpacetimeDB": Bench(
         "https://github.com/clockworklabs/SpacetimeDB",
         "69ec80331fe930c8c9160ab256b1858270d791ea",
         [("crates/bench", "cargo bench --bench generic --bench special")],
-        parser_stub,
+        criterion_parser,
     ),
     "bevy": Bench(
         "https://github.com/bevyengine/bevy",
         "de79d3f363e292489f2dbfdd22b6a9b93e7672ea",
         [("benches", "cargo bench")],
-        parser_stub,
+        criterion_parser,
     ),
     "meilisearch": Bench(
         "https://github.com/meilisearch/meilisearch",
         "8a0bf24ed5c0b49cb788a57ac19eaa43076962bf",
         [("", "cargo bench")],
-        parser_stub,
+        criterion_parser,
     ),
     "oxipng": Bench(
         "https://github.com/shssoichiro/oxipng",
@@ -79,37 +99,37 @@ benches = {
         "https://github.com/tokio-rs/tokio",
         "9563707aaa73a802fa4d3c51c12869a037641070",
         [("", "cargo bench")],
-        parser_stub,
+        criterion_parser,
     ),
     "ruff": Bench(
         "https://github.com/astral-sh/ruff",
         "b302d89da3325c705f87a8343a16aad1723b67ab",
         [("crates/ruff_benchmark", "cargo bench")],
-        parser_stub,
+        criterion_parser,
     ),
     "rav1e": Bench(
         "https://github.com/xiph/rav1e",
         "6ee1f3a678deb9ccef2e3345168e39cd53e5d1a6",
         [("", "cargo criterion --features=bench")],
-        parser_stub,
+        criterion_parser,
     ),
     "uv": Bench(
         "https://github.com/astral-sh/uv",
         "dc5b3762f38a8e47b53bec9cc3cefb71e4aef55c",
         [("", "cargo bench --no-fail-fast")],
-        parser_stub,
+        criterion_parser,
     ),
     "veloren": Bench(
         "https://github.com/veloren/veloren",
         "8598d3d9c5c3a9e6d2366cfe882b479ce92a7bcc",
         [("", "cargo bench")],
-        parser_stub,
+        criterion_parser,
     ),
     "zed": Bench(
         "https://github.com/zed-industries/zed",
         "83d513aef48f6b4b56bad96740a02f5ef86a0a8c",
         [("crates/rope", "cargo bench"), ("crates/extension_host", "cargo bench")],
-        parser_stub,
+        criterion_parser,
     ),
 }
 
@@ -256,7 +276,11 @@ def main():
             cargo_args = args.run_options.split()
             cargo_args.extend(bench_params.split())
 
-            run(cargo_args, fatal=True, tee=True, cwd=str(bench_path))
+            retcode, out, err = run(
+                cargo_args, fatal=True, tee=False, cwd=str(bench_path)
+            )
+            json = bench.output_parser(out)
+            print(json)
 
             # TODO: convert output to json
 
