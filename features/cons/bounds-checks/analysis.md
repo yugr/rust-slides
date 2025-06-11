@@ -124,17 +124,17 @@ $ cd oxipng
 
 $ RUSTFLAGS='-Csave-temps' cargo +baseline b --target-dir=target-baseline --release
 $ for f in `find target-baseline -name *.rcgu.bc`; do ~/src/rust/llvm-tool/CountLoops $f; done > results.txt
-$ grep -c '^No BC' results.txt
-1619
-$ grep -c '^BC' results.txt
-259
+$ grep -c 'Loop may NOT panic' results.txt
+1446
+$ grep -c 'Loop may panic' results.txt
+132
 
 $ RUSTFLAGS='-Csave-temps' cargo +bounds b --target-dir=target-bounds --release
 $ for f in `find target-bounds -name *.rcgu.bc`; do ~/src/rust/llvm-tool/CountLoops $f; done > results.txt
-$ grep -c '^No BC' results.txt
-1710
-$ grep -c '^BC' results.txt
-189
+$ grep -c 'Loop may NOT panic' results.txt
+1501
+$ grep -c 'Loop may panic' results.txt
+66
 ```
 
 TODO:

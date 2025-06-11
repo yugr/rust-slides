@@ -1,4 +1,4 @@
-// Simple tool to count loops with bounds checks in .bc files
+// Simple tool to count loops with panicking checks in .bc files
 
 #include "llvm/Analysis/BlockFrequencyInfo.h"
 #include "llvm/Analysis/LoopAnalysisManager.h"
@@ -25,10 +25,12 @@
 
 using namespace llvm;
 
-static cl::list<std::string> InputFilenames(cl::Positional,
-                                            cl::desc("[input bitcode]..."));
-
 namespace {
+
+cl::opt<bool> SkipColds("skip-colds", cl::desc("Skip cold loops"), cl::Hidden);
+
+cl::list<std::string> InputFilenames(cl::Positional,
+                                     cl::desc("[input bitcode]..."));
 
 struct LLVMDisDiagnosticHandler : public DiagnosticHandler {
   char *Prefix;
@@ -61,19 +63,10 @@ struct LLVMDisDiagnosticHandler : public DiagnosticHandler {
   }
 };
 
-class ForceAnalysesPass : public PassInfoMixin<ForceAnalysesPass> {
-public:
-  PreservedAnalyses run(Function &F, FunctionAnalysisManager &FAM) {
-    auto &BFI = FAM.getResult<BlockFrequencyAnalysis>(F);
-    asm("" :: "r"(&BFI));
-    return PreservedAnalyses::all();
-  }
-};
-
 class PanicCounterPass : public PassInfoMixin<PanicCounterPass> {
   static Regex PanicName;
 
-  bool isBoundsCheckPanic(const Instruction &I) const {
+  bool isPanic(const Instruction &I) const {
     auto *CI = dyn_cast<CallInst>(&I);
     if (!CI)
       return false;
@@ -90,14 +83,15 @@ class PanicCounterPass : public PassInfoMixin<PanicCounterPass> {
     return true;
   }
 
-  bool canPanic(const BasicBlock &BB) const {
+  bool doesPanic(const BasicBlock &BB) const {
+    // TODO: post-dominated by panic ?
     return any_of(BB.instructionsWithoutDebug(),
-                  [this](auto &I) { return isBoundsCheckPanic(I); });
+                  [this](auto &I) { return isPanic(I); });
   }
 
-  bool hasBoundsCheck(const BasicBlock &BB) const {
+  bool mayPanic(const BasicBlock &BB) const {
     return any_of(successors(&BB),
-                  [this](auto *Succ) { return canPanic(*Succ); });
+                  [this](auto *Succ) { return doesPanic(*Succ); });
   }
 
 public:
@@ -113,25 +107,24 @@ public:
     auto *Header = L.getHeader();
     auto *F = Header->getParent();
 
-#if 0
-    // TODO: figure out why this crashes or returns NULL
-    auto &OuterProxy = LAM.getResult<FunctionAnalysisManagerLoopProxy>(L, AR);
-    if (auto *BFI = OuterProxy.getCachedResult<BlockFrequencyAnalysis>(*F)) {
-      const BranchProbability ColdProb(5, 100);
-      auto LoopFreq = BFI->getBlockFreq(Header);
-      auto EntryFreq = BFI->getBlockFreq(&F->getEntryBlock());
-      if (LoopFreq < EntryFreq * ColdProb) {
+    if (SkipColds) {
+      assert(AR.BFI && "Missing BFI");
+
+      auto LoopFreq = AR.BFI->getBlockFreq(Header);
+      auto EntryFreq = AR.BFI->getBlockFreq(&F->getEntryBlock());
+      LLVM_DEBUG(auto Ratio =
+                     (double)LoopFreq.getFrequency() / EntryFreq.getFrequency();
+                 errs() << "Loop " << L.getName() << ": " << Ratio << "\n";);
+      if (LoopFreq <= EntryFreq) {
         LLVM_DEBUG(errs() << "Skipped cold loop\n");
         return PA;
       }
     }
-#endif
 
-    if (any_of(L.getBlocks(),
-               [this](auto *BB) { return hasBoundsCheck(*BB); })) {
-      outs() << "BC in loop\n";
+    if (any_of(L.getBlocks(), [this](auto *BB) { return mayPanic(*BB); })) {
+      outs() << "Loop may panic\n";
     } else {
-      outs() << "No BC in loop\n";
+      outs() << "Loop may NOT panic\n";
     }
 
     return PA;
@@ -161,9 +154,15 @@ void processModule(Module &M) {
   PB.crossRegisterProxies(LAM, FAM, CGAM, MAM);
 
   ModulePassManager MPM;
-  MPM.addPass(createModuleToFunctionPassAdaptor(ForceAnalysesPass()));
   MPM.addPass(createModuleToFunctionPassAdaptor(
-      createFunctionToLoopPassAdaptor(PanicCounterPass())));
+      RequireAnalysisPass<BlockFrequencyAnalysis, Function>()));
+  MPM.addPass(createModuleToFunctionPassAdaptor(createFunctionToLoopPassAdaptor(
+      PanicCounterPass(), /*UseMemorySSA*/ false,
+      /*UseBlockFrequencyInfo*/ true)));
+
+  // Fake profile data because otherwise AR.BFI will not be set...
+  for (auto &F : M)
+    F.setEntryCount(Function::ProfileCount(100, Function::PCT_Real));
 
   MPM.run(M, MAM);
 }
