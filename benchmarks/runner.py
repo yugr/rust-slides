@@ -14,26 +14,30 @@ from collections.abc import Callable
 
 me = os.path.basename(__file__)
 
+
 def warn(msg):
-  """
-  Print nicely-formatted warning message.
-  """
-  sys.stderr.write('%s: warning: %s\n' % (me, msg))
+    """
+    Print nicely-formatted warning message.
+    """
+    sys.stderr.write("%s: warning: %s\n" % (me, msg))
+
 
 def error(msg):
-  """
-  Print nicely-formatted error message and exit.
-  """
-  sys.stderr.write('%s: error: %s\n' % (me, msg))
-  sys.exit(1)
+    """
+    Print nicely-formatted error message and exit.
+    """
+    sys.stderr.write("%s: error: %s\n" % (me, msg))
+    sys.exit(1)
+
 
 def warn_if(cond, msg):
-  if cond:
-    warn(msg)
+    if cond:
+        warn(msg)
+
 
 def error_if(cond, msg):
-  if cond:
-    error(msg)
+    if cond:
+        error(msg)
 
 
 @dataclass
@@ -129,15 +133,18 @@ def run(cmd, fatal=False, tee=False, **kwargs):
 
 
 def main():
-    class Formatter(argparse.ArgumentDefaultsHelpFormatter, argparse.RawDescriptionHelpFormatter): pass
-    parser = argparse.ArgumentParser(description="Simple benchmark runner",
-                                     formatter_class=Formatter)
+    class Formatter(
+        argparse.ArgumentDefaultsHelpFormatter, argparse.RawDescriptionHelpFormatter
+    ):
+        pass
+
+    parser = argparse.ArgumentParser(
+        description="Simple benchmark runner", formatter_class=Formatter
+    )
     parser.add_argument(
         "-t", "--toolchain", help="toolchain version to use", default=None
     )
-    parser.add_argument(
-        "-p", "--path", help="path to benchmark repos", default="./"
-    )
+    parser.add_argument("-p", "--path", help="path to benchmark repos", default="./")
     parser.add_argument(
         "-b",
         "--build-only",
@@ -190,7 +197,7 @@ def main():
 
     bench_names = sorted(benches.keys())
     if args.only is not None:
-        bench_names = args.only.split(',')
+        bench_names = args.only.split(",")
         unknown_names = [name for name in bench_names if name not in benches.keys()]
         if unknown_names:
             error(f"unknown benchmarks {', '.join(unknown_names)}")
@@ -252,6 +259,7 @@ def main():
             run(cargo_args, fatal=True, tee=True, cwd=str(bench_path))
 
             # TODO: convert output to json
+
 
 if __name__ == "__main__":
     main()
