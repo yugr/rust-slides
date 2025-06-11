@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+from __future__ import annotations
+
 import argparse
 import glob
 import os
@@ -7,6 +9,8 @@ import os.path
 from pathlib import Path
 import subprocess
 import sys
+from dataclasses import dataclass
+from collections.abc import Callable
 
 me = os.path.basename(__file__)
 
@@ -31,76 +35,98 @@ def error_if(cond, msg):
   if cond:
     error(msg)
 
-def run(cmd, fatal=False, tee=False, **kwargs):
-  """
-  Simple wrapper for subprocess.
-  """
-  if isinstance(cmd, str):
-    cmd = cmd.split(' ')
-#  print(cmd)
-  p = subprocess.run(cmd, stdin=None, capture_output=True, **kwargs)
-  out = p.stdout.decode()
-  err = p.stderr.decode()
-  if fatal and p.returncode != 0:
-    error("'%s' failed:\n%s%s" % (' '.join(cmd), out, err))
-  if tee:
-    sys.stdout.write(out)
-    sys.stderr.write(err)
-  return p.returncode, out, err
+
+@dataclass
+class Bench:
+    repo_link: str
+    commit: str
+    launch_info: list[tuple[str, str]]
+    output_parser: Callable[str, str]
+
+def parser_stub(bench_output: str) -> str:
+    return bench_output
 
 benches = {
-    "SpacetimeDB": (
+    "SpacetimeDB": Bench(
         "https://github.com/clockworklabs/SpacetimeDB",
         "69ec80331fe930c8c9160ab256b1858270d791ea",
-        [("crates/bench", "cargo bench --bench generic --bench special")]
+        [("crates/bench", "cargo bench --bench generic --bench special")],
+        parser_stub,
     ),
-    "bevy": (
+    "bevy": Bench(
         "https://github.com/bevyengine/bevy",
         "de79d3f363e292489f2dbfdd22b6a9b93e7672ea",
-        [("benches", "cargo bench")]
+        [("benches", "cargo bench")],
+        parser_stub,
     ),
-    "meilisearch": (
+    "meilisearch": Bench(
         "https://github.com/meilisearch/meilisearch",
         "8a0bf24ed5c0b49cb788a57ac19eaa43076962bf",
-        [("", "cargo bench")]
+        [("", "cargo bench")],
+        parser_stub,
     ),
-    "oxipng": (
+    "oxipng": Bench(
         "https://github.com/shssoichiro/oxipng",
         "788997c437319995e55030a92ed8294dfcd4c87a",
-        [("", "cargo bench")]
+        [("", "cargo bench")],
+        parser_stub,
     ),
-    "tokio": (
+    "tokio": Bench(
         "https://github.com/tokio-rs/tokio",
         "9563707aaa73a802fa4d3c51c12869a037641070",
-        [("", "cargo bench")]
+        [("", "cargo bench")],
+        parser_stub,
     ),
-    "ruff": (
+    "ruff": Bench(
         "https://github.com/astral-sh/ruff",
         "b302d89da3325c705f87a8343a16aad1723b67ab",
-        [("crates/ruff_benchmark", "cargo bench")]
+        [("crates/ruff_benchmark", "cargo bench")],
+        parser_stub,
     ),
-    "rav1e": (
+    "rav1e": Bench(
         "https://github.com/xiph/rav1e",
         "6ee1f3a678deb9ccef2e3345168e39cd53e5d1a6",
-        [("", "cargo criterion --features=bench")]
+        [("", "cargo criterion --features=bench")],
+        parser_stub,
     ),
-    "uv": (
+    "uv": Bench(
         "https://github.com/astral-sh/uv",
         "dc5b3762f38a8e47b53bec9cc3cefb71e4aef55c",
-        [("", "cargo bench --no-fail-fast")]
+        [("", "cargo bench --no-fail-fast")],
+        parser_stub,
     ),
-    "veloren": (
+    "veloren": Bench(
         "https://github.com/veloren/veloren",
         "8598d3d9c5c3a9e6d2366cfe882b479ce92a7bcc",
-        [("", "cargo bench")]
+        [("", "cargo bench")],
+        parser_stub,
     ),
-    "zed": (
+    "zed": Bench(
         "https://github.com/zed-industries/zed",
         "83d513aef48f6b4b56bad96740a02f5ef86a0a8c",
-        [("crates/rope", "cargo bench"),
-         ("crates/extension_host", "cargo bench")]
+        [("crates/rope", "cargo bench"), ("crates/extension_host", "cargo bench")],
+        parser_stub,
     ),
 }
+
+
+def run(cmd, fatal=False, tee=False, **kwargs):
+    """
+    Simple wrapper for subprocess.
+    """
+    if isinstance(cmd, str):
+        cmd = cmd.split(" ")
+    #  print(cmd)
+    p = subprocess.run(cmd, stdin=None, capture_output=True, **kwargs)
+    out = p.stdout.decode()
+    err = p.stderr.decode()
+    if fatal and p.returncode != 0:
+        error("'%s' failed:\n%s%s" % (" ".join(cmd), out, err))
+    if tee:
+        sys.stdout.write(out)
+        sys.stderr.write(err)
+    return p.returncode, out, err
+
 
 def main():
     class Formatter(argparse.ArgumentDefaultsHelpFormatter, argparse.RawDescriptionHelpFormatter): pass
@@ -155,7 +181,8 @@ def main():
 
     os.environ["CARGO_INCREMENTAL"] = "0"
     # See https://rust-lang.github.io/rustup/overrides.html
-    os.environ["RUSTUP_TOOLCHAIN"] = args.toolchain
+    if args.toolchain:
+        os.environ["RUSTUP_TOOLCHAIN"] = args.toolchain
 
     # Rust is always line-buffered so mimic this here to preserve order
     sys.stdout.reconfigure(line_buffering=True)
@@ -172,25 +199,29 @@ def main():
 
     if args.clone:
         for bench_name in bench_names:
-            bench_repo, bench_branch, _ = benches[bench_name]
-            print(f"Cloning {bench_repo}...")
-            bench_path = base_path / os.path.basename(bench_repo)
+            bench = benches[bench_name]
+            print(f"Cloning {bench.repo_link}...")
+            bench_path = base_path / os.path.basename(bench.repo_link)
             if not bench_path.exists():
-                run(f"git clone {bench_repo}", cwd=str(base_path), fatal=True)
-                run(f"git checkout {bench_branch}", cwd=str(bench_path), fatal=True)
-                for bench_patch in sorted(glob.glob(str(patch_root / bench_name / "*.patch"))):
-                    run(f"patch -p1 -i {bench_patch}", fatal=True, cwd=str(bench_path))
+                run(f"git clone {bench.repo_link}", cwd=str(base_path), fatal=True)
+                run(f"git checkout {bench.commit}", cwd=str(bench_path), fatal=True)
+                for bench_patch in sorted(
+                    glob.glob(str(patch_root / bench_name / "*.patch"))
+                ):
+                    run(f"patch -p1 -i {Path(bench_patch).absolute()}", fatal=True, cwd=str(bench_path))
 
     # Build
 
     for bench_name in bench_names:
-        bench_repo, _, bench_cmds = benches[bench_name]
-        for bench_subdir, bench_params in bench_cmds:
-            bench_build_path = base_path / os.path.basename(bench_repo) / bench_subdir
+        bench = benches[bench_name]
+        for bench_subdir, bench_params in bench.launch_info:
+            bench_build_path = base_path / os.path.basename(bench.repo_link) / bench_subdir
             print(f"Building {bench_build_path}...")
 
-            error_if(not bench_build_path.exists(),
-                     f"directory {bench_build_path} does not exist, did you forget to clone?")
+            error_if(
+                not bench_build_path.exists(),
+                f"directory {bench_build_path} does not exist, did you forget to clone?",
+            )
 
             cargo_args = bench_params.split()
 
@@ -210,10 +241,10 @@ def main():
     # Run
 
     for bench_name in bench_names:
-        bench_repo, _, bench_cmds = benches[bench_name]
+        bench = benches[bench_name]
         print(f"Benching {bench_name}...")
-        for bench_subdir, bench_params in bench_cmds:
-            bench_path = base_path / os.path.basename(bench_repo) / bench_subdir
+        for bench_subdir, bench_params in bench.launch_info:
+            bench_path = base_path / os.path.basename(bench.repo_link) / bench_subdir
 
             cargo_args = args.run_options.split()
             cargo_args.extend(bench_params.split())
