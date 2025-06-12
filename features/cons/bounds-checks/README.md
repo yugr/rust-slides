@@ -154,7 +154,7 @@ long ago.
 
 # TODO
 
-- Disable index checks in compiler and compare perf of large and/or performance sensitive projects
+- [X] Disable index checks in compiler and compare perf of large and/or performance sensitive projects
   * arrays, slices, string slices, Vecs, Strings
   * can only do best-effort here because there are a lot of custom bounds checks (grep for `panic!`/`assert!`/`assert_unchecked` in std)
   * patch to disable checks: https://blog.readyset.io/bounds-checks
@@ -162,10 +162,12 @@ long ago.
   * also some info [here](https://users.rust-lang.org/t/a-way-to-turn-off-all-bounds-checks-for-exploring-optimisation-potential/117528/4)
   * disables [in stdlib](https://github.com/rust-lang/rust/pull/119440)
   * [unchecked_math](https://github.com/rust-lang/rfcs/issues/2508) feature may be relevant
-- Can we somehow measure how often compiler is able to remove index checks from loops ?
+- [X] Can we somehow measure how often compiler is able to remove index checks from loops ?
   * Probably not, removal is done deep in several LLVM opt passes
     when BCs can't be identified
-- Verify strange off-by-one behaviour of bounds checks (maybe a bug?) (https://users.rust-lang.org/t/rust-vs-c-vs-go-runtime-speed-comparison/104107/20)
+- [] Verify strange off-by-one behaviour of bounds checks [here](https://users.rust-lang.org/t/rust-vs-c-vs-go-runtime-speed-comparison/104107/20)
+  * maybe a bug?
+  * low prio
 
 # Combining multiple checks not optimized
 

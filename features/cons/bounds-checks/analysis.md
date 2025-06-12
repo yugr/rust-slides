@@ -138,8 +138,7 @@ $ grep -c 'Loop may panic' results.txt
 ```
 
 TODO:
-  - support frequency checking in CountLoops
-  - apply to more/larger projects (rustc?)
+  - apply to larger project(s) e.g. rustc
 
 ## Disabling the check
 
@@ -190,10 +189,11 @@ TODO:
   - collect perf measurements for benchmarks:
    * runtime
    * PMU counters (inst count, I$/D$/branch misses)
-   * compiler stats
-     + loop autovec
-       * can just count successful applications via `-Cllvm-args=-debug-only=loop-vectorize`
-       * or optimization remarks when/if they are [fixed](https://github.com/rust-lang/rust/issues/142375)
-     + CSE
-     + GVN
-     + LICM
+  - collect compiler stats:
+     + can count successful applications via `-Cllvm-args=-debug-only=...`
+     + can count optimization remarks once they are [fixed](https://github.com/rust-lang/rust/issues/142375)
+     + stats:
+       - loop autovec (`-debug-only=loop-vectorize`)
+       - CSE
+       - GVN
+       - LICM
