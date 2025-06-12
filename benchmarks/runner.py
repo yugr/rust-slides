@@ -41,12 +41,7 @@ class Bench:
     repo_link: str
     commit: str
     launch_info: list[tuple[str, str]]
-    output_parser: Callable[str, str]
-
-
-def parser_stub(bench_output: str) -> str:
-    warn("parsing output of this benchmark is not implemented yet")
-    return ""
+    output_parser: Callable[str, dict]
 
 
 def fix_units(units):
@@ -68,24 +63,53 @@ def criterion_parser(bench_output: str) -> str:
             if i == 0 or lines[i - 1].strip() == "change:":
                 continue
             name = lines[i - 1]
+            full_line = lines[i - 1] + " " + line
         else:
             # lexer/pydantic/types.py time:   [204.06 µs 204.31 µs 204.62 µs]
-            match = re.match(r"^(\S+)\s+(.*)", line)
-            name = match[1]
-            line = match[2]
+            full_line = line
 
+        match = re.match(r"(.+?)\s+time:\s*(\[.*)", full_line)
+        error_if(match is None, f"failed to parse time report:\n{line}")
+        name = match[1]
+        data = match[2]
+
+        data_match = re.match(
+            r"^\[([0-9.]+) ([a-zµ]+) ([0-9.]+) ([a-zµ]+) ([0-9.]+) ([a-zµ]+)\]", data
+        )
+        error_if(data_match is None, f"failed to parse time report:\n{line}")
+        bench_runtimes[name] = {
+            "lb": (float(data_match[1]), fix_units(data_match[2])),
+            "avg": (float(data_match[3]), fix_units(data_match[4])),
+            "ub": (float(data_match[5]), fix_units(data_match[6])),
+        }
+
+    return bench_runtimes
+
+
+def oxipng_parser(bench_output: str) -> str:
+    bench_runtimes = {}
+    lines = bench_output.splitlines()
+    for line in lines:
         match = re.match(
-            r"^time:\s+\[([0-9.]+) ([a-zµ]+) ([0-9.]+) ([a-zµ]+) ([0-9.]+) ([a-zµ]+)\]",
+            r"^test\s+(\S+)\s+\.\.\.\s+bench:\s+([0-9,.]+) ([a-z]+)/iter \(\+/- ([0-9,.]+)",
             line,
         )
 
+        if match is None:
+            continue
+
+        name = match[1]
+        time = float(match[2].replace(",", ""))
+        units = match[3]
+        diff = float(match[4].replace(",", ""))
+
         bench_runtimes[name] = {
-            "lb": (float(match[1]), fix_units(match[2])),
-            "avg": (float(match[3]), fix_units(match[4])),
-            "ub": (float(match[5]), fix_units(match[6])),
+            "lb": (time - diff, units),
+            "avg": (time, units),
+            "ub": (time + diff, units),
         }
 
-    return json.dumps(bench_runtimes, indent=4, sort_keys=True)
+    return bench_runtimes
 
 
 benches = {
@@ -111,7 +135,7 @@ benches = {
         "https://github.com/shssoichiro/oxipng",
         "788997c437319995e55030a92ed8294dfcd4c87a",
         [("", "cargo bench")],
-        parser_stub,
+        oxipng_parser,
     ),
     "tokio": Bench(
         "https://github.com/tokio-rs/tokio",
@@ -314,7 +338,7 @@ def main():
             )
             json = bench.output_parser(out)
             with (base_path / f"{bench_name}_{i}.json").open("w") as f:
-                f.write(json)
+                f.write(json.dumps(bench_runtimes, indent=4, sort_keys=True))
 
 
 if __name__ == "__main__":
