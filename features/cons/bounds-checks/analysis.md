@@ -84,7 +84,6 @@ TODO:
 
 We should measure reduction of panics in our benchmarks:
   - overall count
-  - functions with panics (?)
   - loops with panics
 
 Overall count may be detected by grepping disasm
@@ -185,15 +184,67 @@ in library/core and library/alloc for most important types:
 
 ## Measurements
 
+### Static estimates
+
+We can measure how bounds checking hurts most common optimizations.
+
+Ideally we should be able to count optimization remarks but they [do not work](https://github.com/rust-lang/rust/issues/142375)
+and same goes for [compiler stats](https://github.com/rust-lang/rust/issues/142266).
+So below we use `-Cllvm-args=-debug-only=...` instead.
+
+Tests were done for oxipng project.
+
+Loop vectorizer:
+```
+$ export RUSTFLAGS='-Cllvm-args=-debug-only=loop-vectorize -Ctarget-cpu=native'
+$ cargo clean
+$ cargo +baseline b -j1 --release |& grep -c 'LV: Vectorizing'
+85
+$ cargo clean
+$ cargo +bounds b -j1 --release |& grep -c 'LV: Vectorizing'
+87
+```
+
+LICM:
+```
+$ export RUSTFLAGS='-Cllvm-args=-debug-only=licm'
+$ cargo clean
+$ cargo +baseline b -j1 --release |& grep -c 'LICM \(hoist\|sink\)ing'
+27714
+$ cargo clean
+$ cargo +bounds b -j1 --release |& grep -c 'LICM \(hoist\|sink\)ing'
+27957
+```
+
+GVN:
+```
+$ export RUSTFLAGS='-Cllvm-args=-debug-only=gvn'
+$ cargo clean
+$ cargo +baseline b -j1 --release |& grep -c 'GVN removed'
+8508
+$ cargo clean
+$ cargo +bounds b -j1 --release |& grep -c 'GVN removed'
+7688
+```
+
+CSE:
+```
+$ export RUSTFLAGS='-Cllvm-args=-debug-only=early-cse'
+$ cargo clean
+$ cargo +baseline b -j1 --release |& grep -c 'EarlyCSE CSE'
+20820
+$ cargo clean
+$ cargo +bounds b -j1 --release |& grep -c 'EarlyCSE CSE'
+20724
+```
+
+TODO:
+  - apply to larger project(s) e.g. rustc
+  - why GVN/CSE degrade? perhaps some preceeding opts should be checked
+
+### Runtime improvements
+
 TODO:
   - collect perf measurements for benchmarks:
    * runtime
    * PMU counters (inst count, I$/D$/branch misses)
-  - collect compiler stats:
-     + can count successful applications via `-Cllvm-args=-debug-only=...`
-     + can count optimization remarks once they are [fixed](https://github.com/rust-lang/rust/issues/142375)
-     + stats:
-       - loop autovec (`-debug-only=loop-vectorize`)
-       - CSE
-       - GVN
-       - LICM
