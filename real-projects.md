@@ -21,6 +21,5 @@ in critical spots (via unsafe, etc.).
 Small but high-performant and important projects
 
 - Serde
-- tokio
-- regex/ripgrep
+- BurntSushi/regex
 - nalgebra
