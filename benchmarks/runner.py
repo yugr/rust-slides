@@ -12,21 +12,16 @@ import sys
 from dataclasses import dataclass
 from collections.abc import Callable
 import json
+import re
 
 me = os.path.basename(__file__)
 
 
 def warn(msg):
-    """
-    Print nicely-formatted warning message.
-    """
     sys.stderr.write("%s: warning: %s\n" % (me, msg))
 
 
 def error(msg):
-    """
-    Print nicely-formatted error message and exit.
-    """
     sys.stderr.write("%s: error: %s\n" % (me, msg))
     sys.exit(1)
 
@@ -50,24 +45,47 @@ class Bench:
 
 
 def parser_stub(bench_output: str) -> str:
-    return bench_output
+    warn("parsing output of this benchmark is not implemented yet")
+    return ""
+
+
+def fix_units(units):
+    return "us" if units == "µs" else units
 
 
 def criterion_parser(bench_output: str) -> str:
     bench_runtimes = {}
     lines = bench_output.splitlines()
-    for line_idx, line in enumerate(lines):
-        pieces = [word.strip() for word in line.split()]
-        if pieces and pieces[0] == "time:":
-            if lines[line_idx - 1].strip() == "change:":
+    for i, line in enumerate(lines):
+        line = line.strip()
+
+        if not re.search(r"\btime: ", line):
+            continue
+
+        if line.startswith("time: "):
+            # lexer/unicode/pypinyin.py
+            #              time:   [23.196 µs 23.316 µs 23.452 µs]
+            if i == 0 or lines[i - 1].strip() == "change:":
                 continue
-            runtime = float(pieces[3])
-            units = pieces[4]
-            name = lines[line_idx - 1].strip()
-            if units == 'µs':
-                units = 'us'
-            bench_runtimes[name] = (runtime, units)
-    return json.dumps(bench_runtimes)
+            name = lines[i - 1]
+        else:
+            # lexer/pydantic/types.py time:   [204.06 µs 204.31 µs 204.62 µs]
+            match = re.match(r"^(\S+)\s+(.*)", line)
+            name = match[1]
+            line = match[2]
+
+        match = re.match(
+            r"^time:\s+\[([0-9.]+) ([a-zµ]+) ([0-9.]+) ([a-zµ]+) ([0-9.]+) ([a-zµ]+)\]",
+            line,
+        )
+
+        bench_runtimes[name] = {
+            "lb": (float(match[1]), fix_units(match[2])),
+            "avg": (float(match[3]), fix_units(match[4])),
+            "ub": (float(match[5]), fix_units(match[6])),
+        }
+
+    return json.dumps(bench_runtimes, indent=4, sort_keys=True)
 
 
 benches = {
@@ -184,6 +202,12 @@ def main():
         help="limit build parallelism",
     )
     parser.add_argument(
+        "-q",
+        "--quiet",
+        help="do not print bench output",
+        default=False,
+    )
+    parser.add_argument(
         "-r",
         "--run-options",
         help="run under wrapper",
@@ -202,9 +226,10 @@ def main():
     )
     args = parser.parse_args()
 
-    base_path = Path(os.path.abspath(args.path))
+    base_path = Path(args.path).absolute()
     os.makedirs(str(base_path), exist_ok=True)
-    patch_root = Path(os.path.dirname(__file__))
+
+    patch_root = Path(__file__).parent.absolute()
 
     os.environ["CARGO_INCREMENTAL"] = "0"
     # See https://rust-lang.github.io/rustup/overrides.html
@@ -216,6 +241,12 @@ def main():
     sys.stderr.reconfigure(line_buffering=True)
 
     bench_names = sorted(benches.keys())
+
+    for bench_name in bench_names:
+        for json_path in glob.glob(str(base_path / f"{bench_name}_*.json")):
+            if os.path.isfile(json_path):
+                os.unlink(json_path)
+
     if args.only is not None:
         bench_names = args.only.split(",")
         unknown_names = [name for name in bench_names if name not in benches.keys()]
@@ -235,14 +266,16 @@ def main():
                 for bench_patch in sorted(
                     glob.glob(str(patch_root / bench_name / "*.patch"))
                 ):
-                    run(f"patch -p1 -i {Path(bench_patch).absolute()}", fatal=True, cwd=str(bench_path))
+                    run(f"patch -p1 -i {bench_patch}", fatal=True, cwd=str(bench_path))
 
     # Build
 
     for bench_name in bench_names:
         bench = benches[bench_name]
         for bench_subdir, bench_params in bench.launch_info:
-            bench_build_path = base_path / os.path.basename(bench.repo_link) / bench_subdir
+            bench_build_path = (
+                base_path / os.path.basename(bench.repo_link) / bench_subdir
+            )
             print(f"Building {bench_build_path}...")
 
             error_if(
@@ -270,19 +303,18 @@ def main():
     for bench_name in bench_names:
         bench = benches[bench_name]
         print(f"Benching {bench_name}...")
-        for bench_subdir, bench_params in bench.launch_info:
+        for i, (bench_subdir, bench_params) in enumerate(bench.launch_info):
             bench_path = base_path / os.path.basename(bench.repo_link) / bench_subdir
 
             cargo_args = args.run_options.split()
             cargo_args.extend(bench_params.split())
 
-            retcode, out, err = run(
-                cargo_args, fatal=True, tee=False, cwd=str(bench_path)
+            _, out, _ = run(
+                cargo_args, fatal=True, tee=not args.quiet, cwd=str(bench_path)
             )
             json = bench.output_parser(out)
-            print(json)
-
-            # TODO: convert output to json
+            with (base_path / f"{bench_name}_{i}.json").open("w") as f:
+                f.write(json)
 
 
 if __name__ == "__main__":
