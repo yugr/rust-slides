@@ -6,6 +6,11 @@ Rust's UTF-8 `String`s have invariant checks which make code slower (compared to
 
 Rust default PRNG is of higher quality but slower.
 
+A lot of APIs in stdlib check index overflows. E.g. see asm generated for `Vec`
+[here](https://github.com/Shnatsel/bounds-check-cookbook/blob/main/src/bin/fibvec_clever_indexing.rs):
+there are _two_ overflow checks (that `size` does not exceed `isize::MAX` and
+`size * elem_size` does not overflow).
+
 # Checks
 
 In general Rust's stdlib checks many invariants even in release

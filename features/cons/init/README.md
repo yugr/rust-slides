@@ -4,6 +4,8 @@ This may be unnecessary if e.g. buffer will be overwritten later
 but compiler will still require dummy initialization.
 In some cases it can be optimized later,
 in some this will be unnecessary overhead.
+Also memory is usually allocated as zero-initialized
+(e.g. for `Vec`).
 
 This is similar to GCC's `-ftrivial-auto-var-init=zero`.
 

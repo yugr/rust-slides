@@ -131,6 +131,10 @@ Rust makes some default choices more performant:
   * functions are static by default
   * struct members can be reordered by default
   * references are restrict by default
+  * `-fno-plt` and `-ffunction-sections` by default
+
+Arguably similar defaults are recommended for C++
+but often (usually ?) not present in average production codebase.
 
 - Move by default (https://www.thecodedmessage.com/posts/cpp-move/ and https://mcyoung.xyz/2021/04/26/move-ctors/)
   * also `Vec` is moved on `resize` at once, rather than by element as in STL

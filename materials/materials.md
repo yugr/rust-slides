@@ -464,7 +464,9 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Problem: Rust code much slower than C `-Ofast`
   * Root cause: lack of autovec
   * Solutions: iterators (`windows` instead of `exact_chunks`), `target-cpu=native`, fast FP operations
-  * More materials: no new links
+  * More materials:
+    + Created [bug](https://github.com/rust-lang/rust/issues/142469) about
+      redundant memset in this case
 - n times faster than C: https://ipthomas.com/blog/n-times-faster-than-c/
   * Assignee: yugr
   * Status: DONE (10m)
