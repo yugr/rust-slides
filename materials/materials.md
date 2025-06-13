@@ -496,6 +496,12 @@ On the other hand, once all materials are analyzed we won't care about this file
     + Not equivalent C/Rust code (e.g. allocations inside loop)
   * More materials:
     + [Reddit](https://www.reddit.com/r/rust/comments/1b6duf5/towards_understanding_the_runtime_performance_of/)
+- Is Rust faster than C? https://steveklabnik.com/writing/is-rust-faster-than-c/
+  * Status: DONE (5m)
+  * States that Rust make more performant choices where possible (struct layout) and
+    safer choices where it's not (index checks)
+  * More materials:
+    + no new links
 
 # UB in C++
 
@@ -2478,6 +2484,10 @@ MIRIFLAGS="-Zmiri-disable-isolation -Zmiri-measureme=crox" cargo +nightly miri r
     + added links
 - Rust programming language in the high-performance computing environment: https://www.research-collection.ethz.ch/bitstream/handle/20.500.11850/474922/thesis.pdf
   * Status: backlog
+- Why doesn't Rust care more about compiler performance?: https://kobzol.github.io/rust/rustc/2025/06/09/why-doesnt-rust-care-more-about-compiler-performance.html
+  * Status: backlog
+  * More materials:
+    + [Reddit](https://www.reddit.com/r/rust/comments/1l77jso/why_doesnt_rust_care_more_about_compiler)
 
 # Panics
 

@@ -126,6 +126,12 @@ and some are consequences (e.g. disabled autovec).
 Rust language also enables new, more aggressive optimizations.
 Rust _can_ be faster than C !
 
+Rust makes some default choices more performant:
+  * move by default
+  * functions are static by default
+  * struct members can be reordered by default
+  * references are restrict by default
+
 - Move by default (https://www.thecodedmessage.com/posts/cpp-move/ and https://mcyoung.xyz/2021/04/26/move-ctors/)
   * also `Vec` is moved on `resize` at once, rather than by element as in STL
     + is this correct ? `std::vector` should be optimized for trivial types !
