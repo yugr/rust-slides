@@ -3,16 +3,17 @@
 from __future__ import annotations
 
 import argparse
+from collections.abc import Callable
+from dataclasses import dataclass
 import glob
+import json
 import os
 import os.path
 from pathlib import Path
 import subprocess
 import sys
-from dataclasses import dataclass
-from collections.abc import Callable
-import json
 import re
+import time
 
 me = os.path.basename(__file__)
 
@@ -183,7 +184,9 @@ def run(cmd, fatal=False, tee=False, **kwargs):
     if isinstance(cmd, str):
         cmd = cmd.split(" ")
     #  print(cmd)
+    t1 = time.perf_counter_ns()
     p = subprocess.run(cmd, stdin=None, capture_output=True, **kwargs)
+    t2 = time.perf_counter_ns()
     out = p.stdout.decode()
     err = p.stderr.decode()
     if fatal and p.returncode != 0:
@@ -191,7 +194,7 @@ def run(cmd, fatal=False, tee=False, **kwargs):
     if tee:
         sys.stdout.write(out)
         sys.stderr.write(err)
-    return p.returncode, out, err
+    return p.returncode, out, err, (t2 - t1) / 1e9
 
 
 def main():
@@ -317,7 +320,8 @@ def main():
             if args.clean:
                 run(f"cargo clean", fatal=True, cwd=str(bench_build_path))
 
-            run(cargo_args, fatal=True, cwd=str(bench_build_path))
+            _, _, _, t = run(cargo_args, fatal=True, cwd=str(bench_build_path))
+            print(f"Built successfully in {int(t)} sec.")
 
     if args.build_only:
         return
@@ -333,10 +337,12 @@ def main():
             cargo_args = args.run_options.split()
             cargo_args.extend(bench_params.split())
 
-            _, out, _ = run(
+            _, out, _, t = run(
                 cargo_args, fatal=True, tee=not args.quiet, cwd=str(bench_path)
             )
-            json = bench.output_parser(out)
+            print(f"Benched successfully in {int(t)} sec.")
+
+            bench_runtimes = bench.output_parser(out)
             with (base_path / f"{bench_name}_{i}.json").open("w") as f:
                 f.write(json.dumps(bench_runtimes, indent=4, sort_keys=True))
 
