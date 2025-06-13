@@ -24,7 +24,7 @@ More complex examples that require non-trivial arithmetic still break optimizer
 Also unnecessary bounds checks are not always eliminated (`f10`).
 
 TODO:
-  - add info about (size) overheads in more complex examples (convolution, fibonacci)
+  - add info about (size) overheads in more complex examples (convolution)
 
 # Optimizations
 
@@ -87,10 +87,15 @@ We should measure reduction of panics in our benchmarks:
   - loops with panics
 
 Overall count may be detected by grepping disasm
-but beware of stripping in project's `Cargo.toml`:
-```
-$ cd oxipng
+but beware of stripping in project's `Cargo.toml`.
 
+### Overall panics
+
+I think we should not disable inlining because many BCs will not be removable after that.
+
+#### Analysis for oxipng
+
+```
 # Project strips symbols so fix this
 $ sed -i -e 's/^\(strip\|panic\)/#\1/' Cargo.toml
 
@@ -104,7 +109,13 @@ $ grep -r panic_bounds_check target-bounds
 $ count-panics target-bounds
 7942
 ```
-I think we should not disable inlining because many BCs will not be removable after that.
+
+#### Analysis for rustc
+
+TODO:
+  - collect results for rustc
+
+### Panics in loops
 
 Panics in loops may be found by analyzing LLVM via
 ```
@@ -114,10 +125,9 @@ which will store `.bc` files in target dir (we need `XXX.rcgu.bc`, without `no-o
 Beware that this [overloads settings in Cargo.toml](https://internals.rust-lang.org/t/we-need-configurably-additive-rustflags/19851)
 and may break build.
 
-Here is example of analysis:
-```
-$ cd oxipng
+#### Analysis for oxipng
 
+```
 # For ThinLTO builds need
 #   find target-baseline -name *.thin-lto-after-pm.bc
 
@@ -136,8 +146,25 @@ $ grep -c 'Loop may panic' results.txt
 66
 ```
 
+#### Analysis for rustc
+
+```
+$ export RUSTFLAGS_NOT_BOOTSTRAP='-Csave-temps'
+$ ./x build --stage 2 compiler
+
+# Baseline
+$ find -name '*.rcgu.bc' | xargs ~/tasks/rust/llvm-tool/CountLoops > results.txt
+$ grep -c 'Loop may NOT panic' results.txt
+35532
+$ grep -c 'Loop may panic' results.txt
+25915
+
+# Bounds
+???
+```
+
 TODO:
-  - apply to larger project(s) e.g. rustc
+  - collect results for bounds checks
 
 ## Disabling the check
 
@@ -192,7 +219,7 @@ Ideally we should be able to count optimization remarks but they [do not work](h
 and same goes for [compiler stats](https://github.com/rust-lang/rust/issues/142266).
 So below we use `-Cllvm-args=-debug-only=...` instead.
 
-Tests were done for oxipng project.
+#### Results for oxipng
 
 Loop vectorizer:
 ```
@@ -239,8 +266,38 @@ $ cargo +bounds b -j1 --release |& grep -c 'EarlyCSE CSE'
 ```
 
 TODO:
-  - apply to larger project(s) e.g. rustc
   - why GVN/CSE degrade? perhaps some preceeding opts should be checked
+
+#### Results for rustc
+
+Warning: ~9 hours to build and log file will take several GBs
+
+Do not forget to add to bootstrap.toml:
+```
+[llvm]
+assertions = true
+```
+
+```
+$ export RUSTFLAGS_NOT_BOOTSTRAP='-Cllvm-args=-debug-only=licm,early-cse,gvn,loop-vectorize'
+$ ./x setup
+$ ./x build -j1 --stage 2 compiler &> tee build.log
+
+# Baseline
+$ grep -c 'LV: Vectorizing' build.log
+549
+$ grep -c 'LICM \(hoist\|sink\)ing' build.log
+2248327
+$ grep -c 'GVN removed' build.log
+798577
+$ grep -c 'EarlyCSE CSE' build.log
+2379907
+
+# Bounds
+???
+```
+TODO:
+  - collect results for bounds checks
 
 ### Runtime improvements
 

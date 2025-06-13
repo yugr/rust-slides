@@ -18,7 +18,7 @@ rm -f libCountLoops.so CountLoops
 CXX=g++
 CFG=$HOME/src/rust/baseline/build/x86_64-unknown-linux-gnu/ci-llvm/bin/llvm-config
 
-CXXFLAGS='-g -O0'
+CXXFLAGS='-g -O2'
 
 LDFLAGS=" $($CFG --ldflags)"
 LIBS="$($CFG --libs)"
