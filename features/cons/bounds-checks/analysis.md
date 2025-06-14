@@ -23,9 +23,6 @@ More complex examples that require non-trivial arithmetic still break optimizer
 (e.g. `f5`, `f6`, `f8`, `f11`, `f13`).
 Also unnecessary bounds checks are not always eliminated (`f10`).
 
-TODO:
-  - add info about (size) overheads in more complex examples (convolution)
-
 # Optimizations
 
 Unnecessary BCs are removed via value tracking in passes like InstCombine.
@@ -151,20 +148,20 @@ $ grep -c 'Loop may panic' results.txt
 ```
 $ export RUSTFLAGS_NOT_BOOTSTRAP='-Csave-temps'
 $ ./x build --stage 2 compiler
+$ find -name '*.rcgu.bc' | xargs ~/tasks/rust/llvm-tool/CountLoops > results.txt
 
 # Baseline
-$ find -name '*.rcgu.bc' | xargs ~/tasks/rust/llvm-tool/CountLoops > results.txt
 $ grep -c 'Loop may NOT panic' results.txt
 35532
 $ grep -c 'Loop may panic' results.txt
 25915
 
 # Bounds
-???
+$ grep -c 'Loop may NOT panic' results.txt
+35773
+$ grep -c 'Loop may panic' results.txt
+25377
 ```
-
-TODO:
-  - collect results for bounds checks
 
 ## Disabling the check
 
@@ -294,10 +291,15 @@ $ grep -c 'EarlyCSE CSE' build.log
 2379907
 
 # Bounds
-???
+$ grep -c 'LV: Vectorizing' build.log
+537
+$ grep -c 'LICM \(hoist\|sink\)ing' build.log
+2289792
+$ grep -c 'GVN removed' build.log
+772504
+$ grep -c 'EarlyCSE CSE' build.log
+2374779
 ```
-TODO:
-  - collect results for bounds checks
 
 ### Runtime improvements
 
