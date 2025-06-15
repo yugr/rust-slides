@@ -504,6 +504,22 @@ On the other hand, once all materials are analyzed we won't care about this file
     safer choices where it's not (index checks)
   * More materials:
     + no new links
+- With the big push for memory safety, how important is it, really? https://www.reddit.com/r/cpp/comments/1jcwkc2/with_the_big_push_for_memory_safety_how_important/
+  * Status: backlog
+- Speed of Development: https://www.reddit.com/r/rust/comments/f2ksja/speed_of_development/
+  * Status: backlog
+- Probably another rust limitation question: https://www.reddit.com/r/rust/comments/ewuep1/probably_another_rust_limitation_question/
+  * Status: backlog
+- Zero-cost abstractions: https://carette.xyz/posts/zero_cost_abstraction/
+  * Status: backlog
+  * More materials:
+    + [Reddit](https://www.reddit.com/r/rust/comments/f17wff/zerocost_abstractions/)
+- Are there specific cases where C/C++ is inherently faster than Rust? https://www.reddit.com/r/rust/comments/qep2uj/are_there_specific_cases_where_cc_is_inherently/
+  * Status: backlog
+- Comparing the safety and performance of operations in Rust and C++: https://www.reddit.com/r/rust/comments/gh84k2/comparing_the_safety_and_performance_of/
+  * Status: backlog
+- When is Rust slow? https://www.reddit.com/r/rust/comments/x76466/when_is_rust_slow/
+  * Status: backlog
 
 # UB in C++
 
@@ -824,6 +840,8 @@ ET's is an important patern for writing linear algebra code in C++. Can it be us
   * No discussion of performance issues
   * More materials:
     + no new links
+-Why did Rust fully specify signed integer overflow? https://www.reddit.com/r/rust/comments/16b9jz2/why_did_rust_fully_specify_signed_integer_overflow/
+  * Status: backlog
 
 # Bounds checks
 
@@ -1401,6 +1419,8 @@ pub fn foo(p: Box<S>) {
   * More materials:
     + [Reddit](https://www.reddit.com/r/rust/comments/15p4thi/cargoremark_examine_rustc_llvm_optimization/)
 - Rust match arm priority: https://www.reddit.com/r/rust/comments/pqnufj/rust_match_arm_priority/
+  * Status: backlog
+- Assembly examples of missed Rust compiler optimizations: https://www.reddit.com/r/rust/comments/14zhb0s/assembly_examples_of_missed_rust_compiler/
   * Status: backlog
 
 # Niches
@@ -2857,6 +2877,8 @@ MIRIFLAGS="-Zmiri-disable-isolation -Zmiri-measureme=crox" cargo +nightly miri r
   * More materials:
     + no new links
 - Should we be worried about proliferation of unsafe in Rust code? https://www.reddit.com/r/rust/comments/xc5wut/should_we_be_worried_about_proliferation_of/
+  * Status: backlog
+- What are valid use cases for unsafe code? https://www.reddit.com/r/rust/comments/emae93/what_are_valid_use_cases_for_unsafe_code/
   * Status: backlog
 
 # Code size
