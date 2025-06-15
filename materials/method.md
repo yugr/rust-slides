@@ -35,7 +35,7 @@ Look for any mentions of `/performance|optimizations|compiler|inefficient|code ?
         - https://www.reddit.com/user/simonask_/search/?q=performance&type=comments
       + Lucretiel (gh-14):
         - https://www.reddit.com/user/Lucretiel/search/?q=performance&type=comments
-      + VorpalWay :
+      + VorpalWay (gh-19):
         - https://www.reddit.com/user/VorpalWay/search/?q=performance&type=comments
     * other known maintainers:
       + nikic:
