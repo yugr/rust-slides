@@ -3,15 +3,15 @@
 set -eu
 #set -x
 
-roots="$@"
-
 find_elfs() {
-  for f in $(find $roots -type f -executable); do
-    if file $f | grep -q ELF; then
-      echo $f
-    fi
-  done
-#  find $roots -name '*.rlib'
+  (
+    for f in $(find "$@" -type f -executable); do
+      if file $f | grep -q ELF; then
+        echo $f
+      fi
+    done
+#  find "$@" -name '*.rlib'
+  ) | grep -v 'build.script.build' | sort -u
 }
 
 # We try to determine different types of panics (not just calls to core::panicking)
@@ -19,7 +19,7 @@ find_elfs() {
 tmp=$(mktemp)
 
 total=0
-for f in $(find_elfs | sort -u); do
+for f in $(find_elfs "$@"); do
   if echo $f | grep -q '\.rlib'; then
     prefix='R_X86_64_GOTPCREL'
   else
