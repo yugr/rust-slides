@@ -70,6 +70,7 @@ For each performance feature we neeed to provide
         - patch for each feature needs to be implemented in separate branch (in private compiler repo)
       + make sure that found solution works on real examples
       + note that simply using `RUSTFLAGS` isn't great because they override project settings in `Cargo.toml`
+      + compiler modifications need to be kept in private compiler repo `yugr/rust-private`
     * collect perf measurements for benchmarks:
      + runtime
      + PMU counters (inst count, I$/D$/branch misses)
