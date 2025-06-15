@@ -1400,6 +1400,8 @@ pub fn foo(p: Box<S>) {
   * Little interest/adoption in community
   * More materials:
     + [Reddit](https://www.reddit.com/r/rust/comments/15p4thi/cargoremark_examine_rustc_llvm_optimization/)
+- Rust match arm priority: https://www.reddit.com/r/rust/comments/pqnufj/rust_match_arm_priority/
+  * Status: backlog
 
 # Niches
 
@@ -2854,6 +2856,8 @@ MIRIFLAGS="-Zmiri-disable-isolation -Zmiri-measureme=crox" cargo +nightly miri r
     + reslicing
   * More materials:
     + no new links
+- Should we be worried about proliferation of unsafe in Rust code? https://www.reddit.com/r/rust/comments/xc5wut/should_we_be_worried_about_proliferation_of/
+  * Status: backlog
 
 # Code size
 
