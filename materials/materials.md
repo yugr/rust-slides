@@ -520,6 +520,8 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Status: backlog
 - When is Rust slow? https://www.reddit.com/r/rust/comments/x76466/when_is_rust_slow/
   * Status: backlog
+- Would you use rust if it weren't as fast as C? https://www.reddit.com/r/rust/comments/gd8jdd/would_you_use_rust_if_it_werent_as_fast_as_c/
+  * Status: backlog
 
 # UB in C++
 
@@ -2512,6 +2514,8 @@ MIRIFLAGS="-Zmiri-disable-isolation -Zmiri-measureme=crox" cargo +nightly miri r
   * Status: backlog
   * More materials:
     + [Reddit](https://www.reddit.com/r/rust/comments/1l77jso/why_doesnt_rust_care_more_about_compiler)
+- Tried to re-write a C++ NES Emulator in Rust, now it runs more than 5 times slower: https://www.reddit.com/r/rust/comments/pmo2l5/tried_to_rewrite_a_c_nes_emulator_in_rust_now_it/
+  * Status: backlog
 
 # Panics
 
@@ -2880,6 +2884,10 @@ MIRIFLAGS="-Zmiri-disable-isolation -Zmiri-measureme=crox" cargo +nightly miri r
   * Status: backlog
 - What are valid use cases for unsafe code? https://www.reddit.com/r/rust/comments/emae93/what_are_valid_use_cases_for_unsafe_code/
   * Status: backlog
+- Uninitialized Memory: Unsafe Rust is Too Hard: https://www.p99conf.io/2022/09/07/uninitialized-memory-unsafe-rust-is-too-hard/
+  * Status: backlog
+  * More materials:
+    + [Reddit](https://www.reddit.com/r/rust/comments/x87n87/uninitialized_memory_unsafe_rust_is_harder_than_c/)
 
 # Code size
 
