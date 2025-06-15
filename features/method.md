@@ -78,7 +78,6 @@ For each performance feature we neeed to provide
        - e.g. SLP/loop autovec for bounds checking feature
        - e.g. NoAlias returns from AA manager for alias feature
        - e.g. CSE/GVN/LICM for alias feature
-       - TODO: check `-print-stats` for interesting counters
     * x86/AArch64, normal/ThinLTO/FatLTO, cgu=default/1
 
 Hopefully in many cases all above will be obtained from collected materials.
