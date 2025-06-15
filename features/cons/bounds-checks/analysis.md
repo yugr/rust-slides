@@ -2,7 +2,7 @@
 
 Parent task: gh-20
 
-Effort: 30h
+Effort: 50h
 
 # Background
 

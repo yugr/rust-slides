@@ -85,25 +85,23 @@ Hopefully in many cases all above will be obtained from collected materials.
 # Priorities
 
 Mandatory:
-  - cons/abi
-  - cons/arithmetic-checks
-  - cons/autovec
-  - cons/bounds-checks
-  - cons/cgu
-  - cons/copy-elision
-  - cons/data-structs
-  - cons/fastmath
-  - cons/init
-  - cons/panics
-  - cons/placement-new
-  - cons/stdlib
-  - pros/alias
-  - pros/stdlib
+  - cons/abi and pros/abi (gh-31)
+  - cons/arithmetic-checks (gh-28)
+  - cons/autovec (gh-29)
+  - cons/bounds-checks (gh-20)
+  - cons/cgu (gh-30)
+  - cons/copy-elision (gh-32)
+  - cons/data-structs (gh-33)
+  - cons/fastmath (gh-34)
+  - cons/init (gh-35)
+  - cons/panics (gh-36)
+  - cons/placement-new (gh-37)
+  - cons/stdlib and pros/stdlib (gh-38)
+  - pros/alias (gh-39)
 
 Important:
   - cons/iterators
   - cons/tls
-  - pros/abi
   - pros/move
   - pros/inline
   - pros/likely
