@@ -80,6 +80,7 @@ For each performance feature we neeed to provide
        - e.g. NoAlias returns from AA manager for alias feature
        - e.g. CSE/GVN/LICM for alias feature
     * x86/AArch64, normal/ThinLTO/FatLTO, cgu=default/1
+  - fix all TODOs that are mentioned in feature's README
 
 Hopefully in many cases all above will be obtained from collected materials.
 
