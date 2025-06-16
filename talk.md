@@ -27,6 +27,8 @@ This is the plan of the talk.
   * ABI
 - (Slow) compile times
   * A lot of work done by Nethercote
+- Analysis of benchmarks regressions/improvements
+  * Maybe next time...
 
 # Is it fair to compare with C++ ?
 

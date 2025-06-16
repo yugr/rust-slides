@@ -88,9 +88,9 @@ def compare_jsons(lhs, rhs):
         lhs_value *= lhs_mult
         rhs_value *= rhs_mult
 
-        geomean *= lhs_value / rhs_value
+        geomean *= rhs_value / lhs_value
 
-    geomean = pow(geomean, 1 / len(lhs_tests))
+    geomean = 1 - pow(geomean, 1 / len(lhs_tests))
 
     name = os.path.basename(str(lhs))
     print(f"{name}: {geomean}")
