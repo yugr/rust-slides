@@ -7,6 +7,7 @@ but this [does not always](https://github.com/rust-lang/rust/issues/47745) resto
 > to some degree, something that we are accepting as a "fact of life"
 
 This may not be a huge downside compared to C++ because Rust TU's are generally much larger (how much ?).
+In a sense `codegen-units=N` is equivalent to C++ unity builds (with `N` batches).
 
 Note that `--emit=asm` automatically enables `-C codegen-units=1` which may change generated code.
 
