@@ -156,6 +156,19 @@ but often (usually ?) not present in average production codebase.
 - `Box` is more performant than `unique_ptr` (https://www.youtube.com/watch?v=rHIkrotSwcc&t=1261s)
 - local function visibility by default
 
+# Comparing against C++
+
+We can't fairly compare Rust to C++ because there are very few equivalent programs
+written in both Rust and C++.
+
+Instead we make an assumption that Rust with disabled checks is very close to C++
+(similar abstraction like functions, stack, heap, etc. and same LLVM backend).
+So we expect that comparing performance of stock Rust vs. Rust without checks
+should be close to comparing Rust to C/C++.
+
+TODO:
+  - compare performance of rav1d/rav1e without checks to C code (hopefully should be close)
+
 # Conclusions
 
 - Ideally need some ballpark numbers here for different classes of programs
