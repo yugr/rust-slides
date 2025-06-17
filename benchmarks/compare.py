@@ -14,11 +14,11 @@ me = os.path.basename(__file__)
 
 
 def warn(msg):
-    sys.stderr.write("%s: warning: %s\n" % (me, msg))
+    sys.stderr.write(f"{me}: warning: {msg}\n")
 
 
 def error(msg):
-    sys.stderr.write("%s: error: %s\n" % (me, msg))
+    sys.stderr.write(f"{me}: error: {msg}\n")
     sys.exit(1)
 
 

@@ -21,11 +21,11 @@ me = os.path.basename(__file__)
 
 
 def warn(msg):
-    sys.stderr.write("%s: warning: %s\n" % (me, msg))
+    sys.stderr.write(f"{me}: warning: {msg}\n")
 
 
 def error(msg):
-    sys.stderr.write("%s: error: %s\n" % (me, msg))
+    sys.stderr.write(f"{me}: error: {msg}\n")
     sys.exit(1)
 
 
@@ -194,7 +194,8 @@ def run(cmd, fatal=False, tee=False, **kwargs):
     out = p.stdout.decode()
     err = p.stderr.decode()
     if fatal and p.returncode != 0:
-        error("'%s' failed:\n%s%s" % (" ".join(cmd), out, err))
+        cmds = " ".join(cmd)
+        error(f"'{cmds}' failed:\n{out}{err}")
     if tee:
         sys.stdout.write(out)
         sys.stderr.write(err)
