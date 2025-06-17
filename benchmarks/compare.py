@@ -50,9 +50,9 @@ def join(lhs, rhs):
     if lhs_deg == rhs_deg:
         return 1, 1
     elif lhs_deg < rhs_deg:
-        return 1, pow(10, rhs_deg - lhs_deg)
+        return pow(10, rhs_deg - lhs_deg), 1
     else:
-        return pow(10, lhs_deg - rhs_deg), 1
+        return 1, pow(10, lhs_deg - rhs_deg)
 
 
 def compare_jsons(lhs, rhs):
@@ -90,10 +90,10 @@ def compare_jsons(lhs, rhs):
 
         geomean *= rhs_value / lhs_value
 
-    geomean = 1 - pow(geomean, 1 / len(lhs_tests))
+    geomean = (1 - pow(geomean, 1 / len(lhs_tests))) * 100
 
     name = os.path.basename(str(lhs))
-    print(f"{name}: {geomean}")
+    print(f"{name}: {geomean:+.1f}%")
 
 
 def main():
