@@ -1,10 +1,9 @@
 #!/bin/bash
 
-# Simple wrapper for runner.py
-# which clones everything, builds and runs benchmarks
+# Simple driver for Python scripts: clones everything, builds and
+# runs benchmarks and compares results.
 #
-# Run like
-#   $ RUNNER_ARGS="-j6 -r '' -o meilisearch,oxipng,rav1e,ruff,tokio" ./runall.sh
+# Run `runall.sh --help` for details.
 
 set -eu
 set -o pipefail
@@ -13,6 +12,7 @@ me=$(basename $0)
 
 TOOLCHAINS='baseline bounds'
 V=0
+BASELINE=baseline
 
 usage() {
   cat <<EOF
@@ -21,10 +21,11 @@ Describe script here.
 
 Options:
   --help, -h                     Print help and exit.
+  --baseline TC                  Compare all results against TC (default '$BASELINE').
   --no-clean                     Do not clean before building (for debug).
   --reclone                      Re-create repos.
   -r ARGS, --runner-args=ARGS    Additional arguments for runner.py.
-  -t TS, --toolchains TS         Toolchains to test (default $TOOLCHAINS).
+  -t TS, --toolchains TS         Toolchains to test (default '$TOOLCHAINS').
   --verbose, -v                  Print diagnostic info
                                  (can be specified more than once).
 
@@ -46,13 +47,17 @@ RECLONE=
 CLEAN=--clean
 RUNNER_ARGS=
 
-ARGS=$(getopt -o 'hr:t:v' --long 'help,no-clean,reclone,runner-args:,toolchains:,verbose' -n "$(basename $0)" -- "$@")
+ARGS=$(getopt -o 'hr:t:v' --long 'help,baseline,no-clean,reclone,runner-args:,toolchains:,verbose' -n "$(basename $0)" -- "$@")
 eval set -- "$ARGS"
 
 while true; do
   case "$1" in
     -h | --help)
       usage
+      ;;
+    --baseline)
+      BASELINE="$2"
+      shift 2
       ;;
     --no-clean)
       CLEAN=
@@ -105,4 +110,10 @@ for t in $TOOLCHAINS; do
   mv $WORKDIR/*.json results/$t
 done
 
-# TODO: compare geomeans
+for t in $TOOLCHAINS; do
+  if test $t = $BASELINE; then
+    continue
+  fi
+  echo "### Comparing $t against $BASELINE:"
+  $D/compare.py results/$BASELINE results/$t
+done

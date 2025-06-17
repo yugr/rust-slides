@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+# Comparator of collected benchmark results.
+
 from __future__ import annotations
 
 import argparse

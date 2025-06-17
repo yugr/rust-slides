@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+# Runner for Rust benchmarks.
+
 from __future__ import annotations
 
 import argparse
@@ -153,7 +155,9 @@ benches = {
     "rav1e": Bench(
         "https://github.com/xiph/rav1e",
         "6ee1f3a678deb9ccef2e3345168e39cd53e5d1a6",
-        [("", "cargo criterion --features=bench")],
+        # Project suggests using "cargo criterion"
+        # but it dumps output to stderr rather than stdout
+        [("", "cargo bench --features=bench")],
         criterion_parser,
     ),
     "uv": Bench(
