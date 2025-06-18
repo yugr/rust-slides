@@ -134,6 +134,12 @@ benches = {
         [("", "cargo bench")],
         criterion_parser,
     ),
+    "nalgebra": Bench(
+        "https://github.com/dimforge/nalgebra",
+        "v0.33.2",
+        [("", "cargo bench")],
+        criterion_parser,
+    ),
     "oxipng": Bench(
         "https://github.com/shssoichiro/oxipng",
         "788997c437319995e55030a92ed8294dfcd4c87a",
