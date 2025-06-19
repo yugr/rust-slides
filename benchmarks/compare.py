@@ -9,6 +9,7 @@ import glob
 import json
 import os.path
 from pathlib import Path
+import sys
 
 me = os.path.basename(__file__)
 
@@ -142,10 +143,10 @@ def main():
         names = ", ".join(rhs_basenames - lhs_basenames)
         warn(f"some results are present only in {rhs}: {names}")
 
-    jsons = lhs_basenames & rhs_basenames
+    json_files = lhs_basenames & rhs_basenames
 
-    for json in jsons:
-        compare_jsons(lhs / json, rhs / json)
+    for json_file in json_files:
+        compare_jsons(lhs / json_file, rhs / json_file)
 
 
 if __name__ == "__main__":
