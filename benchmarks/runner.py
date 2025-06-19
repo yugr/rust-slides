@@ -146,10 +146,12 @@ benches = {
         [("", "cargo bench")],
         oxipng_parser,
     ),
-    "tokio": Bench(
-        "https://github.com/tokio-rs/tokio",
-        "9563707aaa73a802fa4d3c51c12869a037641070",
-        [("", "cargo bench")],
+    "rav1e": Bench(
+        "https://github.com/xiph/rav1e",
+        "6ee1f3a678deb9ccef2e3345168e39cd53e5d1a6",
+        # Project suggests using "cargo criterion"
+        # but it dumps output to stderr rather than stdout
+        [("", "cargo bench --features=bench")],
         criterion_parser,
     ),
     "ruff": Bench(
@@ -158,12 +160,16 @@ benches = {
         [("crates/ruff_benchmark", "cargo bench")],
         criterion_parser,
     ),
-    "rav1e": Bench(
-        "https://github.com/xiph/rav1e",
-        "6ee1f3a678deb9ccef2e3345168e39cd53e5d1a6",
-        # Project suggests using "cargo criterion"
-        # but it dumps output to stderr rather than stdout
-        [("", "cargo bench --features=bench")],
+    "rust_serialization_benchmark": Bench(
+        "https://github.com/djkoloski/rust_serialization_benchmark",
+        "cd9d93b0b0d2036dfb2ec4037cc6f37cf6cab291",
+        [("", "cargo bench")],
+        criterion_parser,
+    ),
+    "tokio": Bench(
+        "https://github.com/tokio-rs/tokio",
+        "9563707aaa73a802fa4d3c51c12869a037641070",
+        [("", "cargo bench")],
         criterion_parser,
     ),
     "uv": Bench(
