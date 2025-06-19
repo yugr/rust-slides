@@ -6,7 +6,6 @@
 #   - type annotations
 
 import argparse
-import glob
 import json
 import os
 import os.path
@@ -78,7 +77,7 @@ class Bench:
         run(f"git checkout {self.commit}", cwd=str(bench_path), fatal=True)
 
         patch_root = Path(__file__).parent.absolute()
-        for bench_patch in sorted(glob.glob(str(patch_root / self.name / "*.patch"))):
+        for bench_patch in sorted((patch_root / self.name).glob("*.patch")):
             run(f"patch -p1 -i {bench_patch}", fatal=True, cwd=str(bench_path))
 
     def build(self, base_path, clean, jobs):
@@ -430,7 +429,7 @@ def main():
     benches = BENCHES
 
     for bench in benches:
-        for json_path in glob.glob(str(base_path / f"{bench.name}_*.json")):
+        for json_path in base_path.glob(f"{bench.name}_*.json"):
             os.unlink(json_path)
 
     if args.only is not None:
