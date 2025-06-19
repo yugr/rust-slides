@@ -219,6 +219,8 @@ class RegexBench(Bench):
 
         if clean:
             run("cargo clean", fatal=True, cwd=str(build_path))
+            engine_path = build_path / "engines/rust/regex"
+            run("cargo clean", fatal=True, cwd=str(engine_path))
 
         cargo_args = ["cargo", "build", "--release"]
         if jobs is not None:
