@@ -23,7 +23,7 @@ Options:
   --help, -h                     Print help and exit.
   --baseline TC                  Compare all results against TC (default '$BASELINE').
   --no-clean                     Do not clean before building (for debug).
-  --reclone                      Re-create repos.
+  --clone                        Re-create repos.
   -r ARGS, --runner-args=ARGS    Additional arguments for runner.py.
   -t TS, --toolchains TS         Toolchains to test (default '$TOOLCHAINS').
   --verbose, -v                  Print diagnostic info
@@ -43,11 +43,11 @@ EOF
   exit 1
 }
 
-RECLONE=
+CLONE=
 CLEAN=--clean
 RUNNER_ARGS=
 
-ARGS=$(getopt -o 'hr:t:v' --long 'help,baseline,no-clean,reclone,runner-args:,toolchains:,verbose' -n "$(basename $0)" -- "$@")
+ARGS=$(getopt -o 'hr:t:v' --long 'help,baseline,no-clean,clone,runner-args:,toolchains:,verbose' -n "$(basename $0)" -- "$@")
 eval set -- "$ARGS"
 
 while true; do
@@ -63,8 +63,8 @@ while true; do
       CLEAN=
       shift
       ;;
-    --reclone)
-      RECLONE=1
+    --clone)
+      CLONE=--clone
       shift
       ;;
     -r | --runner-args)
@@ -96,17 +96,14 @@ for t in $TOOLCHAINS; do
 done
 
 WORKDIR=$PWD/repos
-if test -n "$RECLONE"; then
+if test -n "$CLONE"; then
   rm -rf $WORKDIR
   mkdir $WORKDIR
-elif test -d $WORKDIR; then
-  echo >&2 "Directory $WORKDIR already exists"
-  exit 1
 fi
 
 for t in $TOOLCHAINS; do
   mkdir -p results/$t
-  eval "$D/runner.py -p $WORKDIR -t $t --clone $CLEAN $RUNNER_ARGS" 2>&1 | tee results/$t/runner.log
+  eval "$D/runner.py -p $WORKDIR -t $t $CLONE $CLEAN $RUNNER_ARGS" 2>&1 | tee results/$t/runner.log
   mv $WORKDIR/*.json results/$t
 done
 
