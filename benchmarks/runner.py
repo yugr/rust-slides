@@ -211,6 +211,64 @@ class OxipngBench(CargoBench):
         return runtimes
 
 
+class RegexBench(Bench):
+    """Class for BurntSushi regex benchmarks."""
+
+    def build(self, base_path, clean, jobs):
+        build_path = base_path / os.path.basename(self.repo)
+
+        if clean:
+            run("cargo clean", fatal=True, cwd=str(build_path))
+
+        cargo_args = ["cargo", "build", "--release"]
+        if jobs is not None:
+            cargo_args.extend(["-j", str(jobs)])
+        run(cargo_args, fatal=True, cwd=str(build_path))
+
+        run(
+            "target/release/rebar build -e ^rust/regex$",
+            fatal=True,
+            cwd=str(build_path),
+        )
+
+    def run(self, base_path, run_options):
+        build_path = base_path / os.path.basename(self.repo)
+
+        # TODO: rebar also supports otherRust regex engines (regex-lite, regress)
+        _, out, _, _ = run(
+            "target/release/rebar measure -e ^rust/regex$ -f ^curated",
+            fatal=True,
+            cwd=str(build_path),
+        )
+        #        _, out, _, _ = run("target/release/rebar measure -e ^rust/regex$ -f ^unicode/compile/fifty-letters$", fatal=True, cwd=str(build_path))
+
+        lines = out.splitlines()
+
+        idx = {name: i for i, name in enumerate(lines[0].split(","))}
+
+        runtimes = {}
+
+        def parse_time(t):
+            match = re.match(r"([0-9.]+)([a-zµ]+)", t)
+            return float(match[1]), fix_units(match[2])
+
+        for line in lines[1:]:
+            vals = line.split(",")
+
+            name = vals[idx["name"]]
+            mean = vals[idx["mean"]]
+            min = vals[idx["min"]]
+            max = vals[idx["max"]]
+
+            runtimes[name] = {
+                "lb": parse_time(min),
+                "avg": parse_time(mean),
+                "ub": parse_time(max),
+            }
+
+        return [runtimes]
+
+
 BENCHES = [
     CriterionBench(
         "SpacetimeDB",
@@ -249,6 +307,11 @@ BENCHES = [
         # Project suggests using "cargo criterion"
         # but it dumps output to stderr rather than stdout
         [("", "cargo bench --features=bench")],
+    ),
+    RegexBench(
+        "regex",
+        "https://github.com/BurntSushi/rebar",
+        "19aa8e8e3bd3a4bc0ef6e07774d900e5f4840fad",
     ),
     CriterionBench(
         "ruff",
