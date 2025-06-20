@@ -14,6 +14,15 @@ TOOLCHAINS='baseline bounds'
 V=0
 BASELINE=baseline
 
+error() {
+  printf "$(basename $0): error: $@\\n" >&2
+  exit 1
+}
+
+warn() {
+  printf "$(basename $0): warning: $@\\n" >&2
+}
+
 usage() {
   cat <<EOF
 Usage: $(basename $0) [OPT]...
@@ -48,7 +57,7 @@ CLONE=
 CLEAN=--clean
 RUNNER_ARGS=
 
-ARGS=$(getopt -o 'hr:t:v' --long 'help,baseline,no-clean,clone,runner-args:,toolchains:,verbose' -n "$(basename $0)" -- "$@")
+ARGS=$(getopt -o 'hr:t:v' --long 'help,baseline:,no-clean,clone,runner-args:,toolchains:,verbose' -n "$(basename $0)" -- "$@")
 eval set -- "$ARGS"
 
 while true; do
