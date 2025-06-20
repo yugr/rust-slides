@@ -242,6 +242,8 @@ in library/core and library/alloc for most important types:
     * updated methods
   - HashMap/HashSet
     * can't update because it depends on hashbrown
+  - BTreeXXX
+    * not changed !
 
 ## Measurements
 
@@ -340,7 +342,52 @@ $ grep -c 'EarlyCSE CSE' build.log
 
 ### Runtime improvements
 
+#### x86_64
+
+CPU:
+```
+$ lscpu
+Architecture:                         x86_64
+CPU op-mode(s):                       32-bit, 64-bit
+Byte Order:                           Little Endian
+Address sizes:                        46 bits physical, 48 bits virtual
+CPU(s):                               24
+On-line CPU(s) list:                  0-23
+Thread(s) per core:                   2
+Core(s) per socket:                   6
+Socket(s):                            2
+NUMA node(s):                         2
+Vendor ID:                            GenuineIntel
+CPU family:                           6
+Model:                                63
+Model name:                           Intel(R) Xeon(R) CPU E5-2620 v3 @ 2.40GHz
+Stepping:                             2
+CPU MHz:                              2597.060
+CPU max MHz:                          3200.0000
+CPU min MHz:                          1200.0000
+BogoMIPS:                             4794.66
+Virtualization:                       VT-x
+L1d cache:                            384 KiB
+L1i cache:                            384 KiB
+L2 cache:                             3 MiB
+L3 cache:                             30 MiB
+```
+
+Results:
+```
+$ compare.py results/baseline results/bounds
+oxipng_0.json: +3.9%
+meilisearch_0.json: +1.6%
+ruff_0.json: +1.3%
+tokio_0.json: +2.5%
+regex_0.json: +1.2%
+bevy_0.json: +0.9%
+rust_serialization_benchmark_0.json: +1.2%
+nalgebra_0.json: -1.1%
+rav1e_0.json: +1.8%
+SpacetimeDB_0.json: +2.2%
+```
+
 TODO:
-  - collect perf measurements for benchmarks:
-   * runtime
-   * PMU counters (inst count, I$/D$/branch misses)
+  - perf measurements for AArch64
+  - PMU counters (inst count, I$/D$/branch misses) ?
