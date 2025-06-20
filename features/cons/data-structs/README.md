@@ -22,3 +22,4 @@ suggests several options:
 # TODO
 
 - Check overhead of `Rc` (`Arc`) / `RefCell` by disabling checks in large projects
+- Disable panics in cell.rs (`panic_already_borrowed`)

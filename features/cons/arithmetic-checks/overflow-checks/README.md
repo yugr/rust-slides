@@ -70,6 +70,10 @@ or `alloc/src/str.rs`:
         .expect("attempt to join into collection with len > usize::MAX");
 ```
 
+TODO:
+  - check overflow_panic.rs
+  - disable overflow checks in ptr.rs-like files
+
 # Solutions
 
 - `unchecked_add` and friends

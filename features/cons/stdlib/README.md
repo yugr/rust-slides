@@ -9,7 +9,7 @@ Rust default PRNG is of higher quality but slower.
 A lot of APIs in stdlib check index overflows. E.g. see asm generated for `Vec`
 [here](https://github.com/Shnatsel/bounds-check-cookbook/blob/main/src/bin/fibvec_clever_indexing.rs):
 there are _two_ overflow checks (that `size` does not exceed `isize::MAX` and
-`size * elem_size` does not overflow).
+`size * elem_size` does not overflow). Also `capacity_overflow` in `raw_vec/mod.rs`.
 
 # Checks
 
@@ -25,6 +25,9 @@ e.g. in `library/core/src/slice/mod.rs`:
 Also many APIs force you to perform the necessary checks
 e.g. forced "NULL checks" (via `Option::unwrap` or `Option::expect`)
 for APIs that return `Option`.
+
+Also a lot of `assert!`'s and `panic!`'s for alignment and NULL pointer checks
+(NULL checks can't be easily disabled because APIs are implemented via `Option::expect`).
 
 # IO
 

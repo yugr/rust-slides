@@ -129,7 +129,8 @@ What is `panic_immediate_abort` ?
 
 Does `panic=abort` remove landing pads and libunwind ?
   - `-Z no-landing-pads`, `-Zbuild-std-features=panic_immediate_abort` and `-Zlocation-detail=none` may be needed as well
-  - It seems that `panic=abort` still calls the (blackbox) panic hooks (handlers)
+  - it seems that `panic=abort` still calls the (blackbox) panic hooks (handlers)
+  - try replacing `panic` with `core::panicking::panic_nounwind`
 
 Does `panic=abort` avoid all overheads ? I couldn't get it to do anything in [this](https://news.ycombinator.com/item?id=30867188) example.
   - we need to find way to reduce it to `ud2`
