@@ -30,7 +30,8 @@ Options:
                                  (can be specified more than once).
 
 Examples:
-  \$ $(basename $0) --runner-args "-j6 -r '' --clean -o SpacetimeDB,bevy,meilisearch,oxipng,rav1e,ruff,tokio"
+  # Run benchmarks without fancy dependencies
+  \$ $(basename $0) --runner-args "-j6 -r '' --clean -o SpacetimeDB,bevy,meilisearch,nalgebra,oxipng,rav1e,regex,ruff,rust_serialization_benchmark,tokio"
 EOF
   exit
 }
