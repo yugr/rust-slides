@@ -2108,6 +2108,8 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
     + should use stream locking + `BufRead::read_line`
   * More materials:
     + no new links
+- Default to -Z plt=yes: https://github.com/rust-lang/rust/pull/106380
+  * Status: backlog
 
 # Manual optimizations
 
