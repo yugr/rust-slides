@@ -42,5 +42,8 @@ Results can be viewed with optview2 tool.
 # TODO
 
 - For all problematic features (e.g. bounds checks) collect how they influence autovec (via LLVM debug)
+  * Done in [bounds checks analysis](../bounds/analysis.md)
 - Check SLP vs loop autovec stats
-- Try autovec for simple ubenchmarks (DOALL, DOACROSS e.g. reduce/strlen)
+  * Low prio
+- Try autovec for simple ubenchmarks (DOALL, reduction, strlen)
+  * DOALL and reductions vectorize fine, strlen-like loops are not vectorized neither in Rust, nor C

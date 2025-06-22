@@ -912,7 +912,6 @@ ET's is an important patern for writing linear algebra code in C++. Can it be us
   * OP asks what are the overheads of Rust language
   * People suggest various issues (UFT8 checks, `Rc`, error checking, etc.) but all known by us
   * More materials: nothing new
-
 - How to avoid bounds checks in Rust: https://shnatsel.medium.com/how-to-avoid-bounds-checks-in-rust-without-unsafe-f65e618b4c1e
   * Assignee: yugr
   * Status: DONE (30m)
@@ -1687,7 +1686,7 @@ we should add them to overheads.
 - SIMD in zlib-rs: https://tweedegolf.nl/en/blog/153/simd-in-zlib-rs-part-1-autovectorization-and-target-features
   * Assignee: yugr
   * Status: DONE (10m)
-  * A ver y recent article
+  * A very recent article
   * General overview of autovec:
     + start with simple loop (based on iterators, autovectorizes)
     + get rid of epilig loop via `exact_chunks` iterator

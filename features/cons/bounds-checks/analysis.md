@@ -8,6 +8,9 @@ Effort: 50h
 
 See [README](README.md).
 
+TODO:
+  - describe how this relates to work in C++
+
 # Examples
 
 URLO discussions of huge perf regressions caused by bounds checks (BCs)

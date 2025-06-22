@@ -23,9 +23,14 @@ global fast math flag.
 - Use `std::intrinsics::XXX_algebraic` APIs
   * Support non-finite numbers (NaNs and Infs)
   * In unstable :(
-- Does `-C llvm-args=-ffast-math` work ?
+- Use `-C llvm-args=-ffast-math` (does it work ?)
 - Request for fast-math has been rejected in [upstream #21690](https://github.com/rust-lang/rust/issues/21690)
 
 # Examples
 
 A lot of issues are linked in [upstream #21690](https://github.com/rust-lang/rust/issues/21690).
+
+# TODO
+
+- Is `-C llvm-args=-ffast-math` enough to enable fast math ? If not - why ?
+- Add compile flag to enable fast-math and see how it affects runtime performance and CSE/GVN/LICM/LoopVectorize statistics (esp. autovec)
