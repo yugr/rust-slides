@@ -16,3 +16,6 @@ but incurs more startup overheads
 
 See [this question](https://internals.rust-lang.org/t/function-calls-plt-vs-gotpcrel/8909)
 for details.
+
+Also note that Rust [uses `-fno-semantic-interposition` by default](https://github.com/rust-lang/rustc_codegen_gcc/issues/53)
+(not deliberately but through the virtue of being based on LLVM).
