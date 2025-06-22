@@ -39,7 +39,7 @@ def error_if(cond, msg):
         error(msg)
 
 
-def run(cmd, fatal=False, tee=False, **kwargs):
+def run(cmd, fatal=True, tee=False, **kwargs):
     """
     Simple wrapper for subprocess.
     """
@@ -73,12 +73,12 @@ class Bench:
         if bench_path.exists():
             return
 
-        run(f"git clone {self.repo}", cwd=str(base_path), fatal=True)
-        run(f"git checkout {self.commit}", cwd=str(bench_path), fatal=True)
+        run(f"git clone {self.repo}", cwd=str(base_path))
+        run(f"git checkout {self.commit}", cwd=str(bench_path))
 
         patch_root = Path(__file__).parent.absolute()
         for bench_patch in sorted((patch_root / self.name).glob("*.patch")):
-            run(f"patch -p1 -i {bench_patch}", fatal=True, cwd=str(bench_path))
+            run(f"patch -p1 -i {bench_patch}", cwd=str(bench_path))
 
     def build(self, base_path, clean, jobs):
         raise NotImplementedError
@@ -104,13 +104,13 @@ class CargoBench(Bench):
             )
 
             if clean:
-                run("cargo clean", fatal=True, cwd=str(build_path))
+                run("cargo clean", cwd=str(build_path))
 
             cargo_args = params.split()
             if jobs is not None:
                 cargo_args.extend(["-j", str(jobs)])
             cargo_args.append("--no-run")
-            run(cargo_args, fatal=True, cwd=str(build_path))
+            run(cargo_args, cwd=str(build_path))
 
     def run(self, base_path, run_options):
         runtimes = []
@@ -122,9 +122,7 @@ class CargoBench(Bench):
             cargo_args.extend(params.split())
 
             global QUIET
-            _, out, _, _ = run(
-                cargo_args, fatal=True, tee=not QUIET, cwd=str(build_path)
-            )
+            _, out, _, _ = run(cargo_args, tee=not QUIET, cwd=str(build_path))
 
             runtimes.append(self.parse(out))
 
@@ -217,20 +215,16 @@ class RegexBench(Bench):
         build_path = base_path / os.path.basename(self.repo)
 
         if clean:
-            run("cargo clean", fatal=True, cwd=str(build_path))
+            run("cargo clean", cwd=str(build_path))
             engine_path = build_path / "engines/rust/regex"
-            run("cargo clean", fatal=True, cwd=str(engine_path))
+            run("cargo clean", cwd=str(engine_path))
 
         cargo_args = ["cargo", "build", "--release"]
         if jobs is not None:
             cargo_args.extend(["-j", str(jobs)])
-        run(cargo_args, fatal=True, cwd=str(build_path))
+        run(cargo_args, cwd=str(build_path))
 
-        run(
-            "target/release/rebar build -e ^rust/regex$",
-            fatal=True,
-            cwd=str(build_path),
-        )
+        run("target/release/rebar build -e ^rust/regex$", cwd=str(build_path))
 
     def run(self, base_path, run_options):
         build_path = base_path / os.path.basename(self.repo)
@@ -238,10 +232,9 @@ class RegexBench(Bench):
         # TODO: rebar also supports otherRust regex engines (regex-lite, regress)
         _, out, _, _ = run(
             "target/release/rebar measure -e ^rust/regex$ -f ^curated",
-            fatal=True,
+            # "target/release/rebar measure -e ^rust/regex$ -f ^unicode/compile/fifty-letters$"
             cwd=str(build_path),
         )
-        #        _, out, _, _ = run("target/release/rebar measure -e ^rust/regex$ -f ^unicode/compile/fifty-letters$", fatal=True, cwd=str(build_path))
 
         lines = out.splitlines()
 
