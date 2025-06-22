@@ -14,16 +14,18 @@ See [Dev Guide](https://rustc-dev-guide.rust-lang.org/building/how-to-build-and-
 but generally it's just
 ```
 $ ./x setup  # Select 'compiler'
-$ ./x build -jN library
 ```
-(set `N` according to your quota).
 
 Then add to `bootstrap.toml`
 ```
 [llvm]
 assertions = true
 ```
-for debug prints in LLVM.
+for debug prints in LLVM and build stage1 compiler:
+```
+$ ./x build -jN library
+```
+(set `N` according to your quota).
 
 Default settings (in `src/bootstrap/src/core/config/config.rs`) are reasonable:
   - build optimized compiler and std
