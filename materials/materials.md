@@ -1650,16 +1650,6 @@ we should add them to overheads.
   * OP proposes a MIR-level vectorization; it supersedes LLVM vectorizer in some cases (e.g. when bounds checks are in place)
   * Proposal violates safety guarantees so was rejected
   * Suggested alternatives: reslicing, iterators
-- Speeding up RGB to grayscale conversion in Rust: https://coaxion.net/blog/2018/01/speeding-up-rgb-to-grayscale-conversion-in-rust-by-a-factor-of-2-2-and-various-other-multimedia-related-processing-loops/
-  * Assignee: yugr
-  * Status: DONE (20m)
-  * OP investigates various methods to speed up his kernel:
-    + `assert!` (`assert_eq!` caused slowdown !)
-    + `exact_chunks` iterator (it was first introduced to stdlib as part of this work)
-  * Finally he was able to fully eliminate bounds checks
-  * More materials:
-    + [Reddit](https://www.reddit.com/r/rust/comments/7rxrka/speeding_up_rgb_to_grayscale_conversion_in_rust/)
-    + no new links
 - Auto-vectorization fails in a for-loop: https://users.rust-lang.org/t/auto-vectorization-fails-in-a-for-loop/62612
   * Assignee: yugr
   * Status: DONE (5m)
@@ -1688,7 +1678,7 @@ we should add them to overheads.
   * Status: DONE (10m)
   * A very recent article
   * General overview of autovec:
-    + start with simple loop (based on iterators, autovectorizes)
+    + start with simple loop (based on iterators, already autovectorizes)
     + get rid of epilig loop via `exact_chunks` iterator
     + then manually multiversion (via `target_feature` and const template param) for AVX2 vector size (dispatched via wrapper)
   * More materials:
@@ -1697,7 +1687,7 @@ we should add them to overheads.
   * Assignee: yugr
   * Status: DONE (10m)
   * Compares several SIMD implementations of Hamming distance
-  * The fastest uses autovec (based on `exact_chunks`)
+  * The fastest uses manual autovec (based on `exact_chunks`)
   * More materials:
     + no more perf-relevant posts in blog
     + [Reddit](https://www.reddit.com/r/rust/comments/1hk0bry/unnecessary_optimization_in_rust_hamming/)
@@ -2367,6 +2357,16 @@ if (x, y) == (1, 1) {
   * [Known issue](https://github.com/memorysafety/rav1d/issues/1332) with `Copy` traits
   * Most likely will be fixed soon so no need to investigate/mention in slides
   * More materials: no new links
+- Speeding up RGB to grayscale conversion in Rust: https://coaxion.net/blog/2018/01/speeding-up-rgb-to-grayscale-conversion-in-rust-by-a-factor-of-2-2-and-various-other-multimedia-related-processing-loops/
+  * Assignee: yugr
+  * Status: DONE (20m)
+  * OP investigates various methods to speed up his kernel:
+    + `assert!` (`assert_eq!` caused slowdown !)
+    + `exact_chunks` iterator (it was first introduced to stdlib as part of this work)
+  * Finally he was able to fully eliminate bounds checks
+  * More materials:
+    + [Reddit](https://www.reddit.com/r/rust/comments/7rxrka/speeding_up_rgb_to_grayscale_conversion_in_rust/)
+    + no new links
 - Porting EBU R128 audio loudness analysis from C to Rust: https://coaxion.net/blog/2020/09/porting-ebu-r128-audio-loudness-analysis-from-c-to-rust-porting-details/
   * Assignee: yugr
   * Status: DONE (10m)

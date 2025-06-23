@@ -48,6 +48,7 @@ Good summary from [HN](https://news.ycombinator.com/item?id=14042318):
 # TODO
 
 - Try disabling `noalias` hints via `-Zmutable-noalias=no` for large/performant codebases
+- Measure how noalias influences GVN/CSE/LICM/LoopVectorize
 - A lot of [mentions](https://www.reddit.com/r/rust/comments/acjcbp/comment/ed8nkmj/) that
   `&mut Vec<T>` does not allow noalias for contained buffer and `&[T]` should be used instead.
   Need to investigate this.
