@@ -1691,6 +1691,24 @@ we should add them to overheads.
   * More materials:
     + no more perf-relevant posts in blog
     + [Reddit](https://www.reddit.com/r/rust/comments/1hk0bry/unnecessary_optimization_in_rust_hamming/)
+- Speeding up parallel SIMD simulation: https://users.rust-lang.org/t/speeding-up-parallel-simd-simulation/62896
+  * Status: backlog
+- Optimising path tracing with SIMD: https://bitshifter.github.io/2018/06/04/simd-path-tracing/
+  * Status: backlog
+- SIMD Vector/Slice/Chunk Addition: https://www.reddit.com/r/rust/comments/154vowr/simd_vectorslicechunk_addition/
+  * Status: backlog
+- Auto-vectorize sum with mask: https://users.rust-lang.org/t/auto-vectorize-sum-with-mask/59433
+  * Status: backlog
+- Building a compile-time SIMD optimized smoothing filter: https://scientificcomputing.rs/2024/talks/raz.html
+  * Status: backlog
+  * More materials:
+    + [Reddit](https://news.ycombinator.com/item?id=41679748)
+- Rust, SIMD, and ISPC: https://state.smerity.com/direct/smerity/state/01E8TG3G5VMR0X3DQNTFK1F4WY
+  * Status: backlog
+- This Tiny Rust Tweak Makes Searching a Slice 9x Faster: https://hackernoon.com/this-tiny-rust-tweak-makes-searching-a-slice-9x-faster
+  * Status: backlog
+- Unnecessary Optimization in Rust: Hamming Distances, SIMD, and Auto-Vectorization: https://www.reddit.com/r/rust/comments/1hk0bry/unnecessary_optimization_in_rust_hamming/
+  * Status: backlog
 
 # Stack probing
 
