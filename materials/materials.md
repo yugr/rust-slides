@@ -1707,8 +1707,6 @@ we should add them to overheads.
   * Status: backlog
 - This Tiny Rust Tweak Makes Searching a Slice 9x Faster: https://hackernoon.com/this-tiny-rust-tweak-makes-searching-a-slice-9x-faster
   * Status: backlog
-- Unnecessary Optimization in Rust: Hamming Distances, SIMD, and Auto-Vectorization: https://www.reddit.com/r/rust/comments/1hk0bry/unnecessary_optimization_in_rust_hamming/
-  * Status: backlog
 
 # Stack probing
 
