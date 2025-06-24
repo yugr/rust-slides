@@ -10,7 +10,6 @@ set -o pipefail
 
 me=$(basename $0)
 
-TOOLCHAINS='baseline bounds'
 V=0
 BASELINE=baseline
 
@@ -25,39 +24,36 @@ warn() {
 
 usage() {
   cat <<EOF
-Usage: $(basename $0) [OPT]...
-Describe script here.
+Usage: $(basename $0) [OPT]... TOOLCHAIN...
+Builds and runs benchmarks under multiple toolchains.
 
 Options:
   --help, -h                     Print help and exit.
   --baseline TC                  Compare all results against TC (default '$BASELINE').
-  --no-clean                     Do not clean before building (for debug).
   --clone                        Re-create repos.
   -r ARGS, --runner-args=ARGS    Additional arguments for runner.py.
-  -t TS, --toolchains TS         Toolchains to test (default '$TOOLCHAINS').
   --verbose, -v                  Print diagnostic info
                                  (can be specified more than once).
 
 Examples:
-  # Run benchmarks without fancy dependencies
-  \$ $(basename $0) --runner-args "-j6 -r '' --clean -o SpacetimeDB,bevy,meilisearch,nalgebra,oxipng,rav1e,regex,ruff,rust_serialization_benchmark,tokio"
+  # Run benchmarks without fancy dependencies with sensible flags
+  \$ $(basename $0) --runner-args "-r 'chrt -r 1 taskset 0xf0 nice -n -20 setarch -R' --only SpacetimeDB,bevy,meilisearch,nalgebra,oxipng,rav1e,regex,ruff,rust_serialization_benchmark,tokio" baseline
 EOF
   exit
 }
 
 usage_short() {
   cat >&2 <<EOF
-Usage: $(basename $0) [OPT]... ARG
+Usage: $(basename $0) [OPT]... TOOLCHAIN...
 Run \`$(basename $0) -h' for more details.
 EOF
   exit 1
 }
 
 CLONE=
-CLEAN=--clean
 RUNNER_ARGS=
 
-ARGS=$(getopt -o 'hr:t:v' --long 'help,baseline:,no-clean,clone,runner-args:,toolchains:,verbose' -n "$(basename $0)" -- "$@")
+ARGS=$(getopt -o 'hr:v' --long 'help,baseline:,clone,runner-args:,verbose' -n "$(basename $0)" -- "$@")
 eval set -- "$ARGS"
 
 while true; do
@@ -69,10 +65,6 @@ while true; do
       BASELINE="$2"
       shift 2
       ;;
-    --no-clean)
-      CLEAN=
-      shift
-      ;;
     --clone)
       CLONE=--clone
       shift
@@ -81,12 +73,9 @@ while true; do
       RUNNER_ARGS="$2"
       shift 2
       ;;
-    -t | --toolchains)
-      TOOLCHAINS="$2"
-      shift 2
-      ;;
     --)
       shift
+      TOOLCHAINS="$@"
       break
       ;;
     -*)
@@ -97,6 +86,11 @@ while true; do
       ;;
   esac
 done
+
+if test -z "$TOOLCHAINS"; then
+  echo >&2 "No toolchains specified, exiting"
+  exit 1
+fi
 
 D=$(dirname $0)
 
@@ -113,7 +107,7 @@ fi
 
 for t in $TOOLCHAINS; do
   mkdir -p results/$t
-  eval "$D/runner.py -p $WORKDIR -t $t $CLONE $CLEAN $RUNNER_ARGS" 2>&1 | tee results/$t/runner.log
+  eval "$D/runner.py -p $WORKDIR -t $t $CLONE $RUNNER_ARGS" 2>&1 | tee results/$t/runner.log
   mv $WORKDIR/*.json results/$t
 done
 
