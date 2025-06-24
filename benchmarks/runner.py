@@ -368,8 +368,16 @@ def main():
     parser.add_argument(
         "-c",
         "--clean",
+        dest="clean",
         action="store_true",
         help="clean repositores before running",
+        default=True,
+    )
+    parser.add_argument(
+        "--no-clean",
+        dest="clean",
+        action="store_false",
+        help="Inverse of --clean",
     )
     parser.add_argument(
         "-j",
