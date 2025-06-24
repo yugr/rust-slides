@@ -387,7 +387,7 @@ def main():
         "-r",
         "--run-options",
         help="run under wrapper",
-        default="taskset 0x1 nice -n -20 setarch -R",
+        default="setarch -R",
     )
     parser.add_argument(
         "-o",
