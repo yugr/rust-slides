@@ -13,7 +13,13 @@ $ sudo update-grub
 ```
 and reboot.
 
-You can now use `taskset 0xff00 ...` to run benchmarks on reserved cores.
+Also add permissions to change scheduling policy for ordinary users:
+```
+$ sudo setcap cap_sys_nice=ep /usr/bin/chrt
+```
+(otherwise kernel [will schedule all threads which run under `taskset` on same core](https://serverfault.com/questions/573025/taskset-not-working-over-a-range-of-cores-in-isolcpus)).
+
+You can now use `chrt -r 1 taskset 0xff00 ...` to run benchmarks on reserved cores.
 
 # Run in non-GUI mode
 
@@ -31,4 +37,28 @@ Set scaling governor to `performance` via
 # Give CPU startup routines time to settle
 $ sleep 120
 $ echo performance | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+```
+
+# Increase priority
+
+Add to `/etc/security/limits.conf`:
+```
+USERNAME soft nice -20
+USERNAME hard nice -20
+```
+and run benchmarks under `nice -n -20 ...`.
+
+# Disable ASLR
+
+Run benchmarks under `setarch -R ...`.
+
+# Disable networking
+
+Disable network via
+```
+$ sudo /etc/init.d/networking stop
+```
+or
+```
+$ systemctl stop networking.service
 ```
