@@ -31,5 +31,29 @@ is replaced with explicit chunks:
         .sum::<u32>();
 ```
 
-TODO:
-  - more use-cases for `chunks_exact`
+Another example is developing analog of `std::find`
+[here](https://hackernoon.com/this-tiny-rust-tweak-makes-searching-a-slice-9x-faster):
+branchless code
+```
+    for (i, &b) in haystack.iter().enumerate().rev() {
+        if b == needle {
+            position = Some(i);
+        }
+    }
+```
+fails to vectorize but `chunks_exact` helps:
+```
+fn find_no_early_returns(haystack: &[u8], needle: u8) -> Option<usize> {
+    return haystack.iter().enumerate()
+        .filter(|(_, &b)| b == needle)
+        .rfold(None, |_, (i, _)| Some(i))
+}
+
+fn find(haystack: &[u8], needle: u8) -> Option<usize> {
+    let chunks = haystack.chunks_exact(32);
+    let remainder = chunks.remainder();
+    chunks.enumerate()
+        .find_map(|(i, chunk)| find_no_early_returns(chunk, needle).map(|x| 32 * i + x) )
+        .or(find_no_early_returns(remainder, needle).map(|x| (haystack.len() & !0x1f) + x))
+}
+```

@@ -1696,17 +1696,38 @@ we should add them to overheads.
 - Optimising path tracing with SIMD: https://bitshifter.github.io/2018/06/04/simd-path-tracing/
   * Status: backlog
 - SIMD Vector/Slice/Chunk Addition: https://www.reddit.com/r/rust/comments/154vowr/simd_vectorslicechunk_addition/
-  * Status: backlog
+  * Status: DONE (10m)
+  * Assignee: yugr
+  * OP used `chunks_exact` for vectorize f32 reduction loop
+  * Some issues with bounds checks in inner loop
+    + no longer present in modern rustc
+    + Shnatsel suggested to fix using common techniques from his post
+  * More materials:
+    + no new links
 - Auto-vectorize sum with mask: https://users.rust-lang.org/t/auto-vectorize-sum-with-mask/59433
-  * Status: backlog
+  * Status: DONE (10m)
+  * Assignee: yugr
+  * Discussion of masked sum autovec but no conclusions or concrete results
+  * More materials:
+    + No new links
 - Building a compile-time SIMD optimized smoothing filter: https://scientificcomputing.rs/2024/talks/raz.html
-  * Status: backlog
+  * Status: in progress (10m)
+  * Assignee: yugr
   * More materials:
     + [Reddit](https://news.ycombinator.com/item?id=41679748)
 - Rust, SIMD, and ISPC: https://state.smerity.com/direct/smerity/state/01E8TG3G5VMR0X3DQNTFK1F4WY
-  * Status: backlog
+  * Status: DONE (5m)
+  * Assignee: yugr
+  * Optimized simple FP loop with `chunks_exact` + explicit (unsafe) SIMD
+  * More materials:
+    + no new links
 - This Tiny Rust Tweak Makes Searching a Slice 9x Faster: https://hackernoon.com/this-tiny-rust-tweak-makes-searching-a-slice-9x-faster
-  * Status: backlog
+  * Status: DONE (5m)
+  * Assignee: yugr
+  * `std::find` is vectorized via explicit `chunks_exact`
+  * Not clear why original vectorizer failed
+  * More materials:
+    + no new links
 
 # Stack probing
 
