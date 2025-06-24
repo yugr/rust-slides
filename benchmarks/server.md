@@ -1,5 +1,27 @@
 This file contains instructions for setting up server for benchmarking.
 
+# BIOS settings
+
+Disable frequency scaling, hyperthreading, HW prefetching, Turbo Boost, Intel Speed Shift, etc. in BIOS settings.
+
+# Run in non-GUI mode
+
+To boot to non-GUI mode on systemd systems see https://linuxconfig.org/how-to-disable-enable-gui-in-ubuntu-22-04-jammy-jellyfish-linux-desktop
+(`sudo init 1` otherwise).
+
+# Disable networking
+
+Disable network via
+```
+$ sudo /etc/init.d/networking stop
+```
+or
+```
+$ systemctl stop networking.service
+```
+
+TODO: check if this is important for stability
+
 # Reserve cores for benchmarking
 
 Add to `/etc/default/grub`:
@@ -20,15 +42,6 @@ $ sudo setcap cap_sys_nice=ep /usr/bin/chrt
 (otherwise kernel [will schedule all threads which run under `taskset` on same core](https://serverfault.com/questions/573025/taskset-not-working-over-a-range-of-cores-in-isolcpus)).
 
 You can now use `chrt -r 1 taskset 0xff00 ...` to run benchmarks on reserved cores.
-
-# Run in non-GUI mode
-
-To boot to non-GUI mode on systemd systems see https://linuxconfig.org/how-to-disable-enable-gui-in-ubuntu-22-04-jammy-jellyfish-linux-desktop
-(`sudo init 1` otherwise).
-
-# BIOS settings
-
-Disable frequency scaling, HW prefetching, Turbo Boost, Intel Speed Shift, etc. in BIOS settings.
 
 # Fix frequency
 
@@ -51,14 +64,3 @@ and run benchmarks under `nice -n -20 ...`.
 # Disable ASLR
 
 Run benchmarks under `setarch -R ...`.
-
-# Disable networking
-
-Disable network via
-```
-$ sudo /etc/init.d/networking stop
-```
-or
-```
-$ systemctl stop networking.service
-```
