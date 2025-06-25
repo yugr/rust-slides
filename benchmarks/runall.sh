@@ -73,6 +73,10 @@ while true; do
       RUNNER_ARGS="$2"
       shift 2
       ;;
+    -v | --verbose)
+      V=$((V + 1))
+      shift
+      ;;
     --)
       shift
       TOOLCHAINS="$@"
