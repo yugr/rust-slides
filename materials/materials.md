@@ -1691,10 +1691,6 @@ we should add them to overheads.
   * More materials:
     + no more perf-relevant posts in blog
     + [Reddit](https://www.reddit.com/r/rust/comments/1hk0bry/unnecessary_optimization_in_rust_hamming/)
-- Speeding up parallel SIMD simulation: https://users.rust-lang.org/t/speeding-up-parallel-simd-simulation/62896
-  * Status: backlog
-- Optimising path tracing with SIMD: https://bitshifter.github.io/2018/06/04/simd-path-tracing/
-  * Status: backlog
 - SIMD Vector/Slice/Chunk Addition: https://www.reddit.com/r/rust/comments/154vowr/simd_vectorslicechunk_addition/
   * Status: DONE (10m)
   * Assignee: yugr
