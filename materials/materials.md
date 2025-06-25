@@ -1707,7 +1707,7 @@ we should add them to overheads.
   * More materials:
     + No new links
 - Building a compile-time SIMD optimized smoothing filter: https://scientificcomputing.rs/2024/talks/raz.html
-  * Status: in progress (10m)
+  * Status: DONE (10m)
   * Assignee: yugr
   * More materials:
     + [Reddit](https://news.ycombinator.com/item?id=41679748)
