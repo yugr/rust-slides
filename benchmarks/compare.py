@@ -136,14 +136,17 @@ def main():
     rhs_basenames = set(map(os.path.basename, rhs_jsons))
 
     if lhs_basenames - rhs_basenames:
-        names = ", ".join(lhs_basenames - rhs_basenames)
+        names = ", ".join(sorted(lhs_basenames - rhs_basenames))
         warn(f"some results are present only in {lhs}: {names}")
 
     if rhs_basenames - lhs_basenames:
-        names = ", ".join(rhs_basenames - lhs_basenames)
+        names = ", ".join(sorted(rhs_basenames - lhs_basenames))
         warn(f"some results are present only in {rhs}: {names}")
 
-    json_files = lhs_basenames & rhs_basenames
+    json_files = sorted(lhs_basenames & rhs_basenames)
+
+    if not json_files:
+        error(f"no common .json files found")
 
     for json_file in json_files:
         compare_jsons(lhs / json_file, rhs / json_file)
