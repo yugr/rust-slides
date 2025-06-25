@@ -329,7 +329,7 @@ BENCHES = [
         "uv",
         "https://github.com/astral-sh/uv",
         "dc5b3762f38a8e47b53bec9cc3cefb71e4aef55c",
-        [("", "cargo bench --no-fail-fast")],
+        [("", "cargo bench")],
     ),
     CriterionBench(
         "veloren",
