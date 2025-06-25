@@ -36,8 +36,11 @@ Options:
                                  (can be specified more than once).
 
 Examples:
-  # Run benchmarks without fancy dependencies with sensible flags
-  \$ $(basename $0) --runner-args "-r 'chrt -r 1 taskset 0xf0 nice -n -20 setarch -R' --only SpacetimeDB,bevy,meilisearch,nalgebra,oxipng,rav1e,regex,ruff,rust_serialization_benchmark,tokio" baseline
+  # Run benchmarks with sensible flags
+  \$ $(basename $0) --runner-args "-r 'chrt -r 1 taskset 0xf0 nice -n -20 setarch -R'" baseline
+  #
+  # Run fast benchmarks
+  \$ $(basename $0) --runner-args "--only SpacetimeDB,nalgebra,regex,ruff,tokio" baseline
 EOF
   exit
 }
