@@ -39,6 +39,14 @@ def error_if(cond, msg):
         error(msg)
 
 
+class ExecutionError(Exception):
+    pass
+
+
+class BuildError(Exception):
+    pass
+
+
 def run(cmd, fatal=True, tee=False, **kwargs):
     """
     Simple wrapper for subprocess.
@@ -53,7 +61,7 @@ def run(cmd, fatal=True, tee=False, **kwargs):
     err = p.stderr.decode()
     if fatal and p.returncode != 0:
         cmds = " ".join(cmd)
-        error(f"'{cmds}' failed:\n{out}{err}")
+        raise ExecutionError(f"'{cmds}' failed:\n{out}{err}")
     if tee:
         sys.stdout.write(out)
         sys.stderr.write(err)
@@ -98,10 +106,10 @@ class CargoBench(Bench):
         for subdir, params in self.cmds:
             build_path = base_path / os.path.basename(self.repo) / subdir
 
-            error_if(
-                not build_path.exists(),
-                f"directory {build_path} does not exist, did you forget to clone?",
-            )
+            if not build_path.exists():
+                raise BuildError(
+                    f"directory {build_path} does not exist, did you forget to clone?"
+                )
 
             if clean:
                 run("cargo clean", cwd=str(build_path))
@@ -110,7 +118,10 @@ class CargoBench(Bench):
             if jobs is not None:
                 cargo_args.extend(["-j", str(jobs)])
             cargo_args.append("--no-run")
-            run(cargo_args, cwd=str(build_path))
+            try:
+                run(cargo_args, cwd=str(build_path))
+            except ExecutionError as e:
+                raise BuildError(*e.args) from None
 
     def run(self, base_path, run_options):
         runtimes = []
@@ -161,7 +172,8 @@ class CriterionBench(CargoBench):
                 full_line = line
 
             match = re.match(r"(.+?)\s+time:\s*(\[.*)", full_line)
-            error_if(match is None, f"failed to parse time report:\n{line}")
+            if match is None:
+                raise ExecutionError(f"failed to parse time report:\n{line}")
             name = match[1]
             data = match[2]
 
@@ -169,7 +181,8 @@ class CriterionBench(CargoBench):
                 r"^\[([0-9.]+) ([a-zµ]+) ([0-9.]+) ([a-zµ]+) ([0-9.]+) ([a-zµ]+)\]",
                 data,
             )
-            error_if(data_match is None, f"failed to parse time report:\n{line}")
+            if data_match is None:
+                raise ExecutionError(f"failed to parse time report:\n{line}")
             runtimes[name] = {
                 "lb": (float(data_match[1]), fix_units(data_match[2])),
                 "avg": (float(data_match[3]), fix_units(data_match[4])),
@@ -456,26 +469,36 @@ def main():
 
     # Build
 
+    built_benches = []
     for bench in benches:
         print(f"Building {bench.name}...")
-        t1 = time.time()
-        bench.build(base_path, args.clean, args.jobs)
-        elapsed = time.time() - t1
-        print(f"Built successfully in {int(elapsed)} sec.")
+        try:
+            t1 = time.time()
+            bench.build(base_path, args.clean, args.jobs)
+            elapsed = time.time() - t1
+            print(f"Built successfully in {int(elapsed)} sec.")
+            built_benches.append(bench)
+        except BuildError as e:
+            print(f"Failed to build {bench.name}")
+            print(e.args[0])
 
     if args.build_only:
         return
 
     # Run
 
-    for bench in benches:
+    for bench in built_benches:
         print(f"Benching {bench.name}...")
-        t1 = time.time()
-        for i, bench_runtimes in enumerate(bench.run(base_path, args.run_options)):
-            with (base_path / f"{bench.name}_{i}.json").open("w") as f:
-                f.write(json.dumps(bench_runtimes, indent=4, sort_keys=True))
-        elapsed = time.time() - t1
-        print(f"Benched successfully in {int(elapsed)} sec.")
+        try:
+            t1 = time.time()
+            for i, bench_runtimes in enumerate(bench.run(base_path, args.run_options)):
+                with (base_path / f"{bench.name}_{i}.json").open("w") as f:
+                    f.write(json.dumps(bench_runtimes, indent=4, sort_keys=True))
+            elapsed = time.time() - t1
+            print(f"Benched successfully in {int(elapsed)} sec.")
+        except ExecutionError as e:
+            print(f"Failed to run bench {bench.name}")
+            print(e.args[0])
 
 
 if __name__ == "__main__":
