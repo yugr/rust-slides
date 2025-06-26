@@ -471,7 +471,7 @@ def main():
 
     # Build
 
-    built_benches = []
+    failed_benches = set()
     for bench in benches:
         print(f"Building {bench.name}...")
         try:
@@ -479,17 +479,16 @@ def main():
             bench.build(base_path, args.clean, args.jobs)
             elapsed = time.time() - t1
             print(f"Built successfully in {int(elapsed)} sec.")
-            built_benches.append(bench)
         except BuildError as e:
-            print(f"Failed to build {bench.name}")
-            print(e.args[0])
+            failed_benches.add(bench)
+            warn(f"{bench.name}: failed to build:\n{e.args[0]}")
 
     if args.build_only:
-        return
+        return 1 if failed_benches else 0
 
     # Run
 
-    for bench in built_benches:
+    for bench in (b for b in benches if b not in failed_benches):
         print(f"Benching {bench.name}...")
         try:
             t1 = time.time()
@@ -499,9 +498,11 @@ def main():
             elapsed = time.time() - t1
             print(f"Benched successfully in {int(elapsed)} sec.")
         except ExecutionError as e:
-            print(f"Failed to run bench {bench.name}")
-            print(e.args[0])
+            failed_benches.add(bench)
+            warn(f"{bench.name}: failed to run\n{e.args[0]}")
+
+    return 1 if failed_benches else 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
