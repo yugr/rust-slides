@@ -13,12 +13,15 @@ To boot to non-GUI mode on systemd systems see https://linuxconfig.org/how-to-di
 
 Disable network via
 ```
+# Ubuntu (note that this is a permanent setting)
+$ nmcli networking off
+
+# Other suggestions, didn't work for me
 $ sudo /etc/init.d/networking stop
-```
-or
-```
 $ systemctl stop networking.service
 ```
+
+Note that projects may not be buildable after that because dependencies won't download.
 
 TODO: check if this is important for stability
 
