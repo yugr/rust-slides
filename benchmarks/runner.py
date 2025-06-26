@@ -178,6 +178,13 @@ class CriterionBench(CargoBench):
 
         return runtimes
 
+class UVBench(CriterionBench):
+    """UV benchmark class."""
+
+    def build(self, base_path, clean, jobs):
+        run("python3 -m venv .venv", cwd=base_path)
+        super().build(base_path, clean, jobs)
+
 
 class OxipngBench(CargoBench):
     """Oxipng benchmark class."""
@@ -325,7 +332,7 @@ BENCHES = [
         "9563707aaa73a802fa4d3c51c12869a037641070",
         [("", "cargo bench")],
     ),
-    CriterionBench(
+    UVBench(
         "uv",
         "https://github.com/astral-sh/uv",
         "dc5b3762f38a8e47b53bec9cc3cefb71e4aef55c",

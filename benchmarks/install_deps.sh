@@ -20,3 +20,6 @@ sudo apt install gcc g++ libasound2-dev libfontconfig-dev libwayland-dev libx11-
 
 # For criterion (optional)
 sudo apt install gnuplot
+
+# For uv
+pip3 install virtualenv
