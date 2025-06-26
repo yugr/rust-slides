@@ -191,11 +191,13 @@ class CriterionBench(CargoBench):
 
         return runtimes
 
+
 class UVBench(CriterionBench):
     """UV benchmark class."""
 
     def build(self, base_path, clean, jobs):
-        run("python3 -m venv .venv", cwd=base_path)
+        if not base_path.exists():
+            run("python3 -m venv .venv", cwd=base_path)
         super().build(base_path, clean, jobs)
 
 
