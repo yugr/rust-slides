@@ -4,6 +4,8 @@
 # runs benchmarks and compares results.
 #
 # Run `runall.sh --help` for details.
+#
+# TODO: this script should not be (gh-43)
 
 set -eu
 set -o pipefail
@@ -106,6 +108,7 @@ for t in $TOOLCHAINS; do
   rm -rf results/$t
 done
 
+# TODO: add -o option
 WORKDIR=$PWD/repos
 if test -n "$CLONE"; then
   rm -rf $WORKDIR
