@@ -6,10 +6,7 @@ Effort: 50h
 
 # Background
 
-See [README](README.md).
-
-TODO:
-  - describe how this relates to work in C++
+See [README](README.md), particularly [C++ status](README.md#c).
 
 # Examples
 
@@ -74,9 +71,6 @@ See [README](README.md#solutions).
 
 [Story-time: C++, bounds checking, performance, and compilers](https://chandlerc.blog/posts/2024/11/story-time-bounds-checking/) (and links)
   * Bounds checking in C++
-
-TODO:
-  - any other good posts ?
 
 # Performance impact
 

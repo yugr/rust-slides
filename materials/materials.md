@@ -1599,6 +1599,7 @@ we should add them to overheads.
   * Status: DONE (10m)
   * Problem: studies influence of bounds checks on performance
   * Root cause: matklad concludes that main cost is due to blocked autovec and checks themselves are cheap
+    + some examples no longer relevant (optimized by modern rustc)
   * Solution: N/A (pure analysis)
   * LLVM: N/A (pure analysis)
   * More materials: not checked (~100 non-fork Rust repos)
@@ -2520,7 +2521,7 @@ MIRIFLAGS="-Zmiri-disable-isolation -Zmiri-measureme=crox" cargo +nightly miri r
   * Claims that
     + bounds checks overhead is too large by compiling existing C codec with and without assertions (`NDEBUG`) and getting 13% overhead
       - burntsushi claims 5-8% in regex
-    + codecs require too much low-level byte manipulations and invariants are too complex for compiler to proove (to hoist checks out of loops)
+    + codecs require too much low-level byte manipulations and invariants are too complex for compiler to prove (to hoist checks out of loops)
   * More materials:
     + [Reddit](https://www.reddit.com/r/rust/comments/1j669bm/why_do_i_find_rust_inadequate_for_codecs_in/)
     + [HN](https://news.ycombinator.com/item?id=43295908)
