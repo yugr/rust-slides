@@ -21,7 +21,8 @@ $ sudo /etc/init.d/networking stop
 $ systemctl stop networking.service
 ```
 
-Note that projects may not be buildable after that because dependencies won't download.
+Note that projects may not be buildable after that because dependencies won't download
+(so need to build without `--clone` and with `--no-clean`).
 
 TODO: check if this is important for stability
 
@@ -67,3 +68,19 @@ and run benchmarks under `nice -n -20 ...`.
 # Disable ASLR
 
 Run benchmarks under `setarch -R ...`.
+
+# Future work
+
+The noise is still high (2-4%) so these things should be tried:
+  - single-user mode
+  - `chrt -f`
+  - reduce thread count (maybe even to single core):
+    * control `std::thread::available_parallelism` via env. variable (need to patch stdlib)
+      + bevy, ruff (also `TY_MAX_PARALLELISM` env. variable), uv, rust
+    * reduce parallelism in Rayon via `RAYON_NUM_THREADS` env. variable:
+      + meilisearch, oxipng, rav1e, SpacetimeDB, ruff
+    * reduce parallelism in Tokio via `TOKIO_WORKER_THREADS` env. variable:
+      + tokio
+    * no parallelism:
+      + nalgebra, regex
+    * what about zed ?
