@@ -251,8 +251,6 @@ class RegexBench(Bench):
     def run(self, base_path, run_options):
         build_path = base_path / os.path.basename(self.repo)
 
-        run_options = " ".join(run_options)
-
         # TODO: rebar also supports other Rust regex engines (regex-lite, regress)
         _, out, _, _ = run(
             run_options + " target/release/rebar measure -e ^rust/regex$ -f ^curated",
