@@ -12,9 +12,11 @@ Note that feature consists from
   - compiler part (instrumentation of index accesses)
   - stdlib part (manual checks in stdlib containers)
 
+2024 CVE stats: 2098 CVEs out of total 33k i.e. 6.5%
+(but other CVEs are relatively higher-level e.g. input validation, etc.).
+
 TODO:
   - example errors
-  - CVE stats (for CWEs from https://cwe.mitre.org/data/definitions/1218.html)
 
 # Examples
 
