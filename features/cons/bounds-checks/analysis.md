@@ -1,12 +1,20 @@
 # Administrivia
 
+Assignee: yugr
 Parent task: gh-20
-
-Effort: 50h
+Effort: 75h
 
 # Background
 
 See [README](README.md), particularly [C++ status](README.md#c).
+
+Note that feature consists from
+  - compiler part (instrumentation of index accesses)
+  - stdlib part (manual checks in stdlib containers)
+
+TODO:
+  - example errors
+  - CVE stats (for CWEs from https://cwe.mitre.org/data/definitions/1218.html)
 
 # Examples
 

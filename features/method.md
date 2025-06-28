@@ -53,10 +53,13 @@ When commiting changes
 # Research
 
 For each performance feature we neeed to provide
-  - why this feature is needed ?
-    * examples of errors (including known CVEs/exploits)
+  - why is this feature needed ?
+    * example errors which are caught by this check
+    * CVE stats and known CVEs/exploits (can be taken from https://github.com/CVEProject/cvelistV5)
+    * enabled by default and why
     * situation in C++
   - clear example (Rust microbenchmark, asm code)
+  - types of check (e.g. compiler/stdlib parts)
   - info whether LLVM can potentially optimize it (and with what limitations)
   - info on how developer can work around it and with how much effort/ugliness (unsafe, wrapping operations, reslicing, etc.)
     * pay special attention to cases which can not be optimized at all
@@ -72,14 +75,15 @@ For each performance feature we neeed to provide
       + note that simply using `RUSTFLAGS` isn't great because they override project settings in `Cargo.toml`
       + compiler modifications need to be kept in private compiler repo `yugr/rust-private`
     * collect perf measurements for benchmarks:
-     + runtime
-     + PMU counters (inst count, I$/D$/branch misses)
-     + compiler stats
-       - depend on feature
-       - e.g. SLP/loop autovec for bounds checking feature
-       - e.g. NoAlias returns from AA manager for alias feature
-       - e.g. CSE/GVN/LICM for alias feature
-    * x86/AArch64, normal/ThinLTO/FatLTO, cgu=default/1
+      + runtime
+      + PMU counters (inst count, I$/D$/branch misses)
+      + compiler stats
+        - depend on feature
+        - e.g. SLP/loop autovec for bounds checking feature
+        - e.g. NoAlias returns from AA manager for alias feature
+        - e.g. CSE/GVN/LICM for alias feature
+    * at least x86/AArch64
+      + maybe also normal/ThinLTO/FatLTO, cgu=default/1 in future if we have time
   - fix all TODOs that are mentioned in feature's README
 
 Hopefully in many cases all above will be obtained from collected materials.
