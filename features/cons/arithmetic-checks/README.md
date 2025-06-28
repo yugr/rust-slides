@@ -14,5 +14,3 @@ There we check `x / 0` and `MIN / -1`.
 # TODO
 
 - Benchmark without div check
-- Detect all sources of panic in compiler (besides bounds checks)
-  * Manually or using [no_panic crate](https://docs.rs/no-panic/latest/no_panic/)

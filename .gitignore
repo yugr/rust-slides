@@ -2,3 +2,6 @@
 .*.swo
 /tmp
 /pdfs
+*.d
+*.o
+*.rlib

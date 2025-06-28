@@ -73,6 +73,10 @@ Main source of performance overhead: UB avoidance
 Note that some overheads are basic (e.g. bounds checking)
 and some are consequences (e.g. disabled autovec).
 
+Even fast checks introduce several problems:
+  - pressure on caches (I$, BTB)
+  - more complex control flow so other opts break
+
 - Runtime checks (see `AssertKind` enum in `compiler/rustc_middle/src/mir/syntax.rs`):
   * index accesses:
     + LLVM may not always remove them which will break autovec

@@ -76,7 +76,7 @@ TODO:
 
 # Solutions
 
-- `unchecked_add` and friends
+- `unchecked_add` or `wrapping_XXX` intrinsics
 - `Wrapping<T>` types in stdlib
 - `unchecked_math` pragma
 - asserts or compiler hints:
