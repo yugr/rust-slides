@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 
-# Run me in cvelistV5/cves
+# Scanner of CVEs in https://github.com/CVEProject/cvelistV5
+#
+# I usually scan only cvelistV5/cves/2024
 
+import argparse
 import bs4
 import json
 import os
@@ -72,9 +75,22 @@ def read_cwe_descs():
 
 
 def main():
+    class Formatter(
+        argparse.ArgumentDefaultsHelpFormatter, argparse.RawDescriptionHelpFormatter
+    ):
+        pass
+
+    parser = argparse.ArgumentParser(
+        description="CVE scanner", formatter_class=Formatter
+    )
+    parser.add_argument("dir", nargs="+", help="Directory with CVEs")
+
+    args = parser.parse_args()
+
     files = []
-    for d, _, ff in os.walk("2024"):
-        files.extend(os.path.join(d, f) for f in ff if re.match(r"CVE-.*\.json", f))
+    for dir in args.dir:
+        for d, _, ff in os.walk(dir):
+            files.extend(os.path.join(d, f) for f in ff if re.match(r"CVE-.*\.json", f))
 
     hist = {}
     fails = []
@@ -108,12 +124,23 @@ def main():
         total += count
     print(f"{total} total\n")
 
-    # TODO: moar categories ?
+    # TODO: moar categories from https://cwe.mitre.org/data/definitions/699.html ?
     categories = {
-        # https://cwe.mitre.org/data/definitions/1218.html (removed irrelevant)
-        "Memory Buffer Errors": [120, 124, 125, 131, 786, 787, 788, 805],
-        # https://cwe.mitre.org/data/definitions/189.html (removed irrelevant)
-        "Numeric Errors": [1182, 128, 190, 191, 369, 681, 839, 1335],
+        "Memory Overflow": [
+            # Memory Buffer Errors: https://cwe.mitre.org/data/definitions/1218.html (only relevant)
+            120, 124, 125, 131, 786, 787, 788, 805,
+            # Results of /overflow|underflow|buffer/ search
+            119, 121, 122, 126, 127, 680, 806,
+            # Pointer Issues: https://cwe.mitre.org/data/definitions/465.html (only relevant)
+            466, 468, 469, 823,
+        ],
+        # https://cwe.mitre.org/data/definitions/189.html (only relevant)
+        "Integer Overflow": [
+            # Numeric Errors
+            1182, 128, 190, 191, 369, 681, 839, 1335,
+            # Not sure why these are missing
+            680,
+        ],
     }
 
     print("# Categories:")
