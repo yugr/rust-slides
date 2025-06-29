@@ -141,6 +141,14 @@ def main():
             # Not sure why these are missing
             680,
         ],
+        "Stack overflow": [
+            # Hand-picked
+            121,
+        ],
+        "Uninitialized": [
+            # Hand-picked
+            456, 457, 824,
+        ],
     }
 
     print("# Categories:")
