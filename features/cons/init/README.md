@@ -8,6 +8,9 @@ Also memory is usually allocated as zero-initialized
 (e.g. for `Vec`).
 
 This is similar to GCC's `-ftrivial-auto-var-init=zero`.
+C++26 will get `[[indeterminate]]` attribute to mark uninitialized variables.
+
+TODO: will initialization be required in C++26 ?
 
 Unfortunately APIs to avoid redundant inits are complex.
 
