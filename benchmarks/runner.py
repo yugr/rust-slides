@@ -484,7 +484,10 @@ def main():
             warn(f"{bench.name}: failed to build:\n{e.args[0]}")
 
     if args.build_only:
-        return 1 if failed_benches else 0
+        if failed_benches:
+            print(f"Failed to build {len(failed_benches)} benchmarks")
+            return 1
+        return 0
 
     # Run
 
@@ -501,7 +504,10 @@ def main():
             failed_benches.add(bench)
             warn(f"{bench.name}: failed to run\n{e.args[0]}")
 
-    return 1 if failed_benches else 0
+    if failed_benches:
+        print(f"Failed to bench {len(failed_benches)} benchmarks")
+        return 1
+    return 0
 
 
 if __name__ == "__main__":
