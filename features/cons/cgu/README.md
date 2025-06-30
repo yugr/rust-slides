@@ -1,6 +1,6 @@
 Rust uses the concept of codegen units (CGUs) to parallelize compilation of crates and significantly reduce build times (16-32 cgus is the default value). However, splitting the program into several independent compilation units prevents some interprocedural optimizations:
 
-CGUs can be disabled (via `-C codegen-units=1`) e.g. Rustc itself is compiled with [single CGU](https://nnethercote.github.io/2024/03/06/how-to-speed-up-the-rust-compiler-in-march-2024.html).
+CGUs can be disabled (via `-C codegen-units=1`) e.g. Rustc itself is compiled with [single CGU](https://nnethercote.github.io/2024/03/06/how-to-speed-up-the-rust-compiler-in-march-2024.html). Does not seem to be the default case currently, `codegen_units` parameter in `bootstrap.toml` (configuration file for building Rust toolchain) defaults to 16 or 256 (the same for stdlib).
 [Recommended fix](https://llvm.org/devmtg/2021-02-28/slides/Patrick-rust-llvm.pdf) is to use ThinLTO
 but this [does not always](https://github.com/rust-lang/rust/issues/47745) restore performance:
 > I think at this point the disparity between codegen-units + ThinLTO vs codegen-units=1 is,
@@ -16,7 +16,7 @@ Note that `--emit=asm` automatically enables `-C codegen-units=1` which may chan
 - Inlining requires explicit annotation (`#[inline]`) and LTO but is still not perfect with these solutions:
   * https://github.com/wasmi-labs/wasmi/issues/339#issuecomment-1023034031
   * https://github.com/rust-lang/rust/issues/47745
-- Dead code elimination is unable to detect dead loops if they are split over multiple CGUs (https://github.com/rust-lang/rust/issues/57235#issuecomment-450673756)
+- Dead code elimination is unable to detect dead loops if they are split over multiple CGUs (https://github.com/rust-lang/rust/issues/57235#issuecomment-450673756). Could not reproduce, with current CGU partitioning algorithm a loop should never be split across multiple CGUs.
 - CGUs cause vtable duplication (but vtables in different CGUs are not always equal) which causes some pointer comparisons to be unpredictable (https://github.com/rust-lang/rust/issues/46139)
   * This may be a problem for optimizer because different copies of vtables will block devirtualization; hopefully it'll be fixed in [#68262](https://github.com/rust-lang/rust/issues/68262)
 
