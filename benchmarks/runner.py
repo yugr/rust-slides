@@ -363,7 +363,7 @@ BENCHES = [
         "zed",
         "https://github.com/zed-industries/zed",
         "83d513aef48f6b4b56bad96740a02f5ef86a0a8c",
-        [("crates/rope", "cargo bench"), ("crates/extension_host", "cargo bench")],
+        [("crates/rope", "cargo bench")],
     ),
 ]
 
