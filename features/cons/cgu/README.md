@@ -1,6 +1,6 @@
-Rust uses the concept of codegen units (CGUs) to parallelize compilation of crates and significantly reduce build times (16-32 cgus is the default value). However, splitting the program into several independent compilation units prevents some interprocedural optimizations:
+Rust uses the concept of codegen units (CGUs) to parallelize compilation of crates and significantly reduce build times (16 cgus is the default value, but not as strictly enforced when not specified by user). However, splitting the program into several independent compilation units prevents some interprocedural optimizations.
 
-CGUs can be disabled (via `-C codegen-units=1`) e.g. Rustc itself is compiled with [single CGU](https://nnethercote.github.io/2024/03/06/how-to-speed-up-the-rust-compiler-in-march-2024.html). Does not seem to be the default case currently, `codegen_units` parameter in `bootstrap.toml` (configuration file for building Rust toolchain) defaults to 16 or 256 (the same for stdlib).
+CGUs can be disabled (via `-C codegen-units=1`) e.g. Rustc itself is compiled with [single CGU](https://nnethercote.github.io/2024/03/06/how-to-speed-up-the-rust-compiler-in-march-2024.html). See `src/ci/docker/host-x86_64/dist-x86_64-linux/Dockerfile` for all Rust release build flags.
 [Recommended fix](https://llvm.org/devmtg/2021-02-28/slides/Patrick-rust-llvm.pdf) is to use ThinLTO
 but this [does not always](https://github.com/rust-lang/rust/issues/47745) restore performance:
 > I think at this point the disparity between codegen-units + ThinLTO vs codegen-units=1 is,
@@ -35,7 +35,7 @@ Architecture and design choices are discussed by Nethercote [here](https://nneth
 
 # TODO
 
-- Check compile slowdown (`O(N^2)` ?) and perf improvements when disabling CGUs (`-C codegen-units=1`) for large/performance-sensitive packages
+- [x] Check compile slowdown (`O(N^2)` ?) and perf improvements when disabling CGUs (`-C codegen-units=1`) for large/performance-sensitive packages
   * We can reuse data from [Let's talk about parallel codegen](https://internals.rust-lang.org/t/lets-talk-about-parallel-codegen/2759/1) but maybe it is too old ?
-- Is CGU number fixed or depends on build PC ? If latter, Rust builds are non-reproducible...
-- @zack suggests that crates are generally largers than C/C++ TUs (more like full programs i.e. unity builds)
+- [x] Is CGU number fixed or depends on build PC ? If latter, Rust builds are non-reproducible...
+- [x] @zack suggests that crates are generally largers than C/C++ TUs (more like full programs i.e. unity builds)
