@@ -128,6 +128,8 @@ also MSVC with `_ITERATOR_DEBUG_LEVEL` and EASTL with its own checks)
 which implements checks like bounds, strict weak ordering, etc.
 Moreover STL hardening [has been accepted](https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2025/p3471r4.html)
 for Standard as part of promoting "modern (contemporary) C++".
+This approach is now widely adopted so we should expect
+significant improvement of compiler optimizations related to bounds checks.
 
 Bounds checking overhead can be equated to replacing
 `reserve` + `push_back` with `resize`
