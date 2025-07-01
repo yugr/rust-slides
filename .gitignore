@@ -1,7 +1,12 @@
+# Vim
 .*.swp
 .*.swo
+
+# Materials
 /tmp
 /pdfs
+
+# Code
 *.d
 *.o
 *.rlib
