@@ -55,7 +55,10 @@ When commiting changes
 For each performance feature we neeed to provide
   - why is this feature needed ?
     * example errors which are caught by this check
-    * CVE stats and known CVEs/exploits (can be taken from https://github.com/CVEProject/cvelistV5)
+    * CVE/KEV stats:
+      + CVE: https://github.com/CVEProject/cvelistV5
+      + KEV: https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json
+      + Mitre top-25 rating also considers severity: https://cwe.mitre.org/top25/archive/2024/2024_cwe_top25.html
     * enabled by default and why
     * situation in C++
   - clear example (Rust microbenchmark, asm code)

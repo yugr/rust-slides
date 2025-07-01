@@ -53,6 +53,19 @@ they are sometimes enabled even in production code (see [README](overflow-checks
 2024 CVE stats: 274 out of total 33k i.e. 1%.
 This is more than 10x less than memory errors which explains why overflow checks are disabled by default.
 
+2024 KEV stats: 3 out of total 181 i.e. 1.5% (4x less than buffer overflow errors).
+```
+$ CVE/kev_scanner.py -y 2024 known_exploited_vulnerabilities.json
+3 Integer Overflow
+12 Memory Overflow
+0 Stack overflow
+0 Uninitialized
+181 Total
+```
+
+[Mitre 2024 top-25 weaknesses rating](https://cwe.mitre.org/top25/archive/2024/2024_cwe_top25.html):
+integer overflow is no. 23 and NULL deref no. 21.
+
 TODO:
   - why is this feature needed ?
     * example errors
