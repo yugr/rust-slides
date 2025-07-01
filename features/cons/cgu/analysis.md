@@ -158,4 +158,7 @@ L3 cache:                             30 MiB
 
 # TODO
 
-- Collect compiler optimization counters
+- Collect compiler optimization counters:
+  * licm, gvn, cse, loop-vectorize, inline
+- Add info how to repro results (scripts ?)
+- Add branch links
