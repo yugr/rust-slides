@@ -9,7 +9,7 @@ Disable frequency scaling, hyperthreading, HW prefetching, Turbo Boost, Intel Sp
 To boot to non-GUI mode on systemd systems see https://linuxconfig.org/how-to-disable-enable-gui-in-ubuntu-22-04-jammy-jellyfish-linux-desktop
 (`sudo init 1` otherwise).
 
-# Disable networking
+# Disable networking (TOO INCONVENIENT)
 
 Disable network via
 ```
@@ -26,7 +26,7 @@ Note that projects may not be buildable after that because dependencies won't do
 
 TODO: check if this is important for stability
 
-# Reserve cores for benchmarking
+# Reserve cores for benchmarking (NOT APPLICABLE)
 
 Add to `/etc/default/grub`:
 ```
@@ -45,7 +45,14 @@ $ sudo setcap cap_sys_nice=ep /usr/bin/chrt
 ```
 (otherwise kernel [will schedule all threads which run under `taskset` on same core](https://serverfault.com/questions/573025/taskset-not-working-over-a-range-of-cores-in-isolcpus)).
 
-You can now use `chrt -r 1 taskset 0xff00 ...` to run benchmarks on reserved cores.
+You can now use `chrt -f 1 taskset 0xff00 ...` to run benchmarks on reserved cores.
+
+UNFORTUNATELY CORE RESERVATION IS NOT APPLICABLE TO RUST BENCHMARKS:
+  - most benchmarks rely on `std::thread::available_parallelism` which ignores affinity mask
+  - so they start more worker threads than available cores
+  - this causes noise levels to skyrocket (10x, reproduced on Ubuntu 22 kernel 6.8.0-60-generic)
+  - for some benchmarks this maybe can be controlled by `TOKIO_WORKER_THREADS` or `RAYON_NUM_THREADS`
+    but core `available_parallelism` can not be controlled by environment variable
 
 # Fix frequency
 
@@ -73,7 +80,6 @@ Run benchmarks under `setarch -R ...`.
 
 The noise is still high (2-4%) so these things should be tried:
   - single-user mode
-  - `chrt -f`
   - reduce thread count (maybe even to single core):
     * control `std::thread::available_parallelism` via env. variable (need to patch stdlib)
       + bevy, ruff (also `TY_MAX_PARALLELISM` env. variable), uv, rust
