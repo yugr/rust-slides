@@ -45,7 +45,8 @@ $ sudo setcap cap_sys_nice=ep /usr/bin/chrt
 ```
 (otherwise kernel [will schedule all threads which run under `taskset` on same core](https://serverfault.com/questions/573025/taskset-not-working-over-a-range-of-cores-in-isolcpus)).
 
-You can now use `chrt -f 1 taskset 0xff00 ...` to run benchmarks on reserved cores.
+You can now use `chrt -f 1 taskset 0xff00 ...` to run benchmarks on reserved cores
+(`chrt -r` also works, `chrt -b` does not).
 
 UNFORTUNATELY CORE RESERVATION IS NOT APPLICABLE TO RUST BENCHMARKS:
   - most benchmarks rely on `std::thread::available_parallelism` which ignores affinity mask
