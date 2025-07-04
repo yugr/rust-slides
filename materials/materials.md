@@ -556,6 +556,7 @@ On the other hand, once all materials are analyzed we won't care about this file
     + high-level flags (`_SECURE_SCL`, `_HAS_ITERATOR_DEBUGGING`)
     + low-level flag (`_ITERATOR_DEBUG_LEVEL`)
   * `_ITERATOR_DEBUG_LEVEL=1` is for hardening and `2` is for debug (`2` is 100x slower)
+  * [Too slow](https://www.reddit.com/r/cpp/comments/1hzj1if/comment/m6spg8v) and [planned for removal](https://www.reddit.com/r/cpp/comments/1hzj1if/comment/m6spu55),
 - RFC: C++ Buffer Hardening: https://discourse.llvm.org/t/rfc-c-buffer-hardening/65734 (2022)
   * Assignee: yugr
   * Status: DONE (2h)
@@ -614,6 +615,7 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Status: DONE (1h)
   * Post about hardened Libc++ integration to Google codebase
   * Report just 0.3% performance overhead and 0.5% size increase in Chrome binary !
+    + Chandler [stresses](https://www.reddit.com/r/cpp/comments/1hzj1if/comment/m6vpzh4/) that this relies heavily on ThinLTO and PGO
   * Plan to use [Safe Buffers](https://clang.llvm.org/docs/SafeBuffers.html) in future
   * More materials:
     + [Reddit](https://www.reddit.com/r/cpp/comments/1gs5bvr/retrofitting_spatial_safety_to_hundreds_of/)

@@ -11,6 +11,8 @@ E.g. Google reports [report](https://security.googleblog.com/2024/11/retrofittin
 just 0.3% performance overhead for services and ~0.5% size increase of Chrome binary:
   - caveat - the numbers were measured with FDO enabled
     (w/o FDO penalty is [4x larger](https://bughunters.google.com/blog/6368559657254912/llvm-s-rfc-c-buffer-hardening-at-google))
+  - Chandler [stresses](https://www.reddit.com/r/cpp/comments/1hzj1if/comment/m6vpzh4)) that this heavily relies on ThinLTO and PGO
+    (can expect [4x](https://bughunters.google.com/blog/6368559657254912/llvm-s-rfc-c-buffer-hardening-at-google) otherwise)
 Also Shnatsel [here](https://shnatsel.medium.com/how-to-avoid-bounds-checks-in-rust-without-unsafe-f65e618b4c1e)
 reports typical savings of 1-3% (max. 15%) which are nothing like
 4-8x reported in URLO microbenches.
