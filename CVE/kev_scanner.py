@@ -55,9 +55,13 @@ CATEGORIES = {
         # Not sure why these are missing
         680,
     ],
-    "Stack overflow": [
+    "Stack Overflow": [
         # Hand-picked
         121,
+    ],
+    "Heap Errors": [
+        # Hand-picked
+        122, 244, 415, 416, 590, 761,
     ],
     "Uninitialized": [
         # Hand-picked
