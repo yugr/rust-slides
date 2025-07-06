@@ -50,7 +50,7 @@ and [here](https://internals.rust-lang.org/t/question-why-does-dividing-by-zero-
 C++ also has mechanisms to catch overflows and
 they are sometimes enabled even in production code (see [README](overflow-checks/README.md)).
 
-2024 CVE stats: 274 out of total 33k i.e. 1%.
+2024 CVE stats: 299 out of total 33k i.e. 1%.
 This is more than 10x less than memory errors which explains why overflow checks are disabled by default.
 
 2024 KEV stats: 3 out of total 181 i.e. 1.5% (4x less than buffer overflow errors).

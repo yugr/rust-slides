@@ -52,6 +52,8 @@ CATEGORIES = {
     "Integer Overflow": [
         # Numeric Errors
         1182, 128, 190, 191, 369, 681, 839, 1335,
+        # CWE-681: Incorrect Conversion between Numeric Types
+        192, 194, 195, 196, 197,
         # Not sure why these are missing
         680,
     ],
