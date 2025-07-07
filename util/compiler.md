@@ -18,6 +18,13 @@ $ ./x setup  # Select 'compiler'
 
 Then add to `bootstrap.toml`
 ```
+[rust]
+channel = "nightly"
+```
+to build a nightly compiler (some benches use features which are unstable in 1.87 and will not compile with the default `dev` channel).
+
+Add
+```
 [llvm]
 assertions = true
 ```
