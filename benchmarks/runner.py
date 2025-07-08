@@ -88,10 +88,10 @@ class Bench:
         for bench_patch in sorted((patch_root / self.name).glob("*.patch")):
             run(f"patch -p1 -i {bench_patch}", cwd=str(bench_path))
 
-    def build(self, base_path, clean, jobs):
+    def build(self, repo_path, clean, jobs):
         raise NotImplementedError
 
-    def run(self, base_path, run_options):
+    def run(self, repo_path, run_options):
         raise NotImplementedError
 
 
@@ -102,9 +102,9 @@ class CargoBench(Bench):
         super().__init__(name, repo, commit)
         self.cmds = cmds
 
-    def build(self, base_path, clean, jobs):
+    def build(self, repo_path, clean, jobs):
         for subdir, params in self.cmds:
-            build_path = base_path / os.path.basename(self.repo) / subdir
+            build_path = repo_path / subdir
 
             if not build_path.exists():
                 raise BuildError(
@@ -123,11 +123,11 @@ class CargoBench(Bench):
             except ExecutionError as e:
                 raise BuildError(*e.args) from None
 
-    def run(self, base_path, run_options):
+    def run(self, repo_path, run_options):
         runtimes = []
 
         for subdir, params in self.cmds:
-            build_path = base_path / os.path.basename(self.repo) / subdir
+            build_path = repo_path / subdir
 
             cargo_args = run_options.split()
             cargo_args.extend(params.split())
@@ -195,10 +195,11 @@ class CriterionBench(CargoBench):
 class UVBench(CriterionBench):
     """UV benchmark class."""
 
-    def build(self, base_path, clean, jobs):
-        if not base_path.exists():
-            run("python3 -m venv .venv", cwd=base_path)
-        super().build(base_path, clean, jobs)
+    def build(self, repo_path, clean, jobs):
+        venv_path = repo_path / '.venv'
+        if not venv_path.exists():
+            run("python3 -m venv .venv", cwd=repo_path)
+        super().build(repo_path, clean, jobs)
 
 
 class OxipngBench(CargoBench):
@@ -233,29 +234,25 @@ class OxipngBench(CargoBench):
 class RegexBench(Bench):
     """Class for BurntSushi regex benchmarks."""
 
-    def build(self, base_path, clean, jobs):
-        build_path = base_path / os.path.basename(self.repo)
-
+    def build(self, repo_path, clean, jobs):
         if clean:
-            run("cargo clean", cwd=str(build_path))
-            engine_path = build_path / "engines/rust/regex"
+            run("cargo clean", cwd=str(repo_path))
+            engine_path = repo_path / "engines/rust/regex"
             run("cargo clean", cwd=str(engine_path))
 
         cargo_args = ["cargo", "build", "--release"]
         if jobs is not None:
             cargo_args.extend(["-j", str(jobs)])
-        run(cargo_args, cwd=str(build_path))
+        run(cargo_args, cwd=str(repo_path))
 
-        run("target/release/rebar build -e ^rust/regex$", cwd=str(build_path))
+        run("target/release/rebar build -e ^rust/regex$", cwd=str(repo_path))
 
-    def run(self, base_path, run_options):
-        build_path = base_path / os.path.basename(self.repo)
-
+    def run(self, repo_path, run_options):
         # TODO: rebar also supports other Rust regex engines (regex-lite, regress)
         _, out, _, _ = run(
             run_options + " target/release/rebar measure -e ^rust/regex$ -f ^curated",
             # "target/release/rebar measure -e ^rust/regex$ -f ^unicode/compile/fifty-letters$"
-            cwd=str(build_path),
+            cwd=str(repo_path),
         )
 
         lines = out.splitlines()
@@ -474,9 +471,10 @@ def main():
     failed_benches = set()
     for bench in benches:
         print(f"Building {bench.name}...")
+        repo_path = base_path / os.path.basename(bench.repo)
         try:
             t1 = time.time()
-            bench.build(base_path, args.clean, args.jobs)
+            bench.build(repo_path, args.clean, args.jobs)
             elapsed = time.time() - t1
             print(f"Built successfully in {int(elapsed)} sec.")
         except BuildError as e:
@@ -493,9 +491,10 @@ def main():
 
     for bench in (b for b in benches if b not in failed_benches):
         print(f"Benching {bench.name}...")
+        repo_path = base_path / os.path.basename(bench.repo)
         try:
             t1 = time.time()
-            for i, bench_runtimes in enumerate(bench.run(base_path, args.run_options)):
+            for i, bench_runtimes in enumerate(bench.run(repo_path, args.run_options)):
                 with (base_path / f"{bench.name}_{i}.json").open("w") as f:
                     f.write(json.dumps(bench_runtimes, indent=4, sort_keys=True))
             elapsed = time.time() - t1
