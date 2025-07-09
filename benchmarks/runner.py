@@ -196,7 +196,7 @@ class UVBench(CriterionBench):
     """UV benchmark class."""
 
     def build(self, repo_path, clean, jobs):
-        venv_path = repo_path / '.venv'
+        venv_path = repo_path / ".venv"
         if not venv_path.exists():
             run("python3 -m venv .venv", cwd=repo_path)
         super().build(repo_path, clean, jobs)
@@ -282,6 +282,46 @@ class RegexBench(Bench):
         return [runtimes]
 
 
+class RustcBench(Bench):
+    def build(self, repo_path, clean, jobs):
+        bench_path = Path(repo_path) / "collector" / "runtime-benchmarks"
+        for subdir in bench_path.iterdir():
+            if not subdir.is_dir() or subdir.name == 'data':
+                continue
+            if clean:
+                run("cargo clean", cwd=str(subdir))
+            build_args = ["cargo", "build", "--release"]
+            if jobs is not None:
+                build_args.extend(["-j", str(jobs)])
+            run(build_args, cwd=str(subdir))
+
+    def run(self, repo_path, run_options):
+        runtimes = {}
+        bench_path = Path(repo_path) / "collector" / "runtime-benchmarks"
+        for subdir in bench_path.iterdir():
+            if not subdir.is_dir() or subdir.name == 'data':
+                continue
+            run_args = run_options if run_options else ""
+            run_args += f" ./target/release/{subdir.name}-bench run"
+            _, out, _, _ = run(run_args, cwd=str(subdir))
+
+            for bench_line in out.splitlines():
+                benchmark_data = json.loads(bench_line)["Result"]
+                times = []
+                for run_result in benchmark_data["stats"]:
+                    times.append(
+                        int(run_result["wall_time"]["secs"]) * int(1e9)
+                        + int(run_result["wall_time"]["nanos"])
+                    )
+
+                runtimes[benchmark_data["name"]] = {
+                    "lb": (min(times), "ns"),
+                    "avg": (sum(times) / len(times), "ns"),
+                    "ub": (max(times), "ns"),
+                }
+        return [runtimes]
+
+
 BENCHES = [
     CriterionBench(
         "SpacetimeDB",
@@ -361,6 +401,11 @@ BENCHES = [
         "https://github.com/zed-industries/zed",
         "83d513aef48f6b4b56bad96740a02f5ef86a0a8c",
         [("crates/rope", "cargo bench")],
+    ),
+    RustcBench(
+        "rustc-runtime-benchmarks",
+        "https://github.com/rust-lang/rustc-perf",
+        "2f1d1c27e7a2342d4cbdfea5fb7eac226e70111c",
     ),
 ]
 
