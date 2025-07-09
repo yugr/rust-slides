@@ -3,6 +3,9 @@
 # Scanner of CVEs in https://github.com/CVEProject/cvelistV5
 #
 # I usually scan only cvelistV5/cves/2024
+#
+# Problem with CVEs is that they are often attributed to consequence
+# rather than root cause CWE
 
 import argparse
 import bs4
@@ -102,8 +105,8 @@ CATEGORIES = {
         122, 244, 415, 416, 590, 761,
     ],
     "Uninitialized": [
-        # Hand-picked
-        456, 457, 824,
+        # Hand-picked (908 is too abstract but many CVEs use it)
+        456, 457, 824, 908,
     ],
 }
 
