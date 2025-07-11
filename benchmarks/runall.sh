@@ -115,9 +115,12 @@ if test -n "$CLONE"; then
   mkdir $WORKDIR
 fi
 
+FAILS=0
 for t in $TOOLCHAINS; do
   mkdir -p results/$t
-  eval "$D/runner.py -p $WORKDIR -t $t $CLONE $RUNNER_ARGS" 2>&1 | tee results/$t/runner.log
+  if ! eval "$D/runner.py -p $WORKDIR -t $t $CLONE $RUNNER_ARGS" 2>&1 | tee results/$t/runner.log; then
+    FAILS=$((FAILS + 1))
+  fi
   mv $WORKDIR/*.json results/$t
 done
 
@@ -128,3 +131,5 @@ for t in $TOOLCHAINS; do
   echo "### Comparing $t against $BASELINE:"
   $D/compare.py results/$BASELINE results/$t
 done
+
+exit $FAILS

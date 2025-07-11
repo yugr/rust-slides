@@ -228,6 +228,9 @@ class OxipngBench(CargoBench):
                 "ub": (t + diff, units),
             }
 
+        if not runtimes:
+            raise ExecutionError(f"failed to parse oxipng time report:\n{out}")
+
         return runtimes
 
 
