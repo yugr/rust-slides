@@ -76,6 +76,8 @@ CATEGORIES = {
 
 
 def main():
+    CATEGORIES["Memory Errors"] = list(set(CATEGORIES["Memory Overflow"]) | set(CATEGORIES["Heap Errors"]))
+
     class Formatter(
         argparse.ArgumentDefaultsHelpFormatter, argparse.RawDescriptionHelpFormatter
     ):
