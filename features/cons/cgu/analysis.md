@@ -41,6 +41,9 @@ Note that `--emit=asm` automatically enables `-C codegen-units=1` which may chan
 
 # Compile-time and performance with different numbers of CGUs
 
+Compiler patch is in branch [zakhar/cgu](https://github.com/yugr/rust-private/tree/zakhar/cgu).
+It forces CGU count to be the value specified in `RUST_FORCED_CGU` environment variable when building the compiler.
+
 Baseline is built with 16 CGUs
 
 ## x86_64
@@ -76,6 +79,13 @@ L3 cache:                             30 MiB
 
 ### 16 CGU
 
+```
+$ RUST_FORCED_CGU=16 ./x build
+$ rustup toolchain link 16_cgu build/host/stage1
+```
+
+Build times are extracted from `runner.py` output:
+
 - `SpacetimeDB`:  223 sec
 - `bevy`:  191 sec
 - `meilisearch`:  352 sec
@@ -90,7 +100,34 @@ L3 cache:                             30 MiB
 - `veloren`:  1167 sec
 - `zed`:  283 sec
 
+#### Compiler optimization counters
+
+```
+$ export RUST_FORCED_CGU=16
+$ export RUSTFLAGS_NOT_BOOTSTRAP='-Cllvm-args=-debug-only=licm,early-cse,gvn,loop-vectorize'
+$ ./x build -j1 --stage 2 compiler |& tee build_16.log
+
+$ grep -c 'LV: Vectorizing' build_16.log
+549
+$ grep -c 'LICM \(hoist\|sink\)ing' build_16.log
+2243348
+$ grep -c 'GVN removed' build_16.log
+797319
+$ grep -c 'EarlyCSE CSE' build_16.log
+2378817
+$ grep -c 'Inlining (cost=' build_16.log
+3648026
+```
+
+
 ### 8 CGU
+
+```
+$ RUST_FORCED_CGU=8 ./x build
+$ rustup toolchain link 8_cgu build/host/stage1
+```
+
+Build times are extracted from `runner.py` output:
 
 - `SpacetimeDB`: 222 sec, +25%
 - `bevy`: 191 sec, +35%
@@ -106,7 +143,30 @@ L3 cache:                             30 MiB
 - `veloren`: 1107 sec, -6%
 - `zed`: 284 sec, +17%
 
+#### Compiler optimization counters
+
+```
+$ export RUST_FORCED_CGU=8
+$ export RUSTFLAGS_NOT_BOOTSTRAP='-Cllvm-args=-debug-only=licm,early-cse,gvn,loop-vectorize'
+$ ./x build -j1 --stage 2 compiler |& tee build_8.log
+
+$ grep -c 'LV: Vectorizing' build_8.log
+552
+$ grep -c 'LICM \(hoist\|sink\)ing' build_8.log
+2342017
+$ grep -c 'GVN removed' build_8.log
+814345
+$ grep -c 'EarlyCSE CSE' build_8.log
+2364832
+$ grep -c 'Inlining (cost=' build_8.log
+3622697
+```
+
 #### Performance gain
+
+```
+$ ./compare.py results/8_cgu results/16_cgu
+```
 
 - `SpacetimeDB_0.json`: +0.7%
 - `bevy_0.json`: +0.1%
@@ -126,6 +186,13 @@ L3 cache:                             30 MiB
 
 #### Build times
 
+```
+$ RUST_FORCED_CGU=1 ./x build
+$ rustup toolchain link 1_cgu build/host/stage1
+```
+
+Build times are extracted from `runner.py` output:
+
 - `SpacetimeDB`: 278 sec, +24%
 - `bevy`: 257 sec, +34%
 - `meilisearch`: 462 sec, +31%
@@ -140,7 +207,16 @@ L3 cache:                             30 MiB
 - `veloren`: 1045 sec, -10%
 - `zed`: 333 sec, +17%
 
+#### Compiler optimization counters
+
+No compiler optimization counters here, because compiler was building for three days
+straight and was not even close to finishing.
+
 #### Performance gain
+
+```
+$ ./compare.py results/8_cgu results/16_cgu
+```
 
 - `SpacetimeDB_0.json`: +5.1%
 - `bevy_0.json`: +4.2%
@@ -155,10 +231,3 @@ L3 cache:                             30 MiB
 - `uv_0.json`: +1.8%
 - `veloren_0.json`: +1.4%
 - `zed_0.json`: +10.2%
-
-# TODO
-
-- Collect compiler optimization counters:
-  * licm, gvn, cse, loop-vectorize, inline
-- Add info how to repro results (scripts ?)
-- Add branch links
