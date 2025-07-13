@@ -115,8 +115,8 @@ $ grep -c 'GVN removed' build_16.log
 797319
 $ grep -c 'EarlyCSE CSE' build_16.log
 2378817
-$ grep -c 'Inlining (cost=' build_16.log
-3648026
+$ grep -c 'Size after inlining' build_16.log
+2532643
 ```
 
 
@@ -158,8 +158,8 @@ $ grep -c 'GVN removed' build_8.log
 814345
 $ grep -c 'EarlyCSE CSE' build_8.log
 2364832
-$ grep -c 'Inlining (cost=' build_8.log
-3622697
+$ grep -c 'Size after inlining' build_8.log
+2475688
 ```
 
 #### Performance gain
