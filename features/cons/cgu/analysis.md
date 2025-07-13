@@ -104,7 +104,7 @@ Build times are extracted from `runner.py` output:
 
 ```
 $ export RUST_FORCED_CGU=16
-$ export RUSTFLAGS_NOT_BOOTSTRAP='-Cllvm-args=-debug-only=licm,early-cse,gvn,loop-vectorize'
+$ export RUSTFLAGS_NOT_BOOTSTRAP='-Cllvm-args=-debug-only=licm,early-cse,gvn,loop-vectorize,inline'
 $ ./x build -j1 --stage 2 compiler |& tee build_16.log
 
 $ grep -c 'LV: Vectorizing' build_16.log
@@ -129,25 +129,25 @@ $ rustup toolchain link 8_cgu build/host/stage1
 
 Build times are extracted from `runner.py` output:
 
-- `SpacetimeDB`: 222 sec, +25%
-- `bevy`: 191 sec, +35%
-- `meilisearch`: 456 sec, +1%
-- `nalgebra`: 74 sec, +5%
-- `oxipng`: 25 sec, -8%
-- `rav1e`: 63 sec, +35%
-- `regex`: 45 sec, +29%
-- `ruff`: 109 sec, +36%
-- `rust_serialization_benchmark`: 162 sec, +52%
-- `tokio`: 40 sec, +22%
-- `uv`: 349 sec, -11%
-- `veloren`: 1107 sec, -6%
-- `zed`: 284 sec, +17%
+- `SpacetimeDB`: 222 sec, -0.4%
+- `bevy`: 191 sec, 0.0%
+- `meilisearch`: 456 sec, +29.5%
+- `nalgebra`: 74 sec, -1.3%
+- `oxipng`: 25 sec, 0.0%
+- `rav1e`: 63 sec, 0.0%
+- `regex`: 45 sec, 0.0%
+- `ruff`: 109 sec, -0.9%
+- `rust_serialization_benchmark`: 162 sec, +1.2%
+- `tokio`: 40 sec, 0.0%
+- `uv`: 349 sec, -6.9%
+- `veloren`: 1107 sec, -5.1%
+- `zed`: 284 sec, +0.4%
 
 #### Compiler optimization counters
 
 ```
 $ export RUST_FORCED_CGU=8
-$ export RUSTFLAGS_NOT_BOOTSTRAP='-Cllvm-args=-debug-only=licm,early-cse,gvn,loop-vectorize'
+$ export RUSTFLAGS_NOT_BOOTSTRAP='-Cllvm-args=-debug-only=licm,early-cse,gvn,loop-vectorize,inline'
 $ ./x build -j1 --stage 2 compiler |& tee build_8.log
 
 $ grep -c 'LV: Vectorizing' build_8.log
@@ -165,7 +165,7 @@ $ grep -c 'Inlining (cost=' build_8.log
 #### Performance gain
 
 ```
-$ ./compare.py results/8_cgu results/16_cgu
+$ ./compare.py results/16_cgu results/8_cgu
 ```
 
 - `SpacetimeDB_0.json`: +0.7%
@@ -193,19 +193,19 @@ $ rustup toolchain link 1_cgu build/host/stage1
 
 Build times are extracted from `runner.py` output:
 
-- `SpacetimeDB`: 278 sec, +24%
-- `bevy`: 257 sec, +34%
-- `meilisearch`: 462 sec, +31%
-- `nalgebra`: 78 sec, +4%
-- `oxipng`: 23 sec, -8%
-- `rav1e`: 85 sec, +34%
-- `regex`: 58 sec, +28%
-- `ruff`: 148 sec, +34%
-- `rust_serialization_benchmark`: 247 sec, +54%
-- `tokio`: 49 sec, +22%
-- `uv`: 311 sec, -17%
-- `veloren`: 1045 sec, -10%
-- `zed`: 333 sec, +17%
+- `SpacetimeDB`: 278 sec, +24.7%
+- `bevy`: 257 sec, +34.6%
+- `meilisearch`: 462 sec, +31.2%
+- `nalgebra`: 78 sec, +4.0%
+- `oxipng`: 23 sec, -8.0%
+- `rav1e`: 85 sec, +34.9%
+- `regex`: 58 sec, +28.9%
+- `ruff`: 148 sec, +34.5%
+- `rust_serialization_benchmark`: 247 sec, +54.4%
+- `tokio`: 49 sec, +22.5%
+- `uv`: 311 sec, -17.1%
+- `veloren`: 1045 sec, -10.5%
+- `zed`: 333 sec, +17.7%
 
 #### Compiler optimization counters
 
@@ -215,7 +215,7 @@ straight and was not even close to finishing.
 #### Performance gain
 
 ```
-$ ./compare.py results/8_cgu results/16_cgu
+$ ./compare.py results/16_cgu results/1_cgu
 ```
 
 - `SpacetimeDB_0.json`: +5.1%
