@@ -10,7 +10,7 @@ Effort: 1h
 
 # Background
 
-This feature is an umbreally for various arithmetic operations checks in Rust:
+This feature is an umbrella for various arithmetic operations checks in Rust:
   - division checks
     * divide-by-zero and division overflow (`INT_MIN / -1`, signed types only)
     * enabled by default and no flag to control this
@@ -27,7 +27,7 @@ This feature is an umbreally for various arithmetic operations checks in Rust:
     * strangely overflow in division (`INT_MIN / -1` is checked unconditionally)
   - size overflows in containers
     * enabled by default
-    * implemented in stdlib code
+    * implemented in stdlib code (`checked_add`, `checked_sub`, `Layout` class checks, etc.)
 
 Some naturally expected checks on the other hand are missing:
   - type conversions are particularly incomplete:
@@ -118,6 +118,11 @@ TODO:
   - may need to write analysis passes to scan real Rust code (libs, big projects) for occurences
 
 ## Disabling the check
+
+I disabled low hanging fruits but didn't touch internal stdlib APIs
+that use `Option` or `Result` (hoping that compiler will be able to optimize them out).
+
+I also didn't disable alignment checks (e.g. in `Layout`).
 
 TODO:
   - determine how to enable/disable feature in compiler/stdlib
