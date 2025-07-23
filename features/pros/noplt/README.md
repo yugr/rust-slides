@@ -1,4 +1,5 @@
-Rust enables `-fno-plt` by default so instead of using
+Rust [enables](https://github.com/rust-lang/rust/pull/109982)
+`-fno-plt` by default on X86 so instead of using
 ```
 call example::foo@PLT
 ```

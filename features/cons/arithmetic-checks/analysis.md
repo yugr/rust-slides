@@ -119,10 +119,12 @@ TODO:
 
 ## Disabling the check
 
-I disabled low hanging fruits but didn't touch internal stdlib APIs
-that use `Option` or `Result` (hoping that compiler will be able to optimize them out).
-
-I also didn't disable alignment checks (e.g. in `Layout`).
+Limitations:
+  - I only disabled low hanging fruits i.e. places where checks were in nearby code
+  - I didn't modify internal stdlib APIs
+    - e.g. didn't modify functions that return `Option` or `Result` (hoping that compiler will be able to optimize them out)
+    + e.g. didn't modify checks in `size_hint` methods
+  - I didn't disable alignment checks (e.g. in `Layout`)
 
 TODO:
   - determine how to enable/disable feature in compiler/stdlib
