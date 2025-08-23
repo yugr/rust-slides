@@ -66,21 +66,59 @@ $ CVE/kev_scanner.py -y 2024 known_exploited_vulnerabilities.json
 [Mitre 2024 top-25 weaknesses rating](https://cwe.mitre.org/top25/archive/2024/2024_cwe_top25.html):
 integer overflow is no. 23 and NULL deref no. 21.
 
-TODO:
-  - why is this feature needed ?
-    * example errors
+Some very famous SW errors were caused by integer overflow:
+  - Therac-25 incident (1985)
+  - Ariane 5 crash (1996)
 
 # Examples
 
-TODO:
-  - clear example (Rust microbenchmark, asm code)
+This simple program
+```
+#[no_mangle]
+pub fn foo(xs: &[i32]) -> i32 {
+    let mut ans = 0;
+    for x in xs {
+        ans += x;
+    }
+    ans
+}
+```
+vectorizes well by default
+```
+$ rustc --crate-type=rlib --emit=asm -o- -C target-cpu=native -O repro.rs
+...
+.LBB0_10:
+        vpaddd  (%rdi,%rax,4), %ymm0, %ymm0
+        vpaddd  32(%rdi,%rax,4), %ymm1, %ymm1
+        vpaddd  64(%rdi,%rax,4), %ymm2, %ymm2
+        vpaddd  96(%rdi,%rax,4), %ymm3, %ymm3
+        addq    $32, %rax
+        cmpq    %rax, %r8
+        jne     .LBB0_10
+...
+```
+but breaks when overflows are enabled:
+```
+$ rustc ... -C overflow-checks=on
+...
+.LBB0_3:
+        addl    (%rdi,%rcx), %eax
+        jo      .LBB0_6
+        addq    $4, %rcx
+        cmpq    %rcx, %rsi
+        jne     .LBB0_3
+...
+```
 
 # Optimizations
 
-TODO:
-  - info whether LLVM can potentially optimize it (and with what limitations)
+In theory LLVM could still vectorize in presence of overflow checks
+by vectorizing the overflow checks itself but this is currently not done.
 
-# Workarounds for bounds checks
+TODO:
+  - can we check how many overflow checks are optimized by LLVM ?
+
+# Workarounds for overflow checks
 
 Overflow checks are already covered [here](overflow-checks/README.md#solutions).
 
@@ -94,8 +132,8 @@ Overflow checks in containers can't be worked around.
 
 # Suggested reading
 
-TODO:
-  - links to important articles (design, etc.)
+[Myths and Legends about Integer Overflow in Rust](https://huonw.github.io/blog/2016/04/myths-and-legends-about-integer-overflow-in-rust)
+  - survey of RFC 560
 
 # Performance impact
 
@@ -106,35 +144,66 @@ But some arhictects [claim](https://news.ycombinator.com/item?id=8766264) that
 this will cause a big (~5%) increase of clock cycle.
 Dan Luu is more positive, with [few percent](http://danluu.com/integer-overflow/) estimate.
 
+[Our studies](https://github.com/yugr/slides/blob/main/CppZeroCost/2025/plan.md)
+also show ~30% overhead in Clang.
+
 Overflow checks hurt performance in three ways:
   - overhead to do the checks
   - cache pressure (I$, BTB)
-  - inhibiting other opts (e.g. autovec) due to more complex control flow and broken SCEV analysis
+  - inhibiting other opts (e.g. autovec) due to more complex control flow and
+    [broken SCEV analysis](https://kristerw.blogspot.com/2016/02/how-undefined-signed-overflow-enables.html)
 
 ## Prevalence
 
-TODO:
-  - is this check is a common case in practice ?
-  - may need to write analysis passes to scan real Rust code (libs, big projects) for occurences
+I used the same approach as outlined in [bounds checking](../bounds-checks/analysis.md#overall-panics).
+
+Relevant panics seem to be
+```
+# Default
+core::slice::index::slice_start_index_overflow_fail
+core::panicking::panic_const::panic_const_div_overflow
+core::slice::index::slice_end_index_overflow_fail
+
+# Forced
+core::panicking::panic_const::panic_const_neg_overflow
+core::panicking::panic_const::panic_const_shr_overflow
+core::panicking::panic_const::panic_const_shl_overflow
+core::panicking::panic_const::panic_const_mul_overflow
+core::panicking::panic_const::panic_const_sub_overflow
+core::panicking::panic_const::panic_const_add_overflow
+```
+
+Results for rustc:
+  - (A) 430214
+  - (A+) not relevant
+  - (B) 429725
+    * not sure how it's smaller than (A)...
+  - (Z) 472510 (+10% compared to default, 9% of panics are overflows)
+    * needed to enable overflow checks explicitly:
+      ```
+      [rust]
+      overflow-checks = true
+      ```
 
 ## Disabling the check
 
-Limitations:
+Default Rust is a middle-ground - it enables _some_ arithmetic checks but not all of them.
+Disabling default checks is impossible, extraneous checks may be enabled with `-C overflow-checks=on`.
+
+## Measurements
+
+As discussed we have three variants to test:
+  - (A) all arithmetic checks removed ([yugr/no-overflow-checks/1](https://github.com/yugr/rust-private/tree/yugr/no-overflow-checks/1) branch)
+  - (A+) same as (A) but also add nsw markers in LLVM IR (to match C signed overflow semantics, [yugr/no-overflow-checks-nsw/2](https://github.com/yugr/rust-private/tree/yugr/no-overflow-checks-nsw/2) branch)
+  - (B) default ([yugr/baseline](https://github.com/yugr/rust-private/tree/yugr/baseline) branch)
+  - (Z) all arithmetic checks enabled ([yugr/force-overflow-checks/1](https://github.com/yugr/rust-private/tree/yugr/force-overflow-checks/1) branch)
+
+For (A) there are some limitations:
   - I only disabled low hanging fruits i.e. places where checks were in nearby code
   - I didn't modify internal stdlib APIs
     - e.g. didn't modify functions that return `Option` or `Result` (hoping that compiler will be able to optimize them out)
     + e.g. didn't modify checks in `size_hint` methods
   - I didn't disable alignment checks (e.g. in `Layout`)
-
-TODO:
-  - determine how to enable/disable feature in compiler/stdlib
-    * there may be flags (e.g. for interger overflows) but sometimes may need patch code (e.g. for bounds checks)
-      + patch for each feature needs to be implemented in separate branch (in private compiler repo)
-    * make sure that found solution works on real examples
-    * note that simply using `RUSTFLAGS` isn't great because they override project settings in `Cargo.toml`
-    * compiler modifications need to be kept in private compiler repo `yugr/rust-private`
-
-## Measurements
 
 ### Static estimates
 
@@ -149,6 +218,6 @@ TODO:
 
 TODO:
   - collect perf measurements for benchmarks:
-    + runtime
-    + PMU counters (inst count, I$/D$/branch misses)
+    * runtime
+    * PMU counters (inst count, I$/D$/branch misses)
     * x86/AArch64, normal/ThinLTO/FatLTO, cgu=default/1

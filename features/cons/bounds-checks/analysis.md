@@ -121,6 +121,7 @@ $ sed -i -e 's/^\(strip\|panic\)/#\1/' Cargo.toml
 Here is the distribution of panics in rustc compiler (panics caused by bounds checks are marked with `!`):
 ```
 $ objdump -rd build/x86_64-unknown-linux-gnu/stage2/lib/librustc_driver*.so | c++filt | rustfilt > librustc_driver.d
+# Actually a better regex would be: sed -e 's/^[^<]*<//; s/[+@].*//; s/<.*//'
 $ grep 'call.*\(unwrap_failed\|expect_failed\|assert_failed\|slice_.*_fail\|core::panicking\)' librustc_driver.d | sed -e 's/.*<//; s/[+@].*//' | sort | uniq -c | sort -nk1
 ...
      52 core::panicking::assert_failed::hbeae657127ccdb04

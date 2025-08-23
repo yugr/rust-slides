@@ -32,7 +32,3 @@ square:
 In practice some workloads [regress by 20%](https://internals.rust-lang.org/t/help-us-benchmark-saturating-float-casts/6231/14).
 
 There is (unsafe) `to_int_unchecked` API to avoid overhead.
-
-# TODO
-
-* Benchmark relevant projects with disabled saturation (`-Zsaturating-float-casts=off`)

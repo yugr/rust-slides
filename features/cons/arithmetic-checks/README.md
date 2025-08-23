@@ -10,7 +10,3 @@ There we check `x / 0` and `MIN / -1`.
 - Unchecked operations (see [here](https://codspeed.io/blog/why-rust-doesnt-need-a-standard-divrem#the-cost-of-panic-handling-an-unchecked-version))
 - Special type `NonZeroU32`
 - Asserts or `core::hint::unreachable_unchecked`
-
-# TODO
-
-- Benchmark without div check
