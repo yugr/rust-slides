@@ -115,8 +115,19 @@ $ rustc ... -C overflow-checks=on
 In theory LLVM could still vectorize in presence of overflow checks
 by vectorizing the overflow checks itself but this is currently not done.
 
+Also multiple successive checks could be combined e.g. here
+```
+fn foo(mut x: i32, y: i32) -> i32 {
+  x += y;
+  x += y;
+  x
+}
+```
+but it's not done.
+
 TODO:
   - can we check how many overflow checks are optimized by LLVM ?
+    e.g. count panics in initial IR vs `opt -O2 -disable-loop-unrolling -disable-loop-vectorization disable-slp-vectorization`
 
 # Workarounds for overflow checks
 

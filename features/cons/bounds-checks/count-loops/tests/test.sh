@@ -15,10 +15,16 @@ for t in *.rs; do
   rustc +$TC --crate-type=rlib -O -C target-cpu=native -C save-temps $t
   $DIS $stem.*.0.rcgu.bc -o $stem.ll
   ../CountLoops $stem.*.0.rcgu.bc > $stem.out
-  if ! diff $stem.out $stem.ref; then
+  if ! diff $stem.ref $stem.out; then
     echo >&2 "Unexpected difference for $t"
     errors=$((errors + 1))
   fi
 done
+
+if test $errors = 0; then
+  echo SUCCESS
+else
+  echo FAIL
+fi
 
 exit $errors
