@@ -115,7 +115,9 @@ $ rustc ... -C overflow-checks=on
 In theory LLVM could still vectorize in presence of overflow checks
 by vectorizing the overflow checks itself but this is currently not done.
 
-Also multiple successive checks could be combined e.g. here
+Also multiple successive checks could be combined
+(so called [delayed panics](https://github.com/rust-lang/rfcs/blob/master/text/0560-integer-overflow.md#delayed-panics))
+e.g. here
 ```
 fn foo(mut x: i32, y: i32) -> i32 {
   x += y;
