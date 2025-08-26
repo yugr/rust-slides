@@ -8,7 +8,7 @@ set -x
 rm -f libCount.so Count
 
 CXX=g++
-CFG=$HOME/src/rust/rust/build/x86_64-unknown-linux-gnu/ci-llvm/bin/llvm-config
+CFG=$HOME/src/rust/no-overflow-checks/build/x86_64-unknown-linux-gnu/ci-llvm/bin/llvm-config
 
 CXXFLAGS='-g -O2'
 

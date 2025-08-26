@@ -147,8 +147,28 @@ $ for bc in `fn build/x86_64-unknown-linux-gnu/{stage1-std,stage1-rustc} *.no-op
 done | awk 'BEGIN{s=0} {s+=$2} END{print s}'
 38915
 ```
-
 So 45% of checks are optimized by LLVM !
+
+Better yet, also remove inline - use
+```
+$ /home/yugr/src/rust/rust/build/x86_64-unknown-linux-gnu/ci-llvm/bin/opt -O2 -print-pipeline-passes /dev/null
+```
+to extract `-O2` pipeline and remove inline, loop-vectorize, slp-vectorize and unroll passes.
+With this, I get
+```
+44133
+```
+
+But this may be misleading because most checks are trivially optimizable:
+```
+$ for bc in `fn build/x86_64-unknown-linux-gnu/{stage1-std,stage1-rustc} *.no-opt.bc`; do
+  /home/yugr/src/rust/rust/build/x86_64-unknown-linux-gnu/ci-llvm/bin/opt -passes='mem2reg,sroa<preserve-cfg>,instcombine<max-iterations=100>' $bc -o tmp.bc
+  ~/tasks/rust/count-overflow-panics/Count tmp.bc
+done | awk 'BEGIN{s=0} {s+=$2} END{print s}'
+49354
+```
+So just 21% of checks are not super-trivial.
+early-cse<>, gvn<>, adce, bdce, instsimplify, sccp and correlated-propagation are responsible for the rest.
 
 # Workarounds for overflow checks
 
@@ -249,8 +269,58 @@ TODO:
 
 ### Runtime improvements
 
+Disabling all checks obviously increases perf:
+```
+$ ../../benchmarks/compare.py baseline/ no-overflow-checks
+compare.py: warning: some results are present only in /home/Asus/src/rust-slides/tmp/results-20250826/baseline: meilisearch_0.json
+SpacetimeDB_0.json: +1.5%
+bevy_0.json: +0.6%
+nalgebra_0.json: +0.3%
+oxipng_0.json: +0.2%
+rav1e_0.json: +2.2%
+regex_0.json: +0.4%
+ruff_0.json: +0.9%
+rust_serialization_benchmark_0.json: -0.1%
+tokio_0.json: +0.2%
+uv_0.json: -0.3%
+veloren_0.json: +1.5%
+zed_0.json: +0.3%
+```
+
+On the other hand enforcing them clearly decreases it A LOT:
+```
+$ ../../benchmarks/compare.py baseline/ force-overflow-checks/
+compare.py: warning: some results are present only in /home/Asus/src/rust-slides/tmp/results-20250826/baseline: meilisearch_0.json, rav1e_0.json, rust_serialization_benchmark_0.json
+SpacetimeDB_0.json: -6.5%
+bevy_0.json: -6.6%
+nalgebra_0.json: -6.8%
+oxipng_0.json: -8.0%
+regex_0.json: -0.9%
+ruff_0.json: -0.8%
+tokio_0.json: -1.4%
+uv_0.json: -1.0%
+veloren_0.json: -14.3%
+zed_0.json: -10.5%
+```
+(rust_serialization_benchmark and rav1e crash with checks enabled).
+
+NSW is not clearly better:
+```
+$ ../../benchmarks/compare.py no-overflow-checks no-overflow-checks-nsw/
+SpacetimeDB_0.json: +0.3%
+bevy_0.json: +0.1%
+nalgebra_0.json: +0.1%
+oxipng_0.json: -0.1%
+rav1e_0.json: -2.2% (irrelevant because has overflows)
+regex_0.json: -0.1%
+ruff_0.json: +0.1%
+rust_serialization_benchmark_0.json: -0.2% (irrelevant because has overflows)
+tokio_0.json: +0.0%
+uv_0.json: +0.0%
+veloren_0.json: -1.4%
+zed_0.json: -0.5%
+```
+
 TODO:
-  - collect perf measurements for benchmarks:
-    * runtime
-    * PMU counters (inst count, I$/D$/branch misses)
-    * x86/AArch64, normal/ThinLTO/FatLTO, cgu=default/1
+  - investigate regression in veloren (and zed ?)
+  - perf measurements for AArch64

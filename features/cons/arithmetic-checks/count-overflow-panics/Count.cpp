@@ -61,8 +61,6 @@ struct LLVMDisDiagnosticHandler : public DiagnosticHandler {
 };
 
 class PanicCounterPass : public PassInfoMixin<PanicCounterPass> {
-  static Regex PanicName;
-
   bool isPanic(const Instruction &I) const {
     auto *CI = dyn_cast<CallInst>(&I);
     if (!CI)
@@ -73,11 +71,9 @@ class PanicCounterPass : public PassInfoMixin<PanicCounterPass> {
       return false;
 
     auto Name = F->getName();
-    if (Name.starts_with("_ZN4core9panicking11panic_const")
-        && Name.find("overflow") != std::string::npos)
-      return true;
-
-    return false;
+    return (Name.starts_with("_ZN4core9panicking11panic_const") ||
+            Name.starts_with("_ZN4core5slice5index")) &&
+           Name.find("overflow") != std::string::npos;
   }
 
 public:
@@ -112,7 +108,8 @@ public:
     unsigned Checks = 0;
 
     for (auto &BB : F) {
-      if (any_of(successors(&BB), [&PanicBBs](auto *BB) { return PanicBBs.count(BB); })) {
+      if (any_of(successors(&BB),
+                 [&PanicBBs](auto *BB) { return PanicBBs.count(BB); })) {
         ++Checks;
       }
     }

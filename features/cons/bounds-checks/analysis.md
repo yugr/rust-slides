@@ -389,4 +389,3 @@ zed: -0.6%
 
 TODO:
   - perf measurements for AArch64
-  - PMU counters (inst count, I$/D$/branch misses) ?
