@@ -127,9 +127,28 @@ fn foo(mut x: i32, y: i32) -> i32 {
 ```
 but it's not done.
 
-TODO:
-  - can we check how many overflow checks are optimized by LLVM ?
-    e.g. count panics in initial IR vs `opt -O2 -disable-loop-unrolling -disable-loop-vectorization disable-slp-vectorization`
+To check how many overflow checks are optimized by LLVM
+we count panics in initial IR vs optimized IR.
+
+Checks in unoptimized IR:
+```
+$ RUSTFLAGS_NOT_BOOTSTRAP='-Csave-temps -Coverflow-checks=on' ./x build --stage 2 compiler
+$ find build/x86_64-unknown-linux-gnu/{stage1-std,stage1-rustc} -name '*.no-opt.bc' \
+  | xargs ~/tasks/rust/count-overflow-panics/Count \
+  | awk 'BEGIN{s=0} {s+=$2} END{print s}'
+70947
+```
+
+Checks in optimized IR:
+```
+$ for bc in `fn build/x86_64-unknown-linux-gnu/{stage1-std,stage1-rustc} *.no-opt.bc`; do
+  /home/yugr/src/rust/rust/build/x86_64-unknown-linux-gnu/ci-llvm/bin/opt -O2 -disable-loop-unrolling -vectorize-loops=false -vectorize-slp=false $bc -o tmp.bc
+  ~/tasks/rust/count-overflow-panics/Count tmp.bc
+done | awk 'BEGIN{s=0} {s+=$2} END{print s}'
+38915
+```
+
+So 45% of checks are optimized by LLVM !
 
 # Workarounds for overflow checks
 
@@ -207,6 +226,7 @@ Disabling default checks is impossible, extraneous checks may be enabled with `-
 
 As discussed we have three variants to test:
   - (A) all arithmetic checks removed ([yugr/no-overflow-checks/1](https://github.com/yugr/rust-private/tree/yugr/no-overflow-checks/1) branch)
+    * note that explicit `checked_add`, etc. were preserved (I only removed them from stdlib)
   - (A+) same as (A) but also add nsw markers in LLVM IR (to match C signed overflow semantics, [yugr/no-overflow-checks-nsw/2](https://github.com/yugr/rust-private/tree/yugr/no-overflow-checks-nsw/2) branch)
   - (B) default ([yugr/baseline](https://github.com/yugr/rust-private/tree/yugr/baseline) branch)
   - (Z) all arithmetic checks enabled ([yugr/force-overflow-checks/1](https://github.com/yugr/rust-private/tree/yugr/force-overflow-checks/1) branch)
