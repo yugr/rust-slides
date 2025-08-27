@@ -70,10 +70,6 @@ or `alloc/src/str.rs`:
         .expect("attempt to join into collection with len > usize::MAX");
 ```
 
-TODO:
-  - check overflow_panic.rs
-  - disable overflow checks in ptr.rs-like files
-
 # Solutions
 
 - `unchecked_add` or `wrapping_XXX` intrinsics
@@ -154,31 +150,24 @@ has this issue.
 Finally signed overflow UB also allows for better
 [range tracking](https://kristerw.blogspot.com/2016/02/how-undefined-signed-overflow-enables.html).
 
+TODO:
+  - Why Rust produces such bad asm for code from [here](https://softwarebits.substack.com/p/impact-of-undefined-behavior-on-performance) ?
+    ```
+    #[no_mangle]
+    pub fn sum_of_n_unsigned(n: usize) -> usize {
+        let mut total = 0;
+        for i in 1..=n {
+            total += i;
+        }
+        total
+    }
+    ```
+    (most likely because equivalent C code may loop forever)
+
 # Links
 
 * [RFC 560](https://github.com/rust-lang/rfcs/blob/master/text/0560-integer-overflow.md)
 * [Myths and Legends about Integer Overflow](https://huonw.github.io/blog/2016/04/myths-and-legends-about-integer-overflow-in-rust/)
-
-# TODO
-
-- Add `nsw` to signed integers and compare perf of large and/or performance sensitive projects
-- Measure overhead via `-Z force-overflow-checks` (or `-C overflow-checks=on`)
-  * See [RFC 1535](https://github.com/rust-lang/rfcs/blob/master/text/1535-stable-overflow-checks.md) for some details
-  * Does it add `nsw`/`nuw` and enable loop optimizations ?
-  * For libstd we can force overflow checks in `bootstrap.toml` via `overflow-checks-std`
-  * Also don't forget to disable in stdlib via `[rust] overflow-checks-std` in bootstrap.toml
-- Why Rust produces such bad asm for code from [here](https://softwarebits.substack.com/p/impact-of-undefined-behavior-on-performance) ?
-```
-#[no_mangle]
-pub fn sum_of_n_unsigned(n: usize) -> usize {
-    let mut total = 0;
-    for i in 1..=n {
-        total += i;
-    }
-    total
-}
-```
-  (most likely because equivalent C code may loop forever)
 
 # Inclusive ranges are slower than exclusive ones
 
