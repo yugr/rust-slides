@@ -93,6 +93,8 @@ this will cause a big (~5%) increase of clock cycle.
 # Other languages
 
 C++ has UBsan/Isan and Pascal has long had `$Q+` (e.g. [here](https://www.freepascal.org/docs-html/prog/progsu64.html)).
+UBsan costs are high e.g. [30% in Clang benchmark](https://github.com/yugr/slides/blob/main/CppZeroCost/2025/EN.pdf).
+There is also `-ftrapv` but it has rotten.
 
 # Overflow UB in C++
 
