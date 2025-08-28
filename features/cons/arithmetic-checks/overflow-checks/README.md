@@ -150,20 +150,6 @@ has this issue.
 Finally signed overflow UB also allows for better
 [range tracking](https://kristerw.blogspot.com/2016/02/how-undefined-signed-overflow-enables.html).
 
-TODO:
-  - Why Rust produces such bad asm for code from [here](https://softwarebits.substack.com/p/impact-of-undefined-behavior-on-performance) ?
-    ```
-    #[no_mangle]
-    pub fn sum_of_n_unsigned(n: usize) -> usize {
-        let mut total = 0;
-        for i in 1..=n {
-            total += i;
-        }
-        total
-    }
-    ```
-    (most likely because equivalent C code may loop forever)
-
 # Links
 
 * [RFC 560](https://github.com/rust-lang/rfcs/blob/master/text/0560-integer-overflow.md)
@@ -186,7 +172,52 @@ contains a check for last element. This check introduces overhead on every itera
 `RangeInclusive` can't be replaced with exclusive Range (with `n+1` upper bound)
 due to potential overflow and panic. Programmer can do this manually though.
 
-TODO: check if LLVM could move the check outside of loop
+Take for example these two codes in Rust
+```
+#[no_mangle]
+pub fn sum_of_n_unsigned(n: usize) -> usize {
+    let mut total = 0;
+    for i in 1..=n {
+        total += i;
+    }
+    total
+}
+```
+and C
+```
+unsigned long sum_of_n_unsigned(unsigned long n) {
+  unsigned long total = 0;
+  for (unsigned long i = 0; i <= n; ++i)
+    total += i;
+  return total;
+}
+```
+
+They produce very different asms:
+```
+.LBB0_3:
+        movq    %rcx, %rdx
+        cmpq    %rdi, %rcx
+        adcq    $0, %rcx
+        addq    %rdx, %rax
+        cmpq    %rdi, %rdx
+        jae     .LBB0_5
+        cmpq    %rdi, %rcx
+        jbe     .LBB0_3
+```
+and
+```
+.LBB0_1:                                # =>This Inner Loop Header: Depth=1
+        addq    %rcx, %rax
+        addq    $1, %rcx
+        cmpq    %rdi, %rcx
+        jbe     .LBB0_1
+```
+(respectively). C asm is better for a reason: it allows for endless loop
+(for `n == USIZE_MAX`) whereas Rust code is finite.
+
+In theory this could be optimized by LLVM by making two copies of loop
+(for normal and `USIZE_MAX` cases) but this would significantly increase code size ?
 
 Good explanation of this is given in https://www.reddit.com/r/rust/comments/15tvuio/why_isnt_the_for_loop_optimized_better_in_this/
 
