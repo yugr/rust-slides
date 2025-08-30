@@ -60,7 +60,9 @@ For each performance feature we neeed to provide
       + KEV: https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json
       + Mitre top-25 rating also considers severity: https://cwe.mitre.org/top25/archive/2024/2024_cwe_top25.html
     * enabled by default and why
-    * situation in C++
+    * situation in C/C++
+      + e.g. [The New C Standard: An Economic and Cultural Commentary](https://www.coding-guidelines.com/cbook/cbook1_1.pdf)
+      + e.g. [Rationale for International Standard Programming Languages - C](https://www.open-std.org/jtc1/sc22/wg14/www/C99RationaleV5.10.pdf)
   - clear example (Rust microbenchmark, asm code)
   - types of check (e.g. compiler/stdlib parts)
   - info whether LLVM can potentially optimize it (and with what limitations)

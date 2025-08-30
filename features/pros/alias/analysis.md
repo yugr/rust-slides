@@ -10,10 +10,17 @@ TODO:
 # Background
 
 TODO:
-  - why is this feature needed ?
+  - why is this feature needed ? (most runtime aliases are fake)
   - enabled by default and why
   - situation in C++
+    * e.g. [The New C Standard: An Economic and Cultural Commentary](https://www.coding-guidelines.com/cbook/cbook1_1.pdf)
+    * e.g. [Rationale for International Standard Programming Languages - C](https://www.open-std.org/jtc1/sc22/wg14/www/C99RationaleV5.10.pdf)
+    * Rust vs. C type aliasing (too error-prone ?)
   - situation with raw pointers (no type aliasing rules => very conservative)
+  - alias (pointer) analysis precision:
+    * [AN EMPIRICAL STUDY OF ALIAS ANALYSIS TECHNIQUES](https://digitalcommons.calpoly.edu/cgi/viewcontent.cgi?article=3206&context=theses)
+    * [Speculative Alias Analysis for Executable Code](https://arcb.csc.ncsu.edu/~mueller/pact02/papers/fernandez152.pdf):
+      significant improvement of precision from using speculation
 
 # Examples
 
@@ -25,6 +32,7 @@ TODO:
 
 TODO:
   - how LLVM can use this info (and with what limitations e.g. only function params)
+    * [relevant paper](https://www.cs.utexas.edu/~mckinley/papers/alias-cc-2004.pdf)
 
 # Suggested readings
 
