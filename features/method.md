@@ -70,7 +70,7 @@ For each performance feature we neeed to provide
   - (need to collect prooflinks with timecodes, reprocases for everything)
   - performance impact:
     * is this check is a common case in practice ?
-      * may need to write analysis passes to scan real Rust code (libs, big projects) for occurences
+      + may need to write analysis passes to scan real Rust code (libs, big projects) for occurences
     * determine how to enable/disable feature in compiler/stdlib
       + there may be flags (e.g. for interger overflows) but sometimes may need patch code (e.g. for bounds checks)
         - patch for each feature needs to be implemented in separate branch (in private compiler repo)

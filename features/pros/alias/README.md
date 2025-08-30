@@ -45,6 +45,8 @@ Some people say that C++ `restrict` is equivalent and widely used but truth is t
 Good summary from [HN](https://news.ycombinator.com/item?id=14042318):
   - "Alias analysis has been the holy grail of compiler development for a while. In C++ it's a global, imperfect, and expensive analysis. In Rust you get it for free."
 
+Relevant code is mentioned in [PR #82834](https://github.com/rust-lang/rust/pull/82834).
+
 # TODO
 
 - Try disabling `noalias` hints via `-Zmutable-noalias=no` for large/performant codebases
