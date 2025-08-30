@@ -45,6 +45,15 @@ Rust targets same problem area:
     * SIMD (core::arch, core::simd), inline asm, intrinsics (e.g. `__builtin_assume` vs `core::hint::assume`, `__builtin_expect` vs `#[likely]`, PGO)
   - same optimizer (LLVM)
 
+As [put by scottmcmrust](https://www.reddit.com/r/rust/comments/kpqmrh/comment/gi3u2ki/):
+```
+Because there's no way that the code you're writing needs to be as optimized as possible while discounting all other factors. Everything has diminishing returns, but that's ignored for benchmarks.
+
+And then for AoT-compiled languages in particular, clang and rustc are both producing LLVM IR and running mostly the same LLVM optimization passes. So given enough work they can always produce essentially the same thing, making the comparisons pointless.
+
+It's even worse for things like the TechEmpower web ones -- there's no requirement that they error properly or are secure against attacks. At least for offline batch things like in benchmarks game you could use the implementations, but it would be negligent to use the top-performing ones in the TechEmpower benchmarks.
+```
+
 Important caveats:
   - make sure to build with `--release` :)
   - make sure that (default) target CPU is the same (especially JIT languages like Java are equivalent to `-C target-cpu=native`)

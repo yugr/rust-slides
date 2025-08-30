@@ -1427,6 +1427,10 @@ pub fn foo(p: Box<S>) {
   * Status: backlog
 - Assembly examples of missed Rust compiler optimizations: https://www.reddit.com/r/rust/comments/14zhb0s/assembly_examples_of_missed_rust_compiler/
   * Status: backlog
+- Wondering about assembly code for factorial: https://www.reddit.com/r/rust/comments/kpvftn/wondering_about_assembly_code_for_factorial/
+  * Status: backlog
+- What compiler optimizations happened here? https://www.reddit.com/r/rust/comments/1cu75g1/what_compiler_optimizations_happened_here/
+  * Status: backlog
 
 # Niches
 
