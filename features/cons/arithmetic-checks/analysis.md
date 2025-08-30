@@ -1,12 +1,7 @@
-TODO:
-  - double-check materials for this feature
-  - fix all TODOs that are mentioned in feature's README
-
 # Administrivia
 
 Assignee: yugr
 Parent task: gh-28
-Effort: 1h
 
 # Background
 
