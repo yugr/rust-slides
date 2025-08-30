@@ -182,6 +182,9 @@ Overflow checks in containers can't be worked around.
 [Myths and Legends about Integer Overflow in Rust](https://huonw.github.io/blog/2016/04/myths-and-legends-about-integer-overflow-in-rust)
   - survey of RFC 560
 
+[Understanding Integer Overflow in C/C++](https://users.cs.utah.edu/~regehr/papers/overflow12.pdf)
+  - paper by John Regehr
+
 # Performance impact
 
 John Regehr's well known study [estimates](https://users.cs.utah.edu/~regehr/papers/overflow12.pdf)
@@ -256,12 +259,7 @@ For (A) there are some limitations:
 
 ### Static estimates
 
-TODO:
-  - compiler stats
-    * depend on feature
-    * e.g. SLP/loop autovec for bounds checking feature
-    * e.g. NoAlias returns from AA manager for alias feature
-    * e.g. CSE/GVN/LICM for alias feature
+TODO: figure out what optimizations may get hurt due to this and measure this
 
 ### Runtime improvements
 
