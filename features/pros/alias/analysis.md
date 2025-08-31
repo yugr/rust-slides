@@ -2,7 +2,7 @@
 
 Assignee: yugr
 Parent task: gh-39
-Effort: 1h
+Effort: 7h
 
 TODO:
   - fix all TODOs that are mentioned in feature's README
@@ -194,16 +194,27 @@ Problem is cause by additional `sub` in aliased version which changes loop cost
 and causes loop to not be vectorized in some cases
 (particularly in `target/deps/reductions`)
 
-#### reductions_palette_8_to_grayscale_8 (also reductions_rgba_to_grayscale_alpha_8 and target/release/deps/reductions-636692b0b03e7601)
+#### reductions_palette_8_to_grayscale_8 (also reductions_rgba_to_grayscale_alpha_8 and reductions_rgb_to_grayscale_8)
 
 Profile data can be collected via
 ```
 rm -f perf.data* && perf record -F99 target/release/deps/reductions-636692b0b03e7601 --bench reductions_palette_8_to_grayscale_8
 ```
 
-Slowdown in `oxipng::reduction::color::indexed_to_channels`.
+Slowdown in `oxipng::reduction::color::indexed_to_channels` (or `oxipng::reduction::color::reduced_rgb_to_grayscale`).
+
+Asm of hot loop is practically the same (modulo slightly different scheduling).
+Perhaps alignment issue ?
 
 The only noticeable difference in asm is presence of loop alignment in default (slow) case
-so I suspect code alignment issues.
+so I suspect code alignment issues here. Default align on LLVM X86 is
+```
+setPrefLoopAlignment(Align(16));
+```
 
-TODO: investigate why loop is not aligned and try to align
+If I disable it via
+```
+[target.x86_64-unknown-linux-gnu]
+rustflags = ["-Cllvm-args=-align-loops=1"]
+```
+in `.cargo/config`, perf difference disappears (new binary becomes as slow as baseline).
