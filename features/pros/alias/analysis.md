@@ -2,21 +2,41 @@
 
 Assignee: yugr
 Parent task: gh-39
-Effort: 7h
-
-TODO:
-  - fix all TODOs that are mentioned in feature's README
+Effort: 10h
 
 # Background
 
+Memory aliasing is a common concept across programming langs
+when different pointers/references address same memory location.
+
+There are two extreme cases in language design:
+  - allow this for any pair of pointers
+  - completely disallow this
+and a lot of intermediate options.
+
+Originally C allowed arbitrary aliasing which was made more strict in C99
+by disallowing aliasing of references of different types
+(so called "strict aliasing"). This broke a lot of existing code and
+to date a lot of projects are compiled with `-fno-strict-aliasing`.
+
+Aliasing semantics is very important because it allows compiler
+to optimize code much more aggressively via vectorization, GVN, LICM, etc.
+(or prevents it from doing so !).
+
+Why would language allow aliasing to begin with ?
+It allows to write low-level code much more easily
+which is particularly important for system programming langs.
+
+Other languages e.g. Fortran have much stricter aliasing rules and
+Rust also falls into this category w.r.t. references
+(raw pointers can alias and there is not even type-based aliasing as in C/C++ !)
+
 TODO:
-  - why is this feature needed ? (most runtime aliases are fake)
-  - enabled by default and why
+  - situation in other languages (Java, Swift, Julia) ?
+  - most runtime aliases are fake
   - situation in C++
     * e.g. [The New C Standard: An Economic and Cultural Commentary](https://www.coding-guidelines.com/cbook/cbook1_1.pdf)
     * e.g. [Rationale for International Standard Programming Languages - C](https://www.open-std.org/jtc1/sc22/wg14/www/C99RationaleV5.10.pdf)
-    * Rust vs. C type aliasing (too error-prone ?)
-  - situation with raw pointers (no type aliasing rules => very conservative)
   - alias (pointer) analysis precision:
     * [AN EMPIRICAL STUDY OF ALIAS ANALYSIS TECHNIQUES](https://digitalcommons.calpoly.edu/cgi/viewcontent.cgi?article=3206&context=theses)
     * [Speculative Alias Analysis for Executable Code](https://arcb.csc.ncsu.edu/~mueller/pact02/papers/fernandez152.pdf):
@@ -24,9 +44,64 @@ TODO:
 
 # Examples
 
-TODO:
-  - example codes which are optimized
-  - clear example (Rust microbenchmark, asm code)
+For this simple code
+```
+void foo(int * a, const int * b) {
+  *a = *b;
+  *a += *b;
+}
+```
+we could expect a single load and a single store
+but in fact we get 2 loads and 2 stores:
+```
+movl (%rsi), %eax
+movl %eax, (%rdi)
+addl (%rsi), %eax
+movl %eax, (%rdi)
+```
+because compiler has to consider that `a` and `b` point to same location in memory
+(i.e. alias).  It generates expected code if both pointers are marked with `restrict`.
+
+An equivalent Rust code:
+```
+#[no_mangle]
+pub fn foo(a: &mut i32, b: &i32) {
+    *a = *b + 1;
+    *a += *b;
+}
+```
+generates expected assembly
+```
+movl (%rsi), %eax
+addl %eax, %eax
+movl %eax, (%rdi)
+
+```
+because of language aliasing rules:
+  - mutable reference can't alias anything
+
+Interestingly enough for loops e.g.
+```
+void foo(int * RESTRICT a, const int * RESTRICT b, unsigned n) {
+  for (unsigned i = 0; i < n; ++i)
+    a[i] = b[i] + 100;
+}
+```
+modern Clang will add a runtime aliasing check and
+generate two versions of loop (GCC does not do this).
+
+Other languages also have more strict aliasing guarantees
+e.g. equivalent Fortran program
+```
+SUBROUTINE FOO(X, Y)
+  INTEGER :: X, Y
+  X = Y + 1
+  X = X + Y
+  RETURN
+END
+```
+generates same code as Rust (but Fortran does not enforce
+language rules so it's much easier to make a mistake).
 
 # Optimizations
 
@@ -34,6 +109,11 @@ TODO:
   - how LLVM can use this info (and with what limitations e.g. only function params)
     * [relevant paper](https://www.cs.utexas.edu/~mckinley/papers/alias-cc-2004.pdf)
     * `llvm.experimental.noalias.scope.decl` may be relevant
+  - A lot of [mentions](https://www.reddit.com/r/rust/comments/acjcbp/comment/ed8nkmj/) that
+    `&mut Vec<T>` does not allow noalias for contained buffer and `&[T]` should be used instead.
+    Need to investigate this.
+  - Search for cases where alias info is not utilized
+    (e.g. [here](https://blog.polybdenum.com/2017/02/19/how-copying-an-int-made-my-code-11-times-faster.html))
 
 # Suggested readings
 

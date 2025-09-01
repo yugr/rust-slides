@@ -46,13 +46,3 @@ Good summary from [HN](https://news.ycombinator.com/item?id=14042318):
   - "Alias analysis has been the holy grail of compiler development for a while. In C++ it's a global, imperfect, and expensive analysis. In Rust you get it for free."
 
 Relevant code is mentioned in [PR #82834](https://github.com/rust-lang/rust/pull/82834).
-
-# TODO
-
-- Try disabling `noalias` hints via `-Zmutable-noalias=no` for large/performant codebases
-- Measure how noalias influences GVN/CSE/LICM/LoopVectorize
-- A lot of [mentions](https://www.reddit.com/r/rust/comments/acjcbp/comment/ed8nkmj/) that
-  `&mut Vec<T>` does not allow noalias for contained buffer and `&[T]` should be used instead.
-  Need to investigate this.
-- Search for cases where alias info is not utilized
-  (e.g. [here](https://blog.polybdenum.com/2017/02/19/how-copying-an-int-made-my-code-11-times-faster.html))
