@@ -337,7 +337,7 @@ assertions = true
 ```
 
 ```
-$ export RUSTFLAGS_NOT_BOOTSTRAP='-Cllvm-args=-debug-only=licm,early-cse,gvn,loop-vectorize'
+$ export RUSTFLAGS_NOT_BOOTSTRAP='-Cllvm-args=-debug-only=licm,early-cse,gvn,loop-vectorize,SLP'
 $ ./x setup
 $ ./x build -j1 --stage 2 compiler |& tee build.log
 

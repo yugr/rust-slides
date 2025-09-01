@@ -61,8 +61,36 @@ TODO:
 
 ### Static estimates
 
-TODO:
-  - collect compiler stats: SLP and loop autovec, CSE, GVN, LICM
+Following instructions for [bounds checks](../../cons/bounds-checks/analysis.md#static-estimates):
+
+```
+$ ./x setup
+$ RUSTFLAGS_NOT_BOOTSTRAP='-Cllvm-args=-debug-only=licm,early-cse,gvn,loop-vectorize,SLP' ./x build -j1 --stage 2 compiler |& tee build.log
+
+# Baseline
+$ grep -c 'LV: Vectorizing' build.log
+549
+$ grep -c 'LICM \(hoist\|sink\)ing' build.log
+2248947
+$ grep -c 'GVN removed' build.log
+798566
+$ grep -c 'EarlyCSE CSE' build.log
+2380605
+$ grep -c 'SLP: vectorized' build.log
+25065
+
+# Forced aliasing
+$ grep -c 'LV: Vectorizing' build.log
+392 (-28%)
+$ grep -c 'LICM \(hoist\|sink\)ing' build.log
+2213982 (-1.5%)
+$ grep -c 'GVN removed' build.log
+748188 (-6%)
+$ grep -c 'EarlyCSE CSE' build.log
+2202670 (-7%)
+$ grep -c 'SLP: vectorized' build.log
+25351 (+1%)
+```
 
 ### Runtime improvements
 
