@@ -2,7 +2,7 @@
 
 Assignee: yugr
 Parent task: gh-39
-Effort: 10h
+Effort: 11h
 
 # Background
 
@@ -23,41 +23,41 @@ Aliasing semantics is very important because it allows compiler
 to optimize code much more aggressively via vectorization, GVN, LICM, etc.
 (or prevents it from doing so !).
 
-Why would language allow aliasing to begin with ?
-It allows to write low-level code much more easily
+In practice aliasing is extremely rare. According to
+"Dynamic Points-To Sets: A Comparison with Static Analyses and Potential Applications in Program Understanding and Optimization"
+98% of pointers in SPEC benchmarks address only single object
+and state-of-the-art static alias analyses overestimate this by 2-20x.
+Similar results are reported in "Speculative Alias Analysis for Executable Code"
+and are also a common knowledge among compiler writers.
+
+Why would a language allow aliasing to begin with ?
+Because it allows to write low-level code much more easily
 which is particularly important for system programming langs.
 
 Other languages e.g. Fortran have much stricter aliasing rules and
 Rust also falls into this category w.r.t. references
 (raw pointers can alias and there is not even type-based aliasing as in C/C++ !)
+but in unique in that alias correctness is enforced by language rules.
 
 TODO:
   - situation in other languages (Java, Swift, Julia) ?
-  - most runtime aliases are fake
-  - situation in C++
-    * e.g. [The New C Standard: An Economic and Cultural Commentary](https://www.coding-guidelines.com/cbook/cbook1_1.pdf)
-    * e.g. [Rationale for International Standard Programming Languages - C](https://www.open-std.org/jtc1/sc22/wg14/www/C99RationaleV5.10.pdf)
-  - alias (pointer) analysis precision:
-    * [AN EMPIRICAL STUDY OF ALIAS ANALYSIS TECHNIQUES](https://digitalcommons.calpoly.edu/cgi/viewcontent.cgi?article=3206&context=theses)
-    * [Speculative Alias Analysis for Executable Code](https://arcb.csc.ncsu.edu/~mueller/pact02/papers/fernandez152.pdf):
-      significant improvement of precision from using speculation
 
 # Examples
 
 For this simple code
 ```
-void foo(int * a, const int * b) {
-  *a = *b;
-  *a += *b;
+int foo(int * a, int * b) {
+  *a = 1;
+  *b = 2;
+  return *a;
 }
 ```
-we could expect a single load and a single store
-but in fact we get 2 loads and 2 stores:
+we could expect no loads but in fact we get it:
 ```
-movl (%rsi), %eax
-movl %eax, (%rdi)
-addl (%rsi), %eax
-movl %eax, (%rdi)
+movl    $1, (%rdi)
+movl    $2, (%rsi)
+movl    (%rdi), %eax
+retq
 ```
 because compiler has to consider that `a` and `b` point to same location in memory
 (i.e. alias).  It generates expected code if both pointers are marked with `restrict`.
@@ -65,17 +65,18 @@ because compiler has to consider that `a` and `b` point to same location in memo
 An equivalent Rust code:
 ```
 #[no_mangle]
-pub fn foo(a: &mut i32, b: &i32) {
-    *a = *b + 1;
-    *a += *b;
+pub fn foo(a: &mut i32, b: &mut i32) -> i32{
+    *a = 1;
+    *b = 2;
+    *a
 }
 ```
 generates expected assembly
 ```
-movl (%rsi), %eax
-addl %eax, %eax
-movl %eax, (%rdi)
-
+movl    $1, (%rdi)
+movl    $2, (%rsi)
+movl    $1, %eax
+retq
 ```
 because of language aliasing rules:
   - mutable reference can't alias anything
@@ -93,11 +94,11 @@ generate two versions of loop (GCC does not do this).
 Other languages also have more strict aliasing guarantees
 e.g. equivalent Fortran program
 ```
-SUBROUTINE FOO(X, Y)
-  INTEGER :: X, Y
-  X = Y + 1
-  X = X + Y
-  RETURN
+FUNCTION FOO(X, Y)
+  INTEGER :: X, Y, FOO
+  X = 1
+  Y = 2
+  FOO = X
 END
 ```
 generates same code as Rust (but Fortran does not enforce
@@ -105,8 +106,42 @@ language rules so it's much easier to make a mistake).
 
 # Optimizations
 
+Alias analysis is used by many opts:
+```
+$ grep -l 'getModRefInfo\|\<alias(\|isNoAlias' lib/Transforms/
+lib/Transforms/Coroutines/CoroElide.cpp
+lib/Transforms/InstCombine/InstCombineLoadStoreAlloca.cpp
+lib/Transforms/InstCombine/InstructionCombining.cpp
+lib/Transforms/InstCombine/InstCombineCalls.cpp
+lib/Transforms/AggressiveInstCombine/AggressiveInstCombine.cpp
+lib/Transforms/Utils/FlattenCFG.cpp
+lib/Transforms/Utils/LoopUtils.cpp
+lib/Transforms/Utils/MoveAutoInit.cpp
+lib/Transforms/IPO/AttributorAttributes.cpp
+lib/Transforms/IPO/ArgumentPromotion.cpp
+lib/Transforms/IPO/FunctionAttrs.cpp
+lib/Transforms/IPO/Attributor.cpp
+lib/Transforms/Vectorize/SLPVectorizer.cpp
+lib/Transforms/Vectorize/VectorCombine.cpp
+lib/Transforms/Vectorize/SandboxVectorizer/DependencyGraph.cpp
+lib/Transforms/Vectorize/LoadStoreVectorizer.cpp
+lib/Transforms/Scalar/LoopIdiomRecognize.cpp
+lib/Transforms/Scalar/TailRecursionElimination.cpp
+lib/Transforms/Scalar/LowerMatrixIntrinsics.cpp
+lib/Transforms/Scalar/GVN.cpp
+lib/Transforms/Scalar/MergeICmps.cpp
+lib/Transforms/Scalar/Sink.cpp
+lib/Transforms/Scalar/DeadStoreElimination.cpp
+lib/Transforms/Scalar/LICM.cpp
+lib/Transforms/Scalar/LoopPredication.cpp
+lib/Transforms/Scalar/MemCpyOptimizer.cpp
+lib/Transforms/ObjCARC/ProvenanceAnalysis.cpp
+lib/Transforms/ObjCARC/ObjCARCOpts.cpp
+lib/Transforms/ObjCARC/ObjCARCContract.cpp
+```
+
 TODO:
-  - how LLVM can use this info (and with what limitations e.g. only function params)
+  - what limitations e.g. only function params
     * [relevant paper](https://www.cs.utexas.edu/~mckinley/papers/alias-cc-2004.pdf)
     * `llvm.experimental.noalias.scope.decl` may be relevant
   - A lot of [mentions](https://www.reddit.com/r/rust/comments/acjcbp/comment/ed8nkmj/) that
@@ -121,16 +156,6 @@ TODO:
   - links to important articles (design, etc.)
 
 # Performance impact
-
-TODO:
-  - is this optimization is a common case in practice ?
-    * may need to write analysis passes to scan real Rust code (libs, big projects) for occurences
-  - determine how to enable/disable feature in compiler/stdlib
-    * there may be flags (e.g. for interger overflows) but sometimes may need patch code (e.g. for bounds checks)
-      - patch for each feature needs to be implemented in separate branch (in private compiler repo)
-      - compiler modifications need to be kept in private compiler repo `yugr/rust-private`
-    * make sure that found solution works on real examples
-    * note that simply using `RUSTFLAGS` isn't great because they override project settings in `Cargo.toml`
 
 ## Prevalence
 
