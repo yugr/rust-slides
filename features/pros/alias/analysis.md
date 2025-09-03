@@ -2,7 +2,7 @@
 
 Assignee: yugr
 Parent task: gh-39
-Effort: 11h
+Effort: 18h
 
 # Background
 
@@ -36,7 +36,8 @@ which is particularly important for system programming langs.
 
 Other languages e.g. Fortran have much stricter aliasing rules and
 Rust also falls into this category w.r.t. references
-(raw pointers can alias and there is not even type-based aliasing as in C/C++ !)
+(raw pointers can alias and unlike C/C++ there is
+[not even type-based aliasing](https://users.rust-lang.org/t/question-about-rustc-aliasing-analysis/82398/3))
 but in unique in that alias correctness is enforced by language rules.
 
 TODO:
@@ -159,8 +160,115 @@ TODO:
 
 ## Prevalence
 
-TODO:
-  - NoAlias returns from AA manager
+Efficiency of alias analysis is usually compared via AA precision
+i.e. ratio of precise results (NoAlias + MustAlias) vs. all queries.
+
+### Approach 1
+
+This approach does not use AliasAnalysisEvaluator.
+
+We patch LLVM:
+```
+diff --git a/llvm/lib/Analysis/AliasAnalysis.cpp b/llvm/lib/Analysis/AliasAnalysis.cpp
+index 061a7e8e5..0093c62f6 100644
+--- a/llvm/lib/Analysis/AliasAnalysis.cpp
++++ b/llvm/lib/Analysis/AliasAnalysis.cpp
+@@ -143,9 +143,20 @@ AliasResult AAResults::alias(const MemoryLocation &LocA,
+     else
+       ++NumMayAlias;
+   }
+   return Result;
+ }
+
++#include <sstream>
++
++struct AliasPrinter {
++  ~AliasPrinter() {
++    std::ostringstream S;
++    S << "Aliases: " << NumNoAlias << " " << NumMustAlias << " " << NumMayAlias << "\n";
++    dbgs() << S.str();
++  }
++} AliasPrinter;
++
+ ModRefInfo AAResults::getModRefInfoMask(const MemoryLocation &Loc,
+                                         bool IgnoreLocals) {
+```
+and then
+```
+./x build --stage 1 compiler
+./x build -j1 --stage 2 compiler |& tee build.log
+cat build.log | awk 'BEGIN{prec=0; tot=0} /Aliases/{prec+=$2+$3; tot+=$2+$3+$4} END{print prec " " tot}'
+```
+
+Rust:
+  - baseline: 266298621 / 274619155 == 97%
+  - force-aliasing: 273121758 / 284184312 == 96%
+
+# Approach 2
+
+This uses AliasAnalysisEvaluator:
+```
+diff --git a/llvm/lib/Passes/PassBuilderPipelines.cpp b/llvm/lib/Passes/PassBuilderPipelines.cpp
+index 17ff3bd37..b63498a75 100644
+--- a/llvm/lib/Passes/PassBuilderPipelines.cpp
++++ b/llvm/lib/Passes/PassBuilderPipelines.cpp
+@@ -16,6 +16,7 @@
+
+ #include "llvm/ADT/Statistic.h"
+ #include "llvm/Analysis/AliasAnalysis.h"
++#include "llvm/Analysis/AliasAnalysisEvaluator.h"
+ #include "llvm/Analysis/BasicAliasAnalysis.h"
+ #include "llvm/Analysis/CGSCCPassManager.h"
+ #include "llvm/Analysis/CtxProfAnalysis.h"
+@@ -1559,6 +1560,8 @@ PassBuilder::buildModuleOptimizationPipeline(OptimizationLevel Level,
+                           .speculateUnpredictables(true)
+                           .hoistLoadsStoresWithCondFaulting(true)));
+
++  OptimizePM.addPass(AAEvaluator());
++
+   // Add the core optimizing pipeline.
+   MPM.addPass(createModuleToFunctionPassAdaptor(std::move(OptimizePM),
+```
+and then
+```
+cat build.log | awk 'BEGIN{prec=0; tot=0} /Total Alias Queries/{tot+=$1} /no alias responses|must alias responses/{prec+=$1d} END{print prec " " tot}'
+```
+
+Rust:
+  - baseline: 267950087 / 304403228 = 88%
+  - force-aliasing: 259656576 / 300663932 = 86%
+
+Results for other projects can be collected via
+```
+for d in *; do
+  test -f $d && continue
+  (cd $d; cargo clean && cargo +baseline b --release &> ref.log; cargo clean && cargo +force-aliasing b --release &> new.log
+  echo "=== $d"
+  cat $d/ref.log | awk 'BEGIN{prec=0; tot=0} /Total Alias Queries/{tot+=$1} /no alias responses|must alias responses/{prec+=$1d} END{print prec " " tot}'
+  cat $d/new.log | awk 'BEGIN{prec=0; tot=0} /Total Alias Queries/{tot+=$1} /no alias responses|must alias responses/{prec+=$1d} END{print prec " " tot}'
+done
+```
+
+Results for other projects vary A LOT:
+  - SpacetimeDB: 83% vs 81%
+  - bevy: 72% vs 68%
+  - meilisearch: 47% vs 41%
+  - nalgebra: 66% vs 30%
+  - oxipng: 99% both
+  - rav1e: 89% vs 87%
+  - rebar: 88% vs 82%
+  - ruff: 80% vs 76%
+  - rust_serialization_benchmark: 78% vs 75%
+  - rustc-perf: 84% vs 83%
+  - tokio: 87% vs 80%
+  - uv: 87% both
+  - veloren: 57% vs 55%
+  - zed: 79% vs 80%
+
+So we see that in some cases results are practically the same, often 2-7%
+(except for nalgebra with a whopping 2x).
+
+Interestingly enough Clang has just 55% precision when building itself !
 
 ## Measurements
 
