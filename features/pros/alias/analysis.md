@@ -2,7 +2,7 @@
 
 Assignee: yugr
 Parent task: gh-39
-Effort: 18h
+Effort: 19h
 
 # Background
 
@@ -145,6 +145,7 @@ TODO:
   - what limitations e.g. only function params
     * [relevant paper](https://www.cs.utexas.edu/~mckinley/papers/alias-cc-2004.pdf)
     * `llvm.experimental.noalias.scope.decl` may be relevant
+    * also [this bug](https://github.com/rust-lang/rust/issues/16515)
   - A lot of [mentions](https://www.reddit.com/r/rust/comments/acjcbp/comment/ed8nkmj/) that
     `&mut Vec<T>` does not allow noalias for contained buffer and `&[T]` should be used instead.
     Need to investigate this.
@@ -157,6 +158,10 @@ TODO:
   - links to important articles (design, etc.)
 
 # Performance impact
+
+Parts of aliasing checks can be disabled via `-Z box-noalias=no` and `-Z mutable-noalias=no`.
+
+TODO: update results after compiler update
 
 ## Prevalence
 
@@ -195,9 +200,8 @@ index 061a7e8e5..0093c62f6 100644
 ```
 and then
 ```
-./x build --stage 1 compiler
-./x build -j1 --stage 2 compiler |& tee build.log
-cat build.log | awk 'BEGIN{prec=0; tot=0} /Aliases/{prec+=$2+$3; tot+=$2+$3+$4} END{print prec " " tot}'
+$ ./x build --stage 1 compiler && ./x build -j1 --stage 2 compiler |& tee build.log
+$ cat build.log | awk 'BEGIN{prec=0; tot=0} /Aliases/{prec+=$2+$3; tot+=$2+$3+$4} END{print prec " " tot}'
 ```
 
 Rust:
@@ -231,7 +235,7 @@ index 17ff3bd37..b63498a75 100644
 ```
 and then
 ```
-cat build.log | awk 'BEGIN{prec=0; tot=0} /Total Alias Queries/{tot+=$1} /no alias responses|must alias responses/{prec+=$1d} END{print prec " " tot}'
+$ cat build.log | awk 'BEGIN{prec=0; tot=0} /Total Alias Queries/{tot+=$1} /no alias responses|must alias responses/{prec+=$1d} END{print prec " " tot}'
 ```
 
 Rust:
@@ -390,7 +394,7 @@ rustflags = ["-Cllvm-args=-debug-only=loop-vectorize -print-before=loop-vectoriz
 ```
 to `.cargo/config`. Then run
 ```
-cargo bench --no-run -j1 reductions_16_to_8_bits
+$ cargo bench --no-run -j1 reductions_16_to_8_bits
 ```
 
 Problematic loop looks like
@@ -439,7 +443,7 @@ and causes loop to not be vectorized in some cases
 
 Profile data can be collected via
 ```
-rm -f perf.data* && perf record -F99 target/release/deps/reductions-636692b0b03e7601 --bench reductions_palette_8_to_grayscale_8
+$ rm -f perf.data* && perf record -F99 target/release/deps/reductions-636692b0b03e7601 --bench reductions_palette_8_to_grayscale_8
 ```
 
 Slowdown in `oxipng::reduction::color::indexed_to_channels` (or `oxipng::reduction::color::reduced_rgb_to_grayscale`).

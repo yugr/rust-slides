@@ -40,6 +40,8 @@ Some people say that C++ `restrict` is equivalent and widely used but truth is t
 > is an indicator that it's not being widely used there, though
 (from [Reddit](https://www.reddit.com/r/rust/comments/px72r1/comment/hem3qy8/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button), [HN](https://news.ycombinator.com/item?id=20944403#20949290) and [HN](https://news.ycombinator.com/item?id=20948546)).
 
+TODO: check usage of restrict in Linux kernel
+
 # Links
 
 Good summary from [HN](https://news.ycombinator.com/item?id=14042318):
