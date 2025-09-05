@@ -2,7 +2,7 @@
 
 Assignee: yugr
 Parent task: gh-39
-Effort: 19h
+Effort: 21h
 
 # Background
 
@@ -13,6 +13,9 @@ There are two extreme cases in language design:
   - allow this for any pair of pointers
   - completely disallow this
 and a lot of intermediate options.
+
+Landi proved that interprocedural AA is undecidable and
+intraprocedural AA is NP-complete.
 
 Originally C allowed arbitrary aliasing which was made more strict in C99
 by disallowing aliasing of references of different types
@@ -161,14 +164,79 @@ TODO:
 
 Parts of aliasing checks can be disabled via `-Z box-noalias=no` and `-Z mutable-noalias=no`.
 
-TODO: update results after compiler update
-
 ## Prevalence
 
 Efficiency of alias analysis is usually compared via AA precision
 i.e. ratio of precise results (NoAlias + MustAlias) vs. all queries.
 
-### Approach 1
+# Approach 1
+
+This uses AliasAnalysisEvaluator:
+```
+diff --git a/llvm/lib/Passes/PassBuilderPipelines.cpp b/llvm/lib/Passes/PassBuilderPipelines.cpp
+index 17ff3bd37..b63498a75 100644
+--- a/llvm/lib/Passes/PassBuilderPipelines.cpp
++++ b/llvm/lib/Passes/PassBuilderPipelines.cpp
+@@ -16,6 +16,7 @@
+
+ #include "llvm/ADT/Statistic.h"
+ #include "llvm/Analysis/AliasAnalysis.h"
++#include "llvm/Analysis/AliasAnalysisEvaluator.h"
+ #include "llvm/Analysis/BasicAliasAnalysis.h"
+ #include "llvm/Analysis/CGSCCPassManager.h"
+ #include "llvm/Analysis/CtxProfAnalysis.h"
+@@ -1559,6 +1560,8 @@ PassBuilder::buildModuleOptimizationPipeline(OptimizationLevel Level,
+                           .speculateUnpredictables(true)
+                           .hoistLoadsStoresWithCondFaulting(true)));
+
++  OptimizePM.addPass(AAEvaluator());
++
+   // Add the core optimizing pipeline.
+   MPM.addPass(createModuleToFunctionPassAdaptor(std::move(OptimizePM),
+```
+and then
+```
+$ ./x build --stage 1 compiler && ./x build -j1 --stage 2 compiler |& tee build.log
+$ cat build.log | awk 'BEGIN{prec=0; tot=0} /Total Alias Queries/{tot+=$1} /no alias responses|must alias responses/{prec+=$1} END{print prec " " tot}'
+```
+
+Rust:
+  - baseline: 267950087 / 304403228 = 88%
+  - force-aliasing: 259796295 / 300809438 = 86%
+
+Results for other projects can be collected via
+```
+for d in *; do
+  test -d $d || continue
+  (cd $d; cargo clean && cargo +baseline b --release &> ref.log; cargo clean && cargo +force-aliasing b --release &> new.log)
+  echo "=== $d"
+  cat $d/ref.log | awk 'BEGIN{prec=0; tot=0} /Total Alias Queries/{tot+=$1} /no alias responses|must alias responses/{prec+=$1} END{print prec " " tot}'
+  cat $d/new.log | awk 'BEGIN{prec=0; tot=0} /Total Alias Queries/{tot+=$1} /no alias responses|must alias responses/{prec+=$1} END{print prec " " tot}'
+done
+```
+
+Results for other projects vary A LOT:
+  - SpacetimeDB: 83% vs 81%
+  - bevy: 72% vs 67%
+  - meilisearch: 47% vs 41%
+  - nalgebra: 66% vs 30%
+  - oxipng: 99% both
+  - rav1e: 89% vs 87%
+  - rebar: 88% vs 82%
+  - ruff: 80% vs 76%
+  - rust_serialization_benchmark: 78% vs 75%
+  - rustc-perf: 84% vs 83%
+  - tokio: 87% vs 82%
+  - uv: 87% both
+  - veloren: 57% vs 55%
+  - zed: 79% vs 78%
+
+So we see that in some cases results are practically the same and
+2-7% worse in other cases (except for nalgebra with over 2x).
+
+Interestingly enough Clang has just 55% precision when building itself !
+
+### Approach 2
 
 This approach does not use AliasAnalysisEvaluator.
 
@@ -206,73 +274,16 @@ $ cat build.log | awk 'BEGIN{prec=0; tot=0} /Aliases/{prec+=$2+$3; tot+=$2+$3+$4
 
 Rust:
   - baseline: 266298621 / 274619155 == 97%
-  - force-aliasing: 273121758 / 284184312 == 96%
+  - force-aliasing: ???
 
-# Approach 2
+TODO: recollect results for force-aliasing
 
-This uses AliasAnalysisEvaluator:
-```
-diff --git a/llvm/lib/Passes/PassBuilderPipelines.cpp b/llvm/lib/Passes/PassBuilderPipelines.cpp
-index 17ff3bd37..b63498a75 100644
---- a/llvm/lib/Passes/PassBuilderPipelines.cpp
-+++ b/llvm/lib/Passes/PassBuilderPipelines.cpp
-@@ -16,6 +16,7 @@
+## Disabling optimization
 
- #include "llvm/ADT/Statistic.h"
- #include "llvm/Analysis/AliasAnalysis.h"
-+#include "llvm/Analysis/AliasAnalysisEvaluator.h"
- #include "llvm/Analysis/BasicAliasAnalysis.h"
- #include "llvm/Analysis/CGSCCPassManager.h"
- #include "llvm/Analysis/CtxProfAnalysis.h"
-@@ -1559,6 +1560,8 @@ PassBuilder::buildModuleOptimizationPipeline(OptimizationLevel Level,
-                           .speculateUnpredictables(true)
-                           .hoistLoadsStoresWithCondFaulting(true)));
-
-+  OptimizePM.addPass(AAEvaluator());
-+
-   // Add the core optimizing pipeline.
-   MPM.addPass(createModuleToFunctionPassAdaptor(std::move(OptimizePM),
-```
-and then
-```
-$ cat build.log | awk 'BEGIN{prec=0; tot=0} /Total Alias Queries/{tot+=$1} /no alias responses|must alias responses/{prec+=$1d} END{print prec " " tot}'
-```
-
-Rust:
-  - baseline: 267950087 / 304403228 = 88%
-  - force-aliasing: 259656576 / 300663932 = 86%
-
-Results for other projects can be collected via
-```
-for d in *; do
-  test -f $d && continue
-  (cd $d; cargo clean && cargo +baseline b --release &> ref.log; cargo clean && cargo +force-aliasing b --release &> new.log
-  echo "=== $d"
-  cat $d/ref.log | awk 'BEGIN{prec=0; tot=0} /Total Alias Queries/{tot+=$1} /no alias responses|must alias responses/{prec+=$1d} END{print prec " " tot}'
-  cat $d/new.log | awk 'BEGIN{prec=0; tot=0} /Total Alias Queries/{tot+=$1} /no alias responses|must alias responses/{prec+=$1d} END{print prec " " tot}'
-done
-```
-
-Results for other projects vary A LOT:
-  - SpacetimeDB: 83% vs 81%
-  - bevy: 72% vs 68%
-  - meilisearch: 47% vs 41%
-  - nalgebra: 66% vs 30%
-  - oxipng: 99% both
-  - rav1e: 89% vs 87%
-  - rebar: 88% vs 82%
-  - ruff: 80% vs 76%
-  - rust_serialization_benchmark: 78% vs 75%
-  - rustc-perf: 84% vs 83%
-  - tokio: 87% vs 80%
-  - uv: 87% both
-  - veloren: 57% vs 55%
-  - zed: 79% vs 80%
-
-So we see that in some cases results are practically the same, often 2-7%
-(except for nalgebra with a whopping 2x).
-
-Interestingly enough Clang has just 55% precision when building itself !
+Compiler patch is in branch [yugr/force-aliasing/1](https://github.com/yugr/rust-private/tree/yugr/force-aliasing/1).
+It
+  - disables checks in compiler
+  - removes relevant `panic!` / `assert!` / etc. in stdlib
 
 ## Measurements
 
@@ -282,7 +293,9 @@ Following instructions for [bounds checks](../../cons/bounds-checks/analysis.md#
 
 ```
 $ ./x setup
-$ RUSTFLAGS_NOT_BOOTSTRAP='-Cllvm-args=-debug-only=licm,early-cse,gvn,loop-vectorize,SLP' ./x build -j1 --stage 2 compiler |& tee build.log
+$ export RUSTFLAGS_NOT_BOOTSTRAP='-Cllvm-args=-debug-only=licm,early-cse,gvn,loop-vectorize,SLP'
+$ ./x build --stage 1 compiler
+$ ./x build -j1 --stage 2 compiler |& tee build.log
 
 # Baseline
 $ grep -c 'LV: Vectorizing' build.log
@@ -300,13 +313,13 @@ $ grep -c 'SLP: vectorized' build.log
 $ grep -c 'LV: Vectorizing' build.log
 392 (-28%)
 $ grep -c 'LICM \(hoist\|sink\)ing' build.log
-2213982 (-1.5%)
+2210414 (-1.5%)
 $ grep -c 'GVN removed' build.log
-748188 (-6%)
+737348 (-6%)
 $ grep -c 'EarlyCSE CSE' build.log
-2202670 (-7%)
+2200458 (-7%)
 $ grep -c 'SLP: vectorized' build.log
-25351 (+1%)
+25504 (+1%)
 ```
 
 ### Runtime improvements
@@ -314,31 +327,35 @@ $ grep -c 'SLP: vectorized' build.log
 Disabling the feature obviously decreases perf:
 ```
 $ ../../benchmarks/compare.py baseline/ force-aliasing/
-compare.py: warning: some results are present only in /home/Asus/src/rust-slides/tmp/results-20250826/baseline: meilisearch_0.json, veloren_0.json
-SpacetimeDB_0.json: -0.7%
-bevy_0.json: -0.1%
-nalgebra_0.json: -4.5%
-oxipng_0.json: +2.1%
-rav1e_0.json: -1.0%
+SpacetimeDB_0.json: -0.6%
+bevy_0.json: +0.0%
+nalgebra_0.json: -4.1%
+oxipng_0.json: +2.0%
+rav1e_0.json: -2.1%
 regex_0.json: -1.2%
-ruff_0.json: -1.1%
-rust_serialization_benchmark_0.json: -1.9%
-tokio_0.json: -0.4%
-uv_0.json: -1.0%
-zed_0.json: -1.2%
+ruff_0.json: -0.9%
+rust_serialization_benchmark_0.json: -2.3%
+tokio_0.json: -0.5%
+uv_0.json: -1.3%
+veloren_0.json: -4.4%
+zed_0.json: -0.3%
 ```
 
 TODO: perf measurements for AArch64
 
 Largest speedups in oxipng are in
   - reductions_16_to_8_bits (28%)
-  - filters_bigent (14%) - not reproduced
-  - reductions_palette_8_to_grayscale_8 (9%)
-  - reductions_rgba_to_grayscale_alpha_8 (8%)
-  - reductions_rgb_to_grayscale_8 (7.5%)
+  - reductions_rgb_to_grayscale_16 (25%)
+  - filters_bigent (14%)
+  - filters_16_bits_filter_3 (23%)
+  - `filters_[1248]_bits_filter_3` (20%)
+  - reductions_16_to_8_bits (30%)
 
 There are also slowdowns but not as many:
-  - filters_2_bits_filter_1 (5.6%)
+  - `deinterlacing_[124]_bits` (13%)
+  - reductions_palette_8_to_grayscale_8 (16%)
+
+TODO: re-analyze improvements
 
 #### reductions_16_to_8_bits
 
