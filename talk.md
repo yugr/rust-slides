@@ -59,6 +59,9 @@ Important caveats:
   - make sure that (default) target CPU is the same (especially JIT languages like Java are equivalent to `-C target-cpu=native`)
   - `--emit=asm` may change codegen due to implied [-C codegen-units=1](https://github.com/rust-lang/rust/issues/57235)
     * so it's more reliable to compile to .rlib and use `objdump -d`
+  - note about benchmarks:
+    * numbers are averaged over many scenarios in each bench
+    * even a 1% regression means there's some scenario with 10-20% degradation
 
 # Rust performance issues
 

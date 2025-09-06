@@ -43,6 +43,10 @@ Rust also falls into this category w.r.t. references
 [not even type-based aliasing](https://users.rust-lang.org/t/question-about-rustc-aliasing-analysis/82398/3))
 but in unique in that alias correctness is enforced by language rules.
 
+Zig, it seems, is more C-like - everything aliases by default and
+`noalias` need to be specified explicitly
+(see [#1108](https://github.com/ziglang/zig/issues/1108)).
+
 TODO:
   - situation in other languages (Java, Swift, Julia) ?
 
@@ -144,16 +148,61 @@ lib/Transforms/ObjCARC/ObjCARCOpts.cpp
 lib/Transforms/ObjCARC/ObjCARCContract.cpp
 ```
 
+# Limitations
+
+Currently Rust only provides alias info to LLVM for function parameters
+(`noalias` attribute).
+It could also use [alias.scope metadata](http://llvm.org/docs/LangRef.html#noalias-and-alias-scope-metadata)
+or `llvm.experimental.noalias.scope.decl` intrinsic but currently [does not](https://github.com/rust-lang/rust/issues/16515).
+In some (many?) cases this leads to redundant aliases in LLVM.
+E.g. if we slightly change our starting code:
+```
+pub fn bar(a: *mut i32, b: *mut i32) -> i32 {
+    let a = unsafe { &mut *a };
+    let b = unsafe { &mut *b };
+    *a = 1;
+    *b = 2;
+    return *a;
+}
+```
+we will get a redundant load.
+
+There is a plethora of linked issues showing that people hit
+this issue in practice and also some projects work around this limitation by
+[introducing dummy functions](https://github.com/rust-lang/rust/commit/71f5cfb21f3fd2f1740bced061c66ff112fec259)).
+
+There are a lot of [mentions](https://www.reddit.com/r/rust/comments/acjcbp/comment/ed8nkmj/)
+that `&mut Vec<T>` does not allow noalias for contained buffer and `&[T]` should be used instead.
+I believe this came from the fact that `&Vec` is passed as a single pointer argument
+and, even though this pointer is marked as `noalias`, pointer to data inside of it is not
+which leads to redundant aliasing.
+
+This can be seen from comparison of generated LLVM IR for
+```
+#[no_mangle]
+pub fn foo(a: &mut [i32], b: &[i32]) {
+    let n = a.len();
+    let b = &b[..n];
+    for i in 0..n {
+        a[i] = b[i] + 100;
+    }
+}
+```
+and
+```
+#[no_mangle]
+pub fn foo(a: &mut Vec<i32>, b: &Vec<i32>) {
+    let n = a.len();
+    let b = &b[..n];
+    for i in 0..n {
+        a[i] = b[i] + 100;
+    }
+}
+```
+(Vec-code has additional loop versioning due to potential aliasing).
+
 TODO:
-  - what limitations e.g. only function params
-    * [relevant paper](https://www.cs.utexas.edu/~mckinley/papers/alias-cc-2004.pdf)
-    * `llvm.experimental.noalias.scope.decl` may be relevant
-    * also [this bug](https://github.com/rust-lang/rust/issues/16515)
-  - A lot of [mentions](https://www.reddit.com/r/rust/comments/acjcbp/comment/ed8nkmj/) that
-    `&mut Vec<T>` does not allow noalias for contained buffer and `&[T]` should be used instead.
-    Need to investigate this.
-  - Search for cases where alias info is not utilized
-    (e.g. [here](https://blog.polybdenum.com/2017/02/19/how-copying-an-int-made-my-code-11-times-faster.html))
+  - ORAQL — Optimistic Responses to Alias Queries in LLVM
 
 # Suggested readings
 
@@ -322,6 +371,9 @@ $ grep -c 'SLP: vectorized' build.log
 25504 (+1%)
 ```
 
+According to [The Limits of Alias Analysis for Scalar Optimizations](https://www.cs.utexas.edu/~mckinley/papers/alias-cc-2004.pdf)
+AA mainly affects LICM.
+
 ### Runtime improvements
 
 Disabling the feature obviously decreases perf:
@@ -344,27 +396,29 @@ zed_0.json: -0.3%
 TODO: perf measurements for AArch64
 
 Largest speedups in oxipng are in
-  - reductions_16_to_8_bits (28%)
-  - reductions_rgb_to_grayscale_16 (25%)
-  - filters_bigent (14%)
-  - filters_16_bits_filter_3 (23%)
-  - `filters_[1248]_bits_filter_3` (20%)
   - reductions_16_to_8_bits (30%)
+  - reductions_rgb_to_grayscale_16 (25%) - not reproduced (microarch effect ?)
+  - filters_16_bits_filter_3 (23%) - not reproduced (microarch effect ?)
+  - `filters_[1248]_bits_filter_3` (20%) - not reproduced (microarch effect ?)
+  - filters_bigent (14%)
 
 There are also slowdowns but not as many:
   - `deinterlacing_[124]_bits` (13%)
   - reductions_palette_8_to_grayscale_8 (16%)
 
-TODO: re-analyze improvements
-
-#### reductions_16_to_8_bits
-
-Update
+To analyze regressions, update
 ```
 #strip = "symbols"
 debug = "line-tables-only"
 ```
 in `Cargo.toml` and collect profile via
+```
+rm perf.data* && perf record -F99 target/release/deps/NAME_OF_SUITE --bench NAME_OF_BENCH
+```
+
+#### reductions_16_to_8_bits
+
+Collect profile via
 ```
 rm perf.data* && perf record -F99 target/release/deps/reductions-636692b0b03e7601 --bench --skip reductions_16_to_8_bits_scaled reductions_16_to_8_bits
 ```
@@ -456,27 +510,17 @@ Problem is cause by additional `sub` in aliased version which changes loop cost
 and causes loop to not be vectorized in some cases
 (particularly in `target/deps/reductions`)
 
-#### reductions_palette_8_to_grayscale_8 (also reductions_rgba_to_grayscale_alpha_8 and reductions_rgb_to_grayscale_8)
+#### filters_bigent
 
-Profile data can be collected via
-```
-$ rm -f perf.data* && perf record -F99 target/release/deps/reductions-636692b0b03e7601 --bench reductions_palette_8_to_grayscale_8
-```
-
-Slowdown in `oxipng::reduction::color::indexed_to_channels` (or `oxipng::reduction::color::reduced_rgb_to_grayscale`).
-
-Asm of hot loop is practically the same (modulo slightly different scheduling).
-Perhaps alignment issue ?
-
-The only noticeable difference in asm is presence of loop alignment in default (slow) case
-so I suspect code alignment issues here. Default align on LLVM X86 is
-```
-setPrefLoopAlignment(Align(16));
-```
-
-If I disable it via
+Regression is much smaller (6%) when I try to repro it and
+reduces to 4% when I start to play with alignment by adding
 ```
 [target.x86_64-unknown-linux-gnu]
 rustflags = ["-Cllvm-args=-align-loops=1"]
 ```
-in `.cargo/config`, perf difference disappears (new binary becomes as slow as baseline).
+in `.cargo/config`. Default align on LLVM X86 is
+```
+setPrefLoopAlignment(Align(16));
+```
+
+So I suspect this is another [code alignment issue](https://easyperf.net/blog/2018/01/18/Code_alignment_issues).

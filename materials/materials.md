@@ -2446,6 +2446,9 @@ if (x, y) == (1, 1) {
   * Article is old but the issue still reproduces on trunk rustc
   * Passing local variable to `println!` macro implicitly borrows it (i.e. applies `&`, regardless of `Copy`)
   * After that LLVM fails to realize that the variable remains constant
+  * Root cause:
+    +Rustc does not realize that reference borrowed by `println!` is shared and
+      generates very complex MIR code
   * Can be solved via
     + resetting variable after `println!`
     + using `{var}` (or `var + 0`, or `var.clone()`) when calling `println!`
