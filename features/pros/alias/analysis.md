@@ -2,7 +2,7 @@
 
 Assignee: yugr
 Parent task: gh-39
-Effort: 23h
+Effort: 24h
 
 # Background
 
@@ -47,8 +47,8 @@ Zig, it seems, is more C-like - everything aliases by default and
 `noalias` need to be specified explicitly
 (see [#1108](https://github.com/ziglang/zig/issues/1108)).
 
-TODO:
-  - situation in other languages (Java, Swift, Julia) ?
+I was unable to find good description of situation in other languages
+(Java, Swift, Go, Julia).
 
 # Examples
 
