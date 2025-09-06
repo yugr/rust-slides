@@ -7,10 +7,14 @@ in some this will be unnecessary overhead.
 Also memory is usually allocated as zero-initialized
 (e.g. for `Vec`).
 
-This is similar to GCC's `-ftrivial-auto-var-init=zero`.
-C++26 will get `[[indeterminate]]` attribute to mark uninitialized variables.
-
-TODO: will initialization be required in C++26 ?
+This is similar to GCC's `-ftrivial-auto-var-init` which will become part of C++26
+(errouneous behavior, uninitialized vars can be explicitly marked by `[[indeterminate]]`).
+Overheads are (based on https://github.com/yugr/slides/blob/main/CppZeroCost/2025/plan.md)
+  - 4.5% overhead for Clang X86Builtins.ii compilation
+  - 1% Firefox (https://serge-sans-paille.github.io/pythran-stories/trivial-auto-var-init-experiments.html)
+  - 10% other (https://patchwork-proxy.ozlabs.org/project/qemu-devel/patch/20250604191843.399309-1-stefanha@redhat.com/ , https://issues.chromium.org/issues/40633061#comment142)
+  - 1-20% Postgres (https://bugs.launchpad.net/ubuntu/+source/dpkg/+bug/1972043/comments/11)
+  - 1% Windows (https://github.com/microsoft/MSRC-Security-Research/blob/master/presentations/2019_09_CppCon/CppCon2019%20-%20Killing%20Uninitialized%20Memory.pdf)
 
 Unfortunately APIs to avoid redundant inits are complex.
 
