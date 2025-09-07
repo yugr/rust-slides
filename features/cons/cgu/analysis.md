@@ -231,3 +231,6 @@ $ ./compare.py results/16_cgu results/1_cgu
 - `uv_0.json`: +1.8%
 - `veloren_0.json`: +1.4%
 - `zed_0.json`: +10.2%
+
+TODO:
+  - I suggest to check reason for rav1e regression
