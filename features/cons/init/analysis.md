@@ -2,24 +2,64 @@
 
 Assignee: yugr
 Parent task: gh-35
-Effort: 0h
+Effort: 1h
 
 TODO:
   - fix all TODOs that are mentioned in feature's README
 
 # Background
 
+Uninitialized variables may cause various types of vulnerabilities.
+Firstly attacker may control their initial value and force OOM access
+(this is already handled by Rust's bounds checks).
+But more importantly they can lead to sensitive information leaks:
+```
+void foo() {
+  char password[32];
+  ...
+}
+
+void bar() {
+  char message[1024];
+  if (cond) strcpy(message, “...”);
+  // Leaking password if !cond
+  printf(message);
+}
+
+void baz() {
+  foo();
+  bar();
+}
+```
+
+To avoid this Rust forces programmer to initialize all variables.
+
+This feature has been available in commercial toolchains for a long time.
+It was [added](https://github.com/microsoft/MSRC-Security-Research/blob/master/presentations/2019_09_CppCon/CppCon2019%20-%20Killing%20Uninitialized%20Memory.pdf)
+to Visual Studio in 2019 and to GCC in 2021
+(firstly [discussed](https://gcc.gnu.org/legacy-ml/gcc-patches/2014-06/msg00615.html) in 2014).
+
+Microsoft claims that it's been reason for 10% of CVEs in their prodocts (see link above)
+Also [Android: Art of Defense](https://www.blackhat.com/docs/us-16/materials/us-16-Kralevich-The-Art-Of-Defense-How-Vulnerabilities-Help-Shape-Security-Features-And-Mitigations-In-Android.pdf)
+says that 12% of exploitable bugs in Android are due to uninitialize data.
+It's not in [top-25 Mitre vulns](https://cwe.mitre.org/top25/archive/2024/2024_cwe_top25.html)
+though and also manual analysis failed to find much:
+  - ~50 uninitialized variable CVE in 2024 (1% of buffer overflow CVE)
+  - no KEVs in 2024
+
+For this reason C++26 will now silently initialize variables by default
+(treating them as Erroneous Behavior).
+Note: this feature breaks dynamic checkers like Msan and Valgrind.
+
+Rust uses a more sane approach - instead of selecting default value for all uninit variables
+it requires programmer to initialize all automatic variables (scalars, arrays, structs),
+refusing to compile code otherwise.
+
 TODO:
-  - why is this feature needed ?
-    * example errors which are caught by this check
-  - CVE/KEV stats:
-    * CVE: https://github.com/CVEProject/cvelistV5
-    * KEV: https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json
-    * Mitre top-25 rating also considers severity: https://cwe.mitre.org/top25/archive/2024/2024_cwe_top25.html
-  - enabled by default and why
   - situation in C/C++
     * e.g. [The New C Standard: An Economic and Cultural Commentary](https://www.coding-guidelines.com/cbook/cbook1_1.pdf)
     * e.g. [Rationale for International Standard Programming Languages - C](https://www.open-std.org/jtc1/sc22/wg14/www/C99RationaleV5.10.pdf)
+  - what about heap/globals ?
 
 # Example
 
@@ -46,7 +86,35 @@ TODO:
 
 # Performance impact
 
+Forced initialization overhead for C/C++:
+  * [1% in Firefox](https://serge-sans-paille.github.io/pythran-stories/trivial-auto-var-init-experiments.html)
+  * may take over 10% on hot paths:
+    + [virtio](https://patchwork-proxy.ozlabs.org/project/qemu-devel/patch/20250604191843.399309-1-stefanha@redhat.com/)
+    + [Chrome](https://issues.chromium.org/issues/40633061#comment142) (исправление заняло ~4 месяца)
+  * [1-3% в среднем на Postgres (до 20% на некоторых кейсах)](https://bugs.launchpad.net/ubuntu/+source/dpkg/+bug/1972043/comments/11)
+  * [<1% в Windows](https://github.com/microsoft/MSRC-Security-Research/blob/master/presentations/2019_09_CppCon/CppCon2019%20-%20Killing%20Uninitialized%20Memory.pdf)
+  * 4.5% overhead in Clang (https://github.com/yugr/slides/blob/main/CppZeroCost/2025/plan.md)
+  * main issue is large local array in hot path (e.g. used for IO) e.g.
+    ```
+    while (std::getline(maps, line)) {
+      char modulePath[PATH_MAX + 1] = "";
+      // -ftrivial-auto-var-init вставит здесь memset...
+      ret = sscanf(line.c_str(),
+                   "%lx-%lx %6s %lx %*s %*x %" PATH_MAX_STRING(PATH_MAX)
+                   "s\n",
+                   &start, &end, perm, &offset, modulePath);
+    }
+    ```
+
 ## Prevalence
+
+Forced initialization status for C/C++:
+  - not enabled by default in Linux distros
+    * [Ubuntu discussion](https://bugs.launchpad.net/ubuntu/+source/dpkg/+bug/1972043)
+  - [enabled in Chrome](https://issues.chromium.org/issues/40633061)
+    * fixing hot paths took ~4 months
+  - [not enabled in Firefox](https://serge-sans-paille.github.io/pythran-stories/trivial-auto-var-init-experiments.html)
+  - [enabled in Android user/kernel space](https://android-developers.googleblog.com/2020/06/system-hardening-in-android-11.html)
 
 TODO:
   - is this check is a common case in practice ?
