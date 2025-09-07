@@ -87,18 +87,23 @@ TODO:
 # Performance impact
 
 Forced initialization overhead for C/C++:
-  * [1% in Firefox](https://serge-sans-paille.github.io/pythran-stories/trivial-auto-var-init-experiments.html)
-  * may take over 10% on hot paths:
-    + [virtio](https://patchwork-proxy.ozlabs.org/project/qemu-devel/patch/20250604191843.399309-1-stefanha@redhat.com/)
-    + [Chrome](https://issues.chromium.org/issues/40633061#comment142) (исправление заняло ~4 месяца)
-  * [1-3% в среднем на Postgres (до 20% на некоторых кейсах)](https://bugs.launchpad.net/ubuntu/+source/dpkg/+bug/1972043/comments/11)
-  * [<1% в Windows](https://github.com/microsoft/MSRC-Security-Research/blob/master/presentations/2019_09_CppCon/CppCon2019%20-%20Killing%20Uninitialized%20Memory.pdf)
-  * 4.5% overhead in Clang (https://github.com/yugr/slides/blob/main/CppZeroCost/2025/plan.md)
-  * main issue is large local array in hot path (e.g. used for IO) e.g.
+  - [1% in Firefox](https://serge-sans-paille.github.io/pythran-stories/trivial-auto-var-init-experiments.html)
+  - may take over 10% on hot paths:
+    * [virtio](https://patchwork-proxy.ozlabs.org/project/qemu-devel/patch/20250604191843.399309-1-stefanha@redhat.com/)
+    * [Chrome](https://issues.chromium.org/issues/40633061#comment142) (fixing hot paths took ~4 months)
+  - [1-3% on average in Postgres (up to 20% in some cases)](https://bugs.launchpad.net/ubuntu/+source/dpkg/+bug/1972043/comments/11)
+  - [<1% in Windows](https://github.com/microsoft/MSRC-Security-Research/blob/master/presentations/2019_09_CppCon/CppCon2019%20-%20Killing%20Uninitialized%20Memory.pdf)
+    * 4% initially
+    * solved by
+      + apply only to PODs
+      + opt-out i.e. disabling on hot paths (only 1 instance in Windows kernel)
+      + more precise analysis in compiler
+  - 4.5% overhead in Clang (https://github.com/yugr/slides/blob/main/CppZeroCost/2025/plan.md)
+  - main issue is large local array in hot path (e.g. used for IO) e.g.
     ```
     while (std::getline(maps, line)) {
       char modulePath[PATH_MAX + 1] = "";
-      // -ftrivial-auto-var-init вставит здесь memset...
+      // -ftrivial-auto-var-init inserts memset here...
       ret = sscanf(line.c_str(),
                    "%lx-%lx %6s %lx %*s %*x %" PATH_MAX_STRING(PATH_MAX)
                    "s\n",
@@ -112,7 +117,6 @@ Forced initialization status for C/C++:
   - not enabled by default in Linux distros
     * [Ubuntu discussion](https://bugs.launchpad.net/ubuntu/+source/dpkg/+bug/1972043)
   - [enabled in Chrome](https://issues.chromium.org/issues/40633061)
-    * fixing hot paths took ~4 months
   - [not enabled in Firefox](https://serge-sans-paille.github.io/pythran-stories/trivial-auto-var-init-experiments.html)
   - [enabled in Android user/kernel space](https://android-developers.googleblog.com/2020/06/system-hardening-in-android-11.html)
 
