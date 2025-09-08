@@ -341,7 +341,7 @@ BENCHES = [
     CriterionBench(
         "meilisearch",
         "https://github.com/meilisearch/meilisearch",
-        "8a0bf24ed5c0b49cb788a57ac19eaa43076962bf",
+        "0fd66a5317da7e1f075058665944cac62e17d446",
         [("", "cargo bench")],
     ),
     CriterionBench(

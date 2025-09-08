@@ -1,6 +1,6 @@
 Meilisearch benchmarks are located in the `crates/benchmarks` subdirectory of the [repo](https://github.com/meilisearch/meilisearch)
 
-Built and tested on `8a0bf24ed5c0b49cb788a57ac19eaa43076962bf` commit.
+Built and tested on `0fd66a5317da7e1f075058665944cac62e17d446` commit.
 
 # Build
 
