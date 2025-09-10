@@ -122,6 +122,9 @@ fn foo(mut x: i32, y: i32) -> i32 {
 ```
 but it's not done.
 
+TODO:
+  - why they are not used by LLVM optimizer
+
 To check how many overflow checks are optimized by LLVM
 we count panics in initial IR vs optimized IR.
 
