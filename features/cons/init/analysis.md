@@ -2,7 +2,7 @@
 
 Assignee: yugr
 Parent task: gh-35
-Effort: 8.5h
+Effort: 10.5h
 
 TODO:
   - fix all TODOs that are mentioned in feature's README
