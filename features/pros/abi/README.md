@@ -44,4 +44,5 @@ jmp     g(int)@PLT
 ```
 See [Box vs std::unique_ptr, assembly differences](https://www.reddit.com/r/rust/comments/16hi9em/box_vs_stdunique_ptr_assembly_differences/)
 and [this](https://www.rottedfrog.co.uk/?p=24) and [Carruth's talk](https://www.youtube.com/watch?v=rHIkrotSwcc&feature=youtu.be&t=1261)
+and [this TG post](https://t.me/grokaemcpp/842)
 for detailed discussion.

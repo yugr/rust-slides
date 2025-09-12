@@ -3,7 +3,11 @@ Rust requires that all variables are initialized at definition.
 This may be unnecessary if e.g. buffer will be overwritten later
 but compiler will still require dummy initialization.
 In some cases it can be optimized later,
-in some this will be unnecessary overhead.
+in some this will be unnecessary overhead. A typical case is
+```
+let mut arr : [i32; 5];  // Won't compile
+initialize(&arr);
+```
 Also memory is usually allocated as zero-initialized
 (e.g. for `Vec`).
 
