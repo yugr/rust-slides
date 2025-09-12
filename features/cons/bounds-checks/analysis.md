@@ -373,7 +373,7 @@ Results:
 $ compare.py results/baseline results/bounds
 SpacetimeDB_0.json: +0.8%
 bevy: +0.6%
-meilisearch: +5.5%
+meilisearch_0.json: +3.0%
 nalgebra: +0.4%
 oxipng: +2.3%
 rav1e: +3.8%

@@ -272,6 +272,7 @@ $ ../../benchmarks/compare.py baseline/ no-overflow-checks
 compare.py: warning: some results are present only in /home/Asus/src/rust-slides/tmp/results-20250826/baseline: meilisearch_0.json
 SpacetimeDB_0.json: +1.5%
 bevy_0.json: +0.6%
+meilisearch_0.json: +0.0%
 nalgebra_0.json: +0.3%
 oxipng_0.json: +0.2%
 rav1e_0.json: +2.2%
@@ -290,6 +291,7 @@ $ ../../benchmarks/compare.py baseline/ force-overflow-checks/
 compare.py: warning: some results are present only in /home/Asus/src/rust-slides/tmp/results-20250826/baseline: meilisearch_0.json, rav1e_0.json, rust_serialization_benchmark_0.json
 SpacetimeDB_0.json: -6.5%
 bevy_0.json: -6.6%
+meilisearch_0.json: -5.6%
 nalgebra_0.json: -6.8%
 oxipng_0.json: -8.0%
 regex_0.json: -0.9%
@@ -306,6 +308,7 @@ NSW is not clearly better:
 $ ../../benchmarks/compare.py no-overflow-checks no-overflow-checks-nsw/
 SpacetimeDB_0.json: +0.3%
 bevy_0.json: +0.1%
+meilisearch_0.json: +0.3%
 nalgebra_0.json: +0.1%
 oxipng_0.json: -0.1%
 rav1e_0.json: -2.2% (irrelevant because has overflows)

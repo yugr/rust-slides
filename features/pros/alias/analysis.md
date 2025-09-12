@@ -381,6 +381,7 @@ Disabling the feature obviously decreases perf:
 $ ../../benchmarks/compare.py baseline/ force-aliasing/
 SpacetimeDB_0.json: -0.6%
 bevy_0.json: +0.0%
+meilisearch_0.json: -4.2%
 nalgebra_0.json: -4.1%
 oxipng_0.json: +2.0%
 rav1e_0.json: -2.1%
