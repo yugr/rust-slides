@@ -2,7 +2,7 @@
 
 Assignee: yugr
 Parent task: gh-35
-Effort: 10.5h
+Effort: 13.5h
 
 TODO:
   - fix all TODOs that are mentioned in feature's README
@@ -123,6 +123,8 @@ Forced initialization status for C/C++:
 TODO:
   - is this check is a common case in practice ?
     * may need to write analysis passes to scan real Rust code (libs, big projects) for occurences
+  - run [DeadWrites](https://github.com/yugr/valgrind/tree/yugr/deadwrites/3)
+    * also check [deadstores tool](https://kristerw.blogspot.com/2020/02/watching-for-software-inefficiencies.html)
 
 ## Disabling the check
 
