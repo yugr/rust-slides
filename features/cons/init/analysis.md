@@ -2,10 +2,7 @@
 
 Assignee: yugr
 Parent task: gh-35
-Effort: 13.5h
-
-TODO:
-  - fix all TODOs that are mentioned in feature's README
+Effort: 16h
 
 # Background
 
@@ -120,33 +117,35 @@ Forced initialization status for C/C++:
   - [not enabled in Firefox](https://serge-sans-paille.github.io/pythran-stories/trivial-auto-var-init-experiments.html)
   - [enabled in Android user/kernel space](https://android-developers.googleblog.com/2020/06/system-hardening-in-android-11.html)
 
+To see how often initializations are dead in practice
+we created a small Valgrind plugin [DeadWrites](https://github.com/yugr/valgrind/tree/yugr/deadwrites/3)
+(this was before I learned about excellent [deadstores plugin](https://kristerw.blogspot.com/2020/02/watching-for-software-inefficiencies.html)
+by Krister Walfridsson).
+The plugin counts amount of dead (unused) bytes stored to memory
+and has a 300-400x slowdown.
+Note that not all dead writes come from Rust's initializations
+so this is just an approximation.
+
+Results for oxipng:
+```
+$ cargo clean && valgrind --trace-children=yes --tool=deadwrites cargo +baseline b --release -j 1 |&  tee build.log
+$ ./count_dw_stats.py < build.log
+9% (42725023150 out of 450234323338)
+```
+
 TODO:
-  - is this check is a common case in practice ?
-    * may need to write analysis passes to scan real Rust code (libs, big projects) for occurences
-  - run [DeadWrites](https://github.com/yugr/valgrind/tree/yugr/deadwrites/3)
-    * also check [deadstores tool](https://kristerw.blogspot.com/2020/02/watching-for-software-inefficiencies.html)
+  - dead writes stats for Clang
 
 ## Disabling the check
 
-TODO:
-  - determine how to enable/disable feature in compiler/stdlib
-    * there may be flags (e.g. for interger overflows) but sometimes may need patch code (e.g. for bounds checks)
-      + patch for each feature needs to be implemented in separate branch (in private compiler repo)
-      + compiler modifications need to be kept in private compiler repo `yugr/rust-private`
-    * make sure that found solution works on real examples
-    * note that simply using `RUSTFLAGS` isn't great because they override project settings in `Cargo.toml`
+It's not really possible to disable this check per language rules...
 
 ## Measurements
 
+Rather than measuring Rust, we compare Clang with and without `-ftrivial-auto-var-init`.
+In [Hardening: current status and trends](https://github.com/yugr/slides/blob/main/CppZeroCost/2025/EN.pdf)
+the authors reported 4.5% degradation for Clang (compilation of CGBuiltins.ii).
+
 TODO:
-  * collect perf measurements for benchmarks:
-    + runtime
-    + PMU counters (inst count, I$/D$/branch misses)
-      - actually we failed to understand how to collect PMUs in benchmarks (gh-25)...
-    + compiler stats
-      - depend on feature
-      - e.g. SLP/loop autovec for bounds checking feature
-      - e.g. NoAlias returns from AA manager for alias feature
-      - e.g. CSE/GVN/LICM for alias feature
-  * at least x86/AArch64
-    + maybe also normal/ThinLTO/FatLTO, cgu=default/1 in future if we have time
+  - compiler stats
+    * count stores (and memsets) inside loops
