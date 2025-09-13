@@ -149,6 +149,9 @@ There is also proposal for language dialect eo prevent raw pointer arithmetic
 and provide fixits for easier migration
 ([-Wunsafe-buffer-usage](https://discourse.llvm.org/t/rfc-c-buffer-hardening/65734))
 
+For more info on hardening in C++ see my other talk
+[Hardening: current status and trends](https://github.com/yugr/slides/blob/main/CppZeroCost/2025/EN.pdf).
+
 Pascal/Delphi also had [range checking](http://www.pascal.helpov.net/index/pascal_$R)
 long ago.
 
