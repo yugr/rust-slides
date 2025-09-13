@@ -4,7 +4,7 @@ Assignee: yugr
 
 Parent task: gh-35
 
-Effort: 18h
+Effort: 20h
 
 # Background
 
@@ -155,12 +155,20 @@ $ ./count_dw_stats.py < build.log
 
 Results for Clang can be obtained via
 ```
+$ ./llvm-build.sh
 $ export MALLOC_MMAP_THRESHOLD_=0
-$ time valgrind --trace-children=yes --tool=deadwrites build-ref/bin/clang++ -O2 -w -S files-small/LICM.ii
-$ time valgrind --trace-children=yes --tool=deadwrites build-new/bin/clang++ -O2 -w -S files-small/LICM.ii
+$ valgrind --trace-children=yes --tool=deadwrites build-ref/bin/clang++ -O2 -w -S files-small/LICM.ii
+$ valgrind --trace-children=yes --tool=deadwrites build-new/bin/clang++ -O2 -w -S files-small/LICM.ii
 ```
-For llvmorg-20.1.7 I got
-  - TODO
+For llvmorg-20.1.7 I got 2x increase of dead stores under `-ftrivial-auto-var-init`:
+  - ref:
+    ```
+    ==2723404== Detected 11% dead writes (3076342389 out of 25657876716 total)
+    ```
+  - auto-init:
+    ```
+    ==2781244== Detected 23% dead writes (7956280742 out of 33419109989 total)
+    ```
 
 ## Disabling the check
 
@@ -197,6 +205,24 @@ Other forced initialization overheads:
     }
     ```
 
-TODO:
-  - compiler stats
-    * count stores (and memsets) inside loops
+To statically check how many stores can't be eliminated, we compare number
+of stores and memsets in loops of Clang compiler.
+To generate Clang .bc files, update attached `llvm-build.sh` by adding `-save-temps`
+and run it. Then run
+```
+for B in build-ref build-new; do
+  echo "=== $B"
+  for f in $B/*.bc; do
+    build-bootstrap/bin/opt $f -o opt.bc
+    ~/tasks/rust/count-stores/Count opt.bc
+  done | awk 'BEGIN{s=0; ms=0} /Loop stats:/{s+=$3; ms+=$5} END{print s " stores, " ms " memsets"}'
+done
+```
+My results are
+```
+=== build-ref
+478006 stores, 1752 memsets
+=== build-new
+498320 stores, 19362 memsets
+```
+so +4% stores and 11x (!) memset growth.
