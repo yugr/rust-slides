@@ -4,7 +4,7 @@ Assignee: yugr
 
 Parent task: gh-35
 
-Effort: 22h
+Effort: 23h
 
 # Background
 
@@ -113,6 +113,9 @@ without writing complex `MaybeUninit` logic.
 
 # Optimizations
 
+There is no dedicated auto-init instruction but instructions
+that were inserted by auto-init logic are marked with metadata.
+
 Dead assignments to scalars are very cheap and
 also well optimized by too many SSA passes to name them
 (dce, bdce, adce, instcombine, etc.).
@@ -120,9 +123,19 @@ also well optimized by too many SSA passes to name them
 ## Optimization of stores
 
 Corresponding optimizations are mainly in LLVM DeadStoreElimination.cpp.
-There is also MoveAutoInit.cpp which sinks auto-init closer to uses in CFG.
-There is no dedicated auto-init instruction but instructions
-that were inserted by auto-init logic are marked with metadata.
+There is also MoveAutoInit.cpp which sinks auto-init closer to uses in CFG;
+it's used to avoid initializations in cases like
+```
+void foo() {
+  int a, b;
+  ...
+  if (error) {
+    int buf[99999];
+    handle_error(buf);
+  }
+  ...
+}
+```
 Finally InstCombine and EarlyCSE also do some basic opts.
 
 DSE is based on MemorySSA and has no significant limitations
@@ -179,6 +192,8 @@ TODO:
 C++:
   - [Killing Uninitialized Memory](https://github.com/microsoft/MSRC-Security-Research/blob/master/presentations/2019_09_CppCon/CppCon2019%20-%20Killing%20Uninitialized%20Memory.pdf) ([video](https://www.youtube.com/watch?v=rQWjF8NvqAU))
   - [Erroneous behavior for uninitialized reads](https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2023/p2795r2.html)
+  - [SafeInit: Comprehensive and Practical Mitigation of Uninitialized Read Vulnerabilities](https://www.ndss-symposium.org/wp-content/uploads/2017/09/ndss2017_05B-2_Milburn_paper.pdf)
+    * [video](https://www.youtube.com/watch?v=qGzB5x3mnXw)
 
 Java:
   - [Why Nothing Matters: The Impact of Zeroing](https://users.elis.ugent.be/~jsartor/researchDocs/OOPSLA2011Zero-submit.pdf)
