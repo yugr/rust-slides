@@ -109,13 +109,11 @@ without writing complex `MaybeUninit` logic.
 
 # Optimizations
 
-# Scalar variables
-
 Dead assignments to scalars are very cheap and
 also well optimized by too many SSA passes to name them
 (dce, bdce, adce, instcombine, etc.).
 
-# Memory variables
+## Optimization of stores
 
 Corresponding optimizations are mainly in LLVM DeadStoreElimination.cpp.
 There is also MoveAutoInit.cpp which sinks auto-init closer to uses in CFG.
@@ -128,7 +126,7 @@ except for several limiting thresholds.
 It has been [significantly improved](https://github.com/llvm/llvm-project/issues/39873)
 specifically for auto-init.
 
-## Analysis method
+### Analysis method
 
 I looked for relevant passes by selecting shortlist from
 ```
