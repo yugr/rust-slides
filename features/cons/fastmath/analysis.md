@@ -1,6 +1,113 @@
-# Nalgebra
+# Background
 
-## `vec10000_dot_f32`
+Rust has a very limited support of fast-math.
+There is no `-ffast-math` flag to enable fast-math optimizations globally or at create/module/function level.
+Rust has `std::intrinsics::XXX_algebraic` and `std::intrinsics::XXX_fast` intrinsics which allow fast-math optimization for a specific operations, however these intrinsics are currently unstable.
+Lack of this feature has a significant impact on several domains such as gamedev:
+
+> This particular feature is a real need within the game development community
+> for obvious performance reasons. Usually we'd want this for hot-spot optimizations,
+> however, it's also common to blanket enable -ffast-math for the entire (C++) game codebase.
+>
+> -- https://github.com/rust-lang/rust/issues/21690#issuecomment-1589427278
+
+and computer vision:
+
+> lack of even opt-in location-specific fast math (such as fadd_fast and fmul_fast)
+> on stable hinders the use of Rust in some key algorithms for computer vision,
+> robotics and augmented reality applications
+>
+> -- https://github.com/rust-lang/rust/issues/21690#issuecomment-1589427278
+
+Rust developers have [clearly rejected](https://github.com/rust-lang/rust/issues/21690#issuecomment-1589427278) global fast math flag due to safety concerns (e.g. no clear way for a third-party crate to allow/disallow fast-math optimizations).
+
+# Known performance hits
+
+Most of the performance impact of a lack of fast-math optimizations comes from autovectorization problems. Efficient vectorization often requires reordering of operations, and it is not possible without at least algebraic level of fast-math optimizations.
+
+# Enabling
+
+There is no convenient way to globally enable fast math (see [this comment](https://github.com/rust-lang/rust/issues/21690#issuecomment-2167664644) for some reasons why).
+`-C llvm-args=-ffast-math` has no impact on generated LLVM IR because `-ffast-math` is a clang frontend flag, so it has no impact when `rustc` is generating LLVM IR.
+Furthermore, different options of fast-math optimizations are set in LLVM IR via flags, which apply to single floating-point operations (also phi-nodes, calls, returns).
+Fast math attributes on functions are [in the process of being removed](https://github.com/llvm/llvm-project/issues/70533#issuecomment-1790250502) (or are already removed), so there LLVM IR also does not contain a way to "globally" enable fast-math optimizations.
+
+# Performance with fast- and algebraic- math.
+
+Compiler patches are in branches [zakhar/algebraic-math](https://github.com/yugr/rust-private/tree/zakhar/algebraic-math) and [zakhar/fast-math](https://github.com/yugr/rust-private/tree/zakhar/fast-math).
+
+## x86_64
+
+CPU:
+```
+$ lscpu
+Architecture:                         x86_64
+CPU op-mode(s):                       32-bit, 64-bit
+Byte Order:                           Little Endian
+Address sizes:                        46 bits physical, 48 bits virtual
+CPU(s):                               24
+On-line CPU(s) list:                  0-23
+Thread(s) per core:                   2
+Core(s) per socket:                   6
+Socket(s):                            2
+NUMA node(s):                         2
+Vendor ID:                            GenuineIntel
+CPU family:                           6
+Model:                                63
+Model name:                           Intel(R) Xeon(R) CPU E5-2620 v3 @ 2.40GHz
+Stepping:                             2
+CPU MHz:                              2597.060
+CPU max MHz:                          3200.0000
+CPU min MHz:                          1200.0000
+BogoMIPS:                             4794.66
+Virtualization:                       VT-x
+L1d cache:                            384 KiB
+L1i cache:                            384 KiB
+L2 cache:                             3 MiB
+L3 cache:                             30 MiB
+```
+
+## Algebraic math
+
+```
+SpacetimeDB_0.json: -1.3%
+bevy_0.json: -0.8%
+meilisearch_0.json: -0.1%
+nalgebra_0.json: -2.5%
+oxipng_0.json: +0.4%
+rav1e_0.json: -0.3%
+regex_0.json: +0.2%
+ruff_0.json: -0.0%
+rust_serialization_benchmark_0.json: +0.1%
+tokio_0.json: +0.5%
+uv_0.json: -0.3%
+veloren_0.json: +0.1%
+zed_0.json: +0.4%
+```
+
+## Fast math
+
+```
+SpacetimeDB_0.json: -0.6%
+bevy_0.json: +0.1%
+meilisearch_0.json: -1.1%
+nalgebra_0.json: -2.1%
+oxipng_0.json: +0.6%
+rav1e_0.json: -0.8%
+regex_0.json: -0.4%
+ruff_0.json: +0.3%
+rust_serialization_benchmark_0.json: +0.2%
+tokio_0.json: +0.2%
+uv_0.json: -0.3%
+veloren_0.json: +0.2%
+zed_0.json: -0.3%
+```
+
+# Benchmark analysis
+
+## Nalgebra
+
+### `vec10000_dot_f32`
 
 Slows down significantly with fast-math. Vectorizer unrolls a tight loop, but is unable to optimize loads (does not use packed loads) and this results in an increase in I$ misses.
 Initial loop seems hand-optimized to manually perform reassoc that the Rust compiler does not allow otherwise. This *might* have contributed to the autovectorization problems.
@@ -124,9 +231,9 @@ c0:   movss    -0x1c(%r12,%rdi,1),%xmm10
       ...
 ```
 
-## `lu_determinant_100x100`
+### `lu_determinant_100x100`
 
-Here the disassembly shows that the hot loop was not vectorized, all operations are scalar. Allowing reassociation results in vectorization ("packed" instruction are used).
+Here the disassembly shows that in the baseline the hot loop was not vectorized, all operations are scalar. Allowing reassociation results in vectorization ("packed" instruction are used).
 
 Baseline disassembly:
 ```
@@ -160,10 +267,4 @@ Fast math disassembly:
 ```
 
 
-# Enabling 
-
-There is no convenient way to globally enable fast math (see [this comment](https://github.com/rust-lang/rust/issues/21690#issuecomment-2167664644) for some reasons why).
-`-C llvm-args=-ffast-math` has no impact on generated LLVM IR because `-ffast-math` is a clang frontend flag, so it has no impact when `rustc` is generating LLVM IR.
-Furthermore, different options of "fast math" optimizations are set in LLVM IR via flags, which apply to single floating-point operations (also phi-nodes, calls, returns).
-Fast math attributes on functions are [in the process of being removed](https://github.com/llvm/llvm-project/issues/70533#issuecomment-1790250502) (or are already removed), so there LLVM IR also does not contain a way to "globally" enable "fast math" optimizations.
 
