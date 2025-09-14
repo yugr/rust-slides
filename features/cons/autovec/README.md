@@ -9,6 +9,7 @@ On the other hand it's positively affected by
 
 To facilitate vectorization [use](https://www.reddit.com/r/rust/comments/1hk0bry/comment/m3b76gn/)
   - `chunks_exact` iterator (even if length is not divisable, see [this](https://github.com/nnethercote/perf-book/issues/52))
+    * TODO: does this facilitate SLP or Loop vectorizer ?
 
 Autovec is [unreliable](https://www.reddit.com/r/rust/comments/1hk0bry/comment/m3c4s6s/)
 > risks bad code-gen depending on surrounding code, architectures, types, compiler versions, etc.

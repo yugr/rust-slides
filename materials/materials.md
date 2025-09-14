@@ -2139,6 +2139,10 @@ From [here](https://hackmd.io/@Q66MPiW4T7yNTKOCaEb-Lw/gosim-unconf-rust-codegen)
     + no new links
 - Default to -Z plt=yes: https://github.com/rust-lang/rust/pull/106380
   * Status: backlog
+- Identifying Rust's collect::<Vec<_>>() memory leak footgun: https://blog.polybdenum.com/2024/01/17/identifying-the-collect-vec-memory-leak-footgun.html
+  * Status: backlog
+  * More materials:
+    + [Reddit](https://www.reddit.com/r/rust/comments/199jycb/identifying_rusts_collect_memory_leak_footgun/)
 
 # Manual optimizations
 
@@ -2562,6 +2566,8 @@ MIRIFLAGS="-Zmiri-disable-isolation -Zmiri-measureme=crox" cargo +nightly miri r
     + [Reddit](https://www.reddit.com/r/rust/comments/1l77jso/why_doesnt_rust_care_more_about_compiler)
 - Tried to re-write a C++ NES Emulator in Rust, now it runs more than 5 times slower: https://www.reddit.com/r/rust/comments/pmo2l5/tried_to_rewrite_a_c_nes_emulator_in_rust_now_it/
   * Status: backlog
+- Announcing fast_assert: https://www.reddit.com/r/rust/comments/1mao817/announcing_fast_assert_its_assert_but_faster/
+  * Status: backlog
 
 # Panics
 
@@ -2755,6 +2761,10 @@ MIRIFLAGS="-Zmiri-disable-isolation -Zmiri-measureme=crox" cargo +nightly miri r
   * More materials:
     + [P1640R1: Error size benchmarking: Redux](https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2019/p1640r1.html)
     + no new links
+- No-Panic Rust: A Nice Technique for Systems Programming: https://blog.reverberate.org/2025/02/03/no-panic-rust.html
+  * Status: backlog
+  * More materials:
+    + [Reddit](https://www.reddit.com/r/rust/comments/1ih98r2/nopanic_rust_a_nice_technique_for_systems/)
 
 # Uninit
 

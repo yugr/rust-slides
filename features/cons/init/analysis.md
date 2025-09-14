@@ -159,6 +159,9 @@ Irrelevant passes: early-cse, simplifycfg, dce, bdce, adce, mem2reg/sroa, gvn
 Disadvantage of `MaybeUninit` is that libraries that you use
 must support it.
 
+TODO:
+  - study critics in https://www.reddit.com/r/rust/comments/1iad0lk/rusts_worst_feature_spoiler_its_borrowedbuf_i/
+
 # Suggested readings
 
 C++:
