@@ -20,6 +20,11 @@ Overheads are (based on https://github.com/yugr/slides/blob/main/CppZeroCost/202
   - 1-20% Postgres (https://bugs.launchpad.net/ubuntu/+source/dpkg/+bug/1972043/comments/11)
   - 1% Windows (https://github.com/microsoft/MSRC-Security-Research/blob/master/presentations/2019_09_CppCon/CppCon2019%20-%20Killing%20Uninitialized%20Memory.pdf)
 
+Another solution for C/C++ is SafeInit:
+[paper](https://www.ndss-symposium.org/wp-content/uploads/2017/09/ndss2017_05B-2_Milburn_paper.pdf),
+[video](https://www.youtube.com/watch?v=qGzB5x3mnXw)
+(I'm not sure how it's related to `-ftrivial-auto-var-init`).
+
 Unfortunately APIs to avoid redundant inits are complex.
 
 One of the most common examples where this hurts is reading files.

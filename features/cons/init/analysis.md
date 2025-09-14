@@ -53,15 +53,16 @@ in commercial C/C++ toolchains for a long time
 (e.g. Diag Data Compiler `-Xinit-locals-mask` option).
 It has also been a MISRA requirement for a long time.
 It was [added](https://github.com/microsoft/MSRC-Security-Research/blob/master/presentations/2019_09_CppCon/CppCon2019%20-%20Killing%20Uninitialized%20Memory.pdf)
-to Visual Studio in 2019 and to GCC in 2021
-(firstly [discussed](https://gcc.gnu.org/legacy-ml/gcc-patches/2014-06/msg00615.html) in 2014).
+to Visual Studio in 2019,
+[to Clang](https://lists.llvm.org/pipermail/cfe-dev/2018-November/060304.html) in 2018 and
+to GCC in 2021 (firstly [discussed](https://gcc.gnu.org/legacy-ml/gcc-patches/2014-06/msg00615.html) in 2014).
 
 Microsoft claims that it's been reason for 10% of CVEs in their products (see link above)
 Also [Android: Art of Defense](https://www.blackhat.com/docs/us-16/materials/us-16-Kralevich-The-Art-Of-Defense-How-Vulnerabilities-Help-Shape-Security-Features-And-Mitigations-In-Android.pdf)
 says that 12% of exploitable bugs in Android are due to uninitialize data.
 It's not in [top-25 Mitre vulns](https://cwe.mitre.org/top25/archive/2024/2024_cwe_top25.html)
 though and also manual analysis failed to find much
-(most likely such variables get attributed as buffer overflows):
+(most likely such variables get attributed as buffer overflows or ASLR leaks):
   - ~50 uninitialized variable CVE in 2024 (1% of buffer overflow CVE)
   - no KEVs in 2024
 
@@ -78,7 +79,10 @@ and [Swift](https://kyouko-taiga.github.io/swift-thoughts/tutorial/chapter-1/)
 also require initialization.
 Plain Ada allows uninitilized but SPARK extension prohibits it.
 Java and [Go](https://go.dev/ref/spec#The_zero_value) initialize variables
-with zero default value. Fortran does none of that.
+with zero default value
+(which is arguable a [bad idea](https://lists.llvm.org/pipermail/cfe-dev/2018-November/060321.html)
+but [generates better code](https://lists.llvm.org/pipermail/cfe-dev/2018-December/060540.html)).
+Fortran does none of that.
 
 # Example
 
@@ -126,6 +130,10 @@ except for several limiting thresholds.
 It has been [significantly improved](https://github.com/llvm/llvm-project/issues/39873)
 specifically for auto-init.
 
+Interestingly enough some researches [found](https://users.elis.ugent.be/~jsartor/researchDocs/OOPSLA2011Zero-submit.pdf)
+that DSE benefits are very small because duplicating stores
+are well optimized at hardware level.
+
 ### Analysis method
 
 I looked for relevant passes by selecting shortlist from
@@ -159,6 +167,10 @@ Irrelevant passes: early-cse, simplifycfg, dce, bdce, adce, mem2reg/sroa, gvn
 Disadvantage of `MaybeUninit` is that libraries that you use
 must support it.
 
+It would help if language(s) type system could express
+that function writes certain range of pointer argument
+(LLVM already has `readonly` and `writeonly` attributes).
+
 TODO:
   - study critics in https://www.reddit.com/r/rust/comments/1iad0lk/rusts_worst_feature_spoiler_its_borrowedbuf_i/
 
@@ -167,6 +179,10 @@ TODO:
 C++:
   - [Killing Uninitialized Memory](https://github.com/microsoft/MSRC-Security-Research/blob/master/presentations/2019_09_CppCon/CppCon2019%20-%20Killing%20Uninitialized%20Memory.pdf) ([video](https://www.youtube.com/watch?v=rQWjF8NvqAU))
   - [Erroneous behavior for uninitialized reads](https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2023/p2795r2.html)
+
+Java:
+  - [Why Nothing Matters: The Impact of Zeroing](https://users.elis.ugent.be/~jsartor/researchDocs/OOPSLA2011Zero-submit.pdf)
+    (analysis of overheads but not focused on stack inits)
 
 TODO:
   - anything about Rust ?
