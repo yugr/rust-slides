@@ -17,7 +17,8 @@ There are two extreme cases in language design:
 and a lot of intermediate options.
 
 Landi proved that interprocedural AA is undecidable and
-intraprocedural AA is NP-complete.
+intraprocedural AA is NP-complete
+(Undecidability of static analysis, Landi, 1992).
 
 Originally C allowed arbitrary aliasing which was made more strict in C99
 by disallowing aliasing of references of different types
@@ -25,7 +26,7 @@ by disallowing aliasing of references of different types
 to date a lot of projects are compiled with `-fno-strict-aliasing`.
 
 Aliasing semantics is very important because it allows compiler
-to optimize code much more aggressively via vectorization, GVN, LICM, etc.
+to optimize code much more aggressively via vectorization, CSE/GVN, LICM, DSE, etc.
 (or prevents it from doing so !).
 
 In practice aliasing is extremely rare. According to
@@ -51,6 +52,9 @@ Zig, it seems, is more C-like - everything aliases by default and
 
 I was unable to find good description of situation in other languages
 (Java, Swift, Go, Julia).
+
+TODO:
+  - situation in other langs
 
 # Examples
 
@@ -98,8 +102,9 @@ void foo(int * RESTRICT a, const int * RESTRICT b, unsigned n) {
     a[i] = b[i] + 100;
 }
 ```
-modern Clang will add a runtime aliasing check and
-generate two versions of loop (GCC does not do this).
+modern Clang will add a [runtime aliasing check](https://llvm.org/docs/Vectorizers.html#runtime-checks-of-pointers)
+and generate two versions of loop (GCC does not do this)
+(this is a case of "speculative alias analysis").
 
 Other languages also have more strict aliasing guarantees
 e.g. equivalent Fortran program

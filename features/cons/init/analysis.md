@@ -4,7 +4,7 @@ Assignee: yugr
 
 Parent task: gh-35
 
-Effort: 20h
+Effort: 22h
 
 # Background
 
@@ -47,7 +47,8 @@ forced zero-initialization in kernel (both `brk` and
 [anonymous `mmap`'s](https://stackoverflow.com/a/65084762/2170527)
 zero-initialize mapped pages).
 
-Automatic variable initialization has been available
+Automatic variable initialization has higher overhead
+and is less explored. It has been available
 in commercial C/C++ toolchains for a long time
 (e.g. Diag Data Compiler `-Xinit-locals-mask` option).
 It has also been a MISRA requirement for a long time.
@@ -59,7 +60,8 @@ Microsoft claims that it's been reason for 10% of CVEs in their products (see li
 Also [Android: Art of Defense](https://www.blackhat.com/docs/us-16/materials/us-16-Kralevich-The-Art-Of-Defense-How-Vulnerabilities-Help-Shape-Security-Features-And-Mitigations-In-Android.pdf)
 says that 12% of exploitable bugs in Android are due to uninitialize data.
 It's not in [top-25 Mitre vulns](https://cwe.mitre.org/top25/archive/2024/2024_cwe_top25.html)
-though and also manual analysis failed to find much:
+though and also manual analysis failed to find much
+(most likely such variables get attributed as buffer overflows):
   - ~50 uninitialized variable CVE in 2024 (1% of buffer overflow CVE)
   - no KEVs in 2024
 
@@ -70,6 +72,13 @@ Note: this feature breaks dynamic checkers like Msan and Valgrind.
 Rust uses a more sane approach - instead of selecting default value for all uninit variables
 it requires programmer to initialize all automatic variables (scalars, arrays, structs),
 refusing to compile code otherwise.
+
+[C#](https://stackoverflow.com/questions/30816496/why-do-local-variables-require-initialization-but-fields-do-not).
+and [Swift](https://kyouko-taiga.github.io/swift-thoughts/tutorial/chapter-1/)
+also require initialization.
+Plain Ada allows uninitilized but SPARK extension prohibits it.
+Java and [Go](https://go.dev/ref/spec#The_zero_value) initialize variables
+with zero default value. Fortran does none of that.
 
 # Example
 
@@ -100,13 +109,48 @@ without writing complex `MaybeUninit` logic.
 
 # Optimizations
 
+# Scalar variables
+
+Dead assignments to scalars are very cheap and
+also well optimized by too many SSA passes to name them
+(dce, bdce, adce, instcombine, etc.).
+
+# Memory variables
+
 Corresponding optimizations are mainly in LLVM DeadStoreElimination.cpp.
 There is also MoveAutoInit.cpp which sinks auto-init closer to uses in CFG.
 There is no dedicated auto-init instruction but instructions
 that were inserted by auto-init logic are marked with metadata.
+Finally InstCombine and EarlyCSE also do some basic opts.
 
-TODO:
-  - check DSEPass for potential limitations
+DSE is based on MemorySSA and has no significant limitations
+except for several limiting thresholds.
+It has been [significantly improved](https://github.com/llvm/llvm-project/issues/39873)
+specifically for auto-init.
+
+## Analysis method
+
+I looked for relevant passes by selecting shortlist from
+```
+$ opt -O2 -print-pipeline-passes ...
+```
+and checking if they can optimize this code
+```
+declare void @bar(ptr noundef)
+
+define void @foo() {
+  %1 = alloca i32, align 4
+  store i32 123, ptr %1, align 4
+  store i32 256, ptr %1, align 4
+  call void @bar(ptr noundef nonnull %1)
+  ret void
+}
+```
+(via `opt -passes='PASS' FILE -S -o-`).
+
+Relevant passes: dse, instcombine, early-cse<memssa>
+
+Irrelevant passes: early-cse, simplifycfg, dce, bdce, adce, mem2reg/sroa, gvn
 
 # Workarounds
 

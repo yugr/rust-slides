@@ -143,3 +143,6 @@ Check if C++ also has same overhead due to exceptions: https://www.rottedfrog.co
 
 Measure increase of BTB/I$ misses PMUs and [stack usage](https://www.memorysafety.org/blog/rav1d-performance-optimization)
 when panics are disabled
+
+Check if hot-cold splitting works (i.e. panic handlers moved out of normal function code)
+and speeds up

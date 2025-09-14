@@ -63,6 +63,14 @@ For each performance feature we neeed to provide
     * situation in C/C++
       + e.g. [The New C Standard: An Economic and Cultural Commentary](https://www.coding-guidelines.com/cbook/cbook1_1.pdf)
       + e.g. [Rationale for International Standard Programming Languages - C](https://www.open-std.org/jtc1/sc22/wg14/www/C99RationaleV5.10.pdf)
+    * situation in other langs:
+      + [Java](https://docs.oracle.com/javase/specs/jls/se24/html/),
+      + [C#](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/introduction)
+      + [Go](https://go.dev/ref/spec)
+      + [Swift](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/aboutthelanguagereference/)
+      + [Fortran](https://j3-fortran.org/doc/year/24/24-007.pdf)
+      + Ada ([RM](http://www.ada-auth.org/standards/22rm/html/RM-TOC.html) and [ARM](http://www.ada-auth.org/standards/22aarm/html/AA-TOC.html))
+      + [Julia](https://docs.julialang.org)
   - clear example (Rust microbenchmark, asm code)
   - types of check (e.g. compiler/stdlib parts)
   - info whether LLVM can potentially optimize it (and with what limitations)

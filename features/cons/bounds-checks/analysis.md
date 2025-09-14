@@ -33,6 +33,7 @@ buffer overflows are still no. 2, 6 and 20.
 TODO:
   - why is this feature needed ?
     * example errors
+  - situation in other langs
 
 # Examples
 

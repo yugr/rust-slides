@@ -66,6 +66,9 @@ Some very famous SW errors were caused by integer overflow:
   - Therac-25 incident (1985)
   - Ariane 5 crash (1996)
 
+TODO:
+  - situation in other langs
+
 # Examples
 
 This simple program
