@@ -105,19 +105,25 @@ Hopefully in many cases all above will be obtained from collected materials.
 # Priorities
 
 Mandatory:
-  - cons/abi and pros/abi (gh-31)
   - (DONE) cons/arithmetic-checks (gh-28)
-  - cons/autovec (gh-29)
   - (DONE) cons/bounds-checks (gh-20)
   - (WIP) cons/cgu (gh-30)
-  - cons/copy-elision (gh-32)
-  - cons/data-structs (gh-33)
   - (WIP) cons/fastmath (gh-34)
   - (DONE) cons/init (gh-35)
   - (WIP) cons/panics (gh-36)
-  - cons/placement-new (gh-37)
-  - cons/stdlib and pros/stdlib (gh-38)
   - (DONE) pros/alias (gh-39)
+  - cons/autovec (gh-29)
+    * TODO @yugr: should this be split to separate features ?
+  - cons/stdlib and pros/stdlib (gh-38)
+    * Classify stdlib asserts (anything besides Unicode ?)
+  - cons/abi and pros/abi (gh-31)
+  - cons/copy-elision (gh-32)
+  - cons/placement-new (gh-37)
+    * This could be considered together w/ copy elision
+      (placement-new is basically a means for programmer
+      to work around failed copy elision ?)
+  - cons/data-structs (gh-33)
+    * This is a large topic, decided to skip this
 
 Important:
   - cons/iterators
