@@ -10,7 +10,7 @@ Panicking causes significant code bloat in small functions (e.g. [here](https://
 
 It's not clear how they influence performance (or whether they do at all).
 Note that exceptions may actually be _beneficial_ for performance
-because no BTB is wasted on error handling code.
+because no BTB is wasted on error handling code (see below).
 
 Panics make leaf functions no longer leaf (see [this](https://www.reddit.com/r/programming/comments/2po703/comment/cmym6jk/))
 which may harm optimizations (e.g. inlining) and introduce unnecessary reg spills.
@@ -60,7 +60,7 @@ $ grep 'call.*\(unwrap_failed\|expect_failed\|assert_failed\|slice_.*_fail\|core
 
 If error case is _very_ rare panics can give better performance than
 Rust's preferred error handling (`Result`, `Option`) as
-demononstrated by [iex](https://purplesyringa.moe/blog/you-might-want-to-use-panics-for-error-handling/)
+demononstrated by Alisa Sireneva with [iex](https://purplesyringa.moe/blog/you-might-want-to-use-panics-for-error-handling/)
 crate (5-20% improvement on real projects).
 [Here](https://web.archive.org/web/20230605115838/https://lordsoftech.com/programming/error-codes-are-far-slower-than-exceptions/)
 and [here](https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2019/p1886r0.html)
