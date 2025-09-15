@@ -1,3 +1,11 @@
+# Administrivia
+
+Assignee: zak
+
+Parent task: gh-34
+
+Effort: 0
+
 # Background
 
 Rust has a very limited support of fast-math.
@@ -21,6 +29,24 @@ and computer vision:
 
 Rust developers have [clearly rejected](https://github.com/rust-lang/rust/issues/21690#issuecomment-1589427278) global fast math flag due to safety concerns (e.g. no clear way for a third-party crate to allow/disallow fast-math optimizations).
 
+TODO:
+  - check at least some other langs:
+    * C/C++
+      + e.g. [The New C Standard: An Economic and Cultural Commentary](https://www.coding-guidelines.com/cbook/cbook1_1.pdf)
+      + e.g. [Rationale for International Standard Programming Languages - C](https://www.open-std.org/jtc1/sc22/wg14/www/C99RationaleV5.10.pdf)
+    * [Java](https://docs.oracle.com/javase/specs/jls/se24/html/),
+    * [C#](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/introduction)
+    * [Go](https://go.dev/ref/spec)
+    * [Swift](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/aboutthelanguagereference/)
+    * [Fortran](https://j3-fortran.org/doc/year/24/24-007.pdf)
+      + Fortran should have limited fast-math by default
+    * Ada ([RM](http://www.ada-auth.org/standards/22rm/html/RM-TOC.html) and [ARM](http://www.ada-auth.org/standards/22aarm/html/AA-TOC.html))
+    * [Julia](https://docs.julialang.org)
+
+# Example
+
+TODO
+
 # Known performance hits
 
 Most of the performance impact of a lack of fast-math optimizations comes from autovectorization problems. Efficient vectorization often requires reordering of operations, and it is not possible without at least algebraic level of fast-math optimizations.
@@ -32,9 +58,28 @@ There is no convenient way to globally enable fast math (see [this comment](http
 Furthermore, different options of fast-math optimizations are set in LLVM IR via flags, which apply to single floating-point operations (also phi-nodes, calls, returns).
 Fast math attributes on functions are [in the process of being removed](https://github.com/llvm/llvm-project/issues/70533#issuecomment-1790250502) (or are already removed), so there LLVM IR also does not contain a way to "globally" enable fast-math optimizations.
 
+TODO:
+  - info whether LLVM can potentially optimize it (and with what limitations)
+    * no, it can't
+  - info on how developer can work around it and with how much effort/ugliness (unsafe, wrapping operations, reslicing, etc.)
+    * pay special attention to cases which can not be optimized at all
+
+# Recommended readings
+
+TODO (if any)
+
 # Performance with fast- and algebraic- math.
 
 Compiler patches are in branches [zakhar/algebraic-math](https://github.com/yugr/rust-private/tree/zakhar/algebraic-math) and [zakhar/fast-math](https://github.com/yugr/rust-private/tree/zakhar/fast-math).
+
+TODO:
+  - is this check is a common case in practice ?
+    * may need to write analysis passes to scan real Rust code (libs, big projects) for occurences
+  - compiler stats
+    * depend on feature
+    * e.g. SLP/loop autovec for bounds checking feature
+    * e.g. NoAlias returns from AA manager for alias feature
+    * e.g. CSE/GVN/LICM for alias feature
 
 ## x86_64
 
@@ -105,7 +150,14 @@ zed_0.json: -0.3%
 
 # Benchmark analysis
 
+TODO:
+  - can we check meili as well ? It's quite large
+
 ## Nalgebra
+
+TODO:
+  - is `vec10000_dot_f32` the only large regression ? If so, please mention this.
+    Otherwise need to look at several largest regressions.
 
 ### `vec10000_dot_f32`
 
