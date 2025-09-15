@@ -55,7 +55,8 @@ It has also been a MISRA requirement for a long time.
 It was [added](https://github.com/microsoft/MSRC-Security-Research/blob/master/presentations/2019_09_CppCon/CppCon2019%20-%20Killing%20Uninitialized%20Memory.pdf)
 to Visual Studio in 2019,
 [to Clang](https://lists.llvm.org/pipermail/cfe-dev/2018-November/060304.html) in 2018 and
-to GCC in 2021 (firstly [discussed](https://gcc.gnu.org/legacy-ml/gcc-patches/2014-06/msg00615.html) in 2014).
+to GCC in 2021 (firstly [discussed](https://gcc.gnu.org/legacy-ml/gcc-patches/2014-06/msg00615.html) in 2014,
+not counting [Fortran `-finit-local-zero` in 2007](https://gcc.gnu.org/legacy-ml/fortran/2007-06/msg00028.html)).
 
 Microsoft claims that it's been reason for 10% of CVEs in their products (see link above)
 Also [Android: Art of Defense](https://www.blackhat.com/docs/us-16/materials/us-16-Kralevich-The-Art-Of-Defense-How-Vulnerabilities-Help-Shape-Security-Features-And-Mitigations-In-Android.pdf)
@@ -82,7 +83,8 @@ Java and [Go](https://go.dev/ref/spec#The_zero_value) initialize variables
 with zero default value
 (which is arguable a [bad idea](https://lists.llvm.org/pipermail/cfe-dev/2018-November/060321.html)
 but [generates better code](https://lists.llvm.org/pipermail/cfe-dev/2018-December/060540.html)).
-Fortran does none of that.
+Interestingly enough, old Fortran codes relied on zero locals
+which is the reasons for [`-finit-local-zero` in `gfortran`](https://gcc.gnu.org/legacy-ml/fortran/2007-06/msg00028.html).
 
 # Example
 
