@@ -1,5 +1,5 @@
-Compared to C++, Rust's `#[inline]` supports cross-module inlining
-(function's MIR is stored in object file).
+Compared to C++, Rust's `#[inline]` supports some limited form of cross-crate inlining
+(function's MIR is stored in object file or rlib).
 
 # TODO
 
