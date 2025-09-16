@@ -116,8 +116,8 @@ Mandatory:
     * TODO @yugr: should this be split to separate features ?
   - cons/stdlib and pros/stdlib (gh-38)
     * Classify stdlib asserts (anything besides Unicode ?)
-  - cons/abi and pros/abi (gh-31)
-  - cons/copy-elision (gh-32)
+  - pros/abi (gh-31)
+  - pros/copy-elision (gh-32)
   - cons/placement-new (gh-37)
     * This could be considered together w/ copy elision
       (placement-new is basically a means for programmer
@@ -131,8 +131,6 @@ Important:
   - pros/noplt
   - cons/iterators
   - pros/static
-  - pros/move
-    * TODO: merge w/ copy-elision
   - pros/inline
   - pros/visibility
   - cons/tls
