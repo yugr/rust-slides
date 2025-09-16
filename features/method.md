@@ -126,15 +126,17 @@ Mandatory:
     * This is a large topic, decided to skip this
 
 Important:
-  - cons/iterators
-  - cons/tls
-  - pros/move
-  - pros/inline
   - pros/likely
   - pros/niche
   - pros/noplt
+  - cons/iterators
   - pros/static
+  - pros/move
+    * TODO: merge w/ copy-elision
+  - pros/inline
+    * TODO: merge w/ CGU
   - pros/visibility
+  - cons/tls
 
 Nice:
   - cons/other
