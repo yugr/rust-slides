@@ -43,7 +43,8 @@ that may unwind:
   - `extern "C++"` (but not `extern "C"`)
 
 Panic handling have certain costs:
-  - binary size for unwind tables, landing pads, panic messages
+  - binary size for unwind tables (`.eh_frame`), landing pads,
+    panic messages
     * landing pads are needed only for functions with destructors
       + TODO: how many functions are such ?
     * panic messages are needed only for functions with checks
@@ -104,6 +105,7 @@ TODO:
 
 TODO:
   - clear example (Rust microbenchmark, asm code)
+  - `O(N^2)` growth for vectors in nested blocks
 
 # Optimizations
 
