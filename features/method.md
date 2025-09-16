@@ -134,7 +134,6 @@ Important:
   - pros/move
     * TODO: merge w/ copy-elision
   - pros/inline
-    * TODO: merge w/ CGU
   - pros/visibility
   - cons/tls
 
