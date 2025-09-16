@@ -46,6 +46,37 @@ Disk consumption:
   - sources: 750M
   - release build: 10G
 
+## Prebuilt LLVM
+
+Since Sep 16 this will fail because CI LLVM build for acaea3d2 of https://github.com/rust-lang/llvm-project was removed from server:
+```
+downloading https://ci-artifacts.rust-lang.org/rustc-builds/2848101ed585d93075013ab652ef82e1991b8a4d/rust-dev-nightly-x86_64-unknown-linux-gnu.tar.xz
+curl: (22) The requested URL returned error: 404
+Warning: Problem (retrying all errors). Will retry in 1 seconds. 3 retries
+Warning: left.
+curl: (22) The requested URL returned error: 404
+Warning: Problem (retrying all errors). Will retry in 2 seconds. 2 retries
+Warning: left.
+curl: (22) The requested URL returned error: 404 #
+Warning: Problem (retrying all errors). Will retry in 4 seconds. 1 retries
+Warning: left.
+curl: (22) The requested URL returned error: 404             #
+
+ERROR: failed to download llvm from ci
+
+    HELP: There could be two reasons behind this:
+        1) The host triple is not supported for `download-ci-llvm`.
+        2) Old builds get deleted after a certain time.
+    HELP: In either case, disable `download-ci-llvm` in your bootstrap.toml:
+
+    [llvm]
+    download-ci-llvm = false
+```
+You can instead download it from https://github.com/yugr/rustc-builds and
+untar to `build/x86_64-unknown-linux-gnu/ci-llvm`.
+
+
+
 # Rebuilding LLVM
 
 To build LLVM for Rust add
