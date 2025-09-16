@@ -51,7 +51,9 @@ Panic handling have certain costs:
       (but those are majority)
   - wasted I$ and RAM
   - disabled optimizations
-    * TODO: more info on failed opts
+    (based on [Roman's talk](https://www.youtube.com/watch?v=ItemByR4PRg)):
+    * mainly hurts inlining
+    * a lot of cut-offs in other passes (e.g. ADCE)
 
 What's worse, these costs are enabled even if panics never fire in program
 so they are NOT zero-cost abstractions.
@@ -142,6 +144,7 @@ TODO:
         - actually we failed to understand how to collect PMUs in benchmarks (gh-25)...
       + compiler stats
         - depend on feature
+        - inliner improvements
         - e.g. SLP/loop autovec for bounds checking feature
         - e.g. NoAlias returns from AA manager for alias feature
         - e.g. CSE/GVN/LICM for alias feature
