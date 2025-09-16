@@ -61,7 +61,8 @@ Important caveats:
     * so it's more reliable to compile to .rlib and use `objdump -d`
   - note about benchmarks:
     * numbers are averaged over many scenarios in each bench
-    * even a 1% regression means there's some scenario with 10-20% degradation
+    * even a 1% regression means there's some scenarios with 10-20% degradation
+      (e.g. 1% geomean means 10% of benchmarks regressed by 10%)
 
 # Rust performance issues
 
