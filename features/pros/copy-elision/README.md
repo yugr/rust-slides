@@ -1,4 +1,11 @@
-Rust does not always perform move/copy elision.
+This is about Rust move semantics and move/copy-elision.
+
+It's generally easier to elide moves in Rust
+(than in C++) because a move (and copy, for copyable types)
+is just a `memcpy` (a single instruction in LLVM IR)
+so much easier to optimize in middle-end's LLVM memcpy optimizer.
+
+Rust has _destructive_ moves i.e. destructor of moved object is not called afterwards.
 
 Rust copies/moves are side-effect-free (have "no user-visible
 effects") so it does not need special copy-elision rules
@@ -56,6 +63,16 @@ pub fn cpy(a: A) {
 [copyless](https://github.com/kvark/copyless) trait has been removed
 because situation w/ `memcpy`'s has been significantly improved.
 
+Copies (`clone`'s) are present in high-level IR (MIR)
+and also can be optimized.
+
+TODO:
+  - is this done ?
+
+# Problems
+
+Rust does not always perform move/copy elision.
+
 In many cases Rust keeps spurious `memcpy`'s esp. on function bondary:
 ```
 use std::hint::black_box;
@@ -70,7 +87,7 @@ pub fn mov(a: A) {
 }
 ```
 
-Another common problen is [spurious moves in fold](https://github.com/rust-lang/rust/issues/76725).
+Another common problem is [spurious moves in fold](https://github.com/rust-lang/rust/issues/76725).
 
 The reason is that LLVM is not always good at optimizing `memcpy`
 so Rust has [custom optimization passes](https://github.com/rust-lang/rust/blob/master/compiler/rustc_mir_transform/src/dest_prop.rs) to deal with them.
@@ -79,6 +96,9 @@ e.g. [#91521](https://github.com/rust-lang/rust/issues/91521) has been fixed
 and [#32966](https://github.com/rust-lang/rust/issues/32966)
 and [#79914](https://github.com/rust-lang/rust/issues/79914) haven't.
 Some info on why this may happen can be found in [#103172](https://github.com/rust-lang/rust/pull/103172).
+
+There is a [proposal](https://rust-lang.github.io/rust-project-goals/2025h2/mir-move-elimination.html)
+to optimize moves at MIR level.
 
 # Solutions
 
@@ -93,6 +113,9 @@ Enable additional MIR opts (does not help with case above though):
 
 # Examples
 
+- [Example 1](https://www.reddit.com/r/rust/comments/px72r1/comment/hem26o0/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button)
+- [Example 2](https://www.reddit.com/r/rust/comments/px72r1/comment/heqmrjh/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button)
+- [Cost of copies in large C++ codebase](https://groups.google.com/a/chromium.org/g/chromium-dev/c/EUqoIz2iFU4/m/kPZ5ZK0K3gEJ)
 - [#116541](https://github.com/rust-lang/rust/issues/116541)
 
 # TODO
