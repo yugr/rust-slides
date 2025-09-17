@@ -4,7 +4,7 @@ Assignee: yugr
 
 Parent task: gh-36
 
-Effort: 2h
+Effort: 4h
 
 TODO:
   - fix all TODOs that are mentioned in feature's README
@@ -22,7 +22,8 @@ Unwinding is a very slow process as it involves parsing the unwind tables
 which is effectively bytecode interpretation
 (many people argue that it could be done faster)
 so _usually_ shouldn't be relied on in normal code.
-Normal Rust error handling should use error codes (`Option` and `Result`).
+Normal Rust error handling should use error codes (`Option` and `Result`,
+C++ P0709 zero-overhead exceptions are like this).
 
 TODO:
   - exceptions may [reduce code size](https://www.youtube.com/watch?v=LorcxyJ9zr4)
@@ -38,7 +39,7 @@ allowed (controlled via `-Z panic-in-drop=abort` option).
 
 Rust needs to insert landing pads for all function calls
 that may unwind:
-  - Rust functions with panics
+  - Rust functions with panics or which call functions that may panic
     * TODO: does Rust know unwind status for functions from other crates ?
   - `extern "C++"` (but not `extern "C"`)
 
@@ -60,17 +61,14 @@ so they are NOT zero-cost abstractions.
 
 TODO: 
   - code bloat in [here](https://www.rottedfrog.co.uk/?p=24)
-  - survey:
-    * https://www.youtube.com/watch?v=T9aSGB9Lfzc
-    * https://www.youtube.com/watch?v=BGmzMuSDt-Y
-    * https://www.youtube.com/watch?v=GC4cp4U2f2E
-    * https://www.youtube.com/watch?v=ARYP83yNAWk
-    * https://www.youtube.com/watch?v=XpRL7exdFL8
-    * https://www.youtube.com/watch?v=phi_vUKGbuE
-    * https://www.youtube.com/watch?v=I_ffAFzi-7M
+  - strong arguments for exceptions resulting in smaller code size:
+    https://www.youtube.com/watch?v=BGmzMuSDt-Y
 
 To work around them we have `-C panic=abort` which is similar to `-fno-exceptions`
-(`-fno-exceptions` is enabled in many high-performance codebases e.g. LLVM).
+(`-fno-exceptions` is enabled in many high-performance codebases e.g. LLVM,
+[50% codebases disable it](https://accu.org/conf-docs/PDFs_2019/herb_sutter_-_de-fragmenting_cpp__making_exceptions_more_affordable_and_usable.pdf)
+(also [CppCon talk](https://www.youtube.com/watch?v=ARYP83yNAWk))
+and e.g. Google C++ Code Style [prohibits it](https://google.github.io/styleguide/cppguide.html#Exceptions)).
 It allows the following codegen optimizations:
 ```
 /// * Calling a function which can't unwind means codegen simply ignores any
@@ -105,11 +103,107 @@ TODO:
 
 # Example
 
-TODO:
-  - clear example (Rust microbenchmark, asm code)
-  - `O(N^2)` growth for vectors in nested blocks
+Optimized asm for this simple code
+```
+#[inline(never)]
+pub fn bar(x: &mut Vec<i32>) {
+    std::hint::black_box(x);
+}
+
+#[no_mangle]
+pub fn foo(mut x: Vec<i32>) {
+    bar(&mut x);
+}
+```
+takes 93 bytes and 38 of them are due to exceptions.
+Compiling without panics (`-Cpanic=abort`) gives just 40 bytes.
 
 # Optimizations
+
+Landing pads from nested blocks reuse landing pads for outer blocks
+(so there is no `O(N^2)` code size). E.g. this
+```
+#[inline(never)]
+pub fn bar1(x1: &mut Vec<i32>) {
+    std::hint::black_box(x1);
+}
+
+#[inline(never)]
+pub fn bar2(x1: &mut Vec<i32>, x2: &mut Vec<i32>) {
+    std::hint::black_box(x1);
+    std::hint::black_box(x2);
+}
+
+#[inline(never)]
+pub fn bar3(x1: &mut Vec<i32>, x2: &mut Vec<i32>, x3: &mut Vec<i32>) {
+    std::hint::black_box(x1);
+    std::hint::black_box(x2);
+    std::hint::black_box(x3);
+}
+
+#[no_mangle]
+pub fn foo1() {
+    let mut x1 = vec![1, 2, 3];
+    bar1(&mut x1);
+}
+
+#[no_mangle]
+pub fn foo2() {
+    let mut x1 = vec![1, 2, 3];
+    bar1(&mut x1);
+    let mut x2 = vec![1, 2, 3];
+    bar2(&mut x1, &mut x2);
+}
+
+#[no_mangle]
+pub fn foo3() {
+    let mut x1 = vec![1, 2, 3];
+    bar1(&mut x1);
+    let mut x2 = vec![1, 2, 3];
+    bar2(&mut x1, &mut x2);
+    let mut x3 = vec![1, 2, 3];
+    bar3(&mut x1, &mut x2, &mut x3);
+}
+```
+has the following combined landing pad for `foo3`:
+```
+  movq  %rax, %rbx
+  movq  48(%rsp), %rsi
+  testq %rsi, %rsi
+  je  .LBB5_9
+  movq  56(%rsp), %rdi
+  shlq  $2, %rsi
+  movl  $4, %edx
+  callq *_RNvCs1EfgSJrSbwZ_7___rustc14___rust_dealloc@GOTPCREL(%rip)
+  jmp .LBB5_9
+.LBB5_8:
+.Ltmp20:
+  movq  %rax, %rbx
+.LBB5_9:
+  movq  24(%rsp), %rsi
+  testq %rsi, %rsi
+  je  .LBB5_5
+  movq  32(%rsp), %rdi
+  shlq  $2, %rsi
+  movl  $4, %edx
+  callq *_RNvCs1EfgSJrSbwZ_7___rustc14___rust_dealloc@GOTPCREL(%rip)
+  jmp .LBB5_5
+.LBB5_4:
+.Ltmp23:
+  movq  %rax, %rbx
+.LBB5_5:
+  movq  (%rsp), %rsi
+  testq %rsi, %rsi
+  je  .LBB5_7
+  movq  8(%rsp), %rdi
+  shlq  $2, %rsi
+  movl  $4, %edx
+  callq *_RNvCs1EfgSJrSbwZ_7___rustc14___rust_dealloc@GOTPCREL(%rip)
+.LBB5_7:
+  movq  %rbx, %rdi
+  callq _Unwind_Resume@PLT
+```
+(landing pads of inner blocks jump to outer landing pads).
 
 TODO:
   - info whether LLVM can potentially optimize it (and with what limitations)
