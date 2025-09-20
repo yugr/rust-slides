@@ -34,6 +34,7 @@ TODO:
   - why is this feature needed ?
     * example errors
   - situation in other langs
+  - `_FORTIFY_SOURCE` and hardened STL overheads
 
 # Examples
 
@@ -271,6 +272,11 @@ in library/core and library/alloc for most important types:
     * not changed !
 
 ## Measurements
+
+Note that according to [Hardening talk](https://github.com/yugr/slides/blob/main/CppZeroCost/2025/EN.pdf)
+C++ hardening has comparable overhead:
+  - `_FORTIFY_SOURCE`: 2-3%
+  - STL hardening: 2-3% (0.3% w/ PGO+LTO)
 
 ### Static estimates
 

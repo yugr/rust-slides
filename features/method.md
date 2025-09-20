@@ -89,6 +89,7 @@ For each performance feature we neeed to provide
       + note that simply using `RUSTFLAGS` isn't great because they override project settings in `Cargo.toml`
     * collect perf measurements for benchmarks:
       + runtime
+      + code size (if applicable)
       + PMU counters (inst count, I$/D$/branch misses)
         - actually we failed to understand how to collect PMUs in benchmarks (gh-25)...
       + compiler stats

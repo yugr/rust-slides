@@ -4,10 +4,7 @@ Assignee: yugr
 
 Parent task: gh-36
 
-Effort: 4h
-
-TODO:
-  - fix all TODOs that are mentioned in feature's README
+Effort: 13h
 
 # Background
 
@@ -26,11 +23,10 @@ Normal Rust error handling should use error codes (`Option` and `Result`,
 C++ P0709 zero-overhead exceptions are like this).
 
 TODO:
-  - exceptions may [reduce code size](https://www.youtube.com/watch?v=LorcxyJ9zr4)
-    (because error checking is no longer needed)
-  - citations about faster unwinding
   - using exceptions to replace _very rare_ error codes
     to improve performance by avoiding checks
+    * [kammce](https://isocpp.org/blog/2025/08/cppcon-2025-cutting-cpp-exception-time-by-93.4-khalil-estell)
+      and Sireneva
 
 Panics are very similar to C++ exceptions, both logically and internally
 (Rust panics use same mechanisms in LLVM e.g. `invoke` and landing pads).
@@ -41,7 +37,8 @@ Rust needs to insert landing pads for all function calls
 that may unwind:
   - Rust functions with panics or which call functions that may panic
     * TODO: does Rust know unwind status for functions from other crates ?
-  - `extern "C++"` (but not `extern "C"`)
+  - `extern "C++"`, `extern "C-unwind"` (but not `extern "C"` e.g.
+    see [this](https://www.rottedfrog.co.uk/?p=24))
 
 Panic handling have certain costs:
   - binary size for unwind tables (`.eh_frame`), landing pads,
@@ -50,19 +47,18 @@ Panic handling have certain costs:
       + TODO: how many functions are such ?
     * panic messages are needed only for functions with checks
       (but those are majority)
+    * [here](https://www.youtube.com/watch?v=BGmzMuSDt-Y) Khalil Estell (@kammce)
+      argues that exceptions can actually save code space by avoiding code for
+      error handling (but measurements only for microbenchmarks)
   - wasted I$ and RAM
   - disabled optimizations
-    (based on [Roman's talk](https://www.youtube.com/watch?v=ItemByR4PRg)):
+    (based on [Roman's talk](https://www.youtube.com/watch?v=ItemByR4PRg)
+    which is LLVM-based so also applicable):
     * mainly hurts inlining
     * a lot of cut-offs in other passes (e.g. ADCE)
 
 What's worse, these costs are enabled even if panics never fire in program
 so they are NOT zero-cost abstractions.
-
-TODO: 
-  - code bloat in [here](https://www.rottedfrog.co.uk/?p=24)
-  - strong arguments for exceptions resulting in smaller code size:
-    https://www.youtube.com/watch?v=BGmzMuSDt-Y
 
 To work around them we have `-C panic=abort` which is similar to `-fno-exceptions`
 (`-fno-exceptions` is enabled in many high-performance codebases e.g. LLVM,
@@ -84,11 +80,12 @@ It allows the following codegen optimizations:
 There is one thing this flag does not disable:
 program still will contains significant amount of code to emit
 a user-friendly error message for panic.
+To achieve that we can recompile stdlib with
+`-Zbuild-std-features=panic_immediate_abort`
+(see example [here](https://github.com/microsoft/edit/blob/7338c3cbbc99c1366d556d631402cdd853d989bd/Cargo.toml),
+maybe `-Zbuild-std` is needed too).
 
 TODO:
-  - can we force a simple single `ud2` for the whole program,
-    both for compiler-generated and user panics ?
-  - will hot-cold splitting help and how to enable ?
   - error handling in other languages:
     * C/C++
       + e.g. [The New C Standard: An Economic and Cultural Commentary](https://www.coding-guidelines.com/cbook/cbook1_1.pdf)
@@ -100,6 +97,8 @@ TODO:
     * [Fortran](https://j3-fortran.org/doc/year/24/24-007.pdf)
     * Ada ([RM](http://www.ada-auth.org/standards/22rm/html/RM-TOC.html) and [ARM](http://www.ada-auth.org/standards/22aarm/html/AA-TOC.html))
     * [Julia](https://docs.julialang.org)
+  - check if C++ also has same overhead due to exceptions: https://www.rottedfrog.co.uk/?p=24
+    * if not, we need a slide on this...
 
 # Example
 
@@ -210,9 +209,10 @@ TODO:
 
 # Workarounds
 
+Info available in [README](README.md#solutions).
+
 TODO:
-  - info on how developer can work around it and with how much effort/ugliness (unsafe, wrapping operations, reslicing, etc.)
-    * pay special attention to cases which can not be optimized at all
+  - why HotColdSplitting pass does not help with cold splitting ?
 
 # Suggested readings
 
@@ -220,27 +220,62 @@ TODO:
   - links to important articles (design, etc.)
   - (need to collect prooflinks with timecodes, reprocases for everything)
 
-# Performance
+# Performance impact
+
+## Prevalence
 
 TODO:
-  - performance impact:
-    * is this check is a common case in practice ?
-      + may need to write analysis passes to scan real Rust code (libs, big projects) for occurences
-    * determine how to enable/disable feature in compiler/stdlib
-      + there may be flags (e.g. for interger overflows) but sometimes may need patch code (e.g. for bounds checks)
-        - patch for each feature needs to be implemented in separate branch (in private compiler repo)
-        - compiler modifications need to be kept in private compiler repo `yugr/rust-private`
-      + make sure that found solution works on real examples
-      + note that simply using `RUSTFLAGS` isn't great because they override project settings in `Cargo.toml`
-    * collect perf measurements for benchmarks:
-      + runtime
-      + PMU counters (inst count, I$/D$/branch misses)
-        - actually we failed to understand how to collect PMUs in benchmarks (gh-25)...
-      + compiler stats
-        - depend on feature
-        - inliner improvements
-        - e.g. SLP/loop autovec for bounds checking feature
-        - e.g. NoAlias returns from AA manager for alias feature
-        - e.g. CSE/GVN/LICM for alias feature
-    * at least x86/AArch64
-      + maybe also normal/ThinLTO/FatLTO, cgu=default/1 in future if we have time
+  - is this check is a common case in practice ?
+    * may need to write analysis passes to scan real Rust code (libs, big projects) for occurences
+
+## Disabling the check
+
+To compare overhead of exceptions we measure several variants:
+  - (A) forced `-Cpanic=abort` ([yugr/force-panic-abort/1](https://github.com/yugr/rust-private/tree/yugr/force-panic-abort/1) branch)
+  - (B) = (A) + build stdlib with `panic_immediate_abort` ([yugr/force-panic-abort-mini/1](https://github.com/yugr/rust-private/tree/yugr/force-panic-abort-mini/1) branch)
+  - (C1) and (C2): A + outlining landing pads (to improve I$ locality) ([yugr/enable-hot-cold-splitting/1](https://github.com/yugr/rust-private/tree/yugr/enable-hot-cold-splitting/1) and [yugr/enable-machine-splitter/1](https://github.com/yugr/rust-private/tree/yugr/enable-machine-splitter/1) branches)
+
+(A) removes landing pads for non-FFI (Rust) functions.
+
+(B) removes majority of panics: panic calls in librustc_driver.so
+reduce from 354K in baseline to 8K (98%).
+I also checked code generated for
+  - `unreachable!`, `unimplemented!`, `todo!`, `panic!` (works)
+  - `Option::unwrap`, `Option::expect`, `Result` (works)
+  - Vec allocation e.g. `__rust_alloc` (works)
+  - call FFI functions with C and C-unwind ABI
+    * TODO: still have landing pads in C-unwind ABI
+  - https://news.ycombinator.com/item?id=30867188 (works)
+
+TODO:
+  - investigate remainings panics in (B)
+  - `-Z no-landing-pads`, `-Zlocation-detail=none`
+
+For (C) there 2 options:
+  - HotColdSplitting:
+    * middle-end pass that outlines to separate functions
+    * similar to Rust's manual approach to separate cold code to funcs
+    * off by default, enabled via `-Cllvm-args="-hot-cold-split -enable-cold-section"`
+    * outlines both landing pads and explicit panics
+  - MachineFunctionSplitter:
+    * back-end pass that outlines individual blocks
+    * based on basic block sections feature
+    * off by default, enabled via `-enable-split-machine-functions -mfs-split-ehcode`
+    * outlines only landing pads (not explicit panics, needs PGO for them)
+  - (there is also MachineOutliner but it outlines repeated, not cold, code)
+
+## Measurements
+
+TODO:
+  - runtime
+    * can only be done in benches w/o `catch_unwind` (in bench itself and deps)
+  - code size (if applicable)
+  - PMU counters (inst count, I$/D$/branch misses)
+    * actually we failed to understand how to collect PMUs in benchmarks (gh-25)...
+  - compiler stats
+    * depend on feature
+    * inliner improvements
+    * stack usage
+    * e.g. SLP/loop autovec for bounds checking feature
+    * e.g. NoAlias returns from AA manager for alias feature
+    * e.g. CSE/GVN/LICM for alias feature

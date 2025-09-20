@@ -80,7 +80,7 @@ Rust has `panic=abort` (similar to C++ `-fno-exceptions`, ex. `-Z no-landing-pad
 [No-panic Rust](https://blog.reverberate.org/2025/02/03/no-panic-rust.html)
 approach is about rigorously removing _all_ panic calls from your program.
 
-Ideally panics should be moved to cold functions to reduce overhead
+Ideally panics should be moved to cold functions by compiler to reduce overhead
 but this is [not done](https://github.com/rust-lang/rust/issues/111866) now.
 
 Outline panics via techniques like [this](https://www.reddit.com/r/rust/comments/1fdzu7z/comment/lmqfb49/):
@@ -116,33 +116,3 @@ Unfortunately for LLVM each panic is an unknown function call with distinct para
 so this can not be done at LLVM level and there is not dedicated MIR pass for this.
 
 As a workaround, developers need to use manual `assert!`'s (or `core::hint::unreachable_unchecked`).
-
-# TODO
-
-Check overhead on panics in benches
-  - can only be done in benches w/o `catch_unwind` (in bench itself and deps)
-  - don't forget to disable panicking in stdlib:
-    * update `[rust] std-features' in bootstrap.toml
-    * or use `-Z build-std -Z build-std-features` in cargo
-
-What is `panic_immediate_abort` ?
-
-Does `panic=abort` remove landing pads and libunwind ?
-  - `-Z no-landing-pads`, `-Zbuild-std-features=panic_immediate_abort` and `-Zlocation-detail=none` may be needed as well
-  - it seems that `panic=abort` still calls the (blackbox) panic hooks (handlers)
-  - try replacing `panic` with `core::panicking::panic_nounwind`
-
-Does `panic=abort` avoid all overheads ? I couldn't get it to do anything in [this](https://news.ycombinator.com/item?id=30867188) example.
-  - we need to find way to reduce it to `ud2`
-  - compare to `-fno-exceptions`
-
-Check if optimizations from https://www.youtube.com/watch?v=ItemByR4PRg (LICM, ADCE, etc.) are also disabled for Rust ?
-
-Check if C++ also has same overhead due to exceptions: https://www.rottedfrog.co.uk/?p=24
-  - If not, we need a slide on this
-
-Measure increase of BTB/I$ misses PMUs and [stack usage](https://www.memorysafety.org/blog/rav1d-performance-optimization)
-when panics are disabled
-
-Check if hot-cold splitting works (i.e. panic handlers moved out of normal function code)
-and speeds up

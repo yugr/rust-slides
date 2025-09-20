@@ -37,6 +37,7 @@ Performance overhead may be non-trivial:
 
 Here's another example for video decoder:
   - [Making the rav1d Video Decoder 1% Faster](https://ohadravid.github.io/posts/2025-05-rav1d-faster/)
+  - [Optimizing rav1d, an AV1 Decoder in Rust](https://www.memorysafety.org/blog/rav1d-performance-optimization/)
 
 # Solutions
 
