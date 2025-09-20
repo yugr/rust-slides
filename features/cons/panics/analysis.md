@@ -4,7 +4,7 @@ Assignee: yugr
 
 Parent task: gh-36
 
-Effort: 13h
+Effort: 14h
 
 # Background
 
@@ -22,12 +22,6 @@ so _usually_ shouldn't be relied on in normal code.
 Normal Rust error handling should use error codes (`Option` and `Result`,
 C++ P0709 zero-overhead exceptions are like this).
 
-TODO:
-  - using exceptions to replace _very rare_ error codes
-    to improve performance by avoiding checks
-    * [kammce](https://isocpp.org/blog/2025/08/cppcon-2025-cutting-cpp-exception-time-by-93.4-khalil-estell)
-      and Sireneva
-
 Panics are very similar to C++ exceptions, both logically and internally
 (Rust panics use same mechanisms in LLVM e.g. `invoke` and landing pads).
 Rust is actually more aggressive than C++ because panics in destructors are
@@ -37,8 +31,8 @@ Rust needs to insert landing pads for all function calls
 that may unwind:
   - Rust functions with panics or which call functions that may panic
     * TODO: does Rust know unwind status for functions from other crates ?
-  - `extern "C++"`, `extern "C-unwind"` (but not `extern "C"` e.g.
-    see [this](https://www.rottedfrog.co.uk/?p=24))
+  - `extern "C-unwind"` but not `extern "C"`
+    (e.g. see [this](https://www.rottedfrog.co.uk/?p=24))
 
 Panic handling have certain costs:
   - binary size for unwind tables (`.eh_frame`), landing pads,
@@ -47,6 +41,8 @@ Panic handling have certain costs:
       + TODO: how many functions are such ?
     * panic messages are needed only for functions with checks
       (but those are majority)
+    * panic messages can be made cheaper by using `-Z location-detail=none`
+      (which will remove filename strings from binary)
     * [here](https://www.youtube.com/watch?v=BGmzMuSDt-Y) Khalil Estell (@kammce)
       argues that exceptions can actually save code space by avoiding code for
       error handling (but measurements only for microbenchmarks)
@@ -86,6 +82,10 @@ To achieve that we can recompile stdlib with
 maybe `-Zbuild-std` is needed too).
 
 TODO:
+  - using exceptions to replace _very rare_ error codes
+    to improve performance by avoiding checks
+    * [kammce](https://isocpp.org/blog/2025/08/cppcon-2025-cutting-cpp-exception-time-by-93.4-khalil-estell)
+      and Sireneva
   - error handling in other languages:
     * C/C++
       + e.g. [The New C Standard: An Economic and Cultural Commentary](https://www.coding-guidelines.com/cbook/cbook1_1.pdf)
@@ -225,8 +225,8 @@ TODO:
 ## Prevalence
 
 TODO:
-  - is this check is a common case in practice ?
-    * may need to write analysis passes to scan real Rust code (libs, big projects) for occurences
+  - check if this is a common case in practice by comparing number of
+    calls and invokes in generated IR
 
 ## Disabling the check
 
@@ -243,13 +243,12 @@ I also checked code generated for
   - `unreachable!`, `unimplemented!`, `todo!`, `panic!` (works)
   - `Option::unwrap`, `Option::expect`, `Result` (works)
   - Vec allocation e.g. `__rust_alloc` (works)
-  - call FFI functions with C and C-unwind ABI
-    * TODO: still have landing pads in C-unwind ABI
+  - call FFI functions with C ABI
+    * note that C-unwind ABI still needs a landing pad
   - https://news.ycombinator.com/item?id=30867188 (works)
 
 TODO:
   - investigate remainings panics in (B)
-  - `-Z no-landing-pads`, `-Zlocation-detail=none`
 
 For (C) there 2 options:
   - HotColdSplitting:
@@ -269,9 +268,7 @@ For (C) there 2 options:
 TODO:
   - runtime
     * can only be done in benches w/o `catch_unwind` (in bench itself and deps)
-  - code size (if applicable)
-  - PMU counters (inst count, I$/D$/branch misses)
-    * actually we failed to understand how to collect PMUs in benchmarks (gh-25)...
+  - code+rodata size
   - compiler stats
     * depend on feature
     * inliner improvements
