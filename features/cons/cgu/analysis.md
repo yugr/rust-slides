@@ -232,5 +232,4 @@ $ ./compare.py results/16_cgu results/1_cgu
 - `veloren_0.json`: +1.4%
 - `zed_0.json`: +10.2%
 
-TODO:
-  - I suggest to check reason for rav1e regression
+`rav1e` regression is randomly caused by benchmarking noise (several benchmarks are really short and can have up to 50%-100% noise).
