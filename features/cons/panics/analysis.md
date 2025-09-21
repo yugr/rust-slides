@@ -4,7 +4,7 @@ Assignee: yugr
 
 Parent task: gh-36
 
-Effort: 14h
+Effort: 16h
 
 # Background
 
@@ -81,11 +81,10 @@ To achieve that we can recompile stdlib with
 (see example [here](https://github.com/microsoft/edit/blob/7338c3cbbc99c1366d556d631402cdd853d989bd/Cargo.toml),
 maybe `-Zbuild-std` is needed too).
 
+In some rare cases exceptions my make code faster by removing error handling code
+(see [README](README.md#advantages-of-panics) for details).
+
 TODO:
-  - using exceptions to replace _very rare_ error codes
-    to improve performance by avoiding checks
-    * [kammce](https://isocpp.org/blog/2025/08/cppcon-2025-cutting-cpp-exception-time-by-93.4-khalil-estell)
-      and Sireneva
   - error handling in other languages:
     * C/C++
       + e.g. [The New C Standard: An Economic and Cultural Commentary](https://www.coding-guidelines.com/cbook/cbook1_1.pdf)
@@ -213,12 +212,15 @@ Info available in [README](README.md#solutions).
 
 TODO:
   - why HotColdSplitting pass does not help with cold splitting ?
+    (see [#111866](https://github.com/rust-lang/rust/issues/111866))
 
 # Suggested readings
 
-TODO:
-  - links to important articles (design, etc.)
-  - (need to collect prooflinks with timecodes, reprocases for everything)
+[No-panic Rust](https://blog.reverberate.org/2025/02/03/no-panic-rust.html)
+
+[You might want to use panics for error handling](https://purplesyringa.moe/blog/you-might-want-to-use-panics-for-error-handling/)
+
+[Error codes are far slower than exceptions](https://web.archive.org/web/20230605115838/https://lordsoftech.com/programming/error-codes-are-far-slower-than-exceptions/)
 
 # Performance impact
 

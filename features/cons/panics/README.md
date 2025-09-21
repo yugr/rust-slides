@@ -73,6 +73,9 @@ author suggests that exceptions are beneficial if error frequency is < 0.01%.
 
 This generally goes against [popular guidelines](https://doc.rust-lang.org/book/ch09-03-to-panic-or-not-to-panic.html).
 
+[kammce](https://isocpp.org/blog/2025/08/cppcon-2025-cutting-cpp-exception-time-by-93.4-khalil-estell)
+claims that he was able to speed up exceptions 20x which makes this approach even more amenable.
+
 # Solutions
 
 Rust has `panic=abort` (similar to C++ `-fno-exceptions`, ex. `-Z no-landing-pads`)
