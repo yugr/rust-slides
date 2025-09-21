@@ -4,7 +4,7 @@ Assignee: yugr
 
 Parent task: gh-36
 
-Effort: 16h
+Effort: 18h
 
 # Background
 
@@ -98,6 +98,8 @@ TODO:
     * [Julia](https://docs.julialang.org)
   - check if C++ also has same overhead due to exceptions: https://www.rottedfrog.co.uk/?p=24
     * if not, we need a slide on this...
+  - where does idea that exceptions have to be "slow"
+    and are different from "normal" errors come from ?
 
 # Example
 
@@ -229,6 +231,7 @@ TODO:
 TODO:
   - check if this is a common case in practice by comparing number of
     calls and invokes in generated IR
+  - or compare size of landing pads
 
 ## Disabling the check
 
@@ -271,6 +274,8 @@ TODO:
   - runtime
     * can only be done in benches w/o `catch_unwind` (in bench itself and deps)
   - code+rodata size
+  - does MachineBlockPlacement always place code at the end of function ?
+    this would help I$ as well
   - compiler stats
     * depend on feature
     * inliner improvements
