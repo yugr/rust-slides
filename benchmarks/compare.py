@@ -58,6 +58,43 @@ def join(lhs, rhs):
         return 1, pow(10, lhs_deg - rhs_deg)
 
 
+def compare_runtimes(tests, name, lhs, rhs):
+    geomean = 1
+
+    for test in tests:
+        lhs_value = float(lhs[test]["avg"][0])
+        lhs_dim = lhs[test]["avg"][1]
+
+        rhs_value = float(rhs[test]["avg"][0])
+        rhs_dim = rhs[test]["avg"][1]
+
+        lhs_mult, rhs_mult = join(lhs_dim, rhs_dim)
+        lhs_value *= lhs_mult
+        rhs_value *= rhs_mult
+
+        geomean *= rhs_value / lhs_value
+
+    geomean = (1 - pow(geomean, 1 / len(tests))) * 100
+
+    print(f"{name}: {geomean:+.1f}%")
+
+
+def compare_sizes(tests, name, lhs, rhs):
+    geomeans = {}
+
+    for test in tests:
+        for typ, lhs_value in sorted(lhs[test].items()):
+            rhs_value = rhs[test][typ]
+            if lhs_value != rhs_value:
+                geomeans[typ] = geomeans.get(typ, 1) * lhs_value / rhs_value
+            else:
+                geomeans[typ] = geomeans.get(typ, 1)
+
+    for typ, geomean in sorted(geomeans.items()):
+        geomean = (1 - pow(geomean, 1 / len(tests))) * 100
+        print(f"{name} {typ}: {geomean:+.1f}%")
+
+
 def compare_jsons(lhs, rhs):
     """Compares two .json files with benchmark results."""
 
@@ -78,25 +115,10 @@ def compare_jsons(lhs, rhs):
         names = ", ".join(rhs_tests - lhs_tests)
         warn(f"tests {names} are missing in {lhs}")
 
-    geomean = 1
-
-    for test in lhs_tests:
-        lhs_value = float(lhs_json[test]["avg"][0])
-        lhs_dim = lhs_json[test]["avg"][1]
-
-        rhs_value = float(rhs_json[test]["avg"][0])
-        rhs_dim = rhs_json[test]["avg"][1]
-
-        lhs_mult, rhs_mult = join(lhs_dim, rhs_dim)
-        lhs_value *= lhs_mult
-        rhs_value *= rhs_mult
-
-        geomean *= rhs_value / lhs_value
-
-    geomean = (1 - pow(geomean, 1 / len(lhs_tests))) * 100
-
-    name = os.path.basename(str(lhs))
-    print(f"{name}: {geomean:+.1f}%")
+    if lhs.name.endswith("_sizes.json"):
+        compare_sizes(lhs_tests, lhs.name, lhs_json, rhs_json)
+    else:
+        compare_runtimes(lhs_tests, lhs.name, lhs_json, rhs_json)
 
 
 def main():

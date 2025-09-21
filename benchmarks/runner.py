@@ -68,6 +68,80 @@ def run(cmd, fatal=True, tee=False, **kwargs):
     return p.returncode, out, err, (t2 - t1) / 1e9
 
 
+def make_toc(words, renames=None):
+    "Make an mapping of words to their indices in list"
+    renames = renames or {}
+    toc = {}
+    for i, n in enumerate(words):
+        name = renames.get(n, n)
+        toc[i] = name
+    return toc
+
+
+def parse_row(words, toc, hex_keys):
+    "Make a mapping from column names to values"
+    vals = {k: (words[i] if i < len(words) else "") for i, k in toc.items()}
+    for k in hex_keys:
+        if vals[k]:
+            vals[k] = int(vals[k], 16)
+    return vals
+
+
+def collect_sections(f):
+    """Collect section info from ELF."""
+
+    _, out, _, _ = run(["readelf", "-SW", f])
+
+    toc = None
+    sections = []
+    for line in out.splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        line = re.sub(r"\[\s+", "[", line)
+        words = re.split(r" +", line)
+        if line.startswith("[Nr]"):  # Header?
+            if toc is not None:
+                error("multiple headers in output of readelf")
+            toc = make_toc(words, {"Addr": "Address"})
+        elif line.startswith("[") and toc is not None:
+            sec = parse_row(words, toc, ["Address", "Off", "Size"])
+            if "A" in sec["Flg"]:  # Allocatable section?
+                sections.append(sec)
+
+    if toc is None:
+        error(f"failed to analyze sections in {f}")
+
+    return sections
+
+
+def maybe_collect_binary_sizes(f):
+    """Collect sizes of important file segments."""
+
+    if not f.is_file():
+        return None
+
+    rc, out, _, _ = run(f"file {f}", fatal=False)
+    if rc != 0:
+        return None
+
+    if "ELF" not in out or "executable" not in out:
+        return None
+
+    sizes = {}
+    for s in collect_sections(str(f)):
+        name = s["Name"]
+        if name.startswith(".text"):
+            target = "text"
+        elif name in (".rodata", ".gcc_except_table") or name.startswith(".eh_frame"):
+            target = "rodata"
+        else:
+            continue
+        sizes[target] = sizes.get(target, 0) + s["Size"]
+
+    return sizes
+
+
 class Bench:
     """Base class for all benchmarks."""
 
@@ -98,12 +172,33 @@ class Bench:
 class CargoBench(Bench):
     """Base class for benchmarks which use 'cargo bench' interface."""
 
-    def __init__(self, name, repo, commit, cmds):
+    def __init__(self, name, repo, commit, build_cmd, bench_cmds):
         super().__init__(name, repo, commit)
-        self.cmds = cmds
+        self.build_cmd = build_cmd
+        self.bench_cmds = bench_cmds
 
     def build(self, repo_path, clean, jobs):
-        for subdir, params in self.cmds:
+        if jobs is None:
+            cargo_args_ext = []
+        else:
+            cargo_args_ext = ["-j", str(jobs)]
+
+        if clean:
+            run("cargo clean", cwd=str(repo_path))
+
+        # Run main build cmd
+
+        cargo_args = self.build_cmd.split()
+        cargo_args.extend(cargo_args_ext)
+        try:
+            run(cargo_args, cwd=str(repo_path))
+        except ExecutionError as e:
+            raise BuildError(*e.args) from None
+
+        # Build each bench
+        # TODO: do we need this ?
+
+        for subdir, params in self.bench_cmds:
             build_path = repo_path / subdir
 
             if not build_path.exists():
@@ -111,22 +206,30 @@ class CargoBench(Bench):
                     f"directory {build_path} does not exist, did you forget to clone?"
                 )
 
-            if clean:
-                run("cargo clean", cwd=str(build_path))
-
             cargo_args = params.split()
-            if jobs is not None:
-                cargo_args.extend(["-j", str(jobs)])
+            cargo_args.extend(cargo_args_ext)
             cargo_args.append("--no-run")
             try:
                 run(cargo_args, cwd=str(build_path))
             except ExecutionError as e:
                 raise BuildError(*e.args) from None
 
+        # Collect ELF sizes
+
+        binary_path = Path(repo_path) / "target" / "release"
+
+        sizes = {}
+        for f in binary_path.iterdir():
+            sz = maybe_collect_binary_sizes(f)
+            if sz is not None:
+                sizes[f.name] = sz
+
+        return sizes
+
     def run(self, repo_path, run_options):
         runtimes = []
 
-        for subdir, params in self.cmds:
+        for subdir, params in self.bench_cmds:
             build_path = repo_path / subdir
 
             cargo_args = run_options.split()
@@ -199,7 +302,7 @@ class UVBench(CriterionBench):
         venv_path = repo_path / ".venv"
         if not venv_path.exists():
             run("python3 -m venv .venv", cwd=repo_path)
-        super().build(repo_path, clean, jobs)
+        return super().build(repo_path, clean, jobs)
 
 
 class OxipngBench(CargoBench):
@@ -250,6 +353,9 @@ class RegexBench(Bench):
 
         run("target/release/rebar build -e ^rust/regex$", cwd=str(repo_path))
 
+        # TODO: collect sizes
+        return {}
+
     def run(self, repo_path, run_options):
         # TODO: rebar also supports other Rust regex engines (regex-lite, regress)
         _, out, _, _ = run(
@@ -287,9 +393,11 @@ class RegexBench(Bench):
 
 class RustcBench(Bench):
     def build(self, repo_path, clean, jobs):
+        # Build
+
         bench_path = Path(repo_path) / "collector" / "runtime-benchmarks"
         for subdir in bench_path.iterdir():
-            if not subdir.is_dir() or subdir.name == 'data':
+            if not subdir.is_dir() or subdir.name == "data":
                 continue
             if clean:
                 run("cargo clean", cwd=str(subdir))
@@ -298,11 +406,25 @@ class RustcBench(Bench):
                 build_args.extend(["-j", str(jobs)])
             run(build_args, cwd=str(subdir))
 
+        # Collect sizes
+
+        sizes = {}
+        for d in bench_path.iterdir():
+            binary_path = d / "target" / "release"
+            if not d.is_dir() or not binary_path.exists():
+                continue
+            for f in binary_path.iterdir():
+                sz = maybe_collect_binary_sizes(f)
+                if sz is not None:
+                    sizes[f.name] = sz
+
+        return sizes
+
     def run(self, repo_path, run_options):
         runtimes = {}
         bench_path = Path(repo_path) / "collector" / "runtime-benchmarks"
         for subdir in bench_path.iterdir():
-            if not subdir.is_dir() or subdir.name == 'data':
+            if not subdir.is_dir() or subdir.name == "data":
                 continue
             run_args = run_options if run_options else ""
             run_args += f" ./target/release/{subdir.name}-bench run"
@@ -330,36 +452,42 @@ BENCHES = [
         "SpacetimeDB",
         "https://github.com/clockworklabs/SpacetimeDB",
         "69ec80331fe930c8c9160ab256b1858270d791ea",
+        "cargo b --profile bench --lib --bins --benches",
         [("crates/bench", "cargo bench --bench generic --bench special")],
     ),
     CriterionBench(
         "bevy",
         "https://github.com/bevyengine/bevy",
         "de79d3f363e292489f2dbfdd22b6a9b93e7672ea",
+        "cargo b --profile bench --lib --bins --benches",
         [("benches", "cargo bench")],
     ),
     CriterionBench(
         "meilisearch",
         "https://github.com/meilisearch/meilisearch",
         "0fd66a5317da7e1f075058665944cac62e17d446",
+        "cargo b --profile bench --lib --bins --benches",
         [("", "cargo bench")],
     ),
     CriterionBench(
         "nalgebra",
         "https://github.com/dimforge/nalgebra",
         "v0.33.2",
+        "cargo b --profile bench --lib --bins --benches",
         [("", "cargo bench")],
     ),
     OxipngBench(
         "oxipng",
         "https://github.com/shssoichiro/oxipng",
         "788997c437319995e55030a92ed8294dfcd4c87a",
+        "cargo b --profile bench --lib --bins --benches",
         [("", "cargo bench")],
     ),
     CriterionBench(
         "rav1e",
         "https://github.com/xiph/rav1e",
         "6ee1f3a678deb9ccef2e3345168e39cd53e5d1a6",
+        "cargo b --profile bench --lib --bins --benches",
         # Project suggests using "cargo criterion"
         # but it dumps output to stderr rather than stdout
         [("", "cargo bench --features=bench")],
@@ -373,42 +501,48 @@ BENCHES = [
         "ruff",
         "https://github.com/astral-sh/ruff",
         "b302d89da3325c705f87a8343a16aad1723b67ab",
+        "cargo b --profile bench --lib --bins --benches",
         [("crates/ruff_benchmark", "cargo bench")],
+    ),
+    RustcBench(
+        "rustc-runtime-benchmarks",
+        "https://github.com/rust-lang/rustc-perf",
+        "2f1d1c27e7a2342d4cbdfea5fb7eac226e70111c",
     ),
     CriterionBench(
         "rust_serialization_benchmark",
         "https://github.com/djkoloski/rust_serialization_benchmark",
         "cd9d93b0b0d2036dfb2ec4037cc6f37cf6cab291",
+        "cargo b --profile bench --lib --bins --benches",
         [("", "cargo bench")],
     ),
     CriterionBench(
         "tokio",
         "https://github.com/tokio-rs/tokio",
         "9563707aaa73a802fa4d3c51c12869a037641070",
+        "cargo b --profile bench --lib --bins --benches",
         [("", "cargo bench")],
     ),
     UVBench(
         "uv",
         "https://github.com/astral-sh/uv",
         "dc5b3762f38a8e47b53bec9cc3cefb71e4aef55c",
+        "cargo b --profile bench --lib --bins --benches",
         [("", "cargo bench")],
     ),
     CriterionBench(
         "veloren",
         "https://github.com/veloren/veloren",
         "8598d3d9c5c3a9e6d2366cfe882b479ce92a7bcc",
+        "cargo b --profile bench --lib --bins --benches",
         [("", "cargo bench")],
     ),
     CriterionBench(
         "zed",
         "https://github.com/zed-industries/zed",
         "83d513aef48f6b4b56bad96740a02f5ef86a0a8c",
+        "cargo b --profile bench --bins --benches",  # Fails with --lib
         [("crates/rope", "cargo bench")],
-    ),
-    RustcBench(
-        "rustc-runtime-benchmarks",
-        "https://github.com/rust-lang/rustc-perf",
-        "2f1d1c27e7a2342d4cbdfea5fb7eac226e70111c",
     ),
 ]
 
@@ -522,8 +656,10 @@ def main():
         repo_path = base_path / os.path.basename(bench.repo)
         try:
             t1 = time.time()
-            bench.build(repo_path, args.clean, args.jobs)
+            build_times = bench.build(repo_path, args.clean, args.jobs)
             elapsed = time.time() - t1
+            with (base_path / f"{bench.name}_sizes.json").open("w") as f:
+                f.write(json.dumps(build_times, indent=4, sort_keys=True))
             print(f"Built successfully in {int(elapsed)} sec.")
         except BuildError as e:
             failed_benches.add(bench)
