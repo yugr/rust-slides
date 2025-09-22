@@ -4,7 +4,7 @@ Assignee: yugr
 
 Parent task: gh-36
 
-Effort: 19h
+Effort: 22h
 
 # Background
 
@@ -38,7 +38,7 @@ Panic handling have certain costs:
   - binary size for unwind tables (`.eh_frame`), landing pads,
     panic messages
     * landing pads are needed only for functions with destructors
-      + TODO: how many functions are such ?
+      or nounwind functions with potentially panicking callees
     * panic messages are needed only for functions with checks
       (but those are majority)
     * panic messages can be made cheaper by using `-Z location-detail=none`
@@ -96,10 +96,8 @@ TODO:
     * [Fortran](https://j3-fortran.org/doc/year/24/24-007.pdf)
     * Ada ([RM](http://www.ada-auth.org/standards/22rm/html/RM-TOC.html) and [ARM](http://www.ada-auth.org/standards/22aarm/html/AA-TOC.html))
     * [Julia](https://docs.julialang.org)
-  - check if C++ also has same overhead due to exceptions: https://www.rottedfrog.co.uk/?p=24
+  - (LOW) check if C++ also has same overhead due to exceptions: https://www.rottedfrog.co.uk/?p=24
     * if not, we need a slide on this...
-  - where does idea that exceptions have to be "slow"
-    and are different from "normal" errors come from ?
 
 # Example
 
@@ -205,16 +203,17 @@ has the following combined landing pad for `foo3`:
 ```
 (landing pads of inner blocks jump to outer landing pads).
 
+There is not much LLVM can do about landing pads
+and they can hurt efficiency of various passes as shown in
+[Roman's talk](https://www.youtube.com/watch?v=ItemByR4PRg).
+
 TODO:
+  - EH-related opts in MIR and LLVM
   - info whether LLVM can potentially optimize it (and with what limitations)
 
 # Workarounds
 
 Info available in [README](README.md#solutions).
-
-TODO:
-  - why HotColdSplitting pass does not help with cold splitting ?
-    (see [#111866](https://github.com/rust-lang/rust/issues/111866))
 
 # Suggested readings
 
@@ -228,10 +227,39 @@ TODO:
 
 ## Prevalence
 
-TODO:
-  - check if this is a common case in practice by comparing number of
-    calls and invokes in generated IR
-  - or compare size of landing pads
+Here is panics statistics in Rust compiler:
+```
+$ RUSTFLAGS_NOT_BOOTSTRAP=-Csave-temps ./x build -j12 --stage 2 compiler
+$ find -name '*.rcgu.bc' | xargs ~/tasks/rust/count-panic-stats/Count > results.txt
+
+# Insn stats
+$ cat results.txt | awk '/all insns/{s += $NF} END{print s}'
+14852456
+$ cat results.txt | awk '/calls/{s += $NF} END{print s}'
+1870448
+$ cat results.txt | awk '/invokes/{s += $NF} END{print s}'
+1850321
+$ cat results.txt | awk '/panics/{s += $NF} END{print s}'
+546167
+$ cat results.txt | awk '/panic handling insns/{s += $NF} END{print s}'
+1481282
+$ cat results.txt | awk '/unwind insns/{s += $NF} END{print s}'
+963937
+
+# BB stats
+$ cat results.txt | awk '/all blocks/{s += $NF} END{print s}'
+3277100
+$ cat results.txt | awk '/panic handling blocks/{s += $NF} END{print s}'
+526448
+$ cat results.txt | awk '/unwind blocks/{s += $NF} END{print s}'
+371158
+```
+
+Some conclusions:
+  - practically 50% of calls are invokes (for rest compiler is
+    _probly_ able to infer that they don't panic)
+  - 10% (1481282 / 14852456) of ALL insns and 16% (526448 / 3277100) of ALL blocks are handling panics
+  - 6.5% (963937 / 14852456) of ALL insns and 11% (371158 / 3277100) of ALL blocks are landing pads
 
 ## Disabling the check
 
@@ -258,6 +286,7 @@ TODO:
 For (C) there 2 options:
   - HotColdSplitting:
     * middle-end pass that outlines to separate functions
+      + increases code size and [not necessarily a win](https://llvm.org/devmtg/2019-10/slides/Kumar-HotColdSplitting.pdf)
     * similar to Rust's manual approach to separate cold code to funcs
     * off by default, enabled via `-Cllvm-args="-hot-cold-split -enable-cold-section"`
     * outlines both landing pads and explicit panics

@@ -73,6 +73,15 @@ author suggests that exceptions are beneficial if error frequency is < 0.01%.
 
 This generally goes against [popular guidelines](https://doc.rust-lang.org/book/ch09-03-to-panic-or-not-to-panic.html).
 
+On the other hand, in [P1947r0](https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2019/p1947r0.pdf)
+Bjarne Stroustroup clearly states that
+  - "There has been little serious research on the topics of performance of exceptions ...
+    there are, however, many small unscientific studies and lots of loudly expressed opinions -
+    often claiming exceptions to be inherently slower than various forms of checking of error-codes"
+  - "Exceptions have been observed to speed up critical code by eliminating repeated test and by
+    shortening the critical path"
+  - "I suspect there are significant optimization opportunities left for C++ exception handling"
+
 [kammce](https://isocpp.org/blog/2025/08/cppcon-2025-cutting-cpp-exception-time-by-93.4-khalil-estell)
 claims that he was able to speed up exceptions 20x which makes this approach even more amenable.
 
@@ -102,8 +111,10 @@ fn outlined_panic() -> ! {
     panic!("Index out of bounds")
 }
 ```
-Unfortunately many language constructs (e.g. `assert!` but see [issue #111866](https://github.com/rust-lang/rust/issues/111866))
-do not outline.
+Unfortunately this is not applicable to basic constructs like `assert!`.
+
+Unfortunately automatic outlining (via `HotColdSplitting` or `MachineFunctionSplitter`)
+is not enabled by default (see [issue #111866](https://github.com/rust-lang/rust/issues/111866)).
 
 # Combining panics
 

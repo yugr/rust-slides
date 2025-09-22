@@ -148,17 +148,17 @@ public:
 
     auto Name = F.getName();
 
-    dbgs() << Name << " insns: " << NumInsns << "\n";
-    dbgs() << Name << " calls: " << NumCalls << "\n";
-    dbgs() << Name << " invokes: " << NumCalls << "\n";
-    dbgs() << Name << " panics: " << NumPanics << "\n";
-    dbgs() << Name << " panic handling insns: " << NumPanicHandlingInsns
+    outs() << Name << " all insns: " << NumInsns << "\n";
+    outs() << Name << " calls: " << NumCalls << "\n";
+    outs() << Name << " invokes: " << NumCalls << "\n";
+    outs() << Name << " panics: " << NumPanics << "\n";
+    outs() << Name << " panic handling insns: " << NumPanicHandlingInsns
            << "\n";
-    dbgs() << Name << " unwind insns: " << NumUnwindInsns << "\n";
+    outs() << Name << " unwind insns: " << NumUnwindInsns << "\n";
 
-    dbgs() << Name << " blocks: " << F.size() << "\n";
-    dbgs() << Name << " panic handling blocks: " << PanicBBs.size() << "\n";
-    dbgs() << Name << " unwind blocks: " << UnwindBBs.size() << "\n";
+    outs() << Name << " all blocks: " << F.size() << "\n";
+    outs() << Name << " panic handling blocks: " << PanicBBs.size() << "\n";
+    outs() << Name << " unwind blocks: " << UnwindBBs.size() << "\n";
 
     return PreservedAnalyses::all();
   }
