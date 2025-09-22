@@ -198,5 +198,7 @@ TODO:
   * can not be efficiently fixed (e.g. fast math)
 - It's possible to write 100% equivalent Rust/C++ code;
   but Rust generally makes saner defaults in idiomatic code
+- Rust is not paranoid about security and does not enable REALLY SLOW checks
+- Rust overheads are similar to C++ hardening overheads (are they ?)
 
 Caveat for whoever watches this in future: contents may easily get outdated
