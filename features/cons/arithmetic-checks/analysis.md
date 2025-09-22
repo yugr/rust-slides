@@ -4,6 +4,8 @@ Assignee: yugr
 
 Parent task: gh-28
 
+Effort: 20h (lower bound)
+
 # Background
 
 This feature is an umbrella for various arithmetic operations checks in Rust:
