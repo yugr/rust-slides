@@ -4,7 +4,7 @@ Assignee: yugr
 
 Parent task: gh-36
 
-Effort: 22h
+Effort: 24h
 
 # Background
 
@@ -30,7 +30,8 @@ allowed (controlled via `-Z panic-in-drop=abort` option).
 Rust needs to insert landing pads for all function calls
 that may unwind:
   - Rust functions with panics or which call functions that may panic
-    * TODO: does Rust know unwind status for functions from other crates ?
+    (note that Rust knows unwind status for functions from other crates,
+    see `codegen_fn_attrs` in `compiler/rustc_metadata`)
   - `extern "C-unwind"` but not `extern "C"`
     (e.g. see [this](https://www.rottedfrog.co.uk/?p=24))
 
@@ -227,7 +228,7 @@ Info available in [README](README.md#solutions).
 
 ## Prevalence
 
-Here is panics statistics in Rust compiler:
+Here is LLVM IR panics statistics in Rust compiler:
 ```
 $ RUSTFLAGS_NOT_BOOTSTRAP=-Csave-temps ./x build -j12 --stage 2 compiler
 $ find -name '*.rcgu.bc' | xargs ~/tasks/rust/count-panic-stats/Count > results.txt
@@ -245,6 +246,8 @@ $ cat results.txt | awk '/panic handling insns/{s += $NF} END{print s}'
 1481282
 $ cat results.txt | awk '/unwind insns/{s += $NF} END{print s}'
 963937
+$ cat results.txt | awk '/PANIC.UNWIND insns/{s += $NF} END{print s}'
+1979710
 
 # BB stats
 $ cat results.txt | awk '/all blocks/{s += $NF} END{print s}'
@@ -253,6 +256,8 @@ $ cat results.txt | awk '/panic handling blocks/{s += $NF} END{print s}'
 526448
 $ cat results.txt | awk '/unwind blocks/{s += $NF} END{print s}'
 371158
+$ cat results.txt | awk '/PANIC.UNWIND blocks/{s += $NF} END{print s}'
+742214
 ```
 
 Some conclusions:
@@ -260,12 +265,13 @@ Some conclusions:
     _probly_ able to infer that they don't panic)
   - 10% (1481282 / 14852456) of ALL insns and 16% (526448 / 3277100) of ALL blocks are handling panics
   - 6.5% (963937 / 14852456) of ALL insns and 11% (371158 / 3277100) of ALL blocks are landing pads
+  - 13% (1979710 / 14852456) of ALL insns and 23% (742214 / 3277100) of ALL blocks are handling panics OR landing pads
 
 ## Disabling the check
 
 To compare overhead of exceptions we measure several variants:
   - (A) forced `-Cpanic=abort` ([yugr/force-panic-abort/1](https://github.com/yugr/rust-private/tree/yugr/force-panic-abort/1) branch)
-  - (B) = (A) + build stdlib with `panic_immediate_abort` ([yugr/force-panic-abort-mini/1](https://github.com/yugr/rust-private/tree/yugr/force-panic-abort-mini/1) branch)
+  - (B) = (A) + build stdlib with `panic_immediate_abort` ([yugr/force-panic-immediate-abort/1](https://github.com/yugr/rust-private/tree/yugr/force-panic-immediate-abort/1) branch)
   - (C1) and (C2): A + outlining landing pads (to improve I$ locality) ([yugr/enable-hot-cold-splitting/1](https://github.com/yugr/rust-private/tree/yugr/enable-hot-cold-splitting/1) and [yugr/enable-machine-splitter/1](https://github.com/yugr/rust-private/tree/yugr/enable-machine-splitter/1) branches)
 
 (A) removes landing pads for non-FFI (Rust) functions.

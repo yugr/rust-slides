@@ -144,6 +144,10 @@ public:
     const std::set<BasicBlock *> UnwindBBs = addPostdoms(LPads);
     const unsigned NumUnwindInsns = countInsns(UnwindBBs);
 
+    std::set<BasicBlock *> PanicOrUnwindBBs = PanicBBs;
+    PanicOrUnwindBBs.insert(UnwindBBs.begin(), UnwindBBs.end());
+    const unsigned NumPanicHandlingOrUnwindInsns = countInsns(PanicOrUnwindBBs);
+
     // Print results
 
     auto Name = F.getName();
@@ -155,10 +159,14 @@ public:
     outs() << Name << " panic handling insns: " << NumPanicHandlingInsns
            << "\n";
     outs() << Name << " unwind insns: " << NumUnwindInsns << "\n";
+    outs() << Name << " PANIC/UNWIND insns: " << NumPanicHandlingOrUnwindInsns
+           << "\n";
 
     outs() << Name << " all blocks: " << F.size() << "\n";
     outs() << Name << " panic handling blocks: " << PanicBBs.size() << "\n";
     outs() << Name << " unwind blocks: " << UnwindBBs.size() << "\n";
+    outs() << Name << " PANIC/UNWIND blocks: " << PanicOrUnwindBBs.size()
+           << "\n";
 
     return PreservedAnalyses::all();
   }

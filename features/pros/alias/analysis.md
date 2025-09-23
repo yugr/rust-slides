@@ -96,6 +96,7 @@ retq
 ```
 because of language aliasing rules:
   - mutable reference can't alias anything
+    (Rust's shared refs are true constants unlike in C/C++)
 
 Interestingly enough for loops e.g.
 ```
