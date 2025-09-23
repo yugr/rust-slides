@@ -15,6 +15,8 @@ Avoiding PLT is generally faster:
 but incurs more startup overheads
 (it disables lazy binding so need to resolve all symbols on start).
 
+TODO: is this the reason why rustc is so slow to start ?
+
 See [this question](https://internals.rust-lang.org/t/function-calls-plt-vs-gotpcrel/8909)
 for details.
 
