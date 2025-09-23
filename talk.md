@@ -200,5 +200,7 @@ TODO:
   but Rust generally makes saner defaults in idiomatic code
 - Rust is not paranoid about security and does not enable REALLY SLOW checks
 - Rust overheads are similar to C++ hardening overheads (are they ?)
+- Rust tries hard to compensate in other aspects
+  (aliasing, default static, aggressive branch probs, noplt, etc.)
 
 Caveat for whoever watches this in future: contents may easily get outdated
