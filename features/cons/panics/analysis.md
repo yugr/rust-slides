@@ -4,7 +4,7 @@ Assignee: yugr
 
 Parent task: gh-36
 
-Effort: 24h
+Effort: 26h
 
 # Background
 
@@ -31,11 +31,14 @@ Rust needs to insert landing pads for all function calls
 that may unwind:
   - Rust functions with panics or which call functions that may panic
     (note that Rust knows unwind status for functions from other crates,
-    see `codegen_fn_attrs` in `compiler/rustc_metadata`)
+    see `codegen_fn_attrs` in `compiler/rustc_metadata`;
+    this is a notable improvement compared to C++ which can NOT know
+    this at compile time if `noexcept`'s are missing)
   - `extern "C-unwind"` but not `extern "C"`
     (e.g. see [this](https://www.rottedfrog.co.uk/?p=24))
 
-Panic handling have certain costs:
+Panic handling have certain costs,
+similar to C++ exceptions (on which machinery Rust panics are built upon):
   - binary size for unwind tables (`.eh_frame`), landing pads,
     panic messages
     * landing pads are needed only for functions with destructors
@@ -211,6 +214,8 @@ and they can hurt efficiency of various passes as shown in
 TODO:
   - EH-related opts in MIR and LLVM
   - info whether LLVM can potentially optimize it (and with what limitations)
+  - (LOW) does MachineBlockPlacement always place code at the end of function ?
+    this would help I$ as well
 
 # Workarounds
 
@@ -276,18 +281,45 @@ To compare overhead of exceptions we measure several variants:
 
 (A) removes landing pads for non-FFI (Rust) functions.
 
-(B) removes majority of panics: panic calls in librustc_driver.so
-reduce from 354K in baseline to 8K (98%).
-I also checked code generated for
+(B) removes most panics: panic calls in librustc_driver.so
+reduce _roughly_ by 98%:
+```
+# This may be a bit cynical...
+$ objdump -d build/x86_64-unknown-linux-gnu/stage1/lib/librustc_driver-033b48a87851ef3e.so > librustc.d
+$ grep -c 'call.*panic' librustc.d
+
+# baseline
+352905
+
+# force-panic-immediate-abort
+7828
+```
+
+The reason for remaining panics is that some standard APIs,
+most notably slices and cells, do not respect `panic_immediate_abort`:
+```
+$ cat librustc.d | sed -ne '/call.*panic/{s/^[^<]*<\(.*\)@@.*/\1/; p}' | sort | uniq -c | sort -rnk1 | head
+   2416 core::slice::index::slice_end_index_len_fail::do_panic::runtime
+   1282 core::cell::panic_already_borrowed
+   1022 core::slice::index::slice_start_index_len_fail::do_panic::runtime
+    929 std::thread::local::panic_access_error
+    532 core::cell::panic_already_mutably_borrowed
+    405 core::slice::index::slice_index_order_fail::do_panic::runtime
+    209 <rustc_serialize::opaque::FileEncoder>::panic_invalid_write::<10>
+     87 std::panic::resume_unwind
+     47 core::slice::<impl [T]>::copy_from_slice::len_mismatch_fail::do_panic::runtime
+     45 <rustc_serialize::opaque::FileEncoder>::panic_invalid_write::<8>
+```
+So even with (B) not all panics are removed. Shame on stdlib !
+
+I also checked that (B) actually removes panic/unwind code
+in the following most common cases:
   - `unreachable!`, `unimplemented!`, `todo!`, `panic!` (works)
   - `Option::unwrap`, `Option::expect`, `Result` (works)
   - Vec allocation e.g. `__rust_alloc` (works)
   - call FFI functions with C ABI
     * note that C-unwind ABI still needs a landing pad
   - https://news.ycombinator.com/item?id=30867188 (works)
-
-TODO:
-  - investigate remainings panics in (B)
 
 For (C) there 2 options:
   - HotColdSplitting:
@@ -309,8 +341,6 @@ TODO:
   - runtime
     * can only be done in benches w/o `catch_unwind` (in bench itself and deps)
   - code+rodata size
-  - does MachineBlockPlacement always place code at the end of function ?
-    this would help I$ as well
   - compiler stats
     * depend on feature
     * inliner improvements

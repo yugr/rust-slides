@@ -74,7 +74,7 @@ author suggests that exceptions are beneficial if error frequency is < 0.01%.
 This generally goes against [popular guidelines](https://doc.rust-lang.org/book/ch09-03-to-panic-or-not-to-panic.html).
 
 On the other hand, in [P1947r0](https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2019/p1947r0.pdf)
-Bjarne Stroustroup clearly states that
+Bjarne Stroustrup states that
   - "There has been little serious research on the topics of performance of exceptions ...
     there are, however, many small unscientific studies and lots of loudly expressed opinions -
     often claiming exceptions to be inherently slower than various forms of checking of error-codes"
