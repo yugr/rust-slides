@@ -194,6 +194,9 @@ Overflow checks in containers can't be worked around.
 [Understanding Integer Overflow in C/C++](https://users.cs.utah.edu/~regehr/papers/overflow12.pdf)
   - paper by John Regehr
 
+[How undefined signed overflow enables optimizations in GCC](https://kristerw.blogspot.com/2016/02/how-undefined-signed-overflow-enables.html?m=1)
+  - how UB overflows help compiler to optimize
+
 # Performance impact
 
 John Regehr's well known study [estimates](https://users.cs.utah.edu/~regehr/papers/overflow12.pdf)
