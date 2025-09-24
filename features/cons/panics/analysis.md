@@ -4,7 +4,7 @@ Assignee: yugr
 
 Parent task: gh-36
 
-Effort: 26h
+Effort: 27h
 
 # Background
 
@@ -88,18 +88,14 @@ maybe `-Zbuild-std` is needed too).
 In some rare cases exceptions my make code faster by removing error handling code
 (see [README](README.md#advantages-of-panics) for details).
 
+Error handling approaches in other languages are different.
+Go is similar to Rust: exceptions exist (`panic` + `recover`) but
+not used for "normal" error handling.
+In Java and C# exceptions are the idiomatic way of error handling.
+Swift does not have any exception-like unwinding,
+just syntax sugared return codes.
+
 TODO:
-  - error handling in other languages:
-    * C/C++
-      + e.g. [The New C Standard: An Economic and Cultural Commentary](https://www.coding-guidelines.com/cbook/cbook1_1.pdf)
-      + e.g. [Rationale for International Standard Programming Languages - C](https://www.open-std.org/jtc1/sc22/wg14/www/C99RationaleV5.10.pdf)
-    * [Java](https://docs.oracle.com/javase/specs/jls/se24/html/),
-    * [C#](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/introduction)
-    * [Go](https://go.dev/ref/spec)
-    * [Swift](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/aboutthelanguagereference/)
-    * [Fortran](https://j3-fortran.org/doc/year/24/24-007.pdf)
-    * Ada ([RM](http://www.ada-auth.org/standards/22rm/html/RM-TOC.html) and [ARM](http://www.ada-auth.org/standards/22aarm/html/AA-TOC.html))
-    * [Julia](https://docs.julialang.org)
   - (LOW) check if C++ also has same overhead due to exceptions: https://www.rottedfrog.co.uk/?p=24
     * if not, we need a slide on this...
 
