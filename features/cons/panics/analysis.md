@@ -203,13 +203,12 @@ has the following combined landing pad for `foo3`:
 ```
 (landing pads of inner blocks jump to outer landing pads).
 
-There is not much LLVM can do about landing pads
+There is not much LLVM or MIR can do about landing pads
+(except simplifying trivial and merging in SimplifyCFG)
 and they can hurt efficiency of various passes as shown in
 [Roman's talk](https://www.youtube.com/watch?v=ItemByR4PRg).
 
 TODO:
-  - EH-related opts in MIR and LLVM
-  - info whether LLVM can potentially optimize it (and with what limitations)
   - (LOW) does MachineBlockPlacement always place code at the end of function ?
     this would help I$ as well
 
