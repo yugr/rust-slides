@@ -111,6 +111,9 @@ Enable additional MIR opts (does not help with case above though):
 
 (does not help in all cases).
 
+TODO:
+  - nrvo.rs MIR transform
+
 # Examples
 
 - [Example 1](https://www.reddit.com/r/rust/comments/px72r1/comment/hem26o0/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button)
