@@ -115,6 +115,9 @@ def compare_jsons(lhs, rhs):
         names = ", ".join(rhs_tests - lhs_tests)
         warn(f"tests {names} are missing in {lhs}")
 
+    if lhs_tests != rhs_tests:
+        return
+
     if lhs.name.endswith("_sizes.json"):
         compare_sizes(lhs_tests, lhs.name, lhs_json, rhs_json)
     else:
