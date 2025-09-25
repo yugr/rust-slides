@@ -91,7 +91,9 @@ In some rare cases exceptions my make code faster by removing error handling cod
 Error handling approaches in other languages are different.
 Go is similar to Rust: exceptions exist (`panic` + `recover`) but
 not used for "normal" error handling.
-In Java and C# exceptions are the idiomatic way of error handling.
+In Java and C# exceptions are the idiomatic way of error handling
+(they are also handled more efficiently there due to lack of dtors,
+often begin a single jump within inlined method).
 Swift does not have any exception-like unwinding,
 just syntax sugared return codes.
 
