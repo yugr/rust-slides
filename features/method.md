@@ -108,7 +108,7 @@ Hopefully in many cases all above will be obtained from collected materials.
 Mandatory:
   - (DONE) cons/arithmetic-checks (gh-28)
   - (DONE) cons/bounds-checks (gh-20)
-  - (WIP) cons/cgu (gh-30)
+  - (DONE) cons/cgu (gh-30)
   - (WIP) cons/fastmath (gh-34)
   - (DONE) cons/init (gh-35)
   - (WIP) cons/panics (gh-36)
@@ -127,7 +127,7 @@ Mandatory:
     * This is a large topic, decided to skip this
 
 Important:
-  - (WIP) pros/likely (gh-48)
+  - (DROP) pros/likely (gh-48)
   - pros/niche
   - pros/noplt
   - cons/iterators
