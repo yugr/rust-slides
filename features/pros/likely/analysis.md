@@ -4,17 +4,43 @@ Assignee: yugr
 
 Parent task: gh-48
 
-Effort: 0h
+Effort: 1h
 
 TODO:
   - fix all TODOs that are mentioned in feature's README
 
 # Background
 
+Rust provide several means for assigning frequencies.
+The basic one is function attribute:
+```
+#[cold]
+pub const fn foo() {}
+```
+It's used in many places in stdlib:
+  - mark allocating or panicking code in `Vec`, slice, `String`, `&str`
+  - incorrect borrows in `RefCell`
+  - panics routines
+  - expect/unwrap fails in `Option` and `Result`
+  - `strict_XXX` APIs
+
+Unstable intrinsics `core::intrinsics::{likely, unlikely, cold_path}`
+are built on top of `#[cold]` (also reexported as `core::hint::{likely, unlikely, cold_path}`).
+They are used in some places in stdlib:
+  - mark fails (`Rc`)
+  - mark overflows (`checked_XXX`, `StepBy` and `Slip` iterators`)
+
+`cold_path` is useful for match statements.
+Most likely intrinsics will be stabilized ([#136873](https://github.com/rust-lang/rust/issues/136873)).
+
+Codegen additionally marks blocks as cold if all their succs are cold.
+
 TODO:
+  - apply_attrs_to_cleanup_callsite ?
   - why is this feature needed ?
     * enabled by default and why
     * situation in C/C++
+      + check `std::vector::at`, `std::expected`. `std::optional`, checks in std containers
       + e.g. [The New C Standard: An Economic and Cultural Commentary](https://www.coding-guidelines.com/cbook/cbook1_1.pdf)
       + e.g. [Rationale for International Standard Programming Languages - C](https://www.open-std.org/jtc1/sc22/wg14/www/C99RationaleV5.10.pdf)
     * situation in other langs:
