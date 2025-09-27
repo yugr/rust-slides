@@ -4,7 +4,7 @@ Assignee: yugr
 
 Parent task: gh-48
 
-Effort: 1h
+Effort: 2h
 
 TODO:
   - fix all TODOs that are mentioned in feature's README
@@ -35,14 +35,27 @@ Most likely intrinsics will be stabilized ([#136873](https://github.com/rust-lan
 
 Codegen additionally marks blocks as cold if all their succs are cold.
 
+GCC/Clang have `__builtin_expect` intrinsic to mark likely branch
+and recent C++ has `[[likely]]` annotations.
+GCC uses them for `std::expected`:
+```
+constexpr _Tp&
+value() &
+{
+  if (_M_has_value) [[likely]]
+    return _M_val;
+  _GLIBCXX_THROW_OR_ABORT(bad_expected_access<_Er>(_M_unex));
+}
+```
+`std::optional` does not have this but failing part of method ends with abort
+and LLVM can likely assign low probability to it.
+`std::vector::at` is not annotated and it's not clear if compiler can
+infer the probability.
+
 TODO:
   - apply_attrs_to_cleanup_callsite ?
   - why is this feature needed ?
     * enabled by default and why
-    * situation in C/C++
-      + check `std::vector::at`, `std::expected`. `std::optional`, checks in std containers
-      + e.g. [The New C Standard: An Economic and Cultural Commentary](https://www.coding-guidelines.com/cbook/cbook1_1.pdf)
-      + e.g. [Rationale for International Standard Programming Languages - C](https://www.open-std.org/jtc1/sc22/wg14/www/C99RationaleV5.10.pdf)
     * situation in other langs:
       + [Java](https://docs.oracle.com/javase/specs/jls/se24/html/),
       + [C#](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/introduction)
