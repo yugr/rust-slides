@@ -123,11 +123,11 @@ Mandatory:
     * This could be considered together w/ copy elision
       (placement-new is basically a means for programmer
       to work around failed copy elision ?)
-  - cons/data-structs (gh-33)
+  - (DROP) cons/data-structs (gh-33)
     * This is a large topic, decided to skip this
 
 Important:
-  - pros/likely
+  - (WIP) pros/likely (gh-48)
   - pros/niche
   - pros/noplt
   - cons/iterators
