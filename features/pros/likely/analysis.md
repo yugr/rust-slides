@@ -47,10 +47,10 @@ value() &
   _GLIBCXX_THROW_OR_ABORT(bad_expected_access<_Er>(_M_unex));
 }
 ```
-`std::optional` does not have this but failing part of method ends with abort
-and LLVM can likely assign low probability to it.
-`std::vector::at` is not annotated and it's not clear if compiler can
-infer the probability.
+`std::optional` and `std::vector::at` do not have this
+but the failing part of method ends with call to `abort`
+(or another `noreturn` function) or `throw` and
+LLVM is clever enough to infer low probability for it.
 
 TODO:
   - apply_attrs_to_cleanup_callsite ?
