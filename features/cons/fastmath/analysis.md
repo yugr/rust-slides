@@ -45,7 +45,75 @@ TODO:
 
 # Example
 
-TODO
+This simple loop is only vectorized when algebraic fast-math optimization is enabled. Without it, single scalar xmm instructions are used and only one value is processed per xmm calculation (4 double are processed per loop iteration due to unrolling). When compiler is allowed to change the order of computations, loop is vectorized in packs of 8 floats and one xmm calculation processes 2 double values (4 per loop iteration, but in 8 instructions vs 12 in baseline assembly).
+
+## Source
+
+```
+use std::hint::black_box;
+use std::cmp;
+
+pub fn zipdot_checked_counted_loop() -> f64
+{
+    let xs = vec![0f64; 1024];
+    let ys = vec![0f64; 768];
+    let xs = black_box(xs);
+    let ys = black_box(ys);
+
+    let len = cmp::min(xs.len(), ys.len());
+    let xs = &xs[..len];
+    let ys = &ys[..len];
+
+    let mut s = 0f64;
+
+    for i in 0..len {
+        let x = xs[i];
+        let y = ys[i];
+        s += x * y;
+    }
+
+    s
+}
+```
+
+## x86 assembly, without fast-math optimizations
+
+```
+.LBB0_17:
+	movsd	xmm2, qword ptr [rcx + 8*rsi]
+	mulsd	xmm2, qword ptr [rdi + 8*rsi]
+	movsd	xmm1, qword ptr [rcx + 8*rsi + 8]
+	addsd	xmm2, xmm0
+	mulsd	xmm1, qword ptr [rdi + 8*rsi + 8]
+	addsd	xmm1, xmm2
+	movsd	xmm2, qword ptr [rcx + 8*rsi + 16]
+	mulsd	xmm2, qword ptr [rdi + 8*rsi + 16]
+	addsd	xmm2, xmm1
+	movsd	xmm0, qword ptr [rcx + 8*rsi + 24]
+	mulsd	xmm0, qword ptr [rdi + 8*rsi + 24]
+	lea	r8, [rsi + 4]
+	addsd	xmm0, xmm2
+	mov	rsi, r8
+	cmp	rdx, r8
+	jne	.LBB0_17
+```
+
+## x86 assembly, with algebraic fast-math optimizations
+
+```
+.LBB0_10:
+	movupd	xmm2, xmmword ptr [rcx + r8]
+	movupd	xmm3, xmmword ptr [rcx + r8 + 16]
+	movupd	xmm4, xmmword ptr [rdi + r8]
+	mulpd	xmm4, xmm2
+	addpd	xmm0, xmm4
+	movupd	xmm2, xmmword ptr [rdi + r8 + 16]
+	mulpd	xmm2, xmm3
+	addpd	xmm1, xmm2
+	add	r8, 32
+	cmp	rsi, r8
+	jne	.LBB0_10
+```
 
 # Known performance hits
 
@@ -58,28 +126,19 @@ There is no convenient way to globally enable fast math (see [this comment](http
 Furthermore, different options of fast-math optimizations are set in LLVM IR via flags, which apply to single floating-point operations (also phi-nodes, calls, returns).
 Fast math attributes on functions are [in the process of being removed](https://github.com/llvm/llvm-project/issues/70533#issuecomment-1790250502) (or are already removed), so there LLVM IR also does not contain a way to "globally" enable fast-math optimizations.
 
-TODO:
-  - info whether LLVM can potentially optimize it (and with what limitations)
-    * no, it can't
-  - info on how developer can work around it and with how much effort/ugliness (unsafe, wrapping operations, reslicing, etc.)
-    * pay special attention to cases which can not be optimized at all
+Algebraic and fast-math optimizations can be enabled on per-operations basis by using `std::intrinsics::XXX_algebraic` and `std::intrinsics::XXX_fast`, however they are not yet stabilized.
+
+Rust has `std::intrinsics::XXX_algebraic` and `std::intrinsics::XXX_fast` intrinsics which allow fast-math optimization for a specific operations, however these intrinsics are currently unstable.
 
 # Recommended readings
 
-TODO (if any)
+- [rust-lang github issue](https://github.com/rust-lang/rust/issues/21690)
+- [Fast-math dangers blogpost](https://simonbyrne.github.io/notes/fastmath/)
+- [LLVM fast-math optimization flags](https://llvm.org/docs/LangRef.html#fast-math-flags)
 
 # Performance with fast- and algebraic- math.
 
 Compiler patches are in branches [zakhar/algebraic-math](https://github.com/yugr/rust-private/tree/zakhar/algebraic-math) and [zakhar/fast-math](https://github.com/yugr/rust-private/tree/zakhar/fast-math).
-
-TODO:
-  - is this check is a common case in practice ?
-    * may need to write analysis passes to scan real Rust code (libs, big projects) for occurences
-  - compiler stats
-    * depend on feature
-    * e.g. SLP/loop autovec for bounds checking feature
-    * e.g. NoAlias returns from AA manager for alias feature
-    * e.g. CSE/GVN/LICM for alias feature
 
 ## x86_64
 
@@ -150,8 +209,9 @@ zed_0.json: -0.3%
 
 # Benchmark analysis
 
-TODO:
-  - can we check meili as well ? It's quite large
+## Meilisearch
+
+Meilisearch degradation did not reproduce on another machine, so is most likely caused by benchmarking noise.
 
 ## Nalgebra
 
