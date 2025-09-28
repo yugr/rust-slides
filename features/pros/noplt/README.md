@@ -58,6 +58,3 @@ for details.
 
 Also note that Rust [uses `-fno-semantic-interposition` by default](https://github.com/rust-lang/rustc_codegen_gcc/issues/53)
 (not deliberately but through the virtue of being based on LLVM).
-
-TODO:
-  - check perf when noplt is off

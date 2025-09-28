@@ -129,7 +129,7 @@ Mandatory:
 Important:
   - (DROP) pros/likely (gh-48)
   - pros/niche
-  - pros/noplt
+  - (WIP) pros/noplt (gh-49)
   - cons/iterators
   - pros/static
   - pros/inline

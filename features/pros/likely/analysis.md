@@ -11,7 +11,7 @@ TODO:
 
 # Background
 
-Rust provide several means for assigning frequencies.
+Rust provides several means for assigning frequencies.
 The basic one is function attribute:
 ```
 #[cold]
