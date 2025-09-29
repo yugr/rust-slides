@@ -4,7 +4,7 @@ Assignee: yugr
 
 Parent task: gh-49
 
-Effort: 3h
+Effort: 5h
 
 # Background
 
@@ -149,6 +149,9 @@ TODO:
 
 Issue with relocs can be worked around via `-Z relax-elf-relocations=yes`
 or just by resorting to PLT via `-Z plt=yes`.
+
+One more indirect way is to enable PLT is to disable Full RELRO
+(`-C relro-level=partial`).
 
 # Suggested readings
 
