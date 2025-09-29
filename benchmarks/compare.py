@@ -86,7 +86,7 @@ def compare_sizes(tests, name, lhs, rhs):
         for typ, lhs_value in sorted(lhs[test].items()):
             rhs_value = rhs[test][typ]
             if lhs_value != rhs_value:
-                geomeans[typ] = geomeans.get(typ, 1) * lhs_value / rhs_value
+                geomeans[typ] = geomeans.get(typ, 1) * rhs_value / lhs_value
             else:
                 geomeans[typ] = geomeans.get(typ, 1)
 
