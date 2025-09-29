@@ -335,13 +335,215 @@ For (C) there 2 options:
 ## Measurements
 
 TODO:
-  - runtime
-    * can only be done in benches w/o `catch_unwind` (in bench itself and deps)
-  - code+rodata size
-  - compiler stats
-    * depend on feature
+  - compiler stats:
     * inliner improvements
     * stack usage
-    * e.g. SLP/loop autovec for bounds checking feature
-    * e.g. NoAlias returns from AA manager for alias feature
-    * e.g. CSE/GVN/LICM for alias feature
+
+### `panic-abort` (A)
+
+Compare via
+```
+$ benchmarks/compare.py tmp/results-bak-20250929/baseline/ tmp/results-bak-20250929/force-panic-abort/
+```
+
+Performance:
+```
+SpacetimeDB_0.json: +3.4%
+bevy_0.json: +1.5%
+meilisearch_0.json: -10.1%
+nalgebra_0.json: -0.0%
+oxipng_0.json: -2.9%
+rav1e_0.json: +0.1%
+regex_0.json: +1.9%
+ruff_0.json: +1.3%
+rust_serialization_benchmark_0.json: -0.3%
+rustc-runtime-benchmarks_0.json: -2.2%
+tokio_0.json: +1.2%
+uv_0.json: -3.2%
+zed_0.json: +5.9%
+```
+
+TODO:
+  - investigate performance regressions
+
+Code sizes:
+```
+SpacetimeDB_sizes.json text: +11.5%
+meilisearch_sizes.json text: +10.9%
+oxipng_sizes.json text: +2.2%
+rav1e_sizes.json text: +9.7%
+ruff_sizes.json text: +9.4%
+rustc-runtime-benchmarks_sizes.json text: +11.3%
+tokio_sizes.json text: +9.3%
+uv_sizes.json text: +8.5%
+zed_sizes.json text: +15.7%
+```
+
+Rodata sizes:
+```
+SpacetimeDB_sizes.json rodata: +44.2%
+meilisearch_sizes.json rodata: +58.9%
+oxipng_sizes.json rodata: +8.7%
+rav1e_sizes.json rodata: +47.3%
+ruff_sizes.json rodata: +36.7%
+rustc-runtime-benchmarks_sizes.json rodata: +47.9%
+tokio_sizes.json rodata: +51.6%
+uv_sizes.json rodata: +22.6%
+zed_sizes.json rodata: +48.0%
+```
+
+### `panic-immediate-abort` (B)
+
+Compare via
+```
+$ benchmarks/compare.py tmp/results-bak-20250929/baseline/ tmp/results-bak-20250929/force-panic-immediate-abort/
+```
+
+Performance:
+```
+SpacetimeDB_0.json: +7.6%
+bevy_0.json: +3.0%
+meilisearch_0.json: -9.5%
+nalgebra_0.json: +0.3%
+oxipng_0.json: -0.9%
+rav1e_0.json: +1.9%
+regex_0.json: +2.3%
+ruff_0.json: +3.7%
+rust_serialization_benchmark_0.json: +0.9%
+rustc-runtime-benchmarks_0.json: -2.0%
+tokio_0.json: +3.8%
+uv_0.json: +6.2%
+zed_0.json: +7.2%
+```
+
+Code size:
+```
+SpacetimeDB_sizes.json text: +16.2%
+meilisearch_sizes.json text: +45.1%
+oxipng_sizes.json text: +27.6%
+rav1e_sizes.json text: +14.9%
+ruff_sizes.json text: +16.7%
+rustc-runtime-benchmarks_sizes.json text: +28.9%
+tokio_sizes.json text: +95.5%
+uv_sizes.json text: +48.0%
+zed_sizes.json text: +19.1%
+```
+
+Rodata size:
+```
+SpacetimeDB_sizes.json rodata: +60.5%
+meilisearch_sizes.json rodata: +83.2%
+oxipng_sizes.json rodata: +72.1%
+rav1e_sizes.json rodata: +64.1%
+ruff_sizes.json rodata: +44.3%
+rustc-runtime-benchmarks_sizes.json rodata: +70.5%
+tokio_sizes.json rodata: +99.3%
+uv_sizes.json rodata: +69.0%
+zed_sizes.json rodata: +52.1%
+```
+
+# HotColdSplitting (C1)
+
+Compare via
+```
+$ benchmarks/compare.py tmp/results-bak-20250929/baseline/ tmp/results-bak-20250929/enable-hot-cold-splitting/
+```
+
+Performance:
+```
+SpacetimeDB_0.json: -0.2%
+bevy_0.json: -0.3%
+meilisearch_0.json: -0.3%
+nalgebra_0.json: -0.0%
+oxipng_0.json: -0.8%
+rav1e_0.json: +2.2%
+regex_0.json: +0.2%
+ruff_0.json: +1.1%
+rust_serialization_benchmark_0.json: +0.1%
+rustc-runtime-benchmarks_0.json: -0.8%
+tokio_0.json: -0.1%
+uv_0.json: +1.0%
+zed_0.json: +1.1%
+```
+
+Code size:
+```
+SpacetimeDB_sizes.json text: +2.9%
+meilisearch_sizes.json text: -1.8%
+oxipng_sizes.json text: +4.0%
+rav1e_sizes.json text: +3.1%
+ruff_sizes.json text: +2.9%
+rustc-runtime-benchmarks_sizes.json text: +2.3%
+tokio_sizes.json text: +4.2%
+uv_sizes.json text: +2.8%
+zed_sizes.json text: +3.1%
+```
+
+Rodata size:
+```
+SpacetimeDB_sizes.json rodata: -8.7%
+meilisearch_sizes.json rodata: -19.8%
+oxipng_sizes.json rodata: -19.0%
+rav1e_sizes.json rodata: -13.1%
+ruff_sizes.json rodata: -5.7%
+rustc-runtime-benchmarks_sizes.json rodata: -12.2%
+tokio_sizes.json rodata: -32.9%
+uv_sizes.json rodata: -7.3%
+zed_sizes.json rodata: -3.7%
+```
+
+TODO:
+  - investigate weird results (.text should have degraded, not .rodata)
+
+# MachineFunctionSplitter (C2)
+
+Compare via
+```
+$ benchmarks/compare.py tmp/results-bak-20250929/baseline/ tmp/results-bak-20250929/enable-machine-splitter/
+```
+
+Performance:
+```
+SpacetimeDB_0.json: -0.4%
+bevy_0.json: +0.2%
+meilisearch_0.json: -0.3%
+nalgebra_0.json: -0.1%
+oxipng_0.json: +0.3%
+rav1e_0.json: +0.7%
+regex_0.json: +0.3%
+ruff_0.json: +0.1%
+rust_serialization_benchmark_0.json: -0.1%
+rustc-runtime-benchmarks_0.json: -0.9%
+tokio_0.json: -0.3%
+uv_0.json: -0.1%
+zed_0.json: -1.2%
+```
+
+Code size:
+```
+SpacetimeDB_sizes.json text: -1.8%
+meilisearch_sizes.json text: -89.5%
+oxipng_sizes.json text: -0.0%
+rav1e_sizes.json text: -1.9%
+ruff_sizes.json text: -0.5%
+rustc-runtime-benchmarks_sizes.json text: -13.1%
+tokio_sizes.json text: -11.2%
+uv_sizes.json text: -0.2%
+zed_sizes.json text: -0.2%
+```
+
+Rodata size:
+```
+SpacetimeDB_sizes.json rodata: -16.2%
+meilisearch_sizes.json rodata: -159.9%
+oxipng_sizes.json rodata: -6.8%
+rav1e_sizes.json rodata: -15.1%
+ruff_sizes.json rodata: -10.6%
+rustc-runtime-benchmarks_sizes.json rodata: -20.6%
+tokio_sizes.json rodata: -33.4%
+uv_sizes.json rodata: -10.6%
+zed_sizes.json rodata: -11.6%
+```
+
+TODO:
+  - investigate size degradations (expected no changes)
