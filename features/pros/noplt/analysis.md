@@ -153,6 +153,12 @@ or just by resorting to PLT via `-Z plt=yes`.
 One more indirect way is to enable PLT is to disable Full RELRO
 (`-C relro-level=partial`).
 
+Finally, a potentially unfortunate decision in Rust is that
+by default it links shlib-compatible code
+(`-C relocation-model=pic`) which forces it to call even functions
+which are locally available in the same file via GOT instead of direct call.
+This can be fixed via `-C relocation-model=pie` (only for local functions).
+
 # Suggested readings
 
 TODO:
