@@ -172,28 +172,27 @@ class Bench:
 class CargoBench(Bench):
     """Base class for benchmarks which use 'cargo bench' interface."""
 
-    def __init__(self, name, repo, commit, build_cmd, bench_cmds):
+    def __init__(self, name, repo, commit, build_cmds, bench_cmds):
         super().__init__(name, repo, commit)
-        self.build_cmd = build_cmd
+        self.build_cmds = build_cmds
         self.bench_cmds = bench_cmds
 
     def build(self, repo_path, clean, jobs):
-        if jobs is None:
-            cargo_args_ext = []
-        else:
-            cargo_args_ext = ["-j", str(jobs)]
+        cargo_parallel = [] if jobs is None else [f"-j{jobs}"]
 
         if clean:
             run("cargo clean", cwd=str(repo_path))
 
         # Run main build cmd
 
-        cargo_args = self.build_cmd.split()
-        cargo_args.extend(cargo_args_ext)
-        try:
-            run(cargo_args, cwd=str(repo_path))
-        except ExecutionError as e:
-            raise BuildError(*e.args) from None
+        for build_cmd in self.build_cmds:
+            cargo_args = build_cmd.split()
+            if not any(arg.startswith("-j") for arg in cargo_args):
+                cargo_args.extend(cargo_parallel)
+            try:
+                run(cargo_args, cwd=str(repo_path))
+            except ExecutionError as e:
+                raise BuildError(*e.args) from None
 
         # Build each bench
         # TODO: do we need this ?
@@ -207,7 +206,7 @@ class CargoBench(Bench):
                 )
 
             cargo_args = params.split()
-            cargo_args.extend(cargo_args_ext)
+            cargo_args.extend(cargo_parallel)
             cargo_args.append("--no-run")
             try:
                 run(cargo_args, cwd=str(build_path))
@@ -348,7 +347,7 @@ class RegexBench(Bench):
 
         cargo_args = ["cargo", "build", "--release"]
         if jobs is not None:
-            cargo_args.extend(["-j", str(jobs)])
+            cargo_args.append(f"-j{jobs}")
         run(cargo_args, cwd=str(repo_path))
 
         run("target/release/rebar build -e ^rust/regex$", cwd=str(repo_path))
@@ -403,7 +402,7 @@ class RustcBench(Bench):
                 run("cargo clean", cwd=str(subdir))
             build_args = ["cargo", "build", "--release"]
             if jobs is not None:
-                build_args.extend(["-j", str(jobs)])
+                build_args.append(f"-j{jobs}")
             run(build_args, cwd=str(subdir))
 
         # Collect sizes
@@ -452,42 +451,42 @@ BENCHES = [
         "SpacetimeDB",
         "https://github.com/clockworklabs/SpacetimeDB",
         "69ec80331fe930c8c9160ab256b1858270d791ea",
-        "cargo b --profile bench --lib --bins --benches",
+        ["cargo b --profile bench --lib --bins --benches"],
         [("crates/bench", "cargo bench --bench generic --bench special")],
     ),
     CriterionBench(
         "bevy",
         "https://github.com/bevyengine/bevy",
         "de79d3f363e292489f2dbfdd22b6a9b93e7672ea",
-        "cargo b --profile bench --lib --bins --benches",
+        ["cargo b --profile bench --lib --bins --benches"],
         [("benches", "cargo bench")],
     ),
     CriterionBench(
         "meilisearch",
         "https://github.com/meilisearch/meilisearch",
         "0fd66a5317da7e1f075058665944cac62e17d446",
-        "cargo b --profile bench --lib --bins --benches",
+        ["cargo b --profile bench --lib --bins --benches"],
         [("", "cargo bench")],
     ),
     CriterionBench(
         "nalgebra",
         "https://github.com/dimforge/nalgebra",
         "v0.33.2",
-        "cargo b --profile bench --lib --bins --benches",
+        ["cargo b --profile bench --lib --bins --benches"],
         [("", "cargo bench")],
     ),
     OxipngBench(
         "oxipng",
         "https://github.com/shssoichiro/oxipng",
         "788997c437319995e55030a92ed8294dfcd4c87a",
-        "cargo b --profile bench --lib --bins --benches",
+        ["cargo b --profile bench --lib --bins --benches"],
         [("", "cargo bench")],
     ),
     CriterionBench(
         "rav1e",
         "https://github.com/xiph/rav1e",
         "6ee1f3a678deb9ccef2e3345168e39cd53e5d1a6",
-        "cargo b --profile bench --lib --bins --benches",
+        ["cargo b --profile bench --lib --bins --benches"],
         # Project suggests using "cargo criterion"
         # but it dumps output to stderr rather than stdout
         [("", "cargo bench --features=bench")],
@@ -501,7 +500,7 @@ BENCHES = [
         "ruff",
         "https://github.com/astral-sh/ruff",
         "b302d89da3325c705f87a8343a16aad1723b67ab",
-        "cargo b --profile bench --lib --bins --benches",
+        ["cargo b --profile bench --lib --bins --benches"],
         [("crates/ruff_benchmark", "cargo bench")],
     ),
     RustcBench(
@@ -513,35 +512,38 @@ BENCHES = [
         "rust_serialization_benchmark",
         "https://github.com/djkoloski/rust_serialization_benchmark",
         "cd9d93b0b0d2036dfb2ec4037cc6f37cf6cab291",
-        "cargo b --profile bench --lib --bins --benches",
+        ["cargo b --profile bench --lib --bins --benches"],
         [("", "cargo bench")],
     ),
     CriterionBench(
         "tokio",
         "https://github.com/tokio-rs/tokio",
         "9563707aaa73a802fa4d3c51c12869a037641070",
-        "cargo b --profile bench --lib --bins --benches",
+        ["cargo b --profile bench --lib --bins --benches"],
         [("", "cargo bench")],
     ),
     UVBench(
         "uv",
         "https://github.com/astral-sh/uv",
         "dc5b3762f38a8e47b53bec9cc3cefb71e4aef55c",
-        "cargo b --profile bench --lib --bins --benches",
+        ["cargo b --profile bench --lib --bins --benches"],
         [("", "cargo bench")],
     ),
     CriterionBench(
         "veloren",
         "https://github.com/veloren/veloren",
         "8598d3d9c5c3a9e6d2366cfe882b479ce92a7bcc",
-        "cargo b --profile bench --lib --bins --benches",
+        [
+            "cargo b --profile bench --lib --benches",
+            "cargo b --profile bench --bins -j1",  # Work around OOMs
+        ],
         [("", "cargo bench")],
     ),
     CriterionBench(
         "zed",
         "https://github.com/zed-industries/zed",
         "83d513aef48f6b4b56bad96740a02f5ef86a0a8c",
-        "cargo b --profile bench --bins --benches",  # Fails with --lib
+        ["cargo b --profile bench --bins --benches"],  # Fails with --lib
         [("crates/rope", "cargo bench")],
     ),
 ]
