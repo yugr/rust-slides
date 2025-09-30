@@ -159,7 +159,14 @@ by default it links shlib-compatible code
 which are locally available in the same file via GOT instead of direct call.
 This can be fixed via `-C relocation-model=pie` (only for local functions).
 
+As a side note all these settings are target-specific in Rust
+which arguably is not a good decision because it changes app behavior
+across platforms (e.g. PLT disabled only on x86_64).
+
 # Suggested readings
+
+[Dynamic libraries and how to optimize them](https://github.com/yugr/CppRussia/blob/master/2024/EN.pdf)
+(also video)
 
 TODO:
   - links to important articles (design, etc.)
