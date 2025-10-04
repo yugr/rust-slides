@@ -85,6 +85,9 @@ To achieve that we can recompile stdlib with
 (see example [here](https://github.com/microsoft/edit/blob/7338c3cbbc99c1366d556d631402cdd853d989bd/Cargo.toml),
 maybe `-Zbuild-std` is needed too).
 
+TODO:
+  - check https://github.com/rust-lang/rust/pull/146317
+
 In some rare cases exceptions my make code faster by removing error handling code
 (see [README](README.md#advantages-of-panics) for details).
 
@@ -338,12 +341,13 @@ TODO:
   - compiler stats:
     * inliner improvements
     * stack usage
+  - recollect perf data after stabilizing measurements
 
 ### `panic-abort` (A)
 
 Compare via
 ```
-$ benchmarks/compare.py tmp/results-bak-20250929/baseline/ tmp/results-bak-20250929/force-panic-abort/
+$ benchmarks/compare.py tmp/results-20250929/baseline/ tmp/results-20250929/force-panic-abort/
 ```
 
 Performance:
@@ -362,9 +366,6 @@ tokio_0.json: +1.2%
 uv_0.json: -3.2%
 zed_0.json: +5.9%
 ```
-
-TODO:
-  - investigate performance regressions
 
 Code sizes:
 ```
@@ -392,11 +393,40 @@ uv_sizes.json rodata: +22.6%
 zed_sizes.json rodata: +48.0%
 ```
 
+#### Analysis of meilisearch
+
+Meilisearch: a lot of ~10% regs in
+  - `smol-songs.csv: ...`
+  - `smol-all-countries.jsonl: ...`
+
+but unclear (profile is flat and most time spend in kernel futex synch).
+
+TODO
+
+#### Analysis of oxipng
+
+Regressions in `deinterlacing_?_bits` not reproduced on another machine
+so likely code alignment.
+
+Regression in `filters_?_bits_filter_?` is legit and caused by different codegen
+for `RowFilter::filter_line` function:
+```
+       │       xor    %eax,%eax
+       │       cmp    %rbx,%r15
+  2.35 │       setne  %al
+ 46.00 │       add    %r15,%rax
+```
+
+#### Analysis of rustc benchmarks
+
+In general benchmarks are on par but there is significant regression
+in brotli-decompress (60%). Not reproduced on another machine so likely code alignment.
+
 ### `panic-immediate-abort` (B)
 
 Compare via
 ```
-$ benchmarks/compare.py tmp/results-bak-20250929/baseline/ tmp/results-bak-20250929/force-panic-immediate-abort/
+$ benchmarks/compare.py tmp/results-20250929/baseline/ tmp/results-20250929/force-panic-immediate-abort/
 ```
 
 Performance:
@@ -442,11 +472,19 @@ uv_sizes.json rodata: +69.0%
 zed_sizes.json rodata: +52.1%
 ```
 
+#### Analysis of meilisearch
+
+TODO
+
+#### Analysis of rustc benchmarks
+
+Same as (A).
+
 # HotColdSplitting (C1)
 
 Compare via
 ```
-$ benchmarks/compare.py tmp/results-bak-20250929/baseline/ tmp/results-bak-20250929/enable-hot-cold-splitting/
+$ benchmarks/compare.py tmp/results-20250929/baseline/ tmp/results-20250929/enable-hot-cold-splitting/
 ```
 
 Performance:
@@ -499,7 +537,7 @@ TODO:
 
 Compare via
 ```
-$ benchmarks/compare.py tmp/results-bak-20250929/baseline/ tmp/results-bak-20250929/enable-machine-splitter/
+$ benchmarks/compare.py tmp/results-20250929/baseline/ tmp/results-20250929/enable-machine-splitter/
 ```
 
 Performance:
