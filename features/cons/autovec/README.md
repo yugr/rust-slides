@@ -7,6 +7,8 @@ On the other hand it's positively affected by
   - [noalias](../../pros/alias/README.md)
   - [chained iterators](../iterators/README.md)
 
+THIS IS NOT A DEDICATED FEATURE, IT SHOULD BE COVERED IN SEPARATE FEATURES.
+
 To facilitate vectorization [use](https://www.reddit.com/r/rust/comments/1hk0bry/comment/m3b76gn/)
   - `chunks_exact` iterator (even if length is not divisable, see [this](https://github.com/nnethercote/perf-book/issues/52))
     * TODO: does this facilitate SLP or Loop vectorizer ?
