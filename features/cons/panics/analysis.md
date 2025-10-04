@@ -393,16 +393,6 @@ uv_sizes.json rodata: +22.6%
 zed_sizes.json rodata: +48.0%
 ```
 
-#### Analysis of meilisearch
-
-Meilisearch: a lot of ~10% regs in
-  - `smol-songs.csv: ...`
-  - `smol-all-countries.jsonl: ...`
-
-but unclear (profile is flat and most time spend in kernel futex synch).
-
-TODO
-
 #### Analysis of oxipng
 
 Regressions in `deinterlacing_?_bits` not reproduced on another machine
@@ -416,6 +406,42 @@ for `RowFilter::filter_line` function:
   2.35 │       setne  %al
  46.00 │       add    %r15,%rax
 ```
+
+#### Analysis of meilisearch
+
+Meilisearch: a lot of ~10% regs in
+  - `smol-songs.csv: ...` (target/release/deps/search_songs)
+  - `smol-all-countries.jsonl: ...` (target/release/deps/sort)
+
+but unclear (profile is flat and most time spend in kernel futex synch).
+
+Need to run with
+```
+$ export MEILI_MAX_INDEXING_THREADS=1 RAYON_NUM_THREADS=1
+```
+to remove kernel mutex from perf stats.
+Also remove unnecessary confs and queries in
+crates/benchmarks/benches/sort_songs.rs and
+crates/benchmarks/benches/sort.rs.
+
+New code has a 1%->4% increase of
+`roaring::bitmap::serialization::<impl roaring::bitmap::RoaringBitmap>::deserialize_from_impl`.
+Pattern similar to oxipng:
+```
+  9.53 │510:   xor    %edx,%edx
+  1.07 │       cmp    %rax,%rcx
+ 42.59 │       setne  %sil
+  4.26 │     ↓ je     52a
+ 17.73 │       mov    %sil,%dl
+ 17.00 │       lea    (%rcx,%rdx,2),%rdx
+  1.42 │       test   %rcx,%rcx
+  0.71 │       mov    %rdx,%rcx
+  1.24 │     ↑ jne    510
+```
+
+The loop is completely missing from reference asm.
+
+TODO: figure out what happened
 
 #### Analysis of rustc benchmarks
 
