@@ -113,11 +113,9 @@ Mandatory:
   - (DONE) cons/init (gh-35)
   - (WIP) cons/panics (gh-36)
   - (DONE) pros/alias (gh-39)
-  - cons/autovec (gh-29)
-    * TODO @yugr: should this be split to separate features ?
   - cons/stdlib and pros/stdlib (gh-38)
     * Classify stdlib asserts (anything besides Unicode ?)
-  - pros/abi (gh-31)
+  - (WIP) pros/abi (gh-31)
   - pros/copy-elision (gh-32)
   - cons/placement-new (gh-37)
     * This could be considered together w/ copy elision
