@@ -29,19 +29,14 @@ and computer vision:
 
 Rust developers have [clearly rejected](https://github.com/rust-lang/rust/issues/21690#issuecomment-1589427278) global fast math flag due to safety concerns (e.g. no clear way for a third-party crate to allow/disallow fast-math optimizations).
 
-TODO:
-  - check at least some other langs:
-    * C/C++
-      + e.g. [The New C Standard: An Economic and Cultural Commentary](https://www.coding-guidelines.com/cbook/cbook1_1.pdf)
-      + e.g. [Rationale for International Standard Programming Languages - C](https://www.open-std.org/jtc1/sc22/wg14/www/C99RationaleV5.10.pdf)
-    * [Java](https://docs.oracle.com/javase/specs/jls/se24/html/),
-    * [C#](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/introduction)
-    * [Go](https://go.dev/ref/spec)
-    * [Swift](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/aboutthelanguagereference/)
-    * [Fortran](https://j3-fortran.org/doc/year/24/24-007.pdf)
-      + Fortran should have limited fast-math by default
-    * Ada ([RM](http://www.ada-auth.org/standards/22rm/html/RM-TOC.html) and [ARM](http://www.ada-auth.org/standards/22aarm/html/AA-TOC.html))
-    * [Julia](https://docs.julialang.org)
+Other languages have different views on fast-matho optimizations:
+
+ - C/C++ standard prohibits fast-math optimizations, but compilers provide support for these optimizations
+ - C# does not have support for fast-math optimizations
+ - At first Java required strict following of the IEEE 754 standard, but then some deviations were allowed to improme x87 performance
+ - Go prohibits most fast-math optimizations, but allows fusion of floating-point operations if this fusion does not discard explicit rounding
+ - Swift compiler provides support for fast-math optimizations
+ - Fortran explicitly permits deviations from IEEE 754 in favor of performance
 
 # Example
 
@@ -215,9 +210,7 @@ Meilisearch degradation did not reproduce on another machine, so is most likely 
 
 ## Nalgebra
 
-TODO:
-  - is `vec10000_dot_f32` the only large regression ? If so, please mention this.
-    Otherwise need to look at several largest regressions.
+`vec10000_dot_f32` is the most prominent regression, ~4 times, other benchmarks have not regressed more than 1.5 times.
 
 ### `vec10000_dot_f32`
 
