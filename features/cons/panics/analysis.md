@@ -440,6 +440,19 @@ Pattern similar to oxipng:
 ```
 
 The loop is completely missing from reference asm.
+It _seems_ that for some reason debug assertions get enabled in
+roaring-0.10.12 dependency:
+```
+pub fn from_vec_unchecked(vec: Vec<u16>) -> ArrayStore {
+    if cfg!(debug_assertions) {
+        vec.try_into().unwrap()
+    } else {
+        ArrayStore { vec }
+    }
+}
+```
+(this is called from `RoaringBitmap::deserialize_unchecked_from`
+which is caleld by `CboRoaringBitmapCodec::deserialize_from`).
 
 TODO: figure out what happened
 
