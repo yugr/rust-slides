@@ -29,14 +29,20 @@ and computer vision:
 
 Rust developers have [clearly rejected](https://github.com/rust-lang/rust/issues/21690#issuecomment-1589427278) global fast math flag due to safety concerns (e.g. no clear way for a third-party crate to allow/disallow fast-math optimizations).
 
-Other languages have different views on fast-matho optimizations:
+Other languages have different views on fast-math optimizations:
 
  - C/C++ standard prohibits fast-math optimizations, but compilers provide support for these optimizations
- - C# does not have support for fast-math optimizations
- - At first Java required strict following of the IEEE 754 standard, but then some deviations were allowed to improme x87 performance
+    - [C99](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1256.pdf) section 5.1.2.3 Example 5
+ - C# permits performing computations with higher precision than the result type of the operation (most likely for performance on x87 architecture)
+    - [C# specification](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/types#837-floating-point-types) section 8.3.7
+ - At first Java required strict following of the IEEE 754 standard, but then some deviations were allowed to improve x87 performance
+    - [Paper on the issue](https://arxiv.org/abs/cs/0701192) section 6
  - Go prohibits most fast-math optimizations, but allows fusion of floating-point operations if this fusion does not discard explicit rounding
+    - [Go specification](https://go.dev/ref/spec#Floating_point_operators)
  - Swift compiler provides support for fast-math optimizations
+    - [Godbolt example](https://godbolt.org/z/jqYfWoof5)
  - Fortran explicitly permits deviations from IEEE 754 in favor of performance
+    - [Fortran specification](https://j3-fortran.org/doc/year/24/24-007.pdf) section 17.5
 
 # Example
 
