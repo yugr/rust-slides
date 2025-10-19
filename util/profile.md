@@ -13,3 +13,4 @@ Then run
 $ rm -f perf.data* && perf record -F99 --call-graph fp cmd arg1 ...
 ```
 (omit `--call-graph fp` for flat profile).
+You can also try using `lbr`/`dwarf` for more precise (and slow) tracking.

@@ -102,7 +102,30 @@ Register toolchain with `rustup`:
 ```
 $ rustup toolchain link MY_TOOLCHAIN_NAME build/host/stage1
 ```
-and make it default:
+
+If needed, make it default via
 ```
 $ rustup default stage1
 ```
+
+# Dump rustc invocations
+
+Just add `--verbose` to cargo args.
+
+To reproduce `rustc` call locally will need
+```
+export CARGO_MANIFEST_DIR=/home/yugr/tasks/rust/bench/meilisearch-new-new/target/release/deps
+export CARGO_PKG_VERSION_MAJOR=1
+export CARGO_PKG_VERSION_MINOR=0
+export CARGO_PKG_VERSION_PATCH=0
+```
+
+# Patch dependency
+
+To force cargo to use local (patched) copy of some dependency
+(for current package and all it's deps too), add something like
+```
+[patch.crates-io]
+roaring = { path = "/home/yugr/tasks/rust/bench/mod/roaring-0.10.12" }
+```
+to Cargo.toml.
