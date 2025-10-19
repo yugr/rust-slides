@@ -4,7 +4,7 @@ Assignee: yugr
 
 Parent task: gh-36
 
-Effort: 27h
+Effort: 51h
 
 # Background
 
@@ -440,21 +440,28 @@ Pattern similar to oxipng:
 ```
 
 The loop is completely missing from reference asm.
-It _seems_ that for some reason debug assertions get enabled in
-roaring-0.10.12 dependency:
+The reason is this code in `RoaringBitmap::deserialize_from_impl`:
 ```
-pub fn from_vec_unchecked(vec: Vec<u16>) -> ArrayStore {
-    if cfg!(debug_assertions) {
-        vec.try_into().unwrap()
-    } else {
-        ArrayStore { vec }
-    }
-}
+values.iter_mut().for_each(|n| *n = u16::from_le(*n));
 ```
-(this is called from `RoaringBitmap::deserialize_unchecked_from`
-which is caleld by `CboRoaringBitmapCodec::deserialize_from`).
+which is a no-op on X86.
 
-TODO: figure out what happened
+This code is _not_ inlined by MIR inliner in reference
+(probably because it's potentially panicking or cost is slightly different)
+but later successfully handled by LLVM inliner.
+
+On the other hand it _is_ inlined by MIR inliner in force-panic-abort compilers
+which generates problematic LLVM IR which can't be handled by LLVM optimizer later.
+With `-Zinline-mir=no` in `.cargo/config.toml` or if this line is completely removed
+from meilisearch source code, performance is the same as reference.
+
+I was able to reproduce this issue with a simple reprocase with our baseline
+but not with Rust trunk so likely it has been fixed.
+
+So my conclusion is that this regression is spurious and should be ignored.
+
+TODO:
+  - check sort.rs
 
 #### Analysis of rustc benchmarks
 
@@ -513,7 +520,7 @@ zed_sizes.json rodata: +52.1%
 
 #### Analysis of meilisearch
 
-TODO
+Most likely same as (A).
 
 #### Analysis of rustc benchmarks
 

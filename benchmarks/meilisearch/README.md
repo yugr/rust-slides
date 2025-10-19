@@ -9,3 +9,11 @@ Built and tested with `rustc` version `rustc 1.85.1 (4eb161250 2025-03-15)` and 
 # Run
 
 Change folder to `meilisearch/crates/benchmarks` and execute `cargo bench` (approx 95m for building and running benchmarks on x86 12-core machine, most of the time are benchmarks themselves)
+
+# Bench
+
+When running benchmarks it's useful to specify
+```
+export MEILI_MAX_INDEXING_THREADS=1 RAYON_NUM_THREADS=1
+```
+Also useful to remove unnecessary queries in `BASE_CONF` and `confs` variables.
