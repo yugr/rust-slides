@@ -574,8 +574,12 @@ uv_sizes.json rodata: -7.3%
 zed_sizes.json rodata: -3.7%
 ```
 
+rodata degradation is caused by increase in `.eh_frameXXX` sections:
+any time a block of code is outlined, it requires new FDE
+in EH tables.
+
 TODO:
-  - investigate weird results (.text should have degraded, not .rodata)
+  - update .text after fixes in runner
 
 # MachineFunctionSplitter (C2)
 
