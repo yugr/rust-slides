@@ -4,7 +4,7 @@ Assignee: yugr
 
 Parent task: gh-36
 
-Effort: 51h
+Effort: 55h
 
 # Background
 
@@ -340,7 +340,7 @@ For (C) there 2 options:
 TODO:
   - compiler stats:
     * inliner improvements
-    * stack usage
+    * stack usage (`-Z emit-stack-sizes`)
   - recollect perf data after stabilizing measurements
 
 ### `panic-abort` (A)
@@ -421,7 +421,7 @@ $ export MEILI_MAX_INDEXING_THREADS=1 RAYON_NUM_THREADS=1
 ```
 to remove kernel mutex from perf stats.
 Also remove unnecessary confs and queries in
-crates/benchmarks/benches/sort_songs.rs and
+crates/benchmarks/benches/search_songs.rs and
 crates/benchmarks/benches/sort.rs.
 
 New code has a 1%->4% increase of
@@ -453,15 +453,13 @@ but later successfully handled by LLVM inliner.
 On the other hand it _is_ inlined by MIR inliner in force-panic-abort compilers
 which generates problematic LLVM IR which can't be handled by LLVM optimizer later.
 With `-Zinline-mir=no` in `.cargo/config.toml` or if this line is completely removed
-from meilisearch source code, performance is the same as reference.
+from meilisearch source code, performance of search_songs and sort benchmarks
+is the same as reference (or better).
 
 I was able to reproduce this issue with a simple reprocase with our baseline
 but not with Rust trunk so likely it has been fixed.
 
 So my conclusion is that this regression is spurious and should be ignored.
-
-TODO:
-  - check sort.rs
 
 #### Analysis of rustc benchmarks
 
