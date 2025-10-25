@@ -4,7 +4,7 @@ Assignee: yugr
 
 Parent task: gh-36
 
-Effort: 55h
+Effort: 65h
 
 # Background
 
@@ -631,5 +631,15 @@ uv_sizes.json rodata: -10.6%
 zed_sizes.json rodata: -11.6%
 ```
 
+Rodata increased is caused by `.eh_frameXXX`:
+extracted blocks are represented as functions and
+require extra FDE.
+
+There are unexpected significant regressions
+in `.rodata` (and `.text`) unrelated to `.eh_frame`.
+For some reason garbage collection removes much fewer
+functions and globals
+(disabling it via `-Clink-dead-code` causes difference to go away).
+
 TODO:
-  - investigate size degradations (expected no changes)
+  - investigate root cause for .text and .rodata degradations
