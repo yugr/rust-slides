@@ -1,0 +1,148 @@
+diff --git a/lld/ELF/MarkLive.cpp b/lld/ELF/MarkLive.cpp
+index b6c22884d..eb6ef6972 100644
+--- a/lld/ELF/MarkLive.cpp
++++ b/lld/ELF/MarkLive.cpp
+@@ -100,6 +100,7 @@ void MarkLive<ELFT>::resolveReloc(InputSectionBase &sec, RelTy &rel,
+   // If a symbol is referenced in a live section, it is used.
+   Symbol &sym = sec.file->getRelocTargetSym(rel);
+   sym.used = true;
++  Msg(ctx) << "Symbol marked as read: " << sym.getName() << "\n";
+ 
+   if (auto *d = dyn_cast<Defined>(&sym)) {
+     auto *relSec = dyn_cast_or_null<InputSectionBase>(d->section);
+@@ -119,8 +120,11 @@ void MarkLive<ELFT>::resolveReloc(InputSectionBase &sec, RelTy &rel,
+     // group/SHF_LINK_ORDER rules (b) if the associated text section should be
+     // discarded, marking the LSDA will unnecessarily retain the text section.
+     if (!(fromFDE && ((relSec->flags & (SHF_EXECINSTR | SHF_LINK_ORDER)) ||
+-                      relSec->nextInSectionGroup)))
++                      relSec->nextInSectionGroup))) {
++      Msg(ctx) << "Marking YYY section: " << relSec->name << "\n";
++      Msg(ctx) << fromFDE << " " << (relSec->flags & (SHF_EXECINSTR | SHF_LINK_ORDER)) << " " << (bool)relSec->nextInSectionGroup << "\n";
+       enqueue(relSec, offset);
++    }
+     return;
+   }
+ 
+@@ -128,8 +132,10 @@ void MarkLive<ELFT>::resolveReloc(InputSectionBase &sec, RelTy &rel,
+     if (!ss->isWeak())
+       cast<SharedFile>(ss->file)->isNeeded = true;
+ 
+-  for (InputSectionBase *sec : cNamedSections.lookup(sym.getName()))
++  for (InputSectionBase *sec : cNamedSections.lookup(sym.getName())) {
++    Msg(ctx) << "Marking section with symbol: " << sec->name << "\n";
+     enqueue(sec, 0);
++  }
+ }
+ 
+ // The .eh_frame section is an unfortunate special case.
+@@ -150,6 +156,7 @@ template <class ELFT>
+ template <class RelTy>
+ void MarkLive<ELFT>::scanEhFrameSection(EhInputSection &eh,
+                                         ArrayRef<RelTy> rels) {
++  Msg(ctx) << "scanEhFrameSection start: " << eh.name << "\n";
+   for (const EhSectionPiece &cie : eh.cies)
+     if (cie.firstRelocation != unsigned(-1))
+       resolveReloc(eh, rels[cie.firstRelocation], false);
+@@ -162,6 +169,7 @@ void MarkLive<ELFT>::scanEhFrameSection(EhInputSection &eh,
+          j < end2 && rels[j].r_offset < pieceEnd; ++j)
+       resolveReloc(eh, rels[j], true);
+   }
++  Msg(ctx) << "scanEhFrameSection end: " << eh.name << "\n";
+ }
+ 
+ // Some sections are used directly by the loader, so they should never be
+@@ -221,8 +229,10 @@ template <class ELFT> void MarkLive<ELFT>::run() {
+   // Preserve externally-visible symbols if the symbols defined by this
+   // file can interpose other ELF file's symbols at runtime.
+   for (Symbol *sym : ctx.symtab->getSymbols())
+-    if (sym->isExported && sym->partition == partition)
++    if (sym->isExported && sym->partition == partition) {
+       markSymbol(sym);
++      Msg(ctx) << "Marking exported symbol " << sym->getName() << "\n";
++    }
+ 
+   // If this isn't the main partition, that's all that we need to preserve.
+   if (partition != 1) {
+@@ -235,17 +245,21 @@ template <class ELFT> void MarkLive<ELFT>::run() {
+   markSymbol(ctx.symtab->find(ctx.arg.fini));
+   for (StringRef s : ctx.arg.undefined)
+     markSymbol(ctx.symtab->find(s));
+-  for (StringRef s : ctx.script->referencedSymbols)
++  for (StringRef s : ctx.script->referencedSymbols) {
+     markSymbol(ctx.symtab->find(s));
++    Msg(ctx) << "Marking ref-ed symbol " << s << "\n";
++  }
+   for (auto [symName, _] : ctx.symtab->cmseSymMap) {
+     markSymbol(ctx.symtab->cmseSymMap[symName].sym);
+     markSymbol(ctx.symtab->cmseSymMap[symName].acleSeSym);
++    Msg(ctx) << "Marking cmse symbol " << symName << "\n";
+   }
+ 
+   // Mark .eh_frame sections as live because there are usually no relocations
+   // that point to .eh_frames. Otherwise, the garbage collector would drop
+   // all of them. We also want to preserve personality routines and LSDA
+   // referenced by .eh_frame sections, so we scan them for that here.
++  Msg(ctx) << "Start scanning eh sections:\n";
+   for (EhInputSection *eh : ctx.ehInputSections) {
+     const RelsOrRelas<ELFT> rels =
+         eh->template relsOrRelas<ELFT>(/*supportsCrel=*/false);
+@@ -254,8 +268,10 @@ template <class ELFT> void MarkLive<ELFT>::run() {
+     else if (rels.relas.size())
+       scanEhFrameSection(*eh, rels.relas);
+   }
++  Msg(ctx) << "End scanning eh sections\n";
+   for (InputSectionBase *sec : ctx.inputSections) {
+     if (sec->flags & SHF_GNU_RETAIN) {
++      Msg(ctx) << "Marking retained section: " << sec->name << "\n";
+       enqueue(sec, 0);
+       continue;
+     }
+@@ -286,6 +302,7 @@ template <class ELFT> void MarkLive<ELFT>::run() {
+     // - Groups members are retained or discarded as a unit.
+     if (!(sec->flags & SHF_ALLOC)) {
+       if (!isStaticRelSecType(sec->type) && !sec->nextInSectionGroup) {
++        Msg(ctx) << "Marking XXX section: " << sec->name << "\n";
+         sec->markLive();
+         for (InputSection *isec : sec->dependentSections)
+           isec->markLive();
+@@ -295,6 +312,7 @@ template <class ELFT> void MarkLive<ELFT>::run() {
+     // Preserve special sections and those which are specified in linker
+     // script KEEP command.
+     if (isReserved(sec) || ctx.script->shouldKeep(sec)) {
++      Msg(ctx) << "Marking shouldKeep section: " << sec->name << "\n";
+       enqueue(sec, 0);
+     } else if ((!ctx.arg.zStartStopGC || sec->name.starts_with("__libc_")) &&
+                isValidCIdentifier(sec->name)) {
+@@ -311,9 +329,11 @@ template <class ELFT> void MarkLive<ELFT>::run() {
+ 
+ template <class ELFT> void MarkLive<ELFT>::mark() {
+   // Mark all reachable sections.
++  Msg(ctx) << "mark()\n";
+   while (!queue.empty()) {
+     InputSectionBase &sec = *queue.pop_back_val();
+ 
++    Msg(ctx) << "mark(): relocs in " << sec.name << "\n";
+     const RelsOrRelas<ELFT> rels = sec.template relsOrRelas<ELFT>();
+     for (const typename ELFT::Rel &rel : rels.rels)
+       resolveReloc(sec, rel, false);
+@@ -322,12 +342,18 @@ template <class ELFT> void MarkLive<ELFT>::mark() {
+     for (const typename ELFT::Crel &rel : rels.crels)
+       resolveReloc(sec, rel, false);
+ 
+-    for (InputSectionBase *isec : sec.dependentSections)
++    for (InputSectionBase *isec : sec.dependentSections) {
++      Msg(ctx) << "Marking dependent section " << isec->name << " based on " << sec.name << "\n";
+       enqueue(isec, 0);
++    }
+ 
+     // Mark the next group member.
+-    if (sec.nextInSectionGroup)
++    if (sec.nextInSectionGroup) {
++      Msg(ctx) << "Marking next-in-group section " << sec.nextInSectionGroup->name << " based on " << sec.name << "\n";
+       enqueue(sec.nextInSectionGroup, 0);
++    }
++
++    Msg(ctx) << "mark() end\n";
+   }
+ }
+ 

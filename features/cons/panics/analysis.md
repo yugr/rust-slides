@@ -642,6 +642,4 @@ in `.rodata` (and `.text`) unrelated to `.eh_frame`.
 For some reason garbage collection removes much fewer
 functions and globals
 (disabling it via `-Clink-dead-code` causes difference to go away).
-
-TODO:
-  - investigate root cause for .text and .rodata degradations
+Detailed analysis is [here](splitter-regression).
