@@ -4,7 +4,7 @@ Assignee: yugr
 
 Parent task: gh-36
 
-Effort: 65h
+Effort: 70h
 
 # Background
 
@@ -334,6 +334,8 @@ For (C) there 2 options:
     * off by default, enabled via `-enable-split-machine-functions -mfs-split-ehcode`
     * outlines only landing pads (not explicit panics, needs PGO for them)
   - (there is also MachineOutliner but it outlines repeated, not cold, code)
+  - (there is also `BasicBlockSections` pass which can be enabled with `-basic-block-sections`
+    and also outlines EH blocks but it seems to be equivalent to Splitter)
 
 ## Measurements
 
