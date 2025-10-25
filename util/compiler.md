@@ -112,7 +112,8 @@ $ rustup default stage1
 
 Just add `--verbose` to cargo args.
 
-To reproduce `rustc` call locally will need
+To reproduce `rustc` call locally may need some env. variables
+e.g. for meilisearch I had to
 ```
 export CARGO_MANIFEST_DIR=/home/yugr/tasks/rust/bench/meilisearch-new-new/target/release/deps
 export CARGO_PKG_VERSION_MAJOR=1
@@ -129,3 +130,10 @@ To force cargo to use local (patched) copy of some dependency
 roaring = { path = "/home/yugr/tasks/rust/bench/mod/roaring-0.10.12" }
 ```
 to Cargo.toml.
+
+# Debug logs
+
+To print compiler debug log run it with
+```
+RUSTC_LOG=debug
+```
