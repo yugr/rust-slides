@@ -7,8 +7,9 @@ Failing to remove dead code is due a mix of several factors:
     * see proof below
   - in some cases outlined blocks may contain references to normal blocks
     (e.g. some code is shared by normal and exceptional flow)
-    * TODO: example of this
   - this will cause original code to be marked as live
+
+Reported upstream in [issue #165139](https://github.com/llvm/llvm-project/issues/165139).
 
 # Real example
 
