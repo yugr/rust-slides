@@ -5,4 +5,5 @@
 set -eu
 set -x
 
-sudo systemctl stop apt-daily* dpkg* unattended-upgrades* update-notifier* fwupd* snapd* irqbalance* cups* {systemd-oomd,udisks2,polkit}.service
+UNITS=$(systemctl list-units --all --plain | awk '/^(apt-daily|dpkg|unattended-upgrades|update-notifier|cron|anacron|avahi|fwupd|snapd|irqbalance|cups|systemd-oomd|udisks2)/{print $1}')
+sudo systemctl mask $UNITS
