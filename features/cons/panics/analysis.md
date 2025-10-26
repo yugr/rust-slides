@@ -637,9 +637,8 @@ Rodata increased is caused by `.eh_frameXXX`:
 extracted blocks are represented as functions and
 require extra FDE.
 
-There are unexpected significant regressions
-in `.rodata` (and `.text`) unrelated to `.eh_frame`.
-For some reason garbage collection removes much fewer
-functions and globals
+There are significant regressions in `.rodata` (and `.text`)
+unrelated to `.eh_frame` because linker garbage collector
+(`-Wl,--gc-sections`) removes much fewer functions and globals
 (disabling it via `-Clink-dead-code` causes difference to go away).
 Detailed analysis is [here](splitter-regression).
