@@ -38,6 +38,13 @@ We can see why _ZN5tokio7process3imp17GlobalOrphanQueue12reap_orphans17hfc391815
   * `.text._ZN5tokio7runtime6driver6Driver12park_timeout17haecd5973a5be95c5E`
   * `_ZN5tokio7process3imp17GlobalOrphanQueue12reap_orphans17hfc391815ffd285f1E`
 
+Problematic code in `.text.split._ZN5tokio7runtime7builder7Builder5build17h3367e20f4190c060E`:
+```
+Problem is in XXX:
+ 7e4:   e9 00 00 00 00          jmpq   7e9 <_ZN5tokio7runtime7builder7Builder5build17h3367e20f4190c060E.cold+0x7e9>
+                        7e5: R_X86_64_PLT32     .text._ZN5tokio7runtime7builder7Builder5build17h3367e20f4190c060E+0x16da
+```
+
 # LSDAs example
 
 ```
