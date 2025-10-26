@@ -134,8 +134,10 @@ def maybe_collect_binary_sizes(f):
         # See -hotcoldsplit-cold-section-name default
         if name.startswith(".text") or name == "__llvm_cold":
             target = "text"
-        elif name in (".rodata", ".gcc_except_table") or name.startswith(".eh_frame"):
+        elif name.startswith(".rodata"):
             target = "rodata"
+        elif name.startswith(".eh_frame") or name == ".gcc_except_table":
+            target = "eh"
         else:
             continue
         sizes[target] = sizes.get(target, 0) + s["Size"]
