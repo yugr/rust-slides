@@ -30,6 +30,8 @@ This is the plan of the talk.
   * A lot of work done by Nethercote
 - Analysis of benchmarks regressions/improvements
   * Maybe next time...
+- Code size comparison
+  * See [min-sized-rust](https://github.com/johnthagen/min-sized-rust) project
 
 # Is it fair to compare with C++ ?
 

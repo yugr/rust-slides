@@ -94,6 +94,8 @@ For each performance feature we neeed to provide
         - actually we failed to understand how to collect PMUs in benchmarks (gh-25)...
       + compiler stats
         - depend on feature
+        - LLVM stats may be misleading because some opts (e.g. inline) are done in frontend
+          (at MIR level)
         - e.g. SLP/loop autovec for bounds checking feature
         - e.g. NoAlias returns from AA manager for alias feature
         - e.g. CSE/GVN/LICM for alias feature
@@ -109,9 +111,9 @@ Mandatory:
   - (DONE) cons/arithmetic-checks (gh-28)
   - (DONE) cons/bounds-checks (gh-20)
   - (DONE) cons/cgu (gh-30)
-  - (WIP) cons/fastmath (gh-34)
+  - (DONE) cons/fastmath (gh-34)
   - (DONE) cons/init (gh-35)
-  - (WIP) cons/panics (gh-36)
+  - (DONE) cons/panics (gh-36)
   - (DONE) pros/alias (gh-39)
   - cons/stdlib and pros/stdlib (gh-38)
     * Classify stdlib asserts (anything besides Unicode ?)

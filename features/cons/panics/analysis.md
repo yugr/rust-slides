@@ -4,7 +4,7 @@ Assignee: yugr
 
 Parent task: gh-36
 
-Effort: 70h
+Effort: 76h
 
 # Background
 
@@ -82,11 +82,9 @@ program still will contains significant amount of code to emit
 a user-friendly error message for panic.
 To achieve that we can recompile stdlib with
 `-Zbuild-std-features=panic_immediate_abort`
-(see example [here](https://github.com/microsoft/edit/blob/7338c3cbbc99c1366d556d631402cdd853d989bd/Cargo.toml),
+(see example [here](https://github.com/microsoft/edit/blob/7338c3cbbc99c1366d556d631402cdd853d989bd/Cargo.toml)
+and [PR that added panic_immediate_abort](https://github.com/rust-lang/rust/pull/146317),
 maybe `-Zbuild-std` is needed too).
-
-TODO:
-  - check https://github.com/rust-lang/rust/pull/146317
 
 In some rare cases exceptions my make code faster by removing error handling code
 (see [README](README.md#advantages-of-panics) for details).
@@ -340,10 +338,7 @@ For (C) there 2 options:
 ## Measurements
 
 TODO:
-  - compiler stats:
-    * inliner improvements
-    * stack usage (`-Z emit-stack-sizes`)
-  - recollect perf data after stabilizing measurements
+  - (LOW) stack usage (`-Z emit-stack-sizes`)
 
 ### `panic-abort` (A)
 
@@ -468,6 +463,42 @@ So my conclusion is that this regression is spurious and should be ignored.
 In general benchmarks are on par but there is significant regression
 in brotli-decompress (60%). Not reproduced on another machine so likely code alignment.
 
+#### Static metrics
+
+```
+$ ./x setup
+$ ./x build --stage 1 compiler
+$ RUSTFLAGS_NOT_BOOTSTRAP='-Cllvm-args=-debug-only=inline,licm,early-cse,gvn,loop-vectorize,SLP' ./x build -j1 --stage 2 compiler |& tee build.log
+
+# Baseline
+$ grep -c 'Size after inlining' build.log
+2533754
+$ grep -c 'LV: Vectorizing' build.log
+549
+$ grep -c 'LICM \(hoist\|sink\)ing' build.log
+2248947
+$ grep -c 'GVN removed' build.log
+798566
+$ grep -c 'EarlyCSE CSE' build.log
+2380605
+$ grep -c 'SLP: vectorized' build.log
+25065
+
+# Forced aborts
+$ grep -c 'Size after inlining' build.log
+2261611 (-11%)
+$ grep -c 'LV: Vectorizing' build.log
+547 (0%)
+$ grep -c 'LICM \(hoist\|sink\)ing' build.log
+2239342 (-0.5%)
+$ grep -c 'GVN removed' build.log
+659294 (-17.5%)
+$ grep -c 'EarlyCSE CSE' build.log
+2303586 (-2.2%)
+$ grep -c 'SLP: vectorized' build.log
+24594 (-2%)
+```
+
 ### `panic-immediate-abort` (B)
 
 Compare via
@@ -525,6 +556,28 @@ Most likely same as (A).
 #### Analysis of rustc benchmarks
 
 Same as (A).
+
+#### Static metrics
+
+```
+$ ./x setup
+$ ./x build --stage 1 compiler
+$ RUSTFLAGS_NOT_BOOTSTRAP='-Cllvm-args=-debug-only=inline,licm,early-cse,gvn,loop-vectorize,SLP' ./x build -j1 --stage 2 compiler |& tee build.log
+
+# Forced aborts
+$ grep -c 'Size after inlining' build.log
+2350328 (-7%)
+$ grep -c 'LV: Vectorizing' build.log
+558 (+1.6%)
+$ grep -c 'LICM \(hoist\|sink\)ing' build.log
+2485934 (+10%)
+$ grep -c 'GVN removed' build.log
+687106 (-14%)
+$ grep -c 'EarlyCSE CSE' build.log
+2400785 (+1%)
+$ grep -c 'SLP: vectorized' build.log
+24714 (-1.4%)
+```
 
 # HotColdSplitting (C1)
 
