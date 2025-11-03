@@ -4,7 +4,7 @@ Assignee: yugr
 
 Parent task: gh-36
 
-Effort: 76h
+Effort: 78h
 
 # Background
 
@@ -499,6 +499,37 @@ $ grep -c 'SLP: vectorized' build.log
 24594 (-2%)
 ```
 
+With additional `-Zmir-opt-level=0`:
+```
+# Baseline
+$ grep -c 'Size after inlining' build.log
+4187358
+$ grep -c 'LV: Vectorizing' build.log
+509
+$ grep -c 'LICM \(hoist\|sink\)ing' build.log
+2177009
+$ grep -c 'GVN removed' build.log
+782200
+$ grep -c 'EarlyCSE CSE' build.log
+2149001
+$ grep -c 'SLP: vectorized' build.log
+16987
+
+# Forced aborts
+$ grep -c 'Size after inlining' build.log
+3872367 (-7.5%)
+$ grep -c 'LV: Vectorizing' build.log
+511 (0%)
+$ grep -c 'LICM \(hoist\|sink\)ing' build.log
+2201669 (+1%)
+$ grep -c 'GVN removed' build.log
+652901 (-16.5%)
+$ grep -c 'EarlyCSE CSE' build.log
+1959088 (-9%)
+$ grep -c 'SLP: vectorized' build.log
+16857 (0%)
+```
+
 ### `panic-immediate-abort` (B)
 
 Compare via
@@ -577,6 +608,23 @@ $ grep -c 'EarlyCSE CSE' build.log
 2400785 (+1%)
 $ grep -c 'SLP: vectorized' build.log
 24714 (-1.4%)
+```
+
+With additional `-Zmir-opt-level=0`:
+```
+# Forced aborts
+$ grep -c 'Size after inlining' build.log
+4153180
+$ grep -c 'LV: Vectorizing' build.log
+536
+$ grep -c 'LICM \(hoist\|sink\)ing' build.log
+2398909
+$ grep -c 'GVN removed' build.log
+685367
+$ grep -c 'EarlyCSE CSE' build.log
+2101288
+$ grep -c 'SLP: vectorized' build.log
+16827
 ```
 
 # HotColdSplitting (C1)

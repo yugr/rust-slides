@@ -95,8 +95,8 @@ For each performance feature we neeed to provide
       + compiler stats
         - depend on feature
         - LLVM stats may be misleading because some opts (e.g. inline) are done in frontend
-          (at MIR level)
-          * TODO: re-collect with `-Zmir-opt-level=0` ?
+          (at MIR level). But recollecting with `-Zmir-opt-level=0`
+          e.g. in panic feature didn't improve anything.
         - e.g. SLP/loop autovec for bounds checking feature
         - e.g. NoAlias returns from AA manager for alias feature
         - e.g. CSE/GVN/LICM for alias feature
