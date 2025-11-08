@@ -89,6 +89,7 @@ For each performance feature we neeed to provide
       + note that simply using `RUSTFLAGS` isn't great because they override project settings in `Cargo.toml`
     * collect perf measurements for benchmarks:
       + runtime
+        * large unexpected changes need to be investigated
       + code size (if applicable)
       + PMU counters (inst count, I$/D$/branch misses)
         - actually we failed to understand how to collect PMUs in benchmarks (gh-25)...
@@ -117,9 +118,10 @@ Mandatory:
   - (DONE) cons/panics (gh-36)
   - (DONE) pros/alias (gh-39)
   - cons/stdlib and pros/stdlib (gh-38)
-    * Classify stdlib asserts (anything besides Unicode ?)
+    * classify stdlib asserts (anything besides Unicode ?)
+    * benefits in std containers (multiple elements in node in TreeMap, open-addressing in HashMap)
   - (WIP) pros/abi (gh-31)
-  - pros/copy-elision (gh-32)
+  - (WIP) pros/copy-elision (gh-32)
   - cons/placement-new (gh-37)
     * This could be considered together w/ copy elision
       (placement-new is basically a means for programmer
