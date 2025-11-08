@@ -4,37 +4,99 @@ Assignee: yugr
 
 Parent task: gh-32
 
-Effort: 0h
+Effort: 2h
 
 TODO: fix all TODOs that are mentioned in feature's README
 
 # Background
 
+We call this feature "copy elision" in parallel to C++
+but it's in fact a "move/copy elision" because
+moves are much more prevalent in Rust and more
+amenable to optimization.
+
+It's one example where Rust's default choice (assignments move, not copy)
+improves optimizations: move is just a `memcpy` underneath and
+is much easier to reason about in LLVM and MIR passes (to remove it).
+Also it allows compiler to not call destructor for moved object
+(unlike in C++, where moving keeps source object in valid state and
+requires destructor).
+
+This feature enables compiler to optimize assignments, parameter passing
+and returning values much more aggressively, both in MIR and LLVM transforms.
+Optimization is of course best-effort (i.e. not guaranteed).
+
+Elision is also applied to copies with some caveats:
+  - there is a special `Copy` marker trait which says that object
+    should be copied instead of moved but copy is shallow
+    (i.e. just a `memcpy`); it behaves the same way for optimizations,
+    only does not destruct the source of assignment
+  - non-trivial copies (called "clones" in Rust) need to be done explicitly
+    via `.clone()` method; such copies behave like C++ ones: they are
+    _not_ optimized at MIR level but can be optimized by LLVM
+
+C++ has a bunch of similar rules: RVO, NRVO and copy elision but
+they are not mandatory and only performed with best effort.
+E.g. copy elisions are not performed at all because
+C++ compiles don't do high-level opts (there is Clang IR project
+but it's future is unclear due to large compile-time overheads).
+
+Most other languages (Java, Julia, Python) do not have copy elision
+because there is no value semantics for non-primitive types.
+
 TODO:
-  - why is this feature needed ?
-    * example errors which are caught by this check
-    * enabled by default and why
-    * situation in C/C++
-      + e.g. [The New C Standard: An Economic and Cultural Commentary](https://www.coding-guidelines.com/cbook/cbook1_1.pdf)
-      + e.g. [Rationale for International Standard Programming Languages - C](https://www.open-std.org/jtc1/sc22/wg14/www/C99RationaleV5.10.pdf)
-    * situation in other langs:
-      + [Java](https://docs.oracle.com/javase/specs/jls/se24/html/),
-      + [C#](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/introduction)
-      + [Go](https://go.dev/ref/spec)
-      + [Swift](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/aboutthelanguagereference/)
-      + [Fortran](https://j3-fortran.org/doc/year/24/24-007.pdf)
-      + Ada ([RM](http://www.ada-auth.org/standards/22rm/html/RM-TOC.html) and [ARM](http://www.ada-auth.org/standards/22aarm/html/AA-TOC.html))
-      + [Julia](https://docs.julialang.org)
-  - types of check (e.g. compiler/stdlib parts)
+  - situation in Swift and C#
 
 # Examples
 
-TODO:
-  - clear example (Rust microbenchmark, asm code)
+Here is a simple example where Rust clearly wins.
+
+This C++ code
+```
+#include <utility>
+
+class A {
+public:
+  A(A &&);
+};
+
+A foo(A a0) {
+  A a1(std::move(a0));
+  A a2(std::move(a1));
+  A a3(std::move(a2));
+  A a4(std::move(a3));
+  A a5(std::move(a4));
+  return a5;
+}
+```
+compiles] into 5 function calls to copy constructors
+([tested](https://godbolt.org/z/bG1K6e3ns) on GCC 15.2 and Clang 21).
+
+An equivalent Rust code
+```
+pub struct A {
+    data: [u8; 1024],
+}
+
+pub fn foo(a0: A) -> A {
+    let a1 = a0;
+    let a2 = a1;
+    let a3 = a2;
+    let a4 = a3;
+    let a5 = a4;
+    a5
+}
+```
+has just one `memcpy`.
+
+It could be argued that code is not _quite_ identical because
+definition of `A::A(A &&)` is not available but consider that 
+it's simply not inlined by inliner due to some threshold.
 
 # Optimizations
 
 TODO:
+  - info whether MIR opts can optimize it (moves, copies and clones)
   - info whether LLVM can potentially optimize it (and with what limitations)
 
 # Workarounds
