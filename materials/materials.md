@@ -2568,6 +2568,8 @@ MIRIFLAGS="-Zmiri-disable-isolation -Zmiri-measureme=crox" cargo +nightly miri r
   * Status: backlog
 - Announcing fast_assert: https://www.reddit.com/r/rust/comments/1mao817/announcing_fast_assert_its_assert_but_faster/
   * Status: backlog
+- Rewrite, optimize, repeat - Luca Palmieri: https://www.youtube.com/watch?v=XklFGy3aUX4
+  * Status: backlog
 
 # Panics
 
