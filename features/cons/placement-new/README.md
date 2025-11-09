@@ -4,12 +4,13 @@ This is a particular pain when keeping large structs in containers (`Box`, `Vec`
 [BTreeMap](https://github.com/rust-lang/rust/issues/81444), etc.).
 For example something like
 ```
-pub fn with_new() -> Box<Pages> {
+pub fn with_new() -> Box<LargeStruct> {
     Box::new(LargeStruct { ... })
 }
 ```
 would first create large struct on stack (potentiall crashing the app)
-and then `memcpy` it to heap buffer.
+and then `memcpy` it to heap buffer (may need more complicated example
+depending on compiler version).
 
 This effectively means that one
 > cannot create a struct that is bigger than the stack allows and

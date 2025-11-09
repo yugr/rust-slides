@@ -64,10 +64,9 @@ pub fn cpy(a: A) {
 because situation w/ `memcpy`'s has been significantly improved.
 
 Copies (`clone`'s) are present in high-level IR (MIR)
-and also can be optimized.
+and also can be optimized but currently aren't.
 
-TODO:
-  - is this done ?
+TODO: is this done ?
 
 # Problems
 
@@ -110,9 +109,6 @@ Enable additional MIR opts (does not help with case above though):
   - (may need to prepend `-Zunsound-mir-opts`)
 
 (does not help in all cases).
-
-TODO:
-  - nrvo.rs MIR transform
 
 # Examples
 

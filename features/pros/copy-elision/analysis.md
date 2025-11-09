@@ -4,7 +4,7 @@ Assignee: yugr
 
 Parent task: gh-32
 
-Effort: 2h
+Effort: 4h
 
 TODO: fix all TODOs that are mentioned in feature's README
 
@@ -95,15 +95,45 @@ it's simply not inlined by inliner due to some threshold.
 
 # Optimizations
 
-TODO:
-  - info whether MIR opts can optimize it (moves, copies and clones)
-  - info whether LLVM can potentially optimize it (and with what limitations)
+The general understanding is that LLVM alone is incapable of
+optimizing all cases (see comments in dest\_prop.rs) so
+MIR has several passes to deal with copy elision:
+  - CopyProp (copy\_prop.rs)
+  - DeadStoreElimination (dead\_store\_elimination.rs)
+  - DestinationPropagation (dest\_prop.rs)
+  - RenameReturnPlace (nrvo.rs)
+
+It handles moves and copies.
+Tracking issue for MIR copy elision is
+[#32966](https://github.com/rust-lang/rust/issues/32966).
+
+TODO: are clones handled ?
+
+For cases where MIR fails, LLVM has a dedicated pass to optimize `memcpy`
+(and other memory intrinsics): MemCpyOptPass. It performs, among other things,
+copy propagation over `memcpy`'s. Also DSEPass can remove dead `memcpy`'s.
 
 # Workarounds
 
-TODO:
-  - info on how developer can work around it and with how much effort/ugliness (unsafe, wrapping operations, reslicing, etc.)
-    * pay special attention to cases which can not be optimized at all
+C++ has several workarounds for lack of copy elision e.g.
+  - placement new
+  - perfect forwarding (e.g. `emplace_back`)
+
+but Rust does not have similar language features so
+(currently) developers have to rely solely on compiler.
+Simple cases like
+```
+vec.push(LargeStruct { ... });
+Box::new(LargeStruct { ... });
+```
+are already optimized and some containers provide unsafe APIs
+for `emplace_back`-like functionality (e.g. `Box::new_uninit` or
+`Vec::split_at_spare_mut`).
+
+Another problem is that optimizations happen only in optimized version
+so debug version of program will segfault due to stack overflow.
+
+More details on placement-new are available [here](../../cons/placement-new/README.md).
 
 # Suggested reading
 
