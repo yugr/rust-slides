@@ -1923,6 +1923,9 @@ Nethercote is top industry expert, need to pay close attention to his posts
     + Use protected visibility to speedup startup
     + Faster hardware feature checking
   * More materials: added visibility section
+- [How to speed up the Rust compiler in December 2025](https://nnethercote.github.io/2025/12/05/how-to-speed-up-the-rust-compiler-in-december-2025.html)
+  * Assignee: yugr
+  * Status: backlog
 
 # Visibility
 
