@@ -1080,6 +1080,12 @@ pub fn foo(p: Box<S>) {
     + C++-like guaranteed (unnamed) RVO (i.e. elide copies in function returns)
     + `new_with(|| MyStruct { ... })` methods in containers for inplace construction
   * RFC still not accepted but overall positive
+- Redundant copy when move a variable: https://internals.rust-lang.org/t/redundant-copy-when-move-a-variable/20894
+  * Status: backlog
+- Sad Truth About C++ Copy Elision: https://wolchok.org/posts/sad-truth-about-cxx-copy-elision/
+  * Status: backlog
+  * More materials:
+    + [Reddit](https://news.ycombinator.com/item?id=26678957)
 
 # Iterators
 
