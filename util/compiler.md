@@ -137,3 +137,11 @@ To print compiler debug log run it with
 ```
 RUSTC_LOG=debug
 ```
+
+Optimized MIR can be dumped with `--emit mir`
+(add `-Zmir-opt-level=0` for unoptimized).
+To dump MIR after each transform (to `mir_dump/`), run with `-Zdump-mir=FUNC_NAME`.
+Individual transforms can be disabled via `-Zmir-enable-passes=-PASS_NAME_1,-PASS_NAME_2`.
+
+To dump _optimized_ LLVM IR use `--emit llvm-ir`.
+To print intermediate IRs use `-Cllvm-args='-print-after-all`.
