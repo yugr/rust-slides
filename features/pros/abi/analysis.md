@@ -133,7 +133,7 @@ foo(std::variant<double, int>):
 
 C++ `std::variant` is passed in registers in this case.
 
-## `string` vs `std::string`
+## `String` vs `std::string`
 
 [Godbolt](https://godbolt.org/z/3W1r9vjb9)
 Both on stack
