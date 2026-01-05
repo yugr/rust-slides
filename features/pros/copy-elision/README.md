@@ -66,8 +66,6 @@ because situation w/ `memcpy`'s has been significantly improved.
 Copies (`clone`'s) are present in high-level IR (MIR)
 and also can be optimized but currently aren't.
 
-TODO: is this done ?
-
 # Problems
 
 Rust does not always perform move/copy elision.
@@ -116,8 +114,12 @@ Enable additional MIR opts (does not help with case above though):
 - [Example 2](https://www.reddit.com/r/rust/comments/px72r1/comment/heqmrjh/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button)
 - [Cost of copies in large C++ codebase](https://groups.google.com/a/chromium.org/g/chromium-dev/c/EUqoIz2iFU4/m/kPZ5ZK0K3gEJ)
 - [#116541](https://github.com/rust-lang/rust/issues/116541)
-
-# TODO
-
-- Read comments about problems with copy elision in `dest_prop.rs` and `nrvo.rs`
-- Why Rust generates `memcpy` in simple example above ?
+  * optimization is done not by Rust (so `-Zmir-enable-passes=-DestinationPropagation,-RenameReturnPlace,-CopyProp`
+    indeed do not help) but by LLVM InstCombine which eliminates dead copy
+  * in latest release (1.92) code is optimized (by LLVM) if I remove one level
+    of copying (Outer -> LargeStruct) and `d4` or just remove all `di` fields
+    but keeps failing otherwise
+  * just inlining all functions into main does not matter in 1.92
+    (the issue remains until I remove `d2`-`d4` fields)
+  * unable to debug further because test fails on nightly
+  * looks like an issue with some threshold in InstCombineLoadStoreAlloca.cpp

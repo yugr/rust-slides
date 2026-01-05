@@ -4,9 +4,7 @@ Assignee: yugr
 
 Parent task: gh-32
 
-Effort: 4h
-
-TODO: fix all TODOs that are mentioned in feature's README
+Effort: 15h
 
 # Background
 
@@ -16,8 +14,9 @@ moves are much more prevalent in Rust and more
 amenable to optimization.
 
 It's one example where Rust's default choice (assignments move, not copy)
-improves optimizations: move is just a `memcpy` underneath and
-is much easier to reason about in LLVM and MIR passes (to remove it).
+improves optimizations: move is just a `memcpy` underneath
+(even move of array of objects) and is much easier to reason about in LLVM
+and MIR passes (to remove it).
 Also it allows compiler to not call destructor for moved object
 (unlike in C++, where moving keeps source object in valid state and
 requires destructor).
@@ -91,7 +90,8 @@ has just one `memcpy`.
 
 It could be argued that code is not _quite_ identical because
 definition of `A::A(A &&)` is not available but consider that 
-it's simply not inlined by inliner due to some threshold.
+it's simply not inlined by inliner due to some threshold
+(or resides in another module).
 
 # Optimizations
 
@@ -102,16 +102,50 @@ MIR has several passes to deal with copy elision:
   - DeadStoreElimination (dead\_store\_elimination.rs)
   - DestinationPropagation (dest\_prop.rs)
   - RenameReturnPlace (nrvo.rs)
+    * not in latest, likely replaced with DestinationPropagation
 
-It handles moves and copies.
+It handles moves and copies (and `clone`'s).
 Tracking issue for MIR copy elision is
 [#32966](https://github.com/rust-lang/rust/issues/32966).
 
-TODO: are clones handled ?
-
-For cases where MIR fails, LLVM has a dedicated pass to optimize `memcpy`
+For cases where MIR fails (e.g. [#116541](https://github.com/rust-lang/rust/issues/116541)),
+LLVM has a dedicated pass to optimize `memcpy`
 (and other memory intrinsics): MemCpyOptPass. It performs, among other things,
 copy propagation over `memcpy`'s. Also DSEPass can remove dead `memcpy`'s.
+
+The main limitation for MIR opts seems to be lack of tracking across "projections":
+```
+//! There are a number of ways in which this pass could be improved in the future:
+...
+//! * Allow merging locals into places with projections, eg `_5` into `_6.foo`.
+```
+(from dest\_prop.rs). E.g. in this case
+```
+const SIZE: usize = 1024 * 1024 * 1024;
+
+pub struct LargeStruct {
+    huge: [u8; SIZE],
+}
+
+pub fn foo() -> Box<LargeStruct> {
+    let a0 = LargeStruct { huge: [0; SIZE] };
+    let a1 = a0;
+    let a2 = a1;
+    Box::new(a2)
+}
+```
+all `ai`'s are eliminated but copies to `LargeStruct` and `Box` are not.
+
+Also if address of variable is taken it's copy isn't elided by Rust:
+```
+pub fn foo() -> LargeStruct {
+    let a0 = LargeStruct { huge: [0; SIZE] };
+    let a1 = a0;
+    std::hint::black_box(&a1);
+    let a2 = a1;
+    a2
+}
+```
 
 # Workarounds
 
@@ -143,26 +177,43 @@ TODO:
 
 # Performance impact
 
-## Prevalence
+Unfortunately it's not clear how to measure prevalence/benefit of this feature or
+compare it against C++.
 
-TODO:
-  - is this check is a common case in practice ?
-    * may need to write analysis passes to scan real Rust code (libs, big projects) for occurences
+We can only suspect that redundant copies have high costs with some
+[anecdotal evidence](https://groups.google.com/a/chromium.org/g/chromium-dev/c/EUqoIz2iFU4/m/kPZ5ZK0K3gEJ)
+and the fact that full (i.e. non-mandatory) copy elision optimization does not exist in any production compiler
+See e.g. how it's limited in [Visual Studio](https://devblogs.microsoft.com/cppblog/improving-copy-and-move-elision/).
+Also in this simple example
+```
+#include <vector>
+#include <optional>
 
-## Disabling the check
+struct Big {
+  long data[1 << 20];
+};
 
-TODO:
-  - determine how to enable/disable feature in compiler/stdlib
-    * there may be flags (e.g. for interger overflows) but sometimes may need patch code (e.g. for bounds checks)
-      + patch for each feature needs to be implemented in separate branch (in private compiler repo)
-      + compiler modifications need to be kept in private compiler repo `yugr/rust-private`
-    * make sure that found solution works on real examples
-    * note that simply using `RUSTFLAGS` isn't great because they override project settings in `Cargo.toml`
+std::optional<Big> foo(std::vector<Big> &v) {
+  auto ans = v.back();
+  v.pop_back();
+  return ans;
+}
+```
+GCC generates two `memcpy`'s whereas equivalent Rust code
+```
+pub struct Big {
+    pub data: [usize; 1 << 20],
+}
 
-## Measurements
+pub fn foo(v: &mut Vec<Big>) -> Option<Big> {
+    v.pop()
+}
+```
+has just one (Clang has single `memcpy` but it's unrelated to LLVM optimizer -
+Rust generates LLVM IR with single `memcpy`).
 
-TODO:
-  - collect perf measurements for benchmarks:
-    * runtime
-    * code size
-    * standard compiler stats (inline, CSE/GVN/LICM, SLP/loop autovec)
+Aggressive use of `auto` (without `&`) also [adds](https://medium.com/@rogerbooth/c-gotcha-unnecessary-copies-due-to-the-misuse-of-auto-ed24e65b5efd)
+to copy overheads in C++.
+
+Situation may change if [ultimate_copy_elision](https://github.com/cpp-ru/ideas/issues/256)
+is finished (see also [Настоящее и будущее copy elision](https://assets.ctfassets.net/oxjq45e8ilak/2eGPH36FWGYOPN2dgTom47/eb317b89aab933d9f28a367a7dcb1083/Roman_Rusyayev_Anton_Polukhin_Nastoyashcheye_i_budushcheye_copy_elision_2020_06_28_15_51_59.pdf)).
