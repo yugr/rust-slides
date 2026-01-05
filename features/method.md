@@ -133,7 +133,7 @@ Important:
   - pros/niche
   - (WIP) pros/noplt (gh-49)
   - cons/iterators
-  - pros/static
+  - pros/static (gh-50)
   - pros/inline
   - pros/visibility
   - cons/tls
