@@ -11,6 +11,8 @@ Look for any mentions of `/performance|optimizations|compiler|inefficient|code ?
   - coding guidelines for big and/or performance-critical projects
   - weeklies
     * https://github.com/rust-lang/this-week-in-rust
+    * https://scientificcomputing.rs/monthly
+    * https://www.theembeddedrustacean.com (gh-51)
     * blogs below have mainly been extracted from last 4 years of weeklies (starting Dec 2020)
   - forums (also follow suggested links, recursively)
     * https://users.rust-lang.org (URLO)
