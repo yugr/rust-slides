@@ -1,3 +1,9 @@
+# Rust ABI cons
+
+SIMD vectors are always passed to functions (non-intrinsics) on stack.
+See [Issue #44367](https://github.com/rust-lang/rust/issues/44367) for SIMD vector ABI problems and [this reply](https://github.com/rust-lang/rust/issues/44367#issuecomment-360323733) for a final decision.
+For x86 with SSE2 enabled and x84\_64 architectures, 128 bit SIMD vectors are passed directly in registers. Less than 128 bit vectors will be able to be passed directly when [cranelift issue](https://github.com/bytecodealliance/wasmtime/issues/10254) is fixed.
+
 # C++ and Rust comparisons
 
 - `Box` vs `std::unique_ptr`
