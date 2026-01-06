@@ -31,7 +31,7 @@ Current effort to implement C++-like guaranteed (unnamed) RVO is in [RFC 2884](h
 
 # Solutions
 
-One could argue that lack of placement new may be alleivated
+One could argue that lack of placement new may be alleviated
 by better copy elision but
   - copy elision is not guaranteed
   - copy elision may depend on compiler version
