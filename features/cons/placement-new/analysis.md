@@ -211,26 +211,19 @@ TODO:
 
 ## Prevalence
 
-TODO:
-  - is this check is a common case in practice ?
-    * may need to write analysis passes to scan real Rust code (libs, big projects) for occurences
+We could do a Valgrind checker that detect situations like
+  - `memcpy` copies stack buffer to heap (need to compile w/ `-fno-builtin`)
+  - resulting heap buffer used in `Vec::push`, `Box::new`, etc.
+  - stack data overwritten later without ever being used again
+
+This could serve as upper bound on number of missing copy elisions in placement new.
+
+TODO: implement this checker
 
 ## Disabling the check
 
-TODO:
-  - determine how to enable/disable feature in compiler/stdlib
-    * there may be flags (e.g. for interger overflows) but sometimes may need patch code (e.g. for bounds checks)
-      + patch for each feature needs to be implemented in separate branch (in private compiler repo)
-      + compiler modifications need to be kept in private compiler repo `yugr/rust-private`
-    * make sure that found solution works on real examples
-    * note that simply using `RUSTFLAGS` isn't great because they override project settings in `Cargo.toml`
+N/A
 
 ## Measurements
 
-### Static estimates
-
-TODO
-
-### Runtime improvements
-
-TODO
+N/A

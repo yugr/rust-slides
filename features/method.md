@@ -121,7 +121,7 @@ Mandatory:
     * benefits in std containers (multiple elements in node in TreeMap, open-addressing in HashMap)
   - (WIP) pros/abi (gh-31)
   - (DONE) pros/copy-elision (gh-32)
-  - (WIP) cons/placement-new (gh-37)
+  - (DONE) cons/placement-new (gh-37)
     * This could be considered together w/ copy elision
       (placement-new is basically a means for programmer
       to work around failed copy elision ?)
