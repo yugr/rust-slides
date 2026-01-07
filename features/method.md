@@ -80,6 +80,7 @@ For each performance feature we neeed to provide
   - performance impact:
     * is this check is a common case in practice ?
       + may need to write analysis passes to scan real Rust code (libs, big projects) for occurences
+    * compare against similar features in hardened C++
     * determine how to enable/disable feature in compiler/stdlib
       + there may be flags (e.g. for interger overflows) but sometimes may need patch code (e.g. for bounds checks)
         - patch for each feature needs to be implemented in separate branch (in private compiler repo)
@@ -116,7 +117,7 @@ Mandatory:
   - (DONE) cons/init (gh-35)
   - (DONE) cons/panics (gh-36)
   - (DONE) pros/alias (gh-39)
-  - cons/stdlib and pros/stdlib (gh-38)
+  - (WIP) cons/stdlib and pros/stdlib (gh-38)
     * classify stdlib asserts (anything besides Unicode ?)
     * benefits in std containers (multiple elements in node in TreeMap, open-addressing in HashMap)
   - (WIP) pros/abi (gh-31)
