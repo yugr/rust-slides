@@ -22,7 +22,9 @@ This feature is an umbrella for various arithmetic operations checks in Rust:
     * effectively UB: panic in debug, wrap in release
     * overhead in release due to missing `nsw`
     * implemented in codegen
-    * strangely overflow in division (`INT_MIN / -1` is checked unconditionally)
+    * strangely overflow in division (`INT_MIN / -1`) is checked unconditionally
+    * container overflows are also checked unconditionally (via `assert!`'s),
+      probly because they directly control memory safety
   - size overflows in containers
     * enabled by default
     * implemented in stdlib code (`checked_add`, `checked_sub`, `Layout` class checks, etc.)
@@ -256,7 +258,7 @@ Disabling default checks is impossible, extraneous checks may be enabled with `-
 
 As discussed we have three variants to test:
   - (A) all arithmetic checks removed ([yugr/no-overflow-checks/1](https://github.com/yugr/rust-private/tree/yugr/no-overflow-checks/1) branch)
-    * note that explicit `checked_add`, etc. were preserved (I only removed them from stdlib)
+    * note that explicit `checked_add`, etc. were preserved (I removed some from stdlib but probly not all)
     * `strict_add` family from stdlib wasn't changed either (because they don't seem to be widely used)
   - (A+) same as (A) but also add nsw markers in LLVM IR (to match C signed overflow semantics, [yugr/no-overflow-checks-nsw/2](https://github.com/yugr/rust-private/tree/yugr/no-overflow-checks-nsw/2) branch)
   - (B) default ([yugr/baseline](https://github.com/yugr/rust-private/tree/yugr/baseline) branch)

@@ -87,6 +87,8 @@ claims that he was able to speed up exceptions 20x which makes this approach eve
 
 # Solutions
 
+Developers can use (nightly) [`panic_nounwind`](https://doc.rust-lang.org/core/panicking/index.html) API.
+
 Rust has `panic=abort` (similar to C++ `-fno-exceptions`, ex. `-Z no-landing-pads`)
 
 [No-panic Rust](https://blog.reverberate.org/2025/02/03/no-panic-rust.html)

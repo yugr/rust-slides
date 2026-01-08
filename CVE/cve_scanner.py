@@ -104,6 +104,14 @@ CATEGORIES = {
         # Hand-picked
         122, 244, 415, 416, 590, 761,
     ],
+    "OOM": [
+        # Hand-picked
+        789, 1325,
+    ],
+    "Unicode": [
+        # Based upon Google AI response :)
+        173, 838,
+    ],
     "Uninitialized": [
         # Hand-picked (908 is too abstract but many CVEs use it)
         456, 457, 824, 908,

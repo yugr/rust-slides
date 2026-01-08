@@ -1,6 +1,6 @@
-All info about performance quirks of Rust standard library.
+All info about performance overheads in Rust standard library.
 
-Compiler fails to optimize some stdlib operator adapter combinations (https://github.com/rust-lang/rust/issues/80416)
+Compiler fails to optimize some stdlib operator adapter combinations (https://github.com/rust-lang/rust/issues/80416).
 
 Rust's UTF-8 `String`s have invariant checks which make code slower (compared to `std::string` or `string.h`).
 
@@ -61,8 +61,3 @@ writeln!(lock, "{}", header);
 Perf book goes into [more details](https://nnethercote.github.io/perf-book/io.html)
 on this and stdlib docs [recommend](https://doc.rust-lang.org/stable/std/io/fn.stdout.html)
 explicit locking.
-
-# TODO
-
-- Benchmark disabling of invariant checks in `String`
-- Benchmark disable of checks in `Option::unwrap` and `Option::expect`
