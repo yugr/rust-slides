@@ -1,0 +1,36 @@
+#!/bin/sh
+
+set -eu
+#set -x
+
+find_elfs() {
+  (
+    for f in $(find "$@" -type f -executable); do
+      if file $f | grep -q ELF; then
+        echo $f
+      fi
+    done
+#  find "$@" -name '*.rlib'
+  ) | grep -v 'build.script.build' | sort -u
+}
+
+# We try to determine different types of panics (not just calls to core::panicking)
+
+tmp=$(mktemp)
+
+total=0
+for f in $(find_elfs "$@"); do
+  if echo $f | grep -q '\.rlib'; then
+    prefix='R_X86_64_GOTPCREL'
+  else
+    prefix='\<call'
+  fi
+  objdump -rd $f | c++filt > $tmp
+  asserts=$(grep -c "$prefix"'.*\(unwrap_failed\|expect_failed\|assert_failed\|slice_.*_fail\)' $tmp || true)
+  panics=$(grep -c "$prefix"'.*\(core::panicking\)' $tmp || true)
+  total=$(( total + asserts + panics ))
+done
+
+echo $total
+
+rm -f $tmp

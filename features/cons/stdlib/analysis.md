@@ -10,7 +10,9 @@ Effort: 4h
 
 Rust stdlib tends to be more safe i.e. performs more checks (`assert!`, etc.)
 than that of C/C++.  For example Rust default PRNG is of higher quality but slower.
-Also Rust IO is unbuffered (and thus much slower) by default.
+Also Rust IO is unbuffered (and thus much slower) by default
+and `io::stdout()` is line-buffered even for non-TTY outputs
+(details in [README](README.md)).
 
 There are also many complaints on Rust iterators
 as compiler (often ?) fails to optimize complex adapter combinations
@@ -124,15 +126,71 @@ supposedly high overhead but rare in practice:
 
 ## Prevalence
 
-TODO:
-  - are these checks common in practice ?
+We use the same apporoach as in [bound checks](../bounds-checks/analysis.md#prevalence):
+build compiler as usual
+```
+$ ./x build -j12 --stage 2 compiler
+```
+and run
+```
+$ count-panics ./build/x86_64-unknown-linux-gnu/stage2/lib/librustc_driver*.so
+```
+
+Results are
+  - baseline: 440495
+  - no-char-checks: 440144 (0.1%)
+  - no-overflow-checks: 436329 (1%)
 
 ## Measurements
 
 ### Static estimates
 
-TODO:
-  - stats for std opts: CSE/GVN/LICM, SLP/loop autovec
+```
+$ ./x build --stage 1 compiler
+$ RUSTFLAGS_NOT_BOOTSTRAP='-Cllvm-args=-debug-only=inline,licm,early-cse,gvn,loop-vectorize,SLP' ./x build -j1 --stage 2 compiler &> build.log
+
+# Baseline
+$ grep -c 'Size after inlining' build.log
+2533754
+$ grep -c 'LV: Vectorizing' build.log
+549
+$ grep -c 'LICM \(hoist\|sink\)ing' build.log
+2248947
+$ grep -c 'GVN removed' build.log
+798566
+$ grep -c 'EarlyCSE CSE' build.log
+2380605
+$ grep -c 'SLP: vectorized' build.log
+25065
+
+# No char checks
+$ grep -c 'Size after inlining' build.log
+???
+$ grep -c 'LV: Vectorizing' build.log
+???
+$ grep -c 'LICM \(hoist\|sink\)ing' build.log
+???
+$ grep -c 'GVN removed' build.log
+???
+$ grep -c 'EarlyCSE CSE' build.log
+???
+$ grep -c 'SLP: vectorized' build.log
+???
+
+# No overflow checks
+$ grep -c 'Size after inlining' build.log
+???
+$ grep -c 'LV: Vectorizing' build.log
+???
+$ grep -c 'LICM \(hoist\|sink\)ing' build.log
+???
+$ grep -c 'GVN removed' build.log
+???
+$ grep -c 'EarlyCSE CSE' build.log
+???
+$ grep -c 'SLP: vectorized' build.log
+???
+```
 
 ### Runtime improvements
 
@@ -141,4 +199,3 @@ TODO:
     * runtime
       + large unexpected changes need to be investigated
     * code size (if applicable)
-  - compare against similar features in hardened C++
