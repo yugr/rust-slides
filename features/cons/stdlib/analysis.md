@@ -4,7 +4,7 @@ Assignee: yugr
 
 Parent task: gh-38
 
-Effort: 4h
+Effort: 4.5h
 
 # Background
 
@@ -165,32 +165,35 @@ $ grep -c 'SLP: vectorized' build.log
 
 # No char checks
 $ grep -c 'Size after inlining' build.log
-???
+2532992
 $ grep -c 'LV: Vectorizing' build.log
-???
+545
 $ grep -c 'LICM \(hoist\|sink\)ing' build.log
-???
+2241138
 $ grep -c 'GVN removed' build.log
-???
+795817
 $ grep -c 'EarlyCSE CSE' build.log
-???
+2380456
 $ grep -c 'SLP: vectorized' build.log
-???
+25038
 
 # No overflow checks
 $ grep -c 'Size after inlining' build.log
-???
+2498914
 $ grep -c 'LV: Vectorizing' build.log
-???
+602
 $ grep -c 'LICM \(hoist\|sink\)ing' build.log
-???
+2233869
 $ grep -c 'GVN removed' build.log
-???
+780245
 $ grep -c 'EarlyCSE CSE' build.log
-???
+2328470
 $ grep -c 'SLP: vectorized' build.log
-???
+25113
 ```
+
+So 10% more loops vectorized without overflow checks
+otherwise small and meaningless diffs.
 
 ### Runtime improvements
 
