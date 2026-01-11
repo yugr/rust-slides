@@ -370,6 +370,7 @@ $ grep -c 'GVN removed' build.log
 $ grep -c 'EarlyCSE CSE' build.log
 2374779
 ```
+(counters are slightly unstable because stdout of different CGU may intermix).
 
 ### Runtime improvements
 
@@ -396,5 +397,15 @@ zed: -0.6%
 ```
 (noise was <0.5%).
 
+According to [Hardening: current status and trends](https://github.com/yugr/slides/blob/main/CppZeroCost/2025/EN.pdf)
+similar checks in hardened C++ have on-par overheads:
+  - Stack Protector: 2% (Clang)
+  - `-D_FORTIFY_SOURCE=2`: up to 3% (Clang, ffmpeg)
+  - STL indexing checks: 2-3% (Clang, [Google](https://bughunters.google.com/blog/6368559657254912/llvm-s-rfc-c-buffer-hardening-at-google))
+  - `-fsanitize=object-size`: 10% ([ffmpeg](https://zatoichi-engineer.github.io/2017/10/05/sanitize-object-size.html) but in 2017)
+  - `-fsanitize=bounds`: ???
+
+In general we expect similar overheads because optimizer is the same (LLVM).
+
 TODO:
-  - perf measurements for AArch64
+  - recollect results for `-fsanitize=bounds/object-size` for Clang and ffmpeg

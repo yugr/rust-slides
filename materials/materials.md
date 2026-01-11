@@ -752,6 +752,8 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Just general discussion of UB concept in Rust and C++
   * Mentions some optimizations but overall nothing new
   * More materials: no new links
+- Why does nobody use real-time bound checks if memory safety is so important? https://www.reddit.com/r/cpp/comments/1bbv5rs/why_does_nobody_use_realtime_bound_checks_if/
+  * Status: backlog
 
 # Expression templates
 

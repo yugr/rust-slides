@@ -332,6 +332,11 @@ veloren_0.json: -1.4%
 zed_0.json: -0.5%
 ```
 
+Integer overflow checks known to have high overheads:
+according to [Hardening: current status and trends](https://github.com/yugr/slides/blob/main/CppZeroCost/2025/EN.pdf)
+similar checks in hardened C++ are
+  - 30% (Clang)
+  - 2x (SPEC)
+
 TODO:
   - investigate regression in veloren (and zed ?)
-  - perf measurements for AArch64
