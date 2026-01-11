@@ -6,8 +6,6 @@ Parent task: gh-38
 
 Effort: 0h
 
-TODO: fix all TODOs that are mentioned in feature's README
-
 # Background
 
 TODO:

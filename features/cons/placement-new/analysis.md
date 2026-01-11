@@ -218,7 +218,7 @@ We could do a Valgrind checker that detect situations like
 
 This could serve as upper bound on number of missing copy elisions in placement new.
 
-TODO: implement this checker
+TODO: implement this checker (gh-53)
 
 ## Disabling the check
 
