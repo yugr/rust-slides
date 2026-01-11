@@ -133,15 +133,15 @@ Important:
   - (DROP) pros/likely (gh-48)
   - pros/niche (gh-31)
   - (WIP) pros/noplt (gh-49)
-  - cons/iterators
   - pros/static (gh-50)
-  - pros/inline
+  - cons/probestack
   - pros/visibility
   - cons/tls
 
 Nice:
+  - pros/inline
+  - cons/iterators
   - cons/other
-  - cons/probestack
   - cons/size
   - pros/gc-sections
   - pros/long-indices
