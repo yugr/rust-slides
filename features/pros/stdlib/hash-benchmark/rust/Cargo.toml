@@ -1,0 +1,13 @@
+[package]
+name = "hash"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+ahash = "0.8.12"
+fxhash = "0.1.0"
+
+[features]
+sip = []
+ahash = []
+fxhash = []

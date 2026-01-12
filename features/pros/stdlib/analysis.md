@@ -27,8 +27,19 @@ don't break memory safety (i.e. access invalid indices).
 
 ## Hashtable
 
-TODO:
-  - algo differences
+C++ Standard imposes strict rules on `unordered_map`.
+Most notably, references to container elements must remain valid
+in presense of insertions so this restricts implementation to
+vector of lists. This causes following problems:
+  - even if there are no conflicts we have one additional indirection
+  - all insertions require malloc ("per-element overhead")
+  - poor cache locality
+
+In Rust, this rule is not imposed - moreover it's totally unnecessary
+because we can't modify container while holding reference to any element.
+So Rust uses open addressing hash tables.
+
+On the other hand Rust's hash function (SipHash) is slower and more secure.
 
 ## Search tree
 
@@ -106,8 +117,15 @@ so likely they do not influence results much.
 
 ## Hashtable
 
-TODO:
-  - minibenchmark results
+SipHash has a very high overhead (5.2 sec.)
+compared to (less secure) `ahash` (2.9 sec.)
+and `fxhash` (2.5 sec.).
+
+Corresponding C++ program is
+  - gcc 12 with libstdc++: 3.6 sec.
+  - Clang 20 with libc++: 1 sec.
+
+So it seems C++ performance is now better than Rust.
 
 ## Search tree
 
