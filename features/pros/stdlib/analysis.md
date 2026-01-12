@@ -13,6 +13,9 @@ than in C++.
 
 Below we will cover the most known cases.
 
+TODO:
+  - add remaining issues from README
+
 ## Sorting
 
 Stable sort (`sort()`) uses driftsort algorithm and
@@ -52,8 +55,8 @@ Algorithmic differences are too high-level for compiler to compensate for.
 
 # Workarounds
 
-C++ developers can use alternative implmentations from other libraries
-(e.g. Abseil).
+Developers can use alternative implementations from other libraries
+(e.g. Abseil for C++).
 
 # Suggested reading
 
