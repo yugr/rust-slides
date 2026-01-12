@@ -4,7 +4,7 @@ Assignee: yugr
 
 Parent task: gh-38
 
-Effort: 1h
+Effort: 1.5h
 
 # Background
 
@@ -131,11 +131,3 @@ So it seems C++ performance is now better than Rust.
 
 TODO:
   - minibenchmark results
-
-### Runtime improvements
-
-TODO:
-  - collect perf measurements for benchmarks:
-    * runtime
-      + large unexpected changes need to be investigated
-    * code size (if applicable)
