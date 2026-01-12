@@ -399,13 +399,23 @@ zed: -0.6%
 
 According to [Hardening: current status and trends](https://github.com/yugr/slides/blob/main/CppZeroCost/2025/EN.pdf)
 similar checks in hardened C++ have on-par overheads:
-  - Stack Protector: 2% (Clang)
-  - `-D_FORTIFY_SOURCE=2`: up to 3% (Clang, ffmpeg)
-  - STL indexing checks: 2-3% (Clang, [Google](https://bughunters.google.com/blog/6368559657254912/llvm-s-rfc-c-buffer-hardening-at-google))
-  - `-fsanitize=object-size`: 10% ([ffmpeg](https://zatoichi-engineer.github.io/2017/10/05/sanitize-object-size.html) but in 2017)
-  - `-fsanitize=bounds`: ???
+  - Stack Protector:
+    * 2% Clang (on Clang 14)
+  - `-D_FORTIFY_SOURCE=2/3`:
+    * 2% Clang (compiled by Clang 14)
+    * 0% Clang (compiled by Clang 20)
+    * 3% (ffmpeg)
+  - STL indexing checks:
+    * 3% Clang (compiled by Clang 14)
+    * <1% Clang (compiled by Clang 20)
+    * 2-3% [Google](https://bughunters.google.com/blog/6368559657254912/llvm-s-rfc-c-buffer-hardening-at-google)
+  - `-fsanitize=object-size`:
+    * 0% Clang (compiled by Clang 20)
+    * 10% ([ffmpeg](https://zatoichi-engineer.github.io/2017/10/05/sanitize-object-size.html) but in 2017)
+  - `-fsanitize=bounds`:
+    * 0% Clang (compiled by Clang 14 and 20)
 
 In general we expect similar overheads because optimizer is the same (LLVM).
 
 TODO:
-  - recollect results for `-fsanitize=bounds/object-size` for Clang and ffmpeg
+  - recollect results for ffmpeg

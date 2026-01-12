@@ -335,8 +335,10 @@ zed_0.json: -0.5%
 Integer overflow checks known to have high overheads:
 according to [Hardening: current status and trends](https://github.com/yugr/slides/blob/main/CppZeroCost/2025/EN.pdf)
 similar checks in hardened C++ are
-  - 30% (Clang)
-  - 2x (SPEC)
+  - 30% Clang (compiled by Clang 14)
+  - 22% Clang (compiled by Clang 20)
+  - 2x SPEC
 
 TODO:
+  - collect results for ffmpeg
   - investigate regression in veloren (and zed ?)
