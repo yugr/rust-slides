@@ -1,0 +1,4 @@
+# Most time-consuming files in LLVM repo
+CGBuiltin.ii:tools/clang/lib/CodeGen/CMakeFiles/obj.clangCodeGen.dir/CGBuiltin.cpp.o
+X86ISelLowering.ii:lib/Target/X86/CMakeFiles/LLVMX86CodeGen.dir/X86ISelLowering.cpp.o
+PassBuilder.ii:lib/Passes/CMakeFiles/LLVMPasses.dir/PassBuilder.cpp.o
