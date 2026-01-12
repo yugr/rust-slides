@@ -9,6 +9,8 @@ due to safety guarantees and stability.
 Unstable sort is also available (`slice::sort_unstable`) and
 can be [up to 1.5x faster](https://github.com/rust-lang/rfcs/blob/master/text/1884-unstable-sort.md)
 that `slice::sort`.
+Rust's `Ord` trait implements three-way comparison which may allow
+sorting algorithm to perform fewer comparator calls.
 
 Rust encapsulation rules allow library authors to hide details of their types.
 This allows returning values of internal types on stack, rather than
