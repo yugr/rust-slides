@@ -1,0 +1,8 @@
+[package]
+name = "project"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+
+rand_mt = "5.0.0"
