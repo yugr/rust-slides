@@ -4,7 +4,7 @@ Assignee: yugr
 
 Parent task: gh-38
 
-Effort: 0.5h
+Effort: 1h
 
 # Background
 
@@ -15,9 +15,15 @@ Below we will cover the most known cases.
 
 ## Sorting
 
-TODO:
-  - algo differences
-  - safety overheads in Rust
+Stable sort (`sort()`) uses driftsort algorithm and
+unstable (`sort_unstable()`) uses ipnsort.
+Both were written to facilitate ILP rather than SIMD for simple types
+(as in at least libc++ STL - see comments about vectorization in
+`libcxx/include/__algorithm/sort.h`).
+
+Rust by default uses stable sort (`std::stable_sort`) and
+algo is written in such way that even broken comparators
+don't break memory safety (i.e. access invalid indices).
 
 ## Hashtable
 

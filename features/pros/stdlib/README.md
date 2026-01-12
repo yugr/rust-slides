@@ -11,6 +11,9 @@ can be [up to 1.5x faster](https://github.com/rust-lang/rfcs/blob/master/text/18
 that `slice::sort`.
 Rust's `Ord` trait implements three-way comparison which may allow
 sorting algorithm to perform fewer comparator calls.
+Sorts were recently replaced with [even](https://github.com/rust-lang/rust/pull/124032)
+[faster](https://lobste.rs/s/csl2jn/new_sort_implementations_merged_rust)
+implementations.
 
 Rust encapsulation rules allow library authors to hide details of their types.
 This allows returning values of internal types on stack, rather than
