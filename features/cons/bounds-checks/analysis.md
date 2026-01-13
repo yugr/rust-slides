@@ -407,7 +407,7 @@ similar checks in hardened C++ have on-par overheads:
     * 3% (ffmpeg)
   - STL indexing checks:
     * 3% Clang (compiled by Clang 14)
-    * <1% Clang (compiled by Clang 20)
+    * 1% Clang (compiled by Clang 20)
     * 2-3% [Google](https://bughunters.google.com/blog/6368559657254912/llvm-s-rfc-c-buffer-hardening-at-google)
   - `-fsanitize=object-size`:
     * 0% Clang (compiled by Clang 20)
