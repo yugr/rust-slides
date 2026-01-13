@@ -397,25 +397,24 @@ zed: -0.6%
 ```
 (noise was <0.5%).
 
-According to [Hardening: current status and trends](https://github.com/yugr/slides/blob/main/CppZeroCost/2025/EN.pdf)
-similar checks in hardened C++ have on-par overheads:
-  - Stack Protector:
-    * 2% Clang (on Clang 14)
+Performance of hardened C++ has been collected via `util/llvm-bench` and
+`util/ffmpeg-bench` (for Clang 20):
   - `-D_FORTIFY_SOURCE=2/3`:
-    * 2% Clang (compiled by Clang 14)
-    * 0% Clang (compiled by Clang 20)
-    * 3% (ffmpeg)
+    * 0% Clang
+    * 0% ffmpeg
   - STL indexing checks:
-    * 3% Clang (compiled by Clang 14)
-    * 1% Clang (compiled by Clang 20)
+    * 1% Clang
+    * 0% ffmpeg
     * 2-3% [Google](https://bughunters.google.com/blog/6368559657254912/llvm-s-rfc-c-buffer-hardening-at-google)
   - `-fsanitize=object-size`:
-    * 0% Clang (compiled by Clang 20)
-    * 10% ([ffmpeg](https://zatoichi-engineer.github.io/2017/10/05/sanitize-object-size.html) but in 2017)
+    * 0% Clang
+    * 0% ffmpeg
   - `-fsanitize=bounds`:
-    * 0% Clang (compiled by Clang 14 and 20)
+    * 0% Clang
+    * 2.3% ffmpeg
 
-In general we expect similar overheads because optimizer is the same (LLVM).
+[Hardening: current status and trends](https://github.com/yugr/slides/blob/main/CppZeroCost/2025/EN.pdf)
+reports worse numbers because it used old toolchains.
 
 TODO:
   - recollect results for ffmpeg

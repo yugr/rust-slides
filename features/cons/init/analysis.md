@@ -288,8 +288,8 @@ TODO:
 
 According to [Hardening: current status and trends](https://github.com/yugr/slides/blob/main/CppZeroCost/2025/EN.pdf)
 similar checks in hardened C++ have on-par overheads:
-  - 4.5% Clang (compiled by Clang 14)
   - ~1.5% Clang (compiled by Clang 20)
+  - ~7% ffmpeg (compiled by Clang 20)
   - 1% (Firefox with lots of tuning)
   - 1-3% Postgres (up to 20% in some scenarios)
   - virtio, Chrome: up to 10% in some scenarios

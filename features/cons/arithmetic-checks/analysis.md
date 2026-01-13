@@ -337,6 +337,7 @@ according to [Hardening: current status and trends](https://github.com/yugr/slid
 similar checks in hardened C++ are
   - 30% Clang (compiled by Clang 14)
   - 22% Clang (compiled by Clang 20)
+  - 44% ffmpeg (compiled by Clang 20)
   - 2x SPEC
 
 TODO:
