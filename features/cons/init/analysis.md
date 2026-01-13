@@ -283,9 +283,6 @@ Other forced initialization overheads:
     }
     ```
 
-TODO:
-  - collect results for ffmpeg
-
 According to [Hardening: current status and trends](https://github.com/yugr/slides/blob/main/CppZeroCost/2025/EN.pdf)
 similar checks in hardened C++ have on-par overheads:
   - ~1.5% Clang (compiled by Clang 20)

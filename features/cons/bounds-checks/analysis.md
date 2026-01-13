@@ -415,6 +415,3 @@ Performance of hardened C++ has been collected via `util/llvm-bench` and
 
 [Hardening: current status and trends](https://github.com/yugr/slides/blob/main/CppZeroCost/2025/EN.pdf)
 reports worse numbers because it used old toolchains.
-
-TODO:
-  - recollect results for ffmpeg

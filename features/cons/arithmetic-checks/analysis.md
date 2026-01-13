@@ -341,5 +341,4 @@ similar checks in hardened C++ are
   - 2x SPEC
 
 TODO:
-  - collect results for ffmpeg
   - investigate regression in veloren (and zed ?)
