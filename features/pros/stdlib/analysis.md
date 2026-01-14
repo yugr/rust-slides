@@ -46,8 +46,8 @@ On the other hand Rust's hash function (SipHash) is slower and more secure.
 
 ## Search tree
 
-TODO:
-  - algo differences
+Rust `BTreeMap` uses B-tree (rather than RB-tree like `std::map`)
+so it's more cache friendly and more shallow (so requires less indirections).
 
 # Optimizations
 
@@ -132,5 +132,5 @@ So it seems C++ performance is now better than Rust.
 
 ## Search tree
 
-TODO:
-  - minibenchmark results
+According to very simple benchmark this results in 4x improvement
+(2.27 sec. vs 8.7 sec.).
