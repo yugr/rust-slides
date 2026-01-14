@@ -117,7 +117,7 @@ Mandatory:
   - (DONE) cons/init (gh-35)
   - (DONE) cons/panics (gh-36)
   - (DONE) pros/alias (gh-39)
-  - (WIP) cons/stdlib and pros/stdlib (gh-38)
+  - (DONE) cons/stdlib and pros/stdlib (gh-38)
     * classify stdlib asserts (anything besides Unicode ?)
     * benefits in std containers (multiple elements in node in TreeMap, open-addressing in HashMap)
   - (WIP) pros/abi (gh-31)
