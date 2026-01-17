@@ -133,8 +133,8 @@ Important:
   - (DROP) pros/likely (gh-48)
   - pros/niche (gh-31)
   - (WIP) pros/noplt (gh-49)
-  - pros/static (gh-50)
-  - cons/probestack
+  - (WIP) pros/static (gh-50)
+  - cons/probestack (gh-54)
   - pros/visibility
   - cons/tls
 
