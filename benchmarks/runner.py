@@ -18,6 +18,7 @@ import time
 me = os.path.basename(__file__)
 
 QUIET = False
+VERBOSE = 0
 
 
 def warn(msg):
@@ -193,7 +194,7 @@ class CargoBench(Bench):
             if not any(arg.startswith("-j") for arg in cargo_args):
                 cargo_args.extend(cargo_parallel)
             try:
-                run(cargo_args, cwd=str(repo_path))
+                run(cargo_args, tee=(VERBOSE > 0), cwd=str(repo_path))
             except ExecutionError as e:
                 raise BuildError(*e.args) from None
 
@@ -212,7 +213,7 @@ class CargoBench(Bench):
             cargo_args.extend(cargo_parallel)
             cargo_args.append("--no-run")
             try:
-                run(cargo_args, cwd=str(build_path))
+                run(cargo_args, tee=(VERBOSE > 0), cwd=str(build_path))
             except ExecutionError as e:
                 raise BuildError(*e.args) from None
 
@@ -351,9 +352,9 @@ class RegexBench(Bench):
         cargo_args = ["cargo", "build", "--release"]
         if jobs is not None:
             cargo_args.append(f"-j{jobs}")
-        run(cargo_args, cwd=str(repo_path))
+        run(cargo_args, tee=(VERBOSE > 0), cwd=str(repo_path))
 
-        run("target/release/rebar build -e ^rust/regex$", cwd=str(repo_path))
+        run("target/release/rebar build -e ^rust/regex$", tee=(VERBOSE > 0), cwd=str(repo_path))
 
         # TODO: collect sizes
         return {}
@@ -362,6 +363,7 @@ class RegexBench(Bench):
         # TODO: rebar also supports other Rust regex engines (regex-lite, regress)
         _, out, _, _ = run(
             run_options + " target/release/rebar measure -e ^rust/regex$ -f ^curated",
+            tee=(VERBOSE > 0),
             # "target/release/rebar measure -e ^rust/regex$ -f ^unicode/compile/fifty-letters$"
             cwd=str(repo_path),
         )
@@ -406,7 +408,7 @@ class RustcBench(Bench):
             build_args = ["cargo", "build", "--release"]
             if jobs is not None:
                 build_args.append(f"-j{jobs}")
-            run(build_args, cwd=str(subdir))
+            run(build_args, tee=(VERBOSE > 0), cwd=str(subdir))
 
         # Collect sizes
 
@@ -614,6 +616,13 @@ def main():
         help="clone repos",
         default=False,
     )
+    parser.add_argument(
+        "-v",
+        "--verbose",
+        help="print build logs",
+        action="count",
+        default=0,
+    )
 
     args = parser.parse_args()
 
@@ -631,6 +640,9 @@ def main():
 
     global QUIET
     QUIET = args.quiet
+
+    global VERBOSE
+    VERBOSE = args.verbose
 
     global BENCHES
     benches = BENCHES
