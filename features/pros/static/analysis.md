@@ -194,7 +194,7 @@ $ INTERNAL_STATS=1 make -C build -j4 |& tee make.log
 $ awk '/^Internal stats: [0-9]+ [0-9]+$/{statics += $3; externs += $4} END{print statics " " externs " " (100 * statics / (statics + externs))}' make.log
 146600 980637 13.0053
 
-# 11.8 symbols unused according to Localizer (21.5K with tests, ??? if headers ignored)
+# 11.8 symbols unused according to Localizer (21.5K with tests, 22.3 if headers ignored)
 $ cmake -B build -DBUILD_TESTS=ON -DBUILD_PERF_TESTS=ON -DBUILD_EXAMPLES=ON -DBUILD_opencv_apps=ON
 $ find-locals.py --ignore-header-symbols $PWD make -j10 -C build
 ```

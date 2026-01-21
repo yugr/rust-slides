@@ -12,3 +12,4 @@ TODO:
     in meilisearch/search_songs
   - measure with `-mllvm -enable-ipra`
   - are `pub(crate/super/self)` symbols internalized ?
+  - C++ issue: `private` methods can't be marked `static`
