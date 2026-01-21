@@ -1,0 +1,140 @@
+diff --git a/llvm/lib/Passes/PassBuilderPipelines.cpp b/llvm/lib/Passes/PassBuilderPipelines.cpp
+index d195619f32d0..ede8fb7ebe41 100644
+--- a/llvm/lib/Passes/PassBuilderPipelines.cpp
++++ b/llvm/lib/Passes/PassBuilderPipelines.cpp
+@@ -68,6 +68,7 @@
+ #include "llvm/Transforms/IPO/ModuleInliner.h"
+ #include "llvm/Transforms/IPO/OpenMPOpt.h"
+ #include "llvm/Transforms/IPO/PartialInlining.h"
++#include "llvm/Transforms/IPO/RemoveInternalFunctions.h"
+ #include "llvm/Transforms/IPO/SCCP.h"
+ #include "llvm/Transforms/IPO/SampleProfile.h"
+ #include "llvm/Transforms/IPO/SampleProfileProbe.h"
+@@ -1609,6 +1610,8 @@ PassBuilder::buildPerModuleDefaultPipeline(OptimizationLevel Level,
+ 
+   ModulePassManager MPM;
+ 
++  MPM.addPass(RemoveInternalFunctionsPass());
++
+   // Convert @llvm.global.annotations to !annotation metadata.
+   MPM.addPass(Annotation2MetadataPass());
+ 
+@@ -1689,6 +1692,8 @@ PassBuilder::buildThinLTOPreLinkDefaultPipeline(OptimizationLevel Level) {
+ 
+   ModulePassManager MPM;
+ 
++  MPM.addPass(RemoveInternalFunctionsPass());
++
+   // Convert @llvm.global.annotations to !annotation metadata.
+   MPM.addPass(Annotation2MetadataPass());
+ 
+diff --git a/llvm/lib/Transforms/IPO/CMakeLists.txt b/llvm/lib/Transforms/IPO/CMakeLists.txt
+index 15cb57399d24..f387665f20f3 100644
+--- a/llvm/lib/Transforms/IPO/CMakeLists.txt
++++ b/llvm/lib/Transforms/IPO/CMakeLists.txt
+@@ -34,6 +34,7 @@ add_llvm_component_library(LLVMipo
+   ModuleInliner.cpp
+   OpenMPOpt.cpp
+   PartialInlining.cpp
++  RemoveInternalFunctions.cpp
+   SampleContextTracker.cpp
+   SampleProfile.cpp
+   SampleProfileMatcher.cpp
+diff --git a/llvm/include/llvm/Transforms/IPO/RemoveInternalFunctions.h b/llvm/include/llvm/Transforms/IPO/RemoveInternalFunctions.h
+new file mode 100644
+index 000000000000..ad9c8f300994
+--- /dev/null
++++ b/llvm/include/llvm/Transforms/IPO/RemoveInternalFunctions.h
+@@ -0,0 +1,29 @@
++//===- RemoveInternalFunctions.h - Remove internal funs. --------*- C++ -*-===//
++//
++// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
++// See https://llvm.org/LICENSE.txt for license information.
++// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
++//
++//===----------------------------------------------------------------------===//
++//
++// Convert internal functions to global with unique names.
++//
++//===----------------------------------------------------------------------===//
++
++#ifndef LLVM_TRANSFORMS_IPO_REMOVEINTERNALFUNCTIONS_H
++#define LLVM_TRANSFORMS_IPO_REMOVEINTERNALFUNCTIONS_H
++
++#include "llvm/IR/PassManager.h"
++
++namespace llvm {
++
++class Module;
++
++/// Pass to convert @llvm.global.annotations to !annotation metadata.
++struct RemoveInternalFunctionsPass : public PassInfoMixin<RemoveInternalFunctionsPass> {
++  PreservedAnalyses run(Module &M, ModuleAnalysisManager &AM);
++};
++
++} // end namespace llvm
++
++#endif // LLVM_TRANSFORMS_IPO_REMOVEINTERNALFUNCTIONS_H
+diff --git a/llvm/lib/Transforms/IPO/RemoveInternalFunctions.cpp b/llvm/lib/Transforms/IPO/RemoveInternalFunctions.cpp
+new file mode 100644
+index 000000000000..eb9a58022bf2
+--- /dev/null
++++ b/llvm/lib/Transforms/IPO/RemoveInternalFunctions.cpp
+@@ -0,0 +1,57 @@
++#include "llvm/Transforms/IPO/RemoveInternalFunctions.h"
++#include "llvm/IR/Function.h"
++#include "llvm/IR/InstIterator.h"
++#include "llvm/IR/Module.h"
++#include "llvm/IR/Analysis.h"
++#include "llvm/Support/Debug.h"
++#include "llvm/Transforms/Utils/ModuleUtils.h"
++
++#include <sstream>
++#include <stdlib.h>
++
++using namespace llvm;
++
++#define DEBUG_TYPE "remove-internal-functions"
++
++PreservedAnalyses RemoveInternalFunctionsPass::run(Module &M,
++                                                   ModuleAnalysisManager &AM) {
++  auto Suffix = M.getSourceFileName();
++  for (auto &C : Suffix) {
++    if (!isalnum(C) && C != '.' && C != '$')
++      C = '.';
++  }
++
++  auto ID = getUniqueModuleId(&M);
++
++  unsigned Statics = 0;
++  unsigned Externs = 0;
++
++  for (auto &F : M) {
++    if (F.isDeclaration())
++      continue;
++    switch (F.getLinkage()) {
++      case GlobalValue::InternalLinkage:
++      case GlobalValue::PrivateLinkage:
++        F.setLinkage(GlobalValue::ExternalLinkage);
++        F.setName(F.getName() + "." + Suffix + "." + ID);
++        ++Statics;
++        break;
++      case GlobalValue::WeakAnyLinkage:
++      case GlobalValue::WeakODRLinkage:
++      case GlobalValue::ExternalWeakLinkage:
++      case GlobalValue::CommonLinkage:
++        break;
++      default:
++        ++Externs;
++        break;
++    }
++  }
++
++  if (getenv("INTERNAL_STATS")) {
++    std::ostringstream OS;
++    OS << "Internal stats: " << Statics << " " << Externs << "\n";
++    errs() << OS.str();
++  }
++
++  return PreservedAnalyses::all();
++}

@@ -75,8 +75,6 @@ ERROR: failed to download llvm from ci
 You can instead download it from https://github.com/yugr/rustc-builds and
 untar to `build/x86_64-unknown-linux-gnu/ci-llvm`.
 
-
-
 # Rebuilding LLVM
 
 To build LLVM for Rust add
