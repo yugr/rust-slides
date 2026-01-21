@@ -1,5 +1,5 @@
 diff --git a/llvm/lib/Passes/PassBuilderPipelines.cpp b/llvm/lib/Passes/PassBuilderPipelines.cpp
-index d195619f32d0..ede8fb7ebe41 100644
+index 17ff3bd37..09f79764a 100644
 --- a/llvm/lib/Passes/PassBuilderPipelines.cpp
 +++ b/llvm/lib/Passes/PassBuilderPipelines.cpp
 @@ -68,6 +68,7 @@
@@ -19,7 +19,7 @@ index d195619f32d0..ede8fb7ebe41 100644
    // Convert @llvm.global.annotations to !annotation metadata.
    MPM.addPass(Annotation2MetadataPass());
  
-@@ -1689,6 +1692,8 @@ PassBuilder::buildThinLTOPreLinkDefaultPipeline(OptimizationLevel Level) {
+@@ -1676,6 +1679,8 @@ PassBuilder::buildThinLTOPreLinkDefaultPipeline(OptimizationLevel Level) {
  
    ModulePassManager MPM;
  
@@ -29,7 +29,7 @@ index d195619f32d0..ede8fb7ebe41 100644
    MPM.addPass(Annotation2MetadataPass());
  
 diff --git a/llvm/lib/Transforms/IPO/CMakeLists.txt b/llvm/lib/Transforms/IPO/CMakeLists.txt
-index 15cb57399d24..f387665f20f3 100644
+index 15cb57399..f387665f2 100644
 --- a/llvm/lib/Transforms/IPO/CMakeLists.txt
 +++ b/llvm/lib/Transforms/IPO/CMakeLists.txt
 @@ -34,6 +34,7 @@ add_llvm_component_library(LLVMipo
@@ -42,7 +42,7 @@ index 15cb57399d24..f387665f20f3 100644
    SampleProfileMatcher.cpp
 diff --git a/llvm/include/llvm/Transforms/IPO/RemoveInternalFunctions.h b/llvm/include/llvm/Transforms/IPO/RemoveInternalFunctions.h
 new file mode 100644
-index 000000000000..ad9c8f300994
+index 000000000..ad9c8f300
 --- /dev/null
 +++ b/llvm/include/llvm/Transforms/IPO/RemoveInternalFunctions.h
 @@ -0,0 +1,29 @@
@@ -77,10 +77,10 @@ index 000000000000..ad9c8f300994
 +#endif // LLVM_TRANSFORMS_IPO_REMOVEINTERNALFUNCTIONS_H
 diff --git a/llvm/lib/Transforms/IPO/RemoveInternalFunctions.cpp b/llvm/lib/Transforms/IPO/RemoveInternalFunctions.cpp
 new file mode 100644
-index 000000000000..eb9a58022bf2
+index 000000000..efc78facc
 --- /dev/null
 +++ b/llvm/lib/Transforms/IPO/RemoveInternalFunctions.cpp
-@@ -0,0 +1,57 @@
+@@ -0,0 +1,54 @@
 +#include "llvm/Transforms/IPO/RemoveInternalFunctions.h"
 +#include "llvm/IR/Function.h"
 +#include "llvm/IR/InstIterator.h"
@@ -115,17 +115,14 @@ index 000000000000..eb9a58022bf2
 +    switch (F.getLinkage()) {
 +      case GlobalValue::InternalLinkage:
 +      case GlobalValue::PrivateLinkage:
-+        F.setLinkage(GlobalValue::ExternalLinkage);
 +        F.setName(F.getName() + "." + Suffix + "." + ID);
 +        ++Statics;
 +        break;
-+      case GlobalValue::WeakAnyLinkage:
-+      case GlobalValue::WeakODRLinkage:
-+      case GlobalValue::ExternalWeakLinkage:
-+      case GlobalValue::CommonLinkage:
++      case GlobalValue::ExternalLinkage:
++        ++Externs;
 +        break;
 +      default:
-+        ++Externs;
++        // Do not consider weaks and commons
 +        break;
 +    }
 +  }

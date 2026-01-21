@@ -10,6 +10,3 @@ like `static` functions in C/C++:
 TODO:
   - how does it influence code size ? E.g. 4 instances of `deserialize_from_impl`
     in meilisearch/search_songs
-  - measure with `-mllvm -enable-ipra`
-  - are `pub(crate/super/self)` symbols internalized ?
-  - C++ issue: `private` methods can't be marked `static`
