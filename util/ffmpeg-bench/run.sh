@@ -194,8 +194,7 @@ while read cfg; do
   echo "Benchmarking $name..."
   for i in $(seq $REPEAT); do
      # TODO: more testcases ?
-    /usr/bin/time -o $tmp setarch -R $B/ffmpeg-install/bin/ffmpeg -y -i $FLV -c:v libx264 -c:a aac -threads 1 out.mp4 < /dev/null > /dev/null 2>&1
-    cat $tmp >> $OUT/$name.log
+    /usr/bin/time -ao $OUT/$name.log setarch -R $B/ffmpeg-install/bin/ffmpeg -y -i $FLV -c:v libx264 -c:a aac -threads 1 out.mp4 < /dev/null > /dev/null 2>&1
   done
 done < "$OPTS_CONFIG"
 

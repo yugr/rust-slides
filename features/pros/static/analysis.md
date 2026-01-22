@@ -21,7 +21,7 @@ by compiler:
 In C/C++ functions are public by default and need to be localized explicitly
 (via `static` or anon. namespaces). This is called internal linkage.
 
-TODO: no way to localize methods in C++ (esp. `private` methods)
+TODO: no way to localize methods in C++ (esp. `private` methods) except factoring out to anon. namespaces
 
 In Rust functions are local by default and need to be published explicitly
 via `pub` keyword.
@@ -222,5 +222,16 @@ TODO:
 
 ### Runtime improvements
 
+Clang++ performance compared as in [llvm-bench](../../../util/llvm-bench)
+degraded by ~1%:
+```
+$ cmake -G Ninja -DCMAKE_C_COMPILER=$PREFIX/bin/clang -DCMAKE_CXX_COMPILER=$PREFIX/bin/clang++ -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS= -DCMAKE_EXE_LINKER_FLAGS= -DLLVM_ENABLE_WARNINGS=OFF -DLLVM_ENABLE_LLD=ON -DLLVM_PARALLEL_LINK_JOBS=1 -DLLVM_APPEND_VC_REV=OFF -DLLVM_TARGETS_TO_BUILD=X86 -DLLVM_ENABLE_PROJECTS=clang ../llvm
+$ ninja clang
+
+# Repeat N times
+$ /usr/bin/time setarch -R ~/src/llvm/llvm-project/build-stage1/bin/clang++ -O2 -w -S -o /dev/null CGBuiltin.ii
+```
+and ffmpeg as well by 1% (tested as in [ffmpeg-bench](../../../util/ffmpeg-bench)).
+
 TODO:
-  - collect runtime perf measurements with disabled internals and `-mllvm -enable-ipra`
+  - collect Rust runtime perf measurements with disabled internals and (maybe) `-mllvm -enable-ipra`
