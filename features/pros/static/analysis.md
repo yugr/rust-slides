@@ -28,19 +28,10 @@ via `pub` keyword.
 
 TODO: are `pub(crate/super/self)` symbols internalized ?
 
-TODO:
-  - why is this feature needed ?
-    * situation in C/C++
-      + e.g. [The New C Standard: An Economic and Cultural Commentary](https://www.coding-guidelines.com/cbook/cbook1_1.pdf)
-      + e.g. [Rationale for International Standard Programming Languages - C](https://www.open-std.org/jtc1/sc22/wg14/www/C99RationaleV5.10.pdf)
-    * situation in other langs:
-      + [Java](https://docs.oracle.com/javase/specs/jls/se24/html/),
-      + [C#](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/introduction)
-      + [Go](https://go.dev/ref/spec)
-      + [Swift](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/aboutthelanguagereference/)
-      + [Fortran](https://j3-fortran.org/doc/year/24/24-007.pdf)
-      + Ada ([RM](http://www.ada-auth.org/standards/22rm/html/RM-TOC.html) and [ARM](http://www.ada-auth.org/standards/22aarm/html/AA-TOC.html))
-  - types of check (e.g. compiler/stdlib parts)
+C# has `internal` specifier but there is no info if it can improve performance.
+Swift functions need to be internalized explicitly via `private`.
+In Go developer is forced to choose whether function is internal (starts w/ lowercase)
+or public (starts w/ uppercase). Fortran functions are external by default.
 
 # Examples
 
@@ -61,44 +52,19 @@ TODO:
 
 # Performance impact
 
-## Prevalence
-
-TODO:
-  - is this optimization common in practice ?
-    * may need to write analysis passes to scan real Rust code (libs, big projects) for occurences
-
 ## Disabling optimization
 
-TODO:
-  - determine how to enable/disable feature in compiler/stdlib
-    * there may be flags (e.g. for interger overflows) but sometimes may need patch code (e.g. for bounds checks)
-      + patch for each feature needs to be implemented in separate branch (in private compiler repo)
-      + compiler modifications need to be kept in private compiler repo `yugr/rust-private`
-    * make sure that found solution works on real examples
-    * note that simply using `RUSTFLAGS` isn't great because they override project settings in `Cargo.toml`
+We disable static functions by converting them to globals with unique prefix
+in [attached patch](0001-Remove-internal-functions.patch).  It also collects stats.
 
-## Measurements
-
-TODO: collect compiler stats:
-  - depend on feature
-  - LLVM stats may be misleading because some opts (e.g. inline) are done in frontend
-    (at MIR level). But recollecting with `-Zmir-opt-level=0`
-    e.g. in panic feature didn't improve anything.
-  - e.g. SLP/loop autovec for bounds checking feature
-  - e.g. NoAlias returns from AA manager for alias feature
-  - e.g. CSE/GVN/LICM for alias feature
-
-### Static estimates
-
-TODO: recollect static counts with updated patch
+## Prevalence
 
 Counts for Rust benchmarks were obtained with
-Rust's llvm-project with [attached patch](0001-Remove-internal-functions.patch)
-that both disables internal symbols and collects stats:
+Rust's llvm-project with aboev patch:
 ```
 $ INTERNAL_STATS=1 ../benchmarks/runall.sh --runner-args "-b -j6 -v" no-static
-$ csplit -z -f section_ -b "%02d.txt" results/no-static/runner.log '/^Building /' '{*}'
-$ for f in section_*.txt; do
+$ csplit -z results/no-static/runner.log '/^Building /' '{*}'
+$ for f in xx*; do
     name=$(head -n1 $f | awk '{print $2}')
     echo $name
     ./parse_stats.sh < $f
@@ -106,11 +72,11 @@ $ for f in section_*.txt; do
 SpacetimeDB...
 839580 205050 80.371
 bevy...
-1266716 248486 83.6005
+1266724 248484 83.6007
 meilisearch...
-1720905 55974 96.8499
+1720897 55972 96.85
 nalgebra...
-110550 21742 83.5651
+110556 21742 83.5659
 oxipng...
 54242 13332 80.2705
 rav1e...
@@ -122,87 +88,56 @@ ruff...
 rustc-runtime-benchmarks...
 240663 52169 82.1847
 rust_serialization_benchmark...
-233690 69408 77.1005
+233682 69422 77.0963
 tokio...
-258030 54341 82.6037
+258060 54343 82.6048
 uv...
 981092 184816 84.1483
 veloren...
-1354875 349170 79.5093
+1373325 353288 79.5387
 zed...
 1927025 103508 94.9024
 ```
 
-TODO: rustc stage2 stats
+Rustc stats:
+```
+$ ./x build -j12 library
+$ INTERNAL_STATS=1 ./x build -j1 --stage 2 compiler |& tee build.log
+$ ./parse_stats.sh < build.log
+1270712 281931 81.8419
+```
 
 For some C/C++ projects the numbers are on par
 (all measurements were done with llvmorg-20.1.7 Clang with the above patch).
 For example x264 (0480cb05) stats are similar:
 ```
 $ PREFIX=$HOME/src/llvm/remove-internals/build
-$ CC=$PREFIX/bin/clang ../configure --prefix=$PWD/../install --enable-static --enable-shared
+$ CC=$PREFIX/bin/clang ../configure --prefix=$HOME/src/x264/install --enable-static --enable-shared
 $ INTERNAL_STATS=1 make -j4 |& tee make.log
+$ make install
 $ ./parse_stats.sh < make.log
-1823 503 78.3749
+1823 501 78.4423
 ```
 and ffmpeg 8.0.1 too:
 ```
-$ PKG_CONFIG_PATH=$HOME/src/x264/install/lib/pkgconfig ~/src/ffmpeg-8.0.1/configure --prefix=$PWD/../install --cc=$PREFIX/bin/clang --cxx=$PREFIX/bin/clang++ --extra-cflags='-O2 -DNDEBUG' --extra-cxxflags='-O2 -DNDEBUG' --enable-libx264 --enable-gpl
+$ PKG_CONFIG_PATH=$HOME/src/x264/install/lib/pkgconfig ~/src/ffmpeg-8.0.1/configure --cc=$PREFIX/bin/clang --cxx=$PREFIX/bin/clang++ --extra-cflags='-O2 -DNDEBUG' --extra-cxxflags='-O2 -DNDEBUG' --enable-libx264 --enable-gpl
 $ INTERNAL_STATS=1 make -j4 |& tee make.log
 $ ./parse_stats.sh < make.log
-35817 4053 89.8345
+35817 4015 89.9202
 ```
 and git 2.52.0:
 ```
-$ CC=clang CXX=clang++ ./configure
-$ PATH=$PREFIX/bin:$PATH INTERNAL_STATS=1 make -j4 |& tee make.log
-$ ./parse_stats.sh < make.log
-10868 3612 75.0552
-```
-
-For other projects numbers are dramatically worse e.g.
-openssl 3.6.0 has worse numbers (but this may be because of exported symbols):
-```
-$ PATH=$PREFIX/bin:$PATH
-$ ../config linux-x86_64-clang
+$ CC=$PREFIX/bin/clang CXX=$PREFIX/bin/clang++ ./configure
 $ INTERNAL_STATS=1 make -j4 |& tee make.log
 $ ./parse_stats.sh < make.log
-25014 21983 53.2247
-
-# 308 symbols unused according to Localizer (678 if headers ignored)
-$ ../config linux-x86_64
-$ find-locals.py --ignore-header-symbols $PWD/.. 'make -j10 && make -j10 test'
-```
-and tmux 3.6a too:
-```
-$ ./autogen.sh
-$ CC=clang CXX=clang++ ./configure
-$ PATH=$PREFIX/bin:$PATH INTERNAL_STATS=1 make -j4 |& tee make.log
-$ ./parse_stats.sh < make.log
-1379 1154 54.4414
-
-# 53 symbols unused according to Localizer (165 if headers ignored)
-$ ./configure
-$ find-locals.py --ignore-header-symbols $PWD 'make -j10 && make -j10 check'
-```
-and libuv 1.51.0:
-```
-$ ./autogen.sh
-$ CC=clang CXX=clang++ ./configure
-$ PATH=$PREFIX/bin:$PATH INTERNAL_STATS=1 make -j4 |& tee make.log
-$ ./parse_stats.sh < make.log
-316 464 40.5128
-
-# 34 symbols unused according to Localizer (45 if headers ignored)
-$ ./configure
-$ find-locals.py --ignore-header-symbols $PWD 'make -j10 && make -j10 check'
+10868 3542 75.4198
 ```
 and bitcoin v30.2:
 ```
-$ cmake -B build -DCMAKE_C_COMPILER=$PREFIX/bin/clang  -DCMAKE_CXX_COMPILER=$PREFIX/bin/clang++  -DENABLE_IPC=OFF
+$ cmake -B build -DCMAKE_C_COMPILER=$PREFIX/bin/clang -DCMAKE_CXX_COMPILER=$PREFIX/bin/clang++ -DENABLE_IPC=OFF
 $ INTERNAL_STATS=1 make -C build -j4 |& tee make.log
 $ ./parse_stats.sh < make.log
-27532 418346 6.17478
+27532 4547 85.8256
 
 # 2269 symbols unused according to Localizer (2398 if headers ignored)
 $ cmake -B build -DENABLE_IPC=OFF
@@ -213,11 +148,56 @@ and opencv 4.12.0:
 $ cmake -B build -DCMAKE_C_COMPILER=$PREFIX/bin/clang -DCMAKE_CXX_COMPILER=$PREFIX/bin/clang++
 $ INTERNAL_STATS=1 make -C build -j4 |& tee make.log
 $ ./parse_stats.sh < make.log
-146600 980637 13.0053
+146600 22938 86.4703
 
 # 11.8 symbols unused according to Localizer (21.5K with tests, 22.3 if headers ignored)
 $ cmake -B build -DBUILD_TESTS=ON -DBUILD_PERF_TESTS=ON -DBUILD_EXAMPLES=ON -DBUILD_opencv_apps=ON
 $ find-locals.py --ignore-header-symbols $PWD make -j10 -C build
+```
+and clang llvmorg-20.1.7:
+```
+$ cmake -G Ninja -DCMAKE_C_COMPILER=$PREFIX/bin/clang -DCMAKE_CXX_COMPILER=$PREFIX/bin/clang++ -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS='-O2 -DNDEBUG' -DCMAKE_EXE_LINKER_FLAGS= -DLLVM_ENABLE_WARNINGS=OFF -DLLVM_ENABLE_LLD=ON -DLLVM_PARALLEL_LINK_JOBS=1 -DLLVM_APPEND_VC_REV=OFF -DLLVM_TARGETS_TO_BUILD=X86 -DLLVM_ENABLE_PROJECTS=clang ../llvm
+$ INTERNAL_STATS=1 ninja -j4 |& tee make.log
+$ ./parse_stats.sh < make.log
+425733 61557 87.3675
+```
+
+For other projects numbers are dramatically worse e.g.
+openssl 3.6.0 has worse numbers (but this may be because of exported symbols):
+```
+$ PATH=$PREFIX/bin:$PATH
+$ ../config linux-x86_64-clang
+$ INTERNAL_STATS=1 make -j4 |& tee make.log
+$ ./parse_stats.sh < make.log
+25014 21927 53.2882
+
+# 308 symbols unused according to Localizer (678 if headers ignored)
+$ ../config linux-x86_64
+$ find-locals.py --ignore-header-symbols $PWD/.. 'make -j10 && make -j10 test'
+```
+and tmux 3.6a too:
+```
+$ ./autogen.sh
+$ CC=$PREFIX/bin/clang CXX=$PREFIX/bin/clang++ ./configure
+$ INTERNAL_STATS=1 make -j4 |& tee make.log
+$ ./parse_stats.sh < make.log
+1379 1149 54.5491
+
+# 53 symbols unused according to Localizer (165 if headers ignored)
+$ ./configure
+$ find-locals.py --ignore-header-symbols $PWD 'make -j10 && make -j10 check'
+```
+and libuv 1.51.0:
+```
+$ ./autogen.sh
+$ CC=$PREFIX/bin/clang CXX=$PREFIX/bin/clang++ ./configure
+$ INTERNAL_STATS=1 make -j4 |& tee make.log
+$ ./parse_stats.sh < make.log
+316 457 40.8797
+
+# 34 symbols unused according to Localizer (45 if headers ignored)
+$ ./configure
+$ find-locals.py --ignore-header-symbols $PWD 'make -j10 && make -j10 check'
 ```
 and gcc 15.2.0:
 ```
@@ -226,23 +206,19 @@ $ mkdir build && cd build
 $ CC=$PREFIX/bin/clang CXX=$PREFIX/bin/clang++ ../configure --enable-languages=jit,c,c++,fortran --enable-host-shared --disable-bootstrap --disable-multilib
 $ INTERNAL_STATS=1 make -j4 all-gcc |& tee make.log
 $ ./parse_stats.sh < make.log
-32594 233822 12.2343
+32799 44471 42.4473
 
 # 9.1K symbols unused according to Localizer (11.2K if headers ignored)
 $ ../configure --enable-languages=jit,c,c++,fortran --enable-host-shared --disable-bootstrap --disable-multilib
 $ find-locals.py --ignore-header-symbols $PWD make -j10 all-gcc
 ```
-and clang llvmorg-20.1.7:
-```
-$ cmake -G Ninja -DCMAKE_C_COMPILER=$PREFIX/bin/clang -DCMAKE_CXX_COMPILER=$PREFIX/bin/clang++ -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS='-O2 -DNDEBUG' -DCMAKE_EXE_LINKER_FLAGS= -DLLVM_ENABLE_WARNINGS=OFF -DLLVM_ENABLE_LLD=ON -DLLVM_PARALLEL_LINK_JOBS=1 -DLLVM_APPEND_VC_REV=OFF -DLLVM_TARGETS_TO_BUILD=X86 -DLLVM_ENABLE_PROJECTS=clang ../llvm
-$ INTERNAL_STATS=1 ninja -j4 |& tee make.log
-$ ./parse_stats.sh < make.log
-425733 3583463 10.6189
 
-# ??? symbols unused according to Localizer (??? if headers ignored)
-$ cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS='-O2 -DNDEBUG' -DCMAKE_EXE_LINKER_FLAGS= -DLLVM_ENABLE_WARNINGS=OFF -DLLVM_ENABLE_LLD=ON -DLLVM_PARALLEL_LINK_JOBS=1 -DLLVM_APPEND_VC_REV=OFF -DLLVM_TARGETS_TO_BUILD=X86 -DLLVM_ENABLE_PROJECTS=clang ../llvm
-$ find-locals.py --ignore-header-symbols $PWD ninja
-```
+## Measurements
+
+### Static estimates
+
+TODO:
+  - collect compiler stats: SLP/loop autovec, CSE/GVN/LICM, NoAlias returns from AA manager
 
 ### Runtime improvements
 
