@@ -4,9 +4,7 @@ Assignee: yugr
 
 Parent task: gh-50
 
-Effort: 7h
-
-TODO: fix all TODOs that are mentioned in feature's README
+Effort: 8h
 
 # Background
 
@@ -24,9 +22,40 @@ In C/C++ functions are public by default and need to be localized explicitly
 TODO: no way to localize methods in C++ (esp. `private` methods) except factoring out to anon. namespaces
 
 In Rust functions are local by default and need to be published explicitly
-via `pub` keyword.
+via `pub` keyword. Note that `pub(crate/super/self)`
+just control visibility within crate and do not publish a symbol
+(unless it's explicitly re-exported via `pub use`):
+```
+$ cat test.rs
+#[inline(never)]  // Simulate inliner fail
+pub(crate) fn foo1(x: i32) {
+    println!("Hello world {}", x);
+}
 
-TODO: are `pub(crate/super/self)` symbols internalized ?
+mod mymod {
+    #[inline(never)]  // Simulate inliner fail
+    pub(super) fn foo2(x: i32) {
+        println!("Goodbye world {}", x);
+    }
+
+    #[inline(never)]  // Simulate inliner fail
+    pub fn foo3(x: i32) {
+        println!("Nice world {}", x);
+    }
+}
+
+pub use mymod::foo3;
+
+pub fn bar() {
+    foo1(1);
+    mymod::foo2(2);
+    mymod::foo3(3);
+}
+
+$ rustc +baseline test.rs -O --emit=asm --crate-type=rlib -o- | g globl
+        .globl  _ZN5tmp415mymod4foo317he25c12b2983ea8d0E
+        .globl  _ZN5tmp413bar17h1647cdb4897d4b54E
+```
 
 C# has `internal` specifier but there is no info if it can improve performance.
 Swift functions need to be internalized explicitly via `private`.
@@ -310,6 +339,8 @@ $ find-locals.py --ignore-header-symbols $PWD make -j10 all-gcc
 
 TODO:
   - collect compiler stats: SLP/loop autovec, CSE/GVN/LICM, NoAlias returns from AA manager
+  - how does it influence code size ? E.g. 4 instances of `deserialize_from_impl`
+    in meilisearch/search_songs
 
 ### Runtime improvements
 
