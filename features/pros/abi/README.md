@@ -1,13 +1,5 @@
 This is about various ABI-related improvements.
 
-TODO:
-  - compare ABIs for important data types to C++:
-    * basic: slices vs `std::span`, structs, tuples vs `std::tuple`,
-      `Option` vs `std::optional`, `Result` vs `std::expected`
-    * containers: `String` vs `std::string`, `Vec` vs `std::vector`,
-      `Box` vs `std::unique_ptr`
-  - try to use C++-like ABI for them and compare performance
-
 # Case of `unique_ptr`
 
 Itanium ABI in C++ [requires](https://stackoverflow.com/questions/58339165/why-can-a-t-be-passed-in-register-but-a-unique-ptrt-cannot)

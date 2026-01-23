@@ -15,6 +15,12 @@ For x86 with SSE2 enabled and x84\_64 architectures, 128 bit SIMD vectors are pa
 - `Result` vs `std::expected`
 - `Option` vs `std::optional`
 
+TODO:
+  - explain how `Box` and slice are different from other containers (`String`, `Vec`)
+  - add explanation of current calling convention for structs (vs C++ structs) and
+    tuples (vs `std::tuple`)
+  - also cover returns from functions
+
 ## `Box` vs `std::unique_ptr`
 
 [Godbolt](https://godbolt.org/z/Y6hYccWKs)
