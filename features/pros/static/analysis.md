@@ -4,7 +4,7 @@ Assignee: yugr
 
 Parent task: gh-50
 
-Effort: 5h
+Effort: 7h
 
 TODO: fix all TODOs that are mentioned in feature's README
 
@@ -35,8 +35,99 @@ or public (starts w/ uppercase). Fortran functions are external by default.
 
 # Examples
 
-TODO:
-  - clear example (Rust microbenchmark, asm code)
+This Rust code
+```
+#[inline(never)]  // Simulate inliner fail
+fn foo(b: bool, seed: i32, s: &[i32]) -> i32 {
+    let mut ans = seed;
+    for &x in s {
+        ans += if b { 1 } else { ans ^ x }
+    }
+    ans
+}
+
+pub fn bar(n: i32, s: &[i32]) -> i32 {
+    let mut ans = 0;
+    for i in 0..n {
+        ans += foo(true, i, s);
+    }
+    ans
+}
+```
+compiles to
+```
+$ rustc +baseline test.rs -O --emit=asm --crate-type=rlib -o-
+        .file   "tmp39.a753e57b1e183dcd-cgu.0"
+        .section        .text._ZN5tmp393foo17h2c99de230f997c95E,"ax",@progbits
+        .p2align        6
+        .type   _ZN5tmp393foo17h2c99de230f997c95E,@function
+_ZN5tmp393foo17h2c99de230f997c95E:
+        .cfi_startproc
+        leal    (%rsi,%rdi), %eax
+        retq
+...
+```
+Two things can be noticed here:
+  - ABI of foo was optimized (third argument removed)
+  - loop was completely eliminated from foo
+
+Both optimizations would not have been possible if `foo` were not static
+as can be seen for this seemingly equivalent C++ code:
+```
+#include <vector>
+
+__attribute__((noinline))  // Simulate inliner fail
+int foo(bool b, int seed, const std::vector<int> &s) {
+  int ans = 0;
+  for (auto x : s)
+    ans += b ? 1 : (ans ^ x);
+  return ans;
+}
+
+int bar(int n, const std::vector<int> &s) {
+  int ans = 0;
+  for (int i = 0; i < n; ++i)
+    ans += foo(true, i, s);
+   return ans;
+}
+```
+compiler generates
+```
+$ clang++ -O2 -S -o- tmp39.cpp
+        .text
+        .file   "tmp39.cpp"
+        .globl  _Z3foobiRKSt6vectorIiSaIiEE     # -- Begin function _Z3foobiRKSt6vectorIiSaIiEE
+        .p2align        4, 0x90
+        .type   _Z3foobiRKSt6vectorIiSaIiEE,@function
+_Z3foobiRKSt6vectorIiSaIiEE:            # @_Z3foobiRKSt6vectorIiSaIiEE
+        .cfi_startproc
+# %bb.0:
+        movq    (%rdx), %rcx
+        movq    8(%rdx), %rdx
+        cmpq    %rdx, %rcx
+        je      .LBB0_1
+# %bb.3:
+        xorl    %esi, %esi
+        movl    $1, %r8d
+        .p2align        4, 0x90
+.LBB0_4:                                # =>This Inner Loop Header: Depth=1
+        movl    (%rcx), %eax
+        xorl    %esi, %eax
+        testb   %dil, %dil
+        cmovnel %r8d, %eax
+        addl    %esi, %eax
+        addq    $4, %rcx
+        movl    %eax, %esi
+        cmpq    %rcx, %rdx
+        jne     .LBB0_4
+# %bb.2:
+        retq
+.LBB0_1:
+        xorl    %eax, %eax
+        retq
+...
+```
+(code optimizes fine if we add `static` to `foo`).
 
 # Optimizations
 
