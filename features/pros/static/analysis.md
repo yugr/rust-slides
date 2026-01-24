@@ -15,11 +15,23 @@ by compiler:
   - ABI-violating optimizations (e.g. [IPRA](https://reviews.llvm.org/D23980))
   - change calling convention (to `coldcc` or `fastcc`, see `Transforms/IPO/GlobalOpt.cpp`)
   - more aggressive inlining (e.g. it's always beneficial to inline static function called once)
+  - propagating constant parameters (IPSCCP)
+
+For shared libraries global functions are also exported from library by default
+which slows down startup and make calls to them go through GOT/PLT
+(unless [special care is taken](https://github.com/yugr/CppRussia/blob/master/2024/EN.pdf) about visibility).
 
 In C/C++ functions are public by default and need to be localized explicitly
 (via `static` or anon. namespaces). This is called internal linkage.
-
-TODO: no way to localize methods in C++ (esp. `private` methods) except factoring out to anon. namespaces
+Many high-profile coding styles require this e.g.
+[Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html#Internal_Linkage),
+[LLVM Coding Standard](https://llvm.org/docs/CodingStandards.html#id59) ("Restrict Visibility"),
+[C++ Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#rs-unnamed2),
+[Chromium C++ Style Guilde](https://chromium.googlesource.com/chromium/src/+/main/styleguide/c++/c++.md#unnamed-namespaces).
+One problem in C++ is that there internalization is done at class level so
+there is no way to localize just some methods (esp. `private` methods,
+see some preliminary work [here](https://github.com/yugr/llvm-project/commits/yugr/internal-private/2/))
+except factoring them out to anon. namespaces.
 
 In Rust functions are local by default and need to be published explicitly
 via `pub` keyword. Note that `pub(crate/super/self)`
@@ -160,15 +172,17 @@ _Z3foobiRKSt6vectorIiSaIiEE:            # @_Z3foobiRKSt6vectorIiSaIiEE
 
 # Optimizations
 
-TODO:
-  - info whether LLVM and MIR opts can potentially optimize without it (and with what limitations)
-    * inline/template, LTO, unity builds, etc.
+In theory compiler can perform similar optimizations through
+  - function cloning
+    (Attributor pass does this under `-mllvm -attributor-allow-deep-wrappers`)
+  - determine internalizability at LTO link time
+    (both fat and thin LTO do this, see calls to `internalizeModule`)
+    but this can't be trivially done for shlibs (because all symbols
+    are exported by default)
 
 # Suggested reading
 
-TODO:
-  - links to important articles (design, etc.)
-  - (need to collect prooflinks with timecodes, reprocases for everything)
+N/A
 
 # Performance impact
 
@@ -258,10 +272,6 @@ $ cmake -B build -DCMAKE_C_COMPILER=$PREFIX/bin/clang -DCMAKE_CXX_COMPILER=$PREF
 $ INTERNAL_STATS=1 make -C build -j4 |& tee make.log
 $ ./parse_stats.sh < make.log
 27532 4547 85.8256
-
-# 2269 symbols unused according to Localizer (2398 if headers ignored)
-$ cmake -B build -DENABLE_IPC=OFF
-$ find-locals.py --ignore-header-symbols $PWD 'make -j10 -C build && make -j10 -C build test'
 ```
 and opencv 4.12.0:
 ```
@@ -269,10 +279,6 @@ $ cmake -B build -DCMAKE_C_COMPILER=$PREFIX/bin/clang -DCMAKE_CXX_COMPILER=$PREF
 $ INTERNAL_STATS=1 make -C build -j4 |& tee make.log
 $ ./parse_stats.sh < make.log
 146600 22938 86.4703
-
-# 11.8 symbols unused according to Localizer (21.5K with tests, 22.3 if headers ignored)
-$ cmake -B build -DBUILD_TESTS=ON -DBUILD_PERF_TESTS=ON -DBUILD_EXAMPLES=ON -DBUILD_opencv_apps=ON
-$ find-locals.py --ignore-header-symbols $PWD make -j10 -C build
 ```
 and clang llvmorg-20.1.7:
 ```
@@ -283,7 +289,7 @@ $ ./parse_stats.sh < make.log
 ```
 
 For other projects numbers are dramatically worse e.g.
-openssl 3.6.0 has worse numbers (but this may be because of exported symbols):
+openssl 3.6.0 has worse numbers (but this may be because of code style):
 ```
 $ PATH=$PREFIX/bin:$PATH
 $ ../config linux-x86_64-clang
@@ -328,9 +334,11 @@ $ INTERNAL_STATS=1 make -j4 all-gcc |& tee make.log
 $ ./parse_stats.sh < make.log
 32799 44471 42.4473
 
-# 9.1K symbols unused according to Localizer (11.2K if headers ignored)
+# 4.1K symbols unused according to Localizer (10.5 if headers ignored)
+# (mainly due to missing anon. namespaces or statics but
+# also because I compiled just one backend and not all frontends)
 $ ../configure --enable-languages=jit,c,c++,fortran --enable-host-shared --disable-bootstrap --disable-multilib
-$ find-locals.py --ignore-header-symbols $PWD make -j10 all-gcc
+$ find-locals.py --ignore-header-symbols $PWD/.. make -j10 all-gcc
 ```
 
 ## Measurements
