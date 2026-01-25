@@ -11,6 +11,8 @@ Some missed optimizations due to CGU splitting can be mitigated by ThinLTO, howe
 >
 > -- https://github.com/rust-lang/rust/issues/47745#issuecomment-1139664706
 
+ThinLTO is enabled by default for cross-CGU optimization during crate linking.
+
 # CGU splitting behaviour
 
 >  There are two codegen units for every source-level module:
