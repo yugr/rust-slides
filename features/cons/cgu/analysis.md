@@ -13,6 +13,8 @@ Some missed optimizations due to CGU splitting can be mitigated by ThinLTO, howe
 
 ThinLTO is enabled by default for cross-CGU optimization during crate linking.
 
+TODO: add prooflink for last statement
+
 # CGU splitting behaviour
 
 >  There are two codegen units for every source-level module:

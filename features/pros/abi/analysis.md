@@ -17,8 +17,10 @@ For x86 with SSE2 enabled and x84\_64 architectures, 128 bit SIMD vectors are pa
 
 TODO:
   - explain how `Box` and slice are different from other containers (`String`, `Vec`)
+    (`ScalarPair` for slices/ranges/some `Option` and `Result`, etc.)
   - add explanation of current calling convention for structs (vs C++ structs) and
     tuples (vs `std::tuple`)
+    * for tuples can mention that they use same ABI as structs
   - also cover returns from functions
 
 ## `Box` vs `std::unique_ptr`
