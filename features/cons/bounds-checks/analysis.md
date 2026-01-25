@@ -4,7 +4,7 @@ Assignee: yugr
 
 Parent task: gh-20
 
-Effort: 75h
+Effort: 80h
 
 # Background
 
@@ -34,7 +34,6 @@ TODO:
   - why is this feature needed ?
     * example errors
   - situation in other langs
-  - `_FORTIFY_SOURCE` and hardened STL overheads
 
 # Examples
 
@@ -173,7 +172,7 @@ $ count-panics ./build/x86_64-unknown-linux-gnu/stage2/lib/librustc_driver*.so
 
 Results are
   - baseline: 440483
-  - bounds: 427842
+  - bounds: 427842 (-5%)
 
 ### Panics in loops
 
@@ -206,6 +205,10 @@ $ grep -c 'Loop may panic' results.txt
 66
 ```
 
+So stats are
+  - baseline: 9% loops panic
+  - bounds: 4.3% loops panic (2x reduction)
+
 #### Analysis for rustc
 
 ```
@@ -225,6 +228,12 @@ $ grep -c 'Loop may NOT panic' results.txt
 $ grep -c 'Loop may panic' results.txt
 25377
 ```
+
+So stats are
+  - baseline: 42% loops panic
+  - bounds: 41.5%
+
+TODO: why such small reduction ?
 
 ## Disabling the check
 
@@ -412,6 +421,9 @@ Performance of hardened C++ has been collected via `util/llvm-bench` and
   - `-fsanitize=bounds`:
     * 0% Clang
     * 2.3% ffmpeg
+  - Stack Protector
+    * 2% Clang
+    * 1% ffmpeg
 
 [Hardening: current status and trends](https://github.com/yugr/slides/blob/main/CppZeroCost/2025/EN.pdf)
 reports worse numbers because it used old toolchains.

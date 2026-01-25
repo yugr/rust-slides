@@ -107,7 +107,7 @@ sums[bounded_i] = ...
     * this is useful to tell compiler that two slices have the same range (by subslicing them to `min` of lengths, e.g. [here](https://shnatsel.medium.com/how-to-avoid-bounds-checks-in-rust-without-unsafe-f65e618b4c1e)) although [using zip](https://www.reddit.com/r/rust/comments/154vowr/comment/jsr0b51/) also works
   - manually force index into bounds via `& (len - 1)` (`len` must be power-of-2)
     * it's handy to use `usize::next_power_of_two()`
-  - manually force index into bounds via `cmp::min` (should compile to `cmov`)
+  - manually force index into bounds via `cmp::min` (should compile to `cmov`, e.g. [here](https://www.memorysafety.org/blog/rav1d-performance-optimization/))
   - avoid complex (actually [any nontrivial](https://www.nickwilcox.com/blog/autovec/)) arithmetic on indexes
   - unchecked loads (`get_unchecked`)
   - access largest index first; use `x[i..][..2]` idiom to work around potential integer overflow
@@ -118,7 +118,7 @@ For workarounds like this keep in mind that
 > you are 100% sure code will do what you want,
 > otherwise you will have to chase the rabbit into the rabbithole with every version of Rust
 > since it changes how compiles the stuff,
-> sometimes it gains performance while others take a hit 
+> sometimes it gains performance while others take a hit
 (from [here](https://www.reddit.com/r/rust/comments/10edmjf/comment/j4qhgeo/)).
 
 # C++
@@ -146,7 +146,7 @@ This should not be a surprise - people who practice LeetCode know that
 
 All Linux distros use `_FORTIFY_SOURCE` and some (Fedora, RHEL) also `_GLIBCXX_ASSERTIONS`.
 
-There is also proposal for language dialect eo prevent raw pointer arithmetic
+There is also proposal for language dialect to prevent raw pointer arithmetic
 and provide fixits for easier migration
 ([-Wunsafe-buffer-usage](https://discourse.llvm.org/t/rfc-c-buffer-hardening/65734))
 

@@ -7,7 +7,7 @@ This is the plan of the talk.
   * Benchmarks Game uses wildly non-canonical code, to everyone's dismay
   * "It makes little sense to compare Rust vs C with respect to performance, because you can write the exact equivalent of C code in Rust and get the same performance"
     (from [here](https://users.rust-lang.org/t/a-good-performance-comparision-c-and-rust/5901/4))
-  * "When you compare languages like C, C++ and Rust, which are by-design on equal footing, you can essentially only compare how easy it is to write performant code or how performant idiomatic code is. Modulo optimizer deficiencies, if you implement the exact same datastructures and same algorithms in these languages, they will perform the same." (from [here](https://www.reddit.com/r/rust/comments/9jsqyg/comment/e6ufwcm/))
+  * "When you compare languages like C, C++ and Rust, which are by-design on equal footing, you can essentially only compare how easy it is to write performant code or how performant idiomatic code is. Modulo optimizer deficiencies, if you implement the exact same datastructures and same algorithms in these languages, they will perform the same." (Nikita Popov from [here](https://www.reddit.com/r/rust/comments/9jsqyg/comment/e6ufwcm/))
   * "If C can be faster than C I don't see why Rust can't be faster than C"
     (from [here](https://www.reddit.com/r/rust/comments/1ixt1ei/comment/meow7rc/))
   * [Good example](https://steveklabnik.com/writing/is-rust-faster-than-c) of why non-idiomatic code is less relevant
@@ -18,7 +18,7 @@ This is the plan of the talk.
   * should check what is NYI and can never be implemented in LLVM optimizer
   * do not expect "heroic compiler"
 - Performance of parallel code (["fearless concurrency"](https://blog.rust-lang.org/2015/04/10/Fearless-Concurrency.html))
-  * claimed to be underlying reason of `ripgrep` success by its author
+  * claimed to be underlying reason of `ripgrep` success by its author (I wasn't able to find proof !)
   * well known and discussed in many posts and presentations
   * maybe next time
 - Container performance
