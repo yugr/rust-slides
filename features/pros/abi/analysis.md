@@ -150,6 +150,8 @@ C++ `std::variant` is passed in registers in this case.
 [Godbolt](https://godbolt.org/z/3W1r9vjb9)
 Both on stack
 
+Rust `String` is internally a `Vec` and it is passed on stack for the same reasons that `Vec` is.
+
 ### Rust
 
 ```Rust
@@ -321,6 +323,8 @@ C++ slice is passed in two registers.
 
 [Godbolt](https://godbolt.org/z/3bMYhb37f)
 Both on stack
+
+Rust `Vec` is passed on stack (as opposed to slice), because internal structure of `Vec` is more complex and does not get (and probably cannot) get laid out in two registers. It probably can be represented by 3 or 4 registers, but compiler currently does not support this kind of optimization (and it might turn out to not be beneficial).
 
 ### Rust
 
