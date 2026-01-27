@@ -15,3 +15,7 @@ Run
 $ ./runall.sh --help
 ```
 for more details.
+
+It's recommended to setup system for benchmarking
+according to instructions from [uInit](https://github.com/yugr/uInit)
+and in particular run `./performance.sh` and `./stop_services.sh`.
