@@ -92,6 +92,14 @@ Even fast checks introduce several problems:
   - pressure on caches (I$, BTB)
   - more complex control flow so other opts break
 
+Static checks for safety (see https://www.youtube.com/watch?v=ngTZN09poqk):
+  - borrow checker (assignment destroys object, no UAF/UAR)
+  - no NULL references
+  - forced error checking
+  - explicit conversions (integers, `Option<T> == T` vs. `std::operational<T> == T`)
+    * issues: `as` + useless larger->smaller casts
+  - explicit copies
+
 - Runtime checks (see `AssertKind` enum in `compiler/rustc_middle/src/mir/syntax.rs`):
   * index accesses:
     + LLVM may not always remove them which will break autovec
