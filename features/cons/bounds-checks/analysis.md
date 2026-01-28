@@ -406,8 +406,8 @@ zed: -0.6%
 ```
 (noise was <0.5%).
 
-Performance of hardened C++ has been collected via `util/llvm-bench` and
-`util/ffmpeg-bench` (for Clang 20):
+Performance of hardened C++ has been collected via `benchmarks/cpp/llvm-bench` and
+`benchmarks/cpp/ffmpeg-bench` (for Clang 20):
   - `-D_FORTIFY_SOURCE=2/3`:
     * 0% Clang
     * 0% ffmpeg
