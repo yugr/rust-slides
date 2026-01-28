@@ -291,6 +291,8 @@ similar checks in hardened C++ have on-par overheads:
   - 1-3% Postgres (up to 20% in some scenarios)
   - virtio, Chrome: up to 10% in some scenarios
 
+TODO: use Phoronix Test Suite ? (gh-55)
+
 To statically check how many stores can't be eliminated, we compare number
 of stores and memsets in loops of Clang compiler.
 To generate Clang .bc files, update attached `llvm-build.sh` by adding `-save-temps`

@@ -357,7 +357,7 @@ assertions = true
 ```
 $ export RUSTFLAGS_NOT_BOOTSTRAP='-Cllvm-args=-debug-only=licm,early-cse,gvn,loop-vectorize,SLP'
 $ ./x setup
-$ ./x build -j1 --stage 2 compiler |& tee build.log
+$ ./x build -j1 --stage 2 compiler &> build.log
 
 # Baseline
 $ grep -c 'LV: Vectorizing' build.log
@@ -427,3 +427,5 @@ Performance of hardened C++ has been collected via `util/llvm-bench` and
 
 [Hardening: current status and trends](https://github.com/yugr/slides/blob/main/CppZeroCost/2025/EN.pdf)
 reports worse numbers because it used old toolchains.
+
+TODO: use Phoronix Test Suite ? (gh-55)

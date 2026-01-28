@@ -341,4 +341,5 @@ similar checks in hardened C++ are
   - 2x SPEC
 
 TODO:
+  - use Phoronix Test Suite ? (gh-55)
   - investigate regression in veloren (and zed ?)

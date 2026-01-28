@@ -349,12 +349,11 @@ It
 ### Static estimates
 
 Following instructions for [bounds checks](../../cons/bounds-checks/analysis.md#static-estimates):
-
 ```
 $ ./x setup
 $ export RUSTFLAGS_NOT_BOOTSTRAP='-Cllvm-args=-debug-only=licm,early-cse,gvn,loop-vectorize,SLP'
 $ ./x build --stage 1 compiler
-$ ./x build -j1 --stage 2 compiler |& tee build.log
+$ ./x build -j1 --stage 2 compiler &> build.log
 
 # Baseline
 $ grep -c 'LV: Vectorizing' build.log

@@ -109,7 +109,7 @@ Build times are extracted from `runner.py` output:
 ```
 $ export RUST_FORCED_CGU=16
 $ export RUSTFLAGS_NOT_BOOTSTRAP='-Cllvm-args=-debug-only=licm,early-cse,gvn,loop-vectorize,inline'
-$ ./x build -j1 --stage 2 compiler |& tee build_16.log
+$ ./x build -j1 --stage 2 compiler &> build_16.log
 
 $ grep -c 'LV: Vectorizing' build_16.log
 549
@@ -152,7 +152,7 @@ Build times are extracted from `runner.py` output:
 ```
 $ export RUST_FORCED_CGU=8
 $ export RUSTFLAGS_NOT_BOOTSTRAP='-Cllvm-args=-debug-only=licm,early-cse,gvn,loop-vectorize,inline'
-$ ./x build -j1 --stage 2 compiler |& tee build_8.log
+$ ./x build -j1 --stage 2 compiler &> build_8.log
 
 $ grep -c 'LV: Vectorizing' build_8.log
 552

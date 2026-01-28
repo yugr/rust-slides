@@ -468,7 +468,7 @@ in brotli-decompress (60%). Not reproduced on another machine so likely code ali
 ```
 $ ./x setup
 $ ./x build --stage 1 compiler
-$ RUSTFLAGS_NOT_BOOTSTRAP='-Cllvm-args=-debug-only=inline,licm,early-cse,gvn,loop-vectorize,SLP' ./x build -j1 --stage 2 compiler |& tee build.log
+$ RUSTFLAGS_NOT_BOOTSTRAP='-Cllvm-args=-debug-only=inline,licm,early-cse,gvn,loop-vectorize,SLP' ./x build -j1 --stage 2 compiler &> build.log
 
 # Baseline
 $ grep -c 'Size after inlining' build.log
@@ -593,7 +593,7 @@ Same as (A).
 ```
 $ ./x setup
 $ ./x build --stage 1 compiler
-$ RUSTFLAGS_NOT_BOOTSTRAP='-Cllvm-args=-debug-only=inline,licm,early-cse,gvn,loop-vectorize,SLP' ./x build -j1 --stage 2 compiler |& tee build.log
+$ RUSTFLAGS_NOT_BOOTSTRAP='-Cllvm-args=-debug-only=inline,licm,early-cse,gvn,loop-vectorize,SLP' ./x build -j1 --stage 2 compiler &> build.log
 
 # Forced aborts
 $ grep -c 'Size after inlining' build.log

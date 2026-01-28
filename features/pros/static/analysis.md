@@ -4,18 +4,22 @@ Assignee: yugr
 
 Parent task: gh-50
 
-Effort: 8h
+Effort: 10h
 
 # Background
 
 Functions which are local in translation unit (aka static or internal)
-can be optimized
-[more aggressively](https://web.archive.org/web/20240309202636/https://embeddedgurus.com/stack-overflow/2008/12/efficient-c-tips-5-make-local-functions-static/)
-by compiler:
+can be [more aggressively](https://web.archive.org/web/20240309202636/https://embeddedgurus.com/stack-overflow/2008/12/efficient-c-tips-5-make-local-functions-static/)
+optimized by compiler:
   - ABI-violating optimizations (e.g. [IPRA](https://reviews.llvm.org/D23980))
   - change calling convention (to `coldcc` or `fastcc`, see `Transforms/IPO/GlobalOpt.cpp`)
   - more aggressive inlining (e.g. it's always beneficial to inline static function called once)
-  - propagating constant parameters (IPSCCP)
+  - propagating constant arguments (IPSCCP)
+  - promote by-ref arguments to by-val (ArgumentPromotion)
+  - remove dead argument/return value (DeadArgumentElimination)
+  - better alias analysis (GlobalsAA)
+  - dead code elimitation
+  - merge global constants (ConstantMerge)
 
 For shared libraries global functions are also exported from library by default
 which slows down startup and make calls to them go through GOT/PLT
@@ -345,8 +349,49 @@ $ find-locals.py --ignore-header-symbols $PWD/.. make -j10 all-gcc
 
 ### Static estimates
 
+To speed up log collection
+  - change `DEBUG_TYPE` to `"sccp-solver"`
+    in `lib/Transforms/Utils/SCCPSolver.cpp`
+  - remove
+    ```
+    LLVM_DEBUG(dbgs() << "  BasicBlock Dead:" << BB);
+    ```
+    in `Scalar/SCCP.cpp` and `IPO/SCCP.cpp`
+
+Following instructions for [bounds checks](../../cons/bounds-checks/analysis.md#static-estimates):
+```
+# Ensure that LLVM is rebuild for both versions (see util/compiler.md for details) !
+
+$ export RUSTFLAGS_NOT_BOOTSTRAP='-Cllvm-args=-debug-only=inline,sccp,argpromition,deadargelim'
+$ ./x build --stage 1 compiler
+$ ./x build -j1 --stage 2 compiler &> build.log
+
+# Baseline
+$ grep -c 'Size after inlining:' build.log
+???
+$ grep -c 'BasicBlock Dead:' build.log
+???
+$ grep -c 'Found that GV .* is constant' build.log
+???
+$ grep -c 'ARG PROMOTION:' build.log
+???
+$ grep -c 'DeadArgumentEliminationPass - Removing \(argument\|return value\)' build.log
+???
+
+# No-static
+$ grep -c 'Size after inlining:' build.log
+???
+$ grep -c 'BasicBlock Dead:' build.log
+???
+$ grep -c 'Found that GV .* is constant' build.log
+???
+$ grep -c 'ARG PROMOTION:' build.log
+???
+$ grep -c 'DeadArgumentEliminationPass - Removing \(argument\|return value\)' build.log
+???
+```
+
 TODO:
-  - collect compiler stats: SLP/loop autovec, CSE/GVN/LICM, NoAlias returns from AA manager
   - how does it influence code size ? E.g. 4 instances of `deserialize_from_impl`
     in meilisearch/search_songs
 
