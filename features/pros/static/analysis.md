@@ -349,14 +349,8 @@ $ find-locals.py --ignore-header-symbols $PWD/.. make -j10 all-gcc
 
 ### Static estimates
 
-To speed up log collection
-  - change `DEBUG_TYPE` to `"sccp-solver"`
-    in `lib/Transforms/Utils/SCCPSolver.cpp`
-  - remove
-    ```
-    LLVM_DEBUG(dbgs() << "  BasicBlock Dead:" << BB);
-    ```
-    in `Scalar/SCCP.cpp` and `IPO/SCCP.cpp`
+To speed up log collection change `DEBUG_TYPE` to `"sccp-solver"`
+in `lib/Transforms/Utils/SCCPSolver.cpp`.
 
 Following instructions for [bounds checks](../../cons/bounds-checks/analysis.md#static-estimates):
 ```
@@ -368,28 +362,31 @@ $ ./x build -j1 --stage 2 compiler &> build.log
 
 # Baseline
 $ grep -c 'Size after inlining:' build.log
-???
+2533391
 $ grep -c 'BasicBlock Dead:' build.log
 ???
 $ grep -c 'Found that GV .* is constant' build.log
-???
+8
 $ grep -c 'ARG PROMOTION:' build.log
-???
+0
 $ grep -c 'DeadArgumentEliminationPass - Removing \(argument\|return value\)' build.log
-???
+3839
 
 # No-static
 $ grep -c 'Size after inlining:' build.log
-???
+2533391
 $ grep -c 'BasicBlock Dead:' build.log
-???
+625594
 $ grep -c 'Found that GV .* is constant' build.log
-???
+8
 $ grep -c 'ARG PROMOTION:' build.log
-???
+0
 $ grep -c 'DeadArgumentEliminationPass - Removing \(argument\|return value\)' build.log
-???
+3839
 ```
+(ArgPromotionPass seems off by default).
+
+So it seems there are no obvious benefits from statics ?
 
 TODO:
   - how does it influence code size ? E.g. 4 instances of `deserialize_from_impl`
