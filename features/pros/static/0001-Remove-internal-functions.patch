@@ -80,7 +80,7 @@ new file mode 100644
 index 000000000..efc78facc
 --- /dev/null
 +++ b/llvm/lib/Transforms/IPO/RemoveInternalFunctions.cpp
-@@ -0,0 +1,54 @@
+@@ -0,0 +1,55 @@
 +#include "llvm/Transforms/IPO/RemoveInternalFunctions.h"
 +#include "llvm/IR/Function.h"
 +#include "llvm/IR/InstIterator.h"
@@ -116,6 +116,7 @@ index 000000000..efc78facc
 +      case GlobalValue::InternalLinkage:
 +      case GlobalValue::PrivateLinkage:
 +        F.setName(F.getName() + "." + Suffix + "." + ID);
++        F.setLinkage(GlobalValue::ExternalLinkage);
 +        ++Statics;
 +        break;
 +      case GlobalValue::ExternalLinkage:

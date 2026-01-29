@@ -364,7 +364,7 @@ $ ./x build -j1 --stage 2 compiler &> build.log
 $ grep -c 'Size after inlining:' build.log
 2533391
 $ grep -c 'BasicBlock Dead:' build.log
-???
+625594
 $ grep -c 'Found that GV .* is constant' build.log
 8
 $ grep -c 'ARG PROMOTION:' build.log
@@ -374,17 +374,17 @@ $ grep -c 'DeadArgumentEliminationPass - Removing \(argument\|return value\)' bu
 
 # No-static
 $ grep -c 'Size after inlining:' build.log
-2533391
+2654738  # +5% (???)
 $ grep -c 'BasicBlock Dead:' build.log
-625594
+380500   # -39%
 $ grep -c 'Found that GV .* is constant' build.log
 8
 $ grep -c 'ARG PROMOTION:' build.log
 0
 $ grep -c 'DeadArgumentEliminationPass - Removing \(argument\|return value\)' build.log
-3839
+0        # -100%
 ```
-(ArgPromotionPass seems off by default).
+(ArgPromotionPass seems off by default ?).
 
 So it seems there are no obvious benefits from statics ?
 
@@ -406,4 +406,4 @@ $ /usr/bin/time setarch -R ~/src/llvm/llvm-project/build-stage1/bin/clang++ -O2 
 and ffmpeg as well by 1% (tested as in [ffmpeg-bench](../../../benchmarks/cpp/ffmpeg-bench)).
 
 TODO:
-  - collect Rust runtime perf measurements with disabled internals and (maybe) `-mllvm -enable-ipra`
+  - collect Rust runtime perf measurements with disabled internals (and maybe `-mllvm -enable-ipra` ?)
