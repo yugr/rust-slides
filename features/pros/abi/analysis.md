@@ -18,9 +18,12 @@ For x86 with SSE2 enabled and x84\_64 architectures, 128 bit SIMD vectors are pa
 TODO:
   - explain how `Box` and slice are different from other containers (`String`, `Vec`)
     (`ScalarPair` for slices/ranges/some `Option` and `Result`, etc.)
-  - add explanation of current calling convention for structs (vs C++ structs) and
-    tuples (vs `std::tuple`)
+  - add explanation of current calling convention for structs (vs POD structs in amd64/arm64 platform ABIs
+    and C++ structs in Itanium ABI) and tuples (vs `std::tuple`)
+    * structs are sometimes passed in RegPair, otherwise as explicit pointers to temp. objects
+      (mention why Rust chooses to explicitly lower them to pointers rather than rely on LLVM lowering)
     * for tuples can mention that they use same ABI as structs
+    * most likely RegPair optimization is tightly related to underlying platform ABI
   - also cover returns from functions
 
 ## `Box` vs `std::unique_ptr`
