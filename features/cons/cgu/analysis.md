@@ -11,9 +11,16 @@ Some missed optimizations due to CGU splitting can be mitigated by ThinLTO, howe
 >
 > -- https://github.com/rust-lang/rust/issues/47745#issuecomment-1139664706
 
-ThinLTO is enabled by default for cross-CGU optimization during crate linking.
+ThinLTO is enabled by default for cross-CGU optimization (thin local LTO) during crate linking.
 
-TODO: add prooflink for last statement
+> // Now we're in "defaults" territory. By default we enable ThinLTO for
+> // optimized compiles (anything greater than O0).
+> match self.opts.optimize {
+>     config::OptLevel::No => config::Lto::No,
+>     _ => config::Lto::ThinLocal,
+> }
+>
+> -- `compiler/rustc_session/src/session.rs`
 
 # CGU splitting behaviour
 
