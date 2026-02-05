@@ -20,7 +20,7 @@
       <AutoLoadModules>toggle_screensaver, perf_tips, ob_auto_compare, load_dynamic_result_viewer</AutoLoadModules>
     </Modules>
     <Installation>
-      <RemoveDownloadFiles>TRUE</RemoveDownloadFiles>
+      <RemoveDownloadFiles>FALSE</RemoveDownloadFiles>
       <SearchMediaForCache>TRUE</SearchMediaForCache>
       <SymLinkFilesFromCache>FALSE</SymLinkFilesFromCache>
       <PromptForDownloadMirror>FALSE</PromptForDownloadMirror>
