@@ -391,6 +391,8 @@ So it seems there are no obvious benefits from statics ?
 TODO:
   - how does it influence code size ? E.g. 4 instances of `deserialize_from_impl`
     in meilisearch/search_songs
+  - check if internal funcs are duped in CGUs
+  - are internals generated for monomorphized funcs merged in crate ?
 
 ### Runtime improvements
 
