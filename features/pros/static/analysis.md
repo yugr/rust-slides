@@ -193,7 +193,9 @@ N/A
 ## Disabling optimization
 
 We disable static functions by converting them to globals with unique prefix
-in [attached patch](0001-Remove-internal-functions.patch).  It also collects stats.
+in [attached patch](0001-Remove-internal-functions.patch). It also collects stats.
+
+TODO: is there an overapproximation because compiler used to merge these functions before ?
 
 ## Prevalence
 
@@ -387,12 +389,6 @@ $ grep -c 'DeadArgumentEliminationPass - Removing \(argument\|return value\)' bu
 (ArgPromotionPass seems off by default ?).
 
 So it seems there are no obvious benefits from statics ?
-
-TODO:
-  - how does it influence code size ? E.g. 4 instances of `deserialize_from_impl`
-    in meilisearch/search_songs
-  - check if internal funcs are duped in CGUs
-  - are internals generated for monomorphized funcs merged in crate ?
 
 ### Runtime improvements
 

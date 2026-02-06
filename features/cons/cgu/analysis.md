@@ -49,6 +49,9 @@ Note that `--emit=asm` automatically enables `-C codegen-units=1` which may chan
 - Inlining requires explicit annotation `#[inline]` (otherwise function body will not be available in other CGUs).
 - CGUs cause vtable duplication (but vtables in different CGUs are not always equal) which causes some pointer comparisons to be unpredictable (https://github.com/rust-lang/rust/issues/46139)
   * This may be a problem for optimizer because different copies of vtables will block devirtualization; hopefully it'll be fixed in [#68262](https://github.com/rust-lang/rust/issues/68262)
+- Local (aka non-public, internal, static) functions or monomorphizations of public generics may be duplicated across CGUs (see [cgu-dup](cgu-dup) example). They will later be merged in LLVM IR via `MergeFunctions ` or by linker (via ICF) if code is 100% identical but these opts are off by default and also will not always help due to e.g. IPSCCP, ArgPromotion, etc. which make function bodies not identical. So this may result in code bloat.
+
+TODO: double check claims about code bloat @zak
 
 # Compile-time and performance with different numbers of CGUs
 
