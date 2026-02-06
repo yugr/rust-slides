@@ -8,6 +8,12 @@
 set -eu
 set -x
 
+if ! test -t 1 -o -n "${__SED_ENABLED:-}"; then
+  # PTS prints colors to logfiles, fix this
+  __SED_ENABLED=1 "$0" "$@" | sed 's/\x1b\[[0-9;]*m//g'
+  exit $?
+fi
+
 # Artifacts of my PHP setup...
 PREFIX=$HOME/src/php-tree/root
 . $PREFIX/env
