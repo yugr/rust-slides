@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# TODO:
-# - reduce stdev
-# - limit repeats for long tests (e.g. 10 min. ?)
-# - log comparator
+# Script to run interesting tests from Phoronix Test Suite.
+#
+# All weird parts are due to issues with environment which I intend to
+# run them on.
 
 set -eu
 set -x
@@ -18,16 +18,20 @@ PTS_DIR=$HOME/src/phoronix-test-suite
 PTS_LOCAL_DIR=$HOME/.phoronix-test-suite
 
 # A list of relevant tests:
-#   - popular projects
+#   - come from popular projects
 #   - no external dependencies (I don't have root access on server)
 #   - don't take too much time (e.g. ffmpeg, fftw, redis were removed)
 #   - produce stable results (e.g. all compress/XXX were removed)
-tt='pts/apache pts/c-ray pts/openssl pts/botan pts/bullet pts/coremark pts/gmpbench pts/nginx pts/luajit pts/polybench-c pts/povray pts/simdjson'
+#   - respect CFLAGS/CXXFLAGS
+#     (e.g. mkl-dnn, onednn, etc. reset them and nginx uses CFLAGS for both)
+#   - total runtime of tests under 6 hours
+#     (that's free time on server that I have)
+tt='pts/apache pts/botan pts/bullet pts/coremark pts/crafty pts/c-ray pts/gcrypt pts/gmpbench pts/luajit pts/nginx pts/openssl pts/polybench-c pts/povray pts/simdjson pts/z3'
 
 export NO_EXTERNAL_DEPENDENCIES=TRUE
 
 for t in $tt; do
   $PHP $PTS_DIR/pts-core/phoronix-test-suite.php batch-install $t
-  $PHP $PTS_DIR/pts-core/phoronix-test-suite.php batch-benchmark $t
+  setarch -R $PHP $PTS_DIR/pts-core/phoronix-test-suite.php batch-benchmark $t
   rm -rf $PTS_LOCAL_DIR/installed-tests/$t*
 done
