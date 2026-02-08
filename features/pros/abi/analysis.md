@@ -329,7 +329,8 @@ C++ slice is passed in two registers.
 [Godbolt](https://godbolt.org/z/3bMYhb37f)
 Both on stack
 
-Rust `Vec` is passed on stack (as opposed to slice), because internal structure of `Vec` is more complex and does not get (and probably cannot) get laid out in two registers. It probably can be represented by 3 or 4 registers, but compiler currently does not support this kind of optimization (and it might turn out to not be beneficial).
+Rust `Vec` is passed on stack (as opposed to slice), because internal structure of `Vec` is more complex and does not get (and probably cannot) get laid out in two registers due to it's size.
+It probably can be represented by 3 or 4 registers, but the ABI does not allow it (see [Struct passing ABI](#struct-passing-abi) section).
 
 ### Rust
 
@@ -605,3 +606,14 @@ foo(std::optional<int>):
 ```
 
 C++ `optional` is passed in registers.
+
+# Struct passing ABI
+
+Both [AMD64 abi](https://refspecs.linuxbase.org/elf/x86_64-abi-0.99.pdf) and AArch64 [AAPCS64](https://student.cs.uwaterloo.ca/~cs452/docs/rpi4b/aapcs64.pdf) allow aggregate types which size does not exceed 16 bytes to be passed in two general-purpose registers (also called struct scalarization).
+
+In Rust, structs, tuples (which are just structs with unnamed fields) and enums are treated as aggregate types and are all subject to struct scalarization.
+The possibility of scalarization is special-cased by a separate `BackendRepr` assigned to suitable aggregates - `ScalarPair`.
+Aggregates with such `BackendRepr` will be lowered to an anonymous LLVM IR struct, which will be scalarized according to the ABI.
+Structs that cannot be represented as a pair of scalars are passed in memory (on stack).
+These structures are not lowered to LLVM IR structs and instead Rust frontend directly generates memory accesses.
+Most likely this is due to Rust abi being unstable and allowing for optimizations that cannot be represented on LLVM IR level or performed by the LLVM backend (such optimizations include reordering of struct fields and niche optimizations).
