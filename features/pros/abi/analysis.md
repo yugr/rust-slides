@@ -533,6 +533,8 @@ example::foo::h3e18ceab42494c9b:
 
 Rust `Result` is passed on stack due to compiler underoptimization of enum ABI.
 
+TODO: please explain "underoptimization"
+
 ### C++
 
 ```C++
@@ -617,3 +619,12 @@ Aggregates with such `BackendRepr` will be lowered to an anonymous LLVM IR struc
 Structs that cannot be represented as a pair of scalars are passed in memory (on stack).
 These structures are not lowered to LLVM IR structs and instead Rust frontend directly generates memory accesses.
 Most likely this is due to Rust abi being unstable and allowing for optimizations that cannot be represented on LLVM IR level or performed by the LLVM backend (such optimizations include reordering of struct fields and niche optimizations).
+
+TODO:
+  - this part should be at the beginning of the document so that everything else
+    (`Box`, `Result`, `Vec`, etc.) could be explained through it
+  - please expand on ABI for objects and how it's different from Itanium ABI
+    as this is the key optimization in Rust
+    (this would also explain the mysterious "lang requirements" part in `Box` section)
+  - please explain why `Result` (which is also a struct with two members)
+    isn't passed in regs
