@@ -8,7 +8,6 @@ Script assumes that environment was set up according to comments in
 [gh-55](https://github.com/yugr/rust-slides/issues/55).
 
 TODO:
-  - log comparator
   - reduce stdev ?
 
 # Configs
