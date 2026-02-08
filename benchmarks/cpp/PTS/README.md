@@ -16,6 +16,8 @@ Note that `-O3` is forced in some tests.
 `-fasm` is needed for some tests that use inline asm and `-std=c99`
 (which disables inline asm for Clang but not GCC).
 
+TODO: check if projects already compile with any of these (esp. StackProtector)
+
 Baseline:
 ```
 CC=$PREFIX/bin/clang CXX=$PREFIX/bin/clang++ CFLAGS='-O2 -DNDEBUG -fpermissive' CXXFLAGS="$CFLAGS"
