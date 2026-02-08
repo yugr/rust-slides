@@ -95,7 +95,7 @@ def compare_sizes(tests, name, lhs, rhs):
         print(f"{name} {typ}: {geomean:+.1f}%")
 
 
-def compare_jsons(lhs, rhs):
+def compare_jsons(lhs, rhs, ignore_missing):
     """Compares two .json files with benchmark results."""
 
     with open(lhs) as f:
@@ -108,15 +108,22 @@ def compare_jsons(lhs, rhs):
     rhs_tests = set(sorted(rhs_json.keys()))
 
     if lhs_tests - rhs_tests:
-        names = ", ".join(lhs_tests - rhs_tests)
+        names = ", ".join(f"'{t}'" for t in (lhs_tests - rhs_tests))
         warn(f"tests {names} are missing in {rhs}")
 
     if rhs_tests - lhs_tests:
-        names = ", ".join(rhs_tests - lhs_tests)
+        names = ", ".join(f"'{t}'" for t in (rhs_tests - lhs_tests))
         warn(f"tests {names} are missing in {lhs}")
 
     if lhs_tests != rhs_tests:
-        return
+        if not ignore_missing:
+            return
+        for name in (lhs_tests ^ rhs_tests):
+            if name in lhs_json:
+                del lhs_json[name]
+            if name in rhs_json:
+                del rhs_json[name]
+        lhs_tests = lhs_tests & rhs_tests
 
     if lhs.name.endswith("_sizes.json"):
         compare_sizes(lhs_tests, lhs.name, lhs_json, rhs_json)
@@ -138,6 +145,12 @@ def main():
         choices=["avg", "lb", "ub"],
         default="avg",
         help="Which measurement to compare",
+    )
+    parser.add_argument(
+        "--ignore-missing",
+        action="store_true",
+        default=False,
+        help="Ignore tests with some testcases missing",
     )
     parser.add_argument(
         "LHS",
@@ -177,7 +190,7 @@ def main():
         error(f"no common .json files found")
 
     for json_file in json_files:
-        compare_jsons(lhs / json_file, rhs / json_file)
+        compare_jsons(lhs / json_file, rhs / json_file, args.ignore_missing)
 
 
 if __name__ == "__main__":
