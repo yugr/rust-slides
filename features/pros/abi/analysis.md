@@ -12,6 +12,7 @@ In Rust, structs, tuples (which are just structs with unnamed fields) and enums 
 The possibility of scalarization is special-cased by a separate `BackendRepr` assigned to suitable aggregates - `ScalarPair`.
 Aggregates with such `BackendRepr` will be lowered to an anonymous LLVM IR struct, which will be scalarized according to the ABI.
 The assignment of `ScalarPair` representation is assigned based on both struct element sizes and their offsets, and it's logic does not seem perfectly optimal currently.
+This covers some important cases: slices, `Rc`, ranges.
 It does not take into account all the possibilities of different types coexisting, so some aggregate types (most prominently some cases of the Result enum, e.g `Result<i32, &str>`) are not converted to a `ScalarPair` and are instead passed in memory.
 
 Structs that cannot be represented as a pair of scalars are passed in memory (on stack).
@@ -27,15 +28,6 @@ A significant difference from Itanium ABI is that the Itanium ABI requires any t
 >
 > -- [Itanium ABI](https://itanium-cxx-abi.github.io/cxx-abi/abi.html#non-trivial-parameters)
 
-TODO:
-  - this part should be at the beginning of the document so that everything else
-    (`Box`, `Result`, `Vec`, etc.) could be explained through it
-  - please expand on ABI for objects and how it's different from Itanium ABI
-    as this is the key optimization in Rust
-    (this would also explain the mysterious "lang requirements" part in `Box` section)
-  - please explain why `Result` (which is also a struct with two members)
-    isn't passed in regs
-
 # C++ and Rust comparisons
 
 - `Box` vs `std::unique_ptr`
@@ -48,8 +40,6 @@ TODO:
 - `Option` vs `std::optional`
 
 TODO:
-  - explain how `Box` and slice are different from other containers (`String`, `Vec`)
-    (`ScalarPair` for slices/ranges/some `Option` and `Result`, etc.)
   - add explanation of current calling convention for structs (vs POD structs in amd64/arm64 platform ABIs
     and C++ structs in Itanium ABI) and tuples (vs `std::tuple`)
     * structs are sometimes passed in RegPair, otherwise as explicit pointers to temp. objects
@@ -454,6 +444,8 @@ C++ string is passed on stack.
 
 [Godbolt](https://godbolt.org/z/Waqnn5aaa)
 
+TODO: `Arc`
+
 ### Rust
 
 ```Rust
@@ -545,7 +537,12 @@ example::foo::h3e18ceab42494c9b:
         ret
 ```
 
-Rust `Result` is passed on stack due to compiler underoptimization of enum ABI (as explained in the [stuct passing ABI](#struct-passing-abi) section)
+Rust `Result` is passed on stack due to compiler underoptimization of enum ABI (as explained in the [struct passing ABI](#struct-passing-abi) section)
+
+TODO:
+  - please explain why `Result` (which is also a struct with two members)
+    isn't passed in regs; the struct passing ABI section
+    does not really explain much
 
 ### C++
 
