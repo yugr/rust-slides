@@ -10,3 +10,4 @@ AutoInit:clang:-ftrivial-auto-var-init=zero::
 Libcxx:clang:-nostdinc++ -isystem PREFIX/include/c++/v1 -isystem PREFIX/include/x86_64-unknown-linux-gnu/c++/v1:-L PREFIX/lib/x86_64-unknown-linux-gnu -Wl,-rpath,PREFIX/lib/x86_64-unknown-linux-gnu:-lc++abi -lunwind
 # Note that HardenedSTL should be compared against Libcxx (other configs use GCC libstdc++)
 HardenedSTL:clang:-D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_FAST -nostdinc++ -isystem PREFIX/include/c++/v1 -isystem PREFIX/include/x86_64-unknown-linux-gnu/c++/v1:-L PREFIX/lib/x86_64-unknown-linux-gnu -Wl,-rpath,PREFIX/lib/x86_64-unknown-linux-gnu:-lc++abi -lunwind
+# TODO: -fstack-clash-protection

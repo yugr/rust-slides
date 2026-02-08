@@ -10,3 +10,4 @@ HardenedSTL:clang:-D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_FAST -nostdinc
 # No unsigned-integer-overflow in IOF because Clang uses it intentionally
 IOF:clang:-fsanitize=signed-integer-overflow,pointer-overflow -fno-sanitize-recover=signed-integer-overflow,pointer-overflow -fsanitize-minimal-runtime:-fsanitize-minimal-runtime:
 AutoInit:clang:-ftrivial-auto-var-init=zero::
+# TODO: -fstack-clash-protection
