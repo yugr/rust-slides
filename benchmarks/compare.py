@@ -154,6 +154,9 @@ def main():
     lhs = Path(args.LHS).absolute()
     rhs = Path(args.RHS).absolute()
 
+    error_if(not lhs.exists(), f"directory '{lhs}' does not exist")
+    error_if(not rhs.exists(), f"directory '{rhs}' does not exist")
+
     lhs_jsons = glob.glob(str(lhs / "*.json"))
     rhs_jsons = glob.glob(str(rhs / "*.json"))
 

@@ -11,6 +11,8 @@ $ cmake -G Ninja -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_B
     -DLLVM_ENABLE_WARNINGS=OFF -DLLVM_ENABLE_LLD=ON -DLLVM_PARALLEL_LINK_JOBS=1 -DLLVM_APPEND_VC_REV=OFF \
     -DLLVM_TARGETS_TO_BUILD=X86 -DLLVM_ENABLE_PROJECTS='clang;compiler-rt' -DLLVM_ENABLE_RUNTIMES='libcxx;libcxxabi;libunwind' \
     -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR -B $BUILD_DIR $LLVM_DIR/llvm
+$ cmake -B $BUILD_DIR
+$ ninja -C $BUILD_DIR install
 ```
 
 Finally build and benchmark stage2 compilers:
