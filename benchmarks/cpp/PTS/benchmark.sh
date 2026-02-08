@@ -6,7 +6,7 @@
 # run them on.
 
 set -eu
-set -x
+#set -x
 
 if ! test -t 1 -o -n "${__SED_ENABLED:-}"; then
   # PTS prints colors to logfiles, fix this
