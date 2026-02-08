@@ -1,0 +1,16 @@
+# A list of relevant tests:
+#   - come from popular projects
+#   - compile with Clang
+#   - no external dependencies (I don't have root access on server)
+#   - don't take too much time (e.g. ffmpeg, fftw, redis were removed)
+#   - produce stable results (e.g. all compress/XXX were removed)
+#   - respect CFLAGS/CXXFLAGS
+#     (e.g. mkl-dnn, onednn, etc. reset them and nginx uses CFLAGS for both)
+#   - total runtime of tests under 6 hours
+#     (that's free time on server that I have)
+
+# Default
+::pts/botan pts/bullet pts/coremark pts/c-ray pts/gcrypt pts/luajit pts/openssl pts/polybench-c pts/povray pts/simdjson
+
+# Tests that want older C standard
+-std=gnu89 -fasm::pts/apache pts/gmpbench pts/nginx
