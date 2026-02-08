@@ -4,13 +4,45 @@ SIMD vectors are always passed to functions (non-intrinsics) on stack.
 See [Issue #44367](https://github.com/rust-lang/rust/issues/44367) for SIMD vector ABI problems and [this reply](https://github.com/rust-lang/rust/issues/44367#issuecomment-360323733) for a final decision.
 For x86 with SSE2 enabled and x84\_64 architectures, 128 bit SIMD vectors are passed directly in registers. Less than 128 bit vectors will be able to be passed directly when [cranelift issue](https://github.com/bytecodealliance/wasmtime/issues/10254) is fixed.
 
+# Struct passing ABI
+
+Both [AMD64 abi](https://refspecs.linuxbase.org/elf/x86_64-abi-0.99.pdf) and AArch64 [AAPCS64](https://student.cs.uwaterloo.ca/~cs452/docs/rpi4b/aapcs64.pdf) allow aggregate types which size does not exceed 16 bytes to be passed in two general-purpose registers (also called struct scalarization).
+
+In Rust, structs, tuples (which are just structs with unnamed fields) and enums are treated as aggregate types and are all subject to struct scalarization.
+The possibility of scalarization is special-cased by a separate `BackendRepr` assigned to suitable aggregates - `ScalarPair`.
+Aggregates with such `BackendRepr` will be lowered to an anonymous LLVM IR struct, which will be scalarized according to the ABI.
+The assignment of `ScalarPair` representation is assigned based on both struct element sizes and their offsets, and it's logic does not seem perfectly optimal currently.
+It does not take into account all the possibilities of different types coexisting, so some aggregate types (most prominently some cases of the Result enum, e.g `Result<i32, &str>`) are not converted to a `ScalarPair` and are instead passed in memory.
+
+Structs that cannot be represented as a pair of scalars are passed in memory (on stack).
+These structures are not lowered to LLVM IR structs and instead Rust frontend directly generates memory accesses.
+Most likely this is due to Rust abi being unstable and allowing for optimizations that cannot be represented on LLVM IR level or performed by the LLVM backend.
+Such optimizations are:
+    - reordering of struct fields
+    - niche optimizations
+
+A significant difference from Itanium ABI is that the Itanium ABI requires any type with a non-trivial copy/move constructor or destructor to be passed on stack, and Rust ABI does not have this kind of limitation.
+
+> If a parameter type is a class type that is non-trivial for the purposes of calls, the caller must allocate space for a temporary and pass that temporary by reference
+>
+> -- [Itanium ABI](https://itanium-cxx-abi.github.io/cxx-abi/abi.html#non-trivial-parameters)
+
+TODO:
+  - this part should be at the beginning of the document so that everything else
+    (`Box`, `Result`, `Vec`, etc.) could be explained through it
+  - please expand on ABI for objects and how it's different from Itanium ABI
+    as this is the key optimization in Rust
+    (this would also explain the mysterious "lang requirements" part in `Box` section)
+  - please explain why `Result` (which is also a struct with two members)
+    isn't passed in regs
+
 # C++ and Rust comparisons
 
 - `Box` vs `std::unique_ptr`
 - `enum` vs `std::variant`
-- `string` vs `std::string`
 - `slice` vs `std::span`
 - `Vec` vs `std::vec`
+- `string` vs `std::string`
 - `Rc` vs `std::shared_ptr`
 - `Result` vs `std::expected`
 - `Option` vs `std::optional`
@@ -29,7 +61,6 @@ TODO:
 ## `Box` vs `std::unique_ptr`
 
 [Godbolt](https://godbolt.org/z/Y6hYccWKs)
-C++ on stack (lang requirements), Rust in reg
 
 ### Rust
 
@@ -84,11 +115,9 @@ foo(std::unique_ptr<int, std::default_delete<int>>):
 `std::unique_ptr` is passed on stack due to language ABI requirements of passing objects with non-trivial copy constructor or non-trivial destructor.
 Nice explanation [here](https://stackoverflow.com/questions/58339165/why-can-a-t-be-passed-in-register-but-a-unique-ptrt-cannot).
 
-
 ## `enum` vs `std::variant`
 
 [Godbolt](https://godbolt.org/z/jTro69n3x)
-C++ in regs, Rust on stack (fixable in compiler)
 
 ### Rust
 
@@ -120,7 +149,6 @@ example::foo::hcfc5d64e7cbc02fd:
 
 Rust `Enum` is passed on stack in this case due to underoptimization in compiler.
 
-
 ### C++
 
 ```C++
@@ -136,7 +164,6 @@ double foo(std::variant<double, int> val) {
 }
 ```
 
-
 ```Assembly
 foo(std::variant<double, int>):
         test    sil, sil
@@ -150,113 +177,9 @@ foo(std::variant<double, int>):
 
 C++ `std::variant` is passed in registers in this case.
 
-## `String` vs `std::string`
-
-[Godbolt](https://godbolt.org/z/3W1r9vjb9)
-Both on stack
-
-Rust `String` is internally a `Vec` and it is passed on stack for the same reasons that `Vec` is.
-
-### Rust
-
-```Rust
-#[inline(never)]
-pub fn foo(val: String) -> i32 {
-    if val.as_bytes()[0] == 110 {
-        return 10;
-    } else {
-        return 1;
-    }
-}
-```
-
-```Assembly
-example::foo::hc3a5c6933c8add58:
-        push    r14
-        push    rbx
-        push    rax
-        mov     rbx, rdi
-        cmp     qword ptr [rdi + 16], 0
-        je      .LBB0_7
-        mov     rsi, qword ptr [rbx]
-        mov     rdi, qword ptr [rbx + 8]
-        movzx   ebx, byte ptr [rdi]
-        test    rsi, rsi
-        je      .LBB0_3
-        mov     edx, 1
-        call    qword ptr [rip + __rustc[de0091b922c53d7e]::__rust_dealloc@GOTPCREL]
-.LBB0_3:
-        xor     eax, eax
-        cmp     bl, 110
-        sete    al
-        lea     eax, [rax + 8*rax]
-        inc     eax
-        add     rsp, 8
-        pop     rbx
-        pop     r14
-        ret
-.LBB0_7:
-        lea     rdx, [rip + .Lanon.2a5be9ce72f759b528604ab2593337ff.1]
-        xor     edi, edi
-        xor     esi, esi
-        call    qword ptr [rip + core::panicking::panic_bounds_check::h9bbcb0758914da05@GOTPCREL]
-        ud2
-        mov     r14, rax
-        mov     rsi, qword ptr [rbx]
-        test    rsi, rsi
-        je      .LBB0_6
-        mov     rdi, qword ptr [rbx + 8]
-        mov     edx, 1
-        call    qword ptr [rip + __rustc[de0091b922c53d7e]::__rust_dealloc@GOTPCREL]
-.LBB0_6:
-        mov     rdi, r14
-        call    _Unwind_Resume@PLT
-
-.Lanon.2a5be9ce72f759b528604ab2593337ff.0:
-        .asciz  "/app/example.rs"
-
-.Lanon.2a5be9ce72f759b528604ab2593337ff.1:
-        .quad   .Lanon.2a5be9ce72f759b528604ab2593337ff.0
-        .asciz  "\017\000\000\000\000\000\000\000\003\000\000\000\b\000\000"
-
-DW.ref.rust_eh_personality:
-        .quad   rust_eh_personality
-```
-
-Rust string is passed on stack.
-
-### C++
-
-```C++
-#include <iostream>
-#include <string>
-
-int foo(std::string val) {
-    if (val[0] == 'n') {
-        return 10;
-    } else {
-        return 1;
-    }
-}
-```
-
-```Assembly
-foo(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>):
-        mov     rax, qword ptr [rdi]
-        xor     ecx, ecx
-        cmp     byte ptr [rax], 110
-        sete    cl
-        lea     eax, [rcx + 8*rcx]
-        inc     eax
-        ret
-```
-
-C++ string is passed on stack.
-
 ## `slice` vs `std::span`
 
 [Godbolt](https://godbolt.org/z/Yn8sz9rG3)
-Both in registers
 
 ### Rust
 
@@ -327,10 +250,6 @@ C++ slice is passed in two registers.
 ## `Vec` vs `std::vec`
 
 [Godbolt](https://godbolt.org/z/3bMYhb37f)
-Both on stack
-
-Rust `Vec` is passed on stack (as opposed to slice), because internal structure of `Vec` is more complex and does not get (and probably cannot) get laid out in two registers due to it's size.
-It probably can be represented by 3 or 4 registers, but the ABI does not allow it (see [Struct passing ABI](#struct-passing-abi) section).
 
 ### Rust
 
@@ -400,8 +319,8 @@ DW.ref.rust_eh_personality:
         .quad   rust_eh_personality
 ```
 
-Rust `Vec` is passed on stack.
-
+Rust `Vec` is passed on stack (as opposed to slice), because internal structure of `Vec` is more complex and does not get (and probably cannot) get laid out in two registers due to it's size.
+It probably can be represented by 3 or 4 registers, but the ABI does not allow it (see [Struct passing ABI](#struct-passing-abi) section).
 
 ### C++
 
@@ -431,11 +350,109 @@ foo(std::vector<int, std::allocator<int>>):
 
 C++ vector is passed on stack.
 
+## `String` vs `std::string`
+
+[Godbolt](https://godbolt.org/z/3W1r9vjb9)
+
+### Rust
+
+```Rust
+#[inline(never)]
+pub fn foo(val: String) -> i32 {
+    if val.as_bytes()[0] == 110 {
+        return 10;
+    } else {
+        return 1;
+    }
+}
+```
+
+```Assembly
+example::foo::hc3a5c6933c8add58:
+        push    r14
+        push    rbx
+        push    rax
+        mov     rbx, rdi
+        cmp     qword ptr [rdi + 16], 0
+        je      .LBB0_7
+        mov     rsi, qword ptr [rbx]
+        mov     rdi, qword ptr [rbx + 8]
+        movzx   ebx, byte ptr [rdi]
+        test    rsi, rsi
+        je      .LBB0_3
+        mov     edx, 1
+        call    qword ptr [rip + __rustc[de0091b922c53d7e]::__rust_dealloc@GOTPCREL]
+.LBB0_3:
+        xor     eax, eax
+        cmp     bl, 110
+        sete    al
+        lea     eax, [rax + 8*rax]
+        inc     eax
+        add     rsp, 8
+        pop     rbx
+        pop     r14
+        ret
+.LBB0_7:
+        lea     rdx, [rip + .Lanon.2a5be9ce72f759b528604ab2593337ff.1]
+        xor     edi, edi
+        xor     esi, esi
+        call    qword ptr [rip + core::panicking::panic_bounds_check::h9bbcb0758914da05@GOTPCREL]
+        ud2
+        mov     r14, rax
+        mov     rsi, qword ptr [rbx]
+        test    rsi, rsi
+        je      .LBB0_6
+        mov     rdi, qword ptr [rbx + 8]
+        mov     edx, 1
+        call    qword ptr [rip + __rustc[de0091b922c53d7e]::__rust_dealloc@GOTPCREL]
+.LBB0_6:
+        mov     rdi, r14
+        call    _Unwind_Resume@PLT
+
+.Lanon.2a5be9ce72f759b528604ab2593337ff.0:
+        .asciz  "/app/example.rs"
+
+.Lanon.2a5be9ce72f759b528604ab2593337ff.1:
+        .quad   .Lanon.2a5be9ce72f759b528604ab2593337ff.0
+        .asciz  "\017\000\000\000\000\000\000\000\003\000\000\000\b\000\000"
+
+DW.ref.rust_eh_personality:
+        .quad   rust_eh_personality
+```
+
+Rust `String` is internally a `Vec` and it is passed on stack for the same reasons that `Vec` is.
+
+### C++
+
+```C++
+#include <iostream>
+#include <string>
+
+int foo(std::string val) {
+    if (val[0] == 'n') {
+        return 10;
+    } else {
+        return 1;
+    }
+}
+```
+
+```Assembly
+foo(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>):
+        mov     rax, qword ptr [rdi]
+        xor     ecx, ecx
+        cmp     byte ptr [rax], 110
+        sete    cl
+        lea     eax, [rcx + 8*rcx]
+        inc     eax
+        ret
+```
+
+C++ string is passed on stack.
 
 ## `Rc` vs `std::shared_ptr`
 
 [Godbolt](https://godbolt.org/z/Waqnn5aaa)
-C++ on stack, Rust in registers
 
 ### Rust
 
@@ -502,12 +519,9 @@ foo(std::shared_ptr<int>):
 
 C++ `shared_ptr` is passed on stack.
 
-
 ## `Result` vs `std::expected`
 
 [Godbolt](https://godbolt.org/z/aT8vWoaW8)
-C++ in registers, Rust on stack
-
 
 ### Rust
 
@@ -531,9 +545,7 @@ example::foo::h3e18ceab42494c9b:
         ret
 ```
 
-Rust `Result` is passed on stack due to compiler underoptimization of enum ABI.
-
-TODO: please explain "underoptimization"
+Rust `Result` is passed on stack due to compiler underoptimization of enum ABI (as explained in the [stuct passing ABI](#struct-passing-abi) section)
 
 ### C++
 
@@ -563,8 +575,6 @@ C++ `expected` is passed in registers.
 ## `Option` vs `std::optional`
 
 [Godbolt](https://godbolt.org/z/5Gh3hKET9)
-Both in registers
-
 
 ### Rust
 
@@ -609,22 +619,3 @@ foo(std::optional<int>):
 
 C++ `optional` is passed in registers.
 
-# Struct passing ABI
-
-Both [AMD64 abi](https://refspecs.linuxbase.org/elf/x86_64-abi-0.99.pdf) and AArch64 [AAPCS64](https://student.cs.uwaterloo.ca/~cs452/docs/rpi4b/aapcs64.pdf) allow aggregate types which size does not exceed 16 bytes to be passed in two general-purpose registers (also called struct scalarization).
-
-In Rust, structs, tuples (which are just structs with unnamed fields) and enums are treated as aggregate types and are all subject to struct scalarization.
-The possibility of scalarization is special-cased by a separate `BackendRepr` assigned to suitable aggregates - `ScalarPair`.
-Aggregates with such `BackendRepr` will be lowered to an anonymous LLVM IR struct, which will be scalarized according to the ABI.
-Structs that cannot be represented as a pair of scalars are passed in memory (on stack).
-These structures are not lowered to LLVM IR structs and instead Rust frontend directly generates memory accesses.
-Most likely this is due to Rust abi being unstable and allowing for optimizations that cannot be represented on LLVM IR level or performed by the LLVM backend (such optimizations include reordering of struct fields and niche optimizations).
-
-TODO:
-  - this part should be at the beginning of the document so that everything else
-    (`Box`, `Result`, `Vec`, etc.) could be explained through it
-  - please expand on ABI for objects and how it's different from Itanium ABI
-    as this is the key optimization in Rust
-    (this would also explain the mysterious "lang requirements" part in `Box` section)
-  - please explain why `Result` (which is also a struct with two members)
-    isn't passed in regs
