@@ -147,6 +147,8 @@ pub fn foo() -> LargeStruct {
 }
 ```
 
+TODO: better move elision in MIR is [2026 project goal](https://rust-lang.github.io/rust-project-goals/2025h2/mir-move-elimination.html)
+
 # Workarounds
 
 C++ has several workarounds for lack of copy elision e.g.

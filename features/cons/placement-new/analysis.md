@@ -59,6 +59,8 @@ Ada supports [storage pools](https://www.adacore.com/blog/header-storage-pools).
 Swift provides [UnsafeMutablePointer API](https://stackoverflow.com/a/27721441/2170527)
 similar to Rust.
 
+TODO: inplace initialization is [2026 project goal](https://rust-lang.github.io/rust-project-goals/2025h2/in-place-initialization.html)
+
 # Example
 
 This C++ code
