@@ -35,7 +35,7 @@ A significant difference from Itanium ABI is that the Itanium ABI requires any t
 - `slice` vs `std::span`
 - `Vec` vs `std::vec`
 - `string` vs `std::string`
-- `Rc` vs `std::shared_ptr`
+- `Arc` vs `std::shared_ptr`
 - `Result` vs `std::expected`
 - `Option` vs `std::optional`
 
@@ -310,7 +310,7 @@ DW.ref.rust_eh_personality:
 ```
 
 Rust `Vec` is passed on stack (as opposed to slice), because internal structure of `Vec` is more complex and does not get (and probably cannot) get laid out in two registers due to it's size.
-It probably can be represented by 3 or 4 registers, but the ABI does not allow it (see [Struct passing ABI](#struct-passing-abi) section).
+It probably can be represented by 3 or 4 registers, but the ABI does not allow it (see [Aggregate type passing ABI](#aggregate-type-passing-abi) section).
 
 ### C++
 
@@ -440,57 +440,49 @@ foo(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char
 
 C++ string is passed on stack.
 
-## `Rc` vs `std::shared_ptr`
+## `Arc` vs `std::shared_ptr`
 
-[Godbolt](https://godbolt.org/z/Waqnn5aaa)
-
-TODO: `Arc`
+[Godbolt](https://godbolt.org/z/oP6r7Gh9G)
 
 ### Rust
 
 ```Rust
 #[inline(never)]
-pub fn foo(val: std::rc::Rc<i32>) -> i32 {
+pub fn foo(val: std::sync::Arc<i32>) -> i32 {
     *val
 }
 ```
 
 ```Assembly
-alloc::rc::Rc<T,A>::drop_slow::h0d5f34dd4c5aa101:
+alloc::sync::Arc<T,A>::drop_slow::hd489889effa8d4fa:
         mov     rdi, qword ptr [rdi]
         cmp     rdi, -1
         je      .LBB0_2
-        dec     qword ptr [rdi + 8]
-        je      .LBB0_3
-.LBB0_2:
-        ret
-.LBB0_3:
+        lock            dec     qword ptr [rdi + 8]
+        jne     .LBB0_2
         mov     esi, 24
         mov     edx, 8
         jmp     qword ptr [rip + __rustc[de0091b922c53d7e]::__rust_dealloc@GOTPCREL]
+.LBB0_2:
+        ret
 
-example::foo::h436144ea3aa21137:
+example::foo::he8d9e0d3f481b444:
         push    rbx
         sub     rsp, 16
         mov     qword ptr [rsp + 8], rdi
         mov     ebx, dword ptr [rdi + 16]
-        dec     qword ptr [rdi]
-        je      .LBB1_1
-        mov     eax, ebx
-        add     rsp, 16
-        pop     rbx
-        ret
-.LBB1_1:
+        lock            dec     qword ptr [rdi]
+        jne     .LBB1_2
         lea     rdi, [rsp + 8]
-        call    qword ptr [rip + alloc::rc::Rc<T,A>::drop_slow::h0d5f34dd4c5aa101@GOTPCREL]
+        call    qword ptr [rip + alloc::sync::Arc<T,A>::drop_slow::hd489889effa8d4fa@GOTPCREL]
+.LBB1_2:
         mov     eax, ebx
         add     rsp, 16
         pop     rbx
         ret
 ```
 
-Rust `Rc` is passed on stack.
-Unlike C++, this does not seem to be a language requirement and more likely is a compiler underoptimization, as Rust `Box` is passed in registers.
+Rust `Arc` is passed in register.
 
 ### C++
 
@@ -537,7 +529,11 @@ example::foo::h3e18ceab42494c9b:
         ret
 ```
 
-Rust `Result` is passed on stack due to compiler underoptimization of enum ABI (as explained in the [struct passing ABI](#struct-passing-abi) section)
+Rust `Result` is passed on stack due to compiler underoptimization of enum ABI (as explained in the [Aggregate type passing ABI](#aggregate-type-passing-abi) section).
+When considering if `Result` is eligible to be a `ScalarPair`, compiler check sizes and offsets of types in both enum variants.
+Offset is calculated from the start of the representation, and the first byte of it is taken by the tag of the enum (unless some niche or non-null optimization is performed, which is not the case here).
+In case of `Result` with 4-byte first variant and 8-byte second variant, their offsets are, respectively, 4 and 8 bytes (as 8-byte value has to be aligned on 8 bytes) and do not match.
+This is blocking the conversion of enum to `ScalarPair`.
 
 TODO:
   - please explain why `Result` (which is also a struct with two members)
