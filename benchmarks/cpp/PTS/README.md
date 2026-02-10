@@ -16,7 +16,9 @@ Note that `-O3` is forced in some tests.
 `-fasm` is needed for some tests that use inline asm and `-std=c99`
 (which disables inline asm for Clang but not GCC).
 
-TODO: check if projects already compile with any of these (esp. StackProtector)
+According to manual inspection none of the selected projects
+enables any security features by default
+(except for `-fstack-protector` in botan).
 
 Baseline:
 ```
