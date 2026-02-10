@@ -535,11 +535,6 @@ Offset is calculated from the start of the representation, and the first byte of
 In case of `Result` with 4-byte first variant and 8-byte second variant, their offsets are, respectively, 4 and 8 bytes (as 8-byte value has to be aligned on 8 bytes) and do not match.
 This is blocking the conversion of enum to `ScalarPair`.
 
-TODO:
-  - please explain why `Result` (which is also a struct with two members)
-    isn't passed in regs; the struct passing ABI section
-    does not really explain much
-
 ### C++
 
 ```C++
