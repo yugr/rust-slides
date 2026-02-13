@@ -21,3 +21,5 @@ according to instructions from [uInit](https://github.com/yugr/uInit)
 and in particular run `./performance.sh` and `./stop_services.sh`.
 
 C++ benchmarks are in `cpp/` subdir.
+
+See [this page](averaging.md) for discussion of averaging methods.
