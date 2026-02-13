@@ -43,6 +43,7 @@ while read cfg; do
       # Keep default Autoconf flags
       export CFLAGS="${CFLAGS:--g -O2} $cflags"
       export CXXFLAGS="${CXXFLAGS:--g -O2} $cxxflags"
+      export LDFLAGS="$CFLAGS"
       $PHP $PTS_DIR/pts-core/phoronix-test-suite.php batch-install $t
       setarch -R $PHP $PTS_DIR/pts-core/phoronix-test-suite.php batch-benchmark $t
     )

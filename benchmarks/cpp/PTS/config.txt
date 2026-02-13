@@ -8,6 +8,8 @@
 #     (e.g. mkl-dnn, onednn, etc. reset them and nginx uses CFLAGS for both)
 #   - total runtime of tests under 6 hours
 #     (that's free time on server that I have)
+#
+# Format: CFLAGS:CXXFLAGS:tests
 
 # Default
 ::pts/botan pts/bullet pts/coremark pts/c-ray pts/gcrypt pts/luajit pts/openssl pts/polybench-c pts/povray pts/simdjson
