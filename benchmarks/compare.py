@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
 # Comparator of collected benchmark results.
+#
+# TODO: add script to average multiple runs
 
 from __future__ import annotations
 
