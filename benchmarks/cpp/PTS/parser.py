@@ -41,6 +41,12 @@ def main():
     parser = argparse.ArgumentParser(
         description="Parser of Phoronix logs", formatter_class=Formatter
     )
+    parser.add_argument(
+        "--average-mode",
+        choices=["mean", "median", "min"],
+        help="averaging method",
+        default="mean",
+    )
     parser.add_argument("-o", "--output", help="where to place jsons", default=".")
     parser.add_argument(
         "-v",
@@ -68,88 +74,121 @@ def main():
         os.unlink(f)
 
     results = {}
-    current_test = current_testcase = None
-    blacklist = {}
 
-    for line in lines:
-        # Installed:     pts/apache-3.0.0
-        m = re.match(r"^ *Installed: +(.*)", line)
-        if m is not None:
-            current_test = m[1]
-            results.setdefault(current_test, {})
+    lines = [line.rstrip("\r\n") for line in lines]
+    lines.reverse()
+
+    while lines:
+        line = lines.pop()
+
+        if line == "The following tests failed to properly run:":
             continue
 
-        # pts/apache-3.0.0 [Concurrent Requests: 4]
-        if current_test is not None and line.lstrip().startswith(current_test):
-            m = re.match(r".*\[(.*)\]", line)
-            if m is None:
-                current_testcase = "MAIN"
-            else:
-                current_testcase = m[1]
-            if current_testcase in results[current_test]:
-                error(
-                    f"multiple instances of '{current_testcase}' testcase in '{current_test}' test"
-                )
-            results[current_test][current_testcase] = {}
+        # We look for block like this:
+        #
+        # Botan 2.17.3:
+        #     pts/botan-1.6.0 [Test: KASUMI]
+        #     Test 1 of 6
+        #     Estimated Trial Run Count:    3
+        #     Estimated Test Run-Time:      6 Minutes
+        #     Estimated Time To Completion: 33 Minutes [11:39 UTC]
+        #     Started Run 1 @ 11:07:34
+        #     Started Run 2 @ 11:08:09
+        #     Started Run 3 @ 11:08:43
+        #
+        #     Test: KASUMI:
+        #         56.423
+        #         56.442
+        #         56.436
+        #
+        #     Average: 56.434 MiB/s
+        #     Deviation: 0.02%
+
+        m = re.match(r"^([^ ].*):$", line)
+        if m is None:
             continue
+
+        test = m[1].replace(" ", "-")
+
+        while lines and lines[-1] and lines[-1].startswith(" "):
+            lines.pop()
+
+        if not lines or lines[-1]:
+            continue
+
+        lines.pop()  # Empty
+
+        test_case_line = lines.pop()
+        m = re.match(r"^    (.*):", test_case_line)
+        if m is None:
+            continue
+
+        test_case = m[1]
+
+        data = []
+        while lines and lines[-1]:
+            data_line = lines.pop()
+            data.append(float(data_line.strip()))
+
+        if not lines:
+            continue
+
+        lines.pop()  # Empty
 
         #     Average: 62021.0 Requests Per Second
-        m = re.match(r"^ *Average: +([0-9.]+) (.*)", line)
-        if m is not None:
-            assert current_test is not None
-            assert current_testcase is not None
+        avg_line = lines.pop()
+        m = re.match(r"^ *Average: +([0-9.]+) (.*)", avg_line)
+        num, dim = m.groups()
+        num = float(num)
 
-            num, dim = m.groups()
-            num = float(num)
-
-            if (
-                dim.endswith("/s")
-                or dim.endswith("/Sec")
-                or dim.endswith("Per Second")
-                or dim.endswith("Score")
-                or dim.endswith("flops")
-            ):
-                # Convert rates to readable times
-                if num > 1e8:
-                    num = 1e9 / num
-                    dim = "ns"
-                elif num > 1e5:
-                    num = 1e6 / num
-                    dim = "us"
-                elif num > 1e2:
-                    num = 1e3 / num
-                    dim = "ms"
-                else:
-                    num = 1 / num
-                    dim = "s"
-            elif dim == "Seconds":
-                dim = "s"
+        if (
+            dim.endswith("/s")
+            or dim.endswith("/Sec")
+            or dim.endswith("Per Second")
+            or dim.endswith("Score")
+            or dim.endswith("flops")
+        ):
+            # Convert rates to readable times
+            if num > 1e8:
+                N = 1e9
+                dim = "ns"
+            elif num > 1e5:
+                N = 1e6
+                dim = "us"
+            elif num > 1e2:
+                N = 1e3
+                dim = "ms"
             else:
-                error(f"unknown dimension '{dim}'")
-
-            results[current_test][current_testcase]["avg"] = [num, dim]
+                N = 1
+                dim = "s"
+            num = N / num
+            data = [N / d for d in data]
+        elif dim == "Seconds":
+            dim = "s"
+        else:
+            error(f"unknown dimension '{dim}'")
 
         #     Deviation: 0.19%
-        m = re.match(r"^ *Deviation: +([0-9.]+)%", line)
-        if m is not None:
-            assert current_test is not None
-            assert current_testcase is not None
-            if float(m[1]) > 1:
-                blacklist.setdefault(current_test, set()).add(current_testcase)
+        std_line = lines.pop()
+        m = re.match(r"^ *Deviation: +([0-9.]+)%", std_line)
+        if m is not None and float(m[1]) > 1:
+            warn(f"skipping noisy test case '{test_case}' in '{test}'")
+            continue
+
+        if args.average_mode == "min":
+            val = min(data)
+        elif args.average_mode == "mean":
+            val = sum(data) / len(data)
+        else:
+            assert args.average_mode == "median"
+            val = data[len(data) // 2]
+
+        results.setdefault(test, {})[test_case] = {
+            "avg": [val, dim],
+        }
 
     os.makedirs(args.output, exist_ok=True)
     for test, cases in results.items():
-        for case, vals in sorted(cases.items()):
-            if not vals:
-                warn(f"skipping empty test case '{case}' in '{test}'")
-                del cases[case]
-            if test in blacklist and case in blacklist[test]:
-                warn(f"skipping noisy test case '{case}' in '{test}'")
-                del cases[case]
-        if not cases:
-            warn(f"no test cases for '{test}'")
-            continue
-        test = re.sub(r".*\/", "", test)
         with open(os.path.join(args.output, test + ".json"), "w") as f:
             f.write(json.dumps(cases, indent=4, sort_keys=True))
 
