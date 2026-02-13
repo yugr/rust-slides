@@ -2,7 +2,7 @@ This is the plan of the talk.
 
 # What this talk is NOT about
 
-- Non-idiomatic code (SIMD, intrinsics, inline asm, `wrapping_add`, too many `unsafe`s, `restrict` in C++, `__builtin_expect`'s, etc.)
+- Non-idiomatic code (SIMD, intrinsics, inline asm, `wrapping_add`, too many `unsafe`s, `restrict` in C++, `__builtin_expect`'s, containers from non-standard libraries, etc.)
   * would like to compare "standard" (default) Rust and C++
   * Benchmarks Game uses wildly non-canonical code, to everyone's dismay
   * "It makes little sense to compare Rust vs C with respect to performance, because you can write the exact equivalent of C code in Rust and get the same performance"
