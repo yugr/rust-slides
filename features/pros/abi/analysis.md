@@ -17,20 +17,28 @@ It does not take into account all the possibilities of different types coexistin
 
 Structs that cannot be represented as a pair of scalars are passed in memory (on stack).
 These structures are not lowered to LLVM IR structs and instead Rust frontend directly generates memory accesses.
-Most likely this is due to Rust abi being unstable and allowing for optimizations that cannot be represented on LLVM IR level or performed by the LLVM backend.
+Most likely this is due to Rust ABI being unstable and allowing for optimizations that cannot be represented on LLVM IR level or performed by the LLVM backend.
 Such optimizations are:
     - reordering of struct fields
     - niche optimizations
 
 A significant difference from Itanium ABI is that the Itanium ABI requires any type with a non-trivial copy/move constructor or destructor to be passed on stack, and Rust ABI does not have this kind of limitation.
+The same requirement of the value having an address in memory holds for non-trivial return values, for which the caller has the responsibility to allocate memory and pass this pointer as implicit first argument.
+These limitations are the most noticeable for smart pointer types, where a single internal pointer of a `unique_ptr` or two internal pointers of a `shared_ptr` are passed on stack instead of being passed in registers.
 
-> If a parameter type is a class type that is non-trivial for the purposes of calls, the caller must allocate space for a temporary and pass that temporary by reference
+> If a parameter type is a class type that is non-trivial for the purposes of calls, the caller must allocate space for a temporary and pass that temporary by reference.
 >
 > -- [Itanium ABI](https://itanium-cxx-abi.github.io/cxx-abi/abi.html#non-trivial-parameters)
+
+> If the return type is a class type that is non-trivial for the purposes of calls, the caller passes an address as an implicit parameter.
+> The callee then constructs the return value into this address.
+>
+> -- [Itanium ABI](https://itanium-cxx-abi.github.io/cxx-abi/abi.html#non-trivial-return-values)
 
 # C++ and Rust comparisons
 
 - `Box` vs `std::unique_ptr`
+- `Box` vs `std::unique_ptr` as return value
 - `enum` vs `std::variant`
 - `slice` vs `std::span`
 - `Vec` vs `std::vec`
@@ -98,6 +106,72 @@ foo(std::unique_ptr<int, std::default_delete<int>>):
 
 `std::unique_ptr` is passed on stack due to language ABI requirements of passing objects with non-trivial copy constructor or non-trivial destructor.
 Nice explanation [here](https://stackoverflow.com/questions/58339165/why-can-a-t-be-passed-in-register-but-a-unique-ptrt-cannot).
+
+## `Box` vs `std::unique_ptr` as return value
+
+[Godbolt](https://godbolt.org/z/qcGxxG4We)
+
+### Rust
+
+```Rust
+#[inline(never)]
+pub fn foo(val: i32) -> Box<i32> {
+    return Box::new(val);
+}
+```
+
+```Assembly
+example::foo::h0f2b10160f200d96:
+        push    rbx
+        mov     ebx, edi
+        call    qword ptr [rip + __rustc[de0091b922c53d7e]::__rust_no_alloc_shim_is_unstable_v2@GOTPCREL]
+        mov     edi, 4
+        mov     esi, 4
+        call    qword ptr [rip + __rustc[de0091b922c53d7e]::__rust_alloc@GOTPCREL]
+        test    rax, rax
+        je      .LBB0_2
+        mov     dword ptr [rax], ebx
+        pop     rbx
+        ret
+.LBB0_2:
+        mov     edi, 4
+        mov     esi, 4
+        call    qword ptr [rip + alloc::alloc::handle_alloc_error::h1a71ccc8de2526dc@GOTPCREL]
+```
+
+When Rust `Box` is returned from a function, it is passed in registers.
+
+### C++
+
+```C++
+#include <memory>
+
+std::unique_ptr<int> baz(int val) {
+    return std::make_unique<int>(val);
+}
+```
+
+```Assembly
+baz(int):
+        push    r14
+        push    rbx
+        push    rax
+        mov     ebx, esi
+        mov     r14, rdi
+        mov     edi, 4
+        call    operator new(unsigned long)@PLT
+        mov     dword ptr [rax], ebx
+        mov     qword ptr [r14], rax
+        mov     rax, r14
+        add     rsp, 8
+        pop     rbx
+        pop     r14
+        ret
+```
+
+When `std::unique_ptr` is returned from a function, space for it is allocated by the caller and pointer to this space is passed as first argument.
+The same pointer is returned by the callee.
+This behaviour for non-trivial return values is required by the [Itanium ABI](https://itanium-cxx-abi.github.io/cxx-abi/abi.html#non-trivial-return-values).
 
 ## `enum` vs `std::variant`
 
