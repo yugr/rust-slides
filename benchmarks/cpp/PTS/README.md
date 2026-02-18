@@ -78,3 +78,11 @@ Stack Clash (probestack):
 ```
 CC=$PREFIX/bin/clang CXX=$PREFIX/bin/clang++ CFLAGS='-O2 -DNDEBUG -fpermissive -fstack-clash-protection' CXXFLAGS="$CFLAGS"
 ```
+
+# Known issues
+
+Apache will not work for some configs because luajit dependency ignores CC.
+
+TODO:
+  - Use wrappers for `cc`, `gcc`, etc. ?
+    This would also allow us to enable crafty and luajit.

@@ -12,7 +12,7 @@
 # Format: CFLAGS:CXXFLAGS:tests
 
 # Default
-::pts/botan pts/bullet pts/coremark pts/c-ray pts/gcrypt pts/luajit pts/openssl pts/polybench-c pts/povray pts/simdjson
+::pts/botan pts/bullet pts/coremark pts/c-ray pts/gcrypt pts/openssl pts/polybench-c pts/povray pts/simdjson
 
 # Tests that want older C standard
 -std=gnu89 -fasm::pts/apache pts/gmpbench pts/nginx
