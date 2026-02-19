@@ -44,6 +44,8 @@ Other languages have different views on fast-math optimizations:
  - Fortran explicitly permits deviations from IEEE 754 in favor of performance
     - [Fortran specification](https://j3-fortran.org/doc/year/24/24-007.pdf) section 17.5
 
+TODO: mention issues from https://simonbyrne.github.io/notes/fastmath/
+
 # Example
 
 This simple loop is only vectorized when algebraic fast-math optimization is enabled. Without it, single scalar xmm instructions are used and only one value is processed per xmm calculation (4 double are processed per loop iteration due to unrolling). When compiler is allowed to change the order of computations, loop is vectorized in packs of 8 floats and one xmm calculation processes 2 double values (4 per loop iteration, but in 8 instructions vs 12 in baseline assembly).
