@@ -413,6 +413,7 @@ Performance of hardened C++ has been collected via `benchmarks/cpp/llvm-bench` a
     * 0% ffmpeg
   - STL indexing checks:
     * 1% Clang
+      + TODO: recollect after fixing flags (`-stdlib=libc++`)
     * 0% ffmpeg
     * 2-3% [Google](https://bughunters.google.com/blog/6368559657254912/llvm-s-rfc-c-buffer-hardening-at-google)
   - `-fsanitize=object-size`:

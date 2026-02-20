@@ -52,13 +52,13 @@ CC=$PREFIX/bin/clang CXX=$PREFIX/bin/clang++ CFLAGS='-O2 -DNDEBUG -fpermissive -
 
 Libcxx:
 ```
-CC=$PREFIX/bin/clang CXX=$PREFIX/bin/clang++ CFLAGS="-O2 -DNDEBUG -fpermissive -nostdinc++ -isystem $PREFIX/include/c++/v1 -isystem $PREFIX/include/x86_64-unknown-linux-gnu/c++/v1" CXXFLAGS="$CFLAGS"
+CC=$PREFIX/bin/clang CXX=$PREFIX/bin/clang++ CFLAGS="-O2 -DNDEBUG -fpermissive -stdlib=libc++ -nostdinc++ -isystem $PREFIX/include/c++/v1 -isystem $PREFIX/include/x86_64-unknown-linux-gnu/c++/v1" CXXFLAGS="$CFLAGS"
 ```
 (need STL in CFLAGS because nginx sets CXXFLAGS to them).
 
 HardenedSTL:
 ```
-CC=$PREFIX/bin/clang CXX=$PREFIX/bin/clang++ CFLAGS="-O2 -DNDEBUG -fpermissive -nostdinc++ -isystem $PREFIX/include/c++/v1 -isystem $PREFIX/include/x86_64-unknown-linux-gnu/c++/v1 -D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_FAST" CXXFLAGS="$CFLAGS"
+CC=$PREFIX/bin/clang CXX=$PREFIX/bin/clang++ CFLAGS="-O2 -DNDEBUG -fpermissive -stdlib=libc++ -nostdinc++ -isystem $PREFIX/include/c++/v1 -isystem $PREFIX/include/x86_64-unknown-linux-gnu/c++/v1 -D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_FAST" CXXFLAGS="$CFLAGS"
 ```
 (need STL in CFLAGS because nginx sets CXXFLAGS to them,
 note that HardenedSTL should be compared against Libcxx as other configs use GCC libstdc++).
