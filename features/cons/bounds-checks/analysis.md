@@ -4,7 +4,7 @@ Assignee: yugr
 
 Parent task: gh-20
 
-Effort: 80h
+Effort: 86h
 
 # Background
 
@@ -30,10 +30,11 @@ $ CVE/kev_scanner.py -y 2024 known_exploited_vulnerabilities.json
 [Mitre 2024 top-25 weaknesses rating](https://cwe.mitre.org/top25/archive/2024/2024_cwe_top25.html):
 buffer overflows are still no. 2, 6 and 20.
 
+For more information on security vulnerabilities caused by memory errors check
+[Hardening: current status and trends](https://github.com/yugr/slides/blob/main/CppZeroCost/2025/EN.pdf).
+
 TODO:
-  - why is this feature needed ?
-    * example errors
-  - situation in other langs
+  - situation in other langs (Java, C#, Swift, Ada)
 
 # Examples
 
@@ -157,30 +158,31 @@ $ grep 'call.*\(unwrap_failed\|expect_failed\|assert_failed\|slice_.*_fail\|core
                                               # It's enabled in compiler because it's compiled with -Cdebug-assertions by default
                                               # (that's default from bootstrap.compiler.toml for "compiler" profile).
 ```
-Note that `!`-marks above are approximate:
-  - some `core::str::slice_error_fail` are due to char boundary checks
-  - some other asserts mat be due to boundary checks in containers
 
-For rustc without debug-assertions I get more reasonable results:
+For rustc with `debug-assertions=false` I get more reasonable results:
 ```
     204 core::panicking::assert_failed_inner
     299 std::panicking::try::cleanup
-    320 core::slice::index::slice_index_order_fail
+!    320 core::slice::index::slice_index_order_fail
     344 core::panicking::panic_cannot_unwind
-    444 core::str::slice_error_fail
+!    444 core::str::slice_error_fail
     550 core::panicking::assert_failed
     556 std::panicking::begin_panic
     568 std::panicking::panic_count::is_zero_slow_path
-   1134 core::slice::index::slice_start_index_len_fail
-   2300 core::slice::index::slice_end_index_len_fail
+!   1134 core::slice::index::slice_start_index_len_fail
+!   2300 core::slice::index::slice_end_index_len_fail
    3651 core::result::unwrap_failed
    7007 core::panicking::panic_fmt
-   9243 core::panicking::panic_bounds_check
+!   9243 core::panicking::panic_bounds_check
   11409 core::option::expect_failed
   11632 core::option::unwrap_failed
   14865 core::panicking::panic
  117973 core::panicking::panic_in_cleanup
 ```
+
+Note that `!`-marks above are approximate:
+  - some `core::str::slice_error_fail` are due to char boundary checks
+  - some other asserts mat be due to boundary checks in containers
 
 To compare how big are the savings, build stage2 compiler with
 ```
@@ -196,8 +198,6 @@ $ count-panics ./build/x86_64-unknown-linux-gnu/stage2/lib/librustc_driver*.so
 Results are
   - baseline: 64410
   - bounds: 51122 (-21%)
-
-TODO: compare for other projects ?
 
 ### Panics in loops
 
@@ -319,62 +319,61 @@ C++ hardening has comparable overhead:
 
 We can measure how bounds checking hurts most common optimizations.
 
-Ideally we should be able to count optimization remarks but they [do not work](https://github.com/rust-lang/rust/issues/142375)
+Ideally we should be able to count optimization remarks but
+they [do not work](https://github.com/rust-lang/rust/issues/142375)
 and same goes for [compiler stats](https://github.com/rust-lang/rust/issues/142266).
 So below we use `-Cllvm-args=-debug-only=...` instead.
 
 #### Results for oxipng
 
+Inliner:
+```
+$ export RUSTFLAGS='-Cllvm-args=-debug-only=inline -Ctarget-cpu=native'
+$ cargo clean && cargo +baseline b -j1 --release |& grep -c 'Size after inlining:'
+24320
+$ cargo clean && cargo +bounds b -j1 --release |& grep -c 'Size after inlining:'
+24208
+```
+
 Loop vectorizer:
 ```
 $ export RUSTFLAGS='-Cllvm-args=-debug-only=loop-vectorize -Ctarget-cpu=native'
-$ cargo clean
-$ cargo +baseline b -j1 --release |& grep -c 'LV: Vectorizing'
-85
-$ cargo clean
-$ cargo +bounds b -j1 --release |& grep -c 'LV: Vectorizing'
-87
+$ cargo clean && cargo +baseline b -j1 --release |& grep -c 'LV: Vectorizing'
+102
+$ cargo clean && cargo +bounds b -j1 --release |& grep -c 'LV: Vectorizing'
+128
 ```
 
 LICM:
 ```
 $ export RUSTFLAGS='-Cllvm-args=-debug-only=licm'
-$ cargo clean
-$ cargo +baseline b -j1 --release |& grep -c 'LICM \(hoist\|sink\)ing'
-27714
-$ cargo clean
-$ cargo +bounds b -j1 --release |& grep -c 'LICM \(hoist\|sink\)ing'
-27957
+$ cargo clean && cargo +baseline b -j1 --release |& grep -c 'LICM \(hoist\|sink\)ing'
+42482
+$ cargo clean && cargo +bounds b -j1 --release |& grep -c 'LICM \(hoist\|sink\)ing'
+43094
 ```
 
 GVN:
 ```
 $ export RUSTFLAGS='-Cllvm-args=-debug-only=gvn'
-$ cargo clean
-$ cargo +baseline b -j1 --release |& grep -c 'GVN removed'
-8508
-$ cargo clean
-$ cargo +bounds b -j1 --release |& grep -c 'GVN removed'
-7688
+$ cargo clean && cargo +baseline b -j1 --release |& grep -c 'GVN removed'
+26458
+$ cargo clean && cargo +bounds b -j1 --release |& grep -c 'GVN removed'
+25302
 ```
 
 CSE:
 ```
 $ export RUSTFLAGS='-Cllvm-args=-debug-only=early-cse'
-$ cargo clean
-$ cargo +baseline b -j1 --release |& grep -c 'EarlyCSE CSE'
-20820
-$ cargo clean
-$ cargo +bounds b -j1 --release |& grep -c 'EarlyCSE CSE'
-20724
+$ cargo clean && cargo +baseline b -j1 --release |& grep -c 'EarlyCSE CSE'
+18603
+$ cargo clean && cargo +bounds b -j1 --release |& grep -c 'EarlyCSE CSE'
+18444
 ```
-
-TODO:
-  - why GVN/CSE degrade? perhaps some preceeding opts should be checked
 
 #### Results for rustc
 
-Warning: ~9 hours to build and log file will take several GBs
+Warning: ~9 hours to build and log file will take several GBs.
 
 Do not forget to add to bootstrap.toml:
 ```
@@ -383,11 +382,12 @@ assertions = true
 ```
 
 ```
-$ export RUSTFLAGS_NOT_BOOTSTRAP='-Cllvm-args=-debug-only=licm,early-cse,gvn,loop-vectorize,SLP'
-$ ./x setup
-$ ./x build -j1 --stage 2 compiler &> build.log
+$ ./x build --stage 1 compiler
+$ RUSTFLAGS_NOT_BOOTSTRAP='-Cllvm-args=-debug-only=inline,licm,early-cse,gvn,loop-vectorize,SLP' ./x build -j1 --stage 2 compiler &> build.log
 
 # Baseline
+$ grep -c 'Size after inlining:' build.log
+???
 $ grep -c 'LV: Vectorizing' build.log
 549
 $ grep -c 'LICM \(hoist\|sink\)ing' build.log
@@ -398,6 +398,8 @@ $ grep -c 'EarlyCSE CSE' build.log
 2379907
 
 # Bounds
+$ grep -c 'Size after inlining:' build.log
+???
 $ grep -c 'LV: Vectorizing' build.log
 537
 $ grep -c 'LICM \(hoist\|sink\)ing' build.log
@@ -427,7 +429,7 @@ nalgebra: +0.4%
 oxipng: +2.3%
 rav1e: +3.8%
 regex: +3.6%
-ruff: + 2.2%
+ruff: +2.2%
 rust_serialization_benchmark: +1%
 tokio: -0.6%
 uv: -0.6%
