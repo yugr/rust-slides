@@ -187,14 +187,39 @@ Because of issue with relocations we want to compare two variants:
 
 ## Measurements
 
-TODO:
-  * collect perf measurements for benchmarks:
-    + runtime
-    + code size (if applicable)
-    + compiler stats
-      - depend on feature
-      - e.g. SLP/loop autovec for bounds checking feature
-      - e.g. NoAlias returns from AA manager for alias feature
-      - e.g. CSE/GVN/LICM for alias feature
+CPU: Intel(R) Core(TM) i7-9700K @ 3.60GHz (frequency fixed at 1.5 GHz)
 
+Results:
+```
+$ compare.py results/baseline results/plt
+SpacetimeDB_0.json: -0.1%
+bevy_0.json: -0.6%
+nalgebra_0.json: +0.2%
+oxipng_0.json: -1.0%
+rav1e_0.json: +0.5%
+regex_0.json: +0.6%
+ruff_0.json: +0.3%
+rust_serialization_benchmark_0.json: -0.8%
+rustc-runtime-benchmarks_0.json: +1.5%
+tokio_0.json: +0.3%
+uv_0.json: -0.7%
+veloren_0.json: -0.6%
+zed_0.json: +2.2%
 
+$ compare.py results/baseline results/noplt-relax
+SpacetimeDB_0.json: -0.1%
+bevy_0.json: -0.2%
+nalgebra_0.json: +0.7%
+oxipng_0.json: +0.2%
+rav1e_0.json: -0.2%
+regex_0.json: +0.2%
+ruff_0.json: -0.3%
+rust_serialization_benchmark_0.json: +0.0%
+rustc-runtime-benchmarks_0.json: +0.8%
+tokio_0.json: +0.1%
+uv_0.json: -0.2%
+veloren_0.json: -0.1%
+zed_0.json: -0.2%
+```
+
+So PLT-related flags are largely irrelevant for common benchmarks.
