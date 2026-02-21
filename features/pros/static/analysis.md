@@ -247,6 +247,9 @@ $ ./parse_stats.sh < build.log
 1270712 281931 81.8419
 ```
 
+TODO:
+  - rebuild rustc w/ `debug-assertions=false` and recollect data
+
 For some C/C++ projects the numbers are on par
 (all measurements were done with llvmorg-20.1.7 Clang with the above patch).
 For example x264 (0480cb05) stats are similar:

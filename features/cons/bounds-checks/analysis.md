@@ -194,8 +194,8 @@ $ count-panics ./build/x86_64-unknown-linux-gnu/stage2/lib/librustc_driver*.so
 ```
 
 Results are
-  - baseline: 64405
-  - bounds: 51117 (-21%)
+  - baseline: 64410
+  - bounds: 51122 (-21%)
 
 TODO: compare for other projects ?
 
@@ -216,49 +216,52 @@ and may break build.
 #   find target-baseline -name *.thin-lto-after-pm.bc
 
 $ RUSTFLAGS='-Csave-temps' cargo +baseline b --target-dir=target-baseline --release
-$ for f in `find target-baseline -name *.rcgu.bc`; do ~/src/rust/llvm-tool/CountLoops $f; done > results.txt
+$ find target-baseline -name '*.rcgu.bc' | xargs ~/tasks/rust/llvm-tool/CountLoops > results.txt
 $ grep -c 'Loop may NOT panic' results.txt
-1446
+3419
 $ grep -c 'Loop may panic' results.txt
-132
+328
 
 $ RUSTFLAGS='-Csave-temps' cargo +bounds b --target-dir=target-bounds --release
-$ for f in `find target-bounds -name *.rcgu.bc`; do ~/src/rust/llvm-tool/CountLoops $f; done > results.txt
+$ find target-bounds -name '*.rcgu.bc' | xargs ~/tasks/rust/llvm-tool/CountLoops > results.txt
 $ grep -c 'Loop may NOT panic' results.txt
-1501
+3826
 $ grep -c 'Loop may panic' results.txt
-66
+73
 ```
 
 So stats are
-  - baseline: 9% loops panic
-  - bounds: 4.3% loops panic (2x reduction)
+  - baseline: 8.8% loops panic
+  - bounds: 1.9% loops panic (5x improvement)
 
 #### Analysis for rustc
 
+Add
 ```
-$ export RUSTFLAGS_NOT_BOOTSTRAP='-Csave-temps'
-$ ./x build --stage 2 compiler
+[rust]
+debug-assertions = false
+```
+to bootstrap.toml and run
+```
+$ RUSTFLAGS_NOT_BOOTSTRAP='-Csave-temps' ./x build --stage 2 compiler
 $ find -name '*.rcgu.bc' | xargs ~/tasks/rust/llvm-tool/CountLoops > results.txt
 
 # Baseline
 $ grep -c 'Loop may NOT panic' results.txt
-35532
+66946
 $ grep -c 'Loop may panic' results.txt
-25915
+3058
 
 # Bounds
 $ grep -c 'Loop may NOT panic' results.txt
-35773
+68048
 $ grep -c 'Loop may panic' results.txt
-25377
+706
 ```
 
 So stats are
-  - baseline: 42% loops panic
-  - bounds: 41.5%
-
-TODO: why such small reduction ?
+  - baseline: 4.8% loops panic
+  - bounds: 1% (5x improvement)
 
 ## Disabling the check
 
@@ -405,6 +408,8 @@ $ grep -c 'EarlyCSE CSE' build.log
 2374779
 ```
 (counters are slightly unstable because stdout of different CGU may intermix).
+
+TODO: recollect results
 
 ### Runtime improvements
 

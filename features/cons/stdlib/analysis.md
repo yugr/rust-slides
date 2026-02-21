@@ -146,6 +146,9 @@ Results are
   - no-char-checks: 440144 (0.1%)
   - no-overflow-checks: 436329 (1%)
 
+TODO:
+  - rebuild rustc w/ `debug-assertions=false` and recollect data
+
 ## Measurements
 
 ### Static estimates

@@ -263,6 +263,9 @@ Rust:
   - baseline: 267950087 / 304403228 = 88%
   - force-aliasing: 259796295 / 300809438 = 86%
 
+TODO:
+  - rebuild rustc w/ `debug-assertions=false` and recollect data
+
 Results for other projects can be collected via
 ```
 for d in *; do

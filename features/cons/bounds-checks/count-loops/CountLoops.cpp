@@ -131,10 +131,25 @@ public:
   }
 };
 
-Regex PanicCounterPass::PanicName("_ZN4core9panicking"
-                                  "|_ZN4core5slice.*_fail"
-                                  "|_ZN4core6option13expect_failed"
-                                  "|_ZN4core6option13unwrap_failed");
+// See analysis.md for explanation
+
+Regex PanicCounterPass::PanicName(
+    // Explicit panics
+    "_ZN4core9panicking5panic17"
+    "|_ZN4core9panicking9panic_fmt17"
+    "|_ZN4core9panicking14panic_nounwind"
+    "|_ZN4core9panicking18panic_nounwind_fmt"
+    "|_ZN3std9panicking11begin_panic17"
+    // Unwraps
+    "|_ZN4core9panicking13assert_failed"
+    "|_ZN4core6option13expect_failed"
+    "|_ZN4core6option13unwrap_failed"
+    // Codegen checks
+    "|_ZN4core9panicking18panic_bounds_check"
+    "|_ZN4core9panicking30panic_null_pointer_dereference"
+    "|_ZN4core9panicking36panic_misaligned_pointer_dereference"
+    "|_ZN4core5slice.*_fail");
+
 
 ExitOnError ExitOnErr;
 

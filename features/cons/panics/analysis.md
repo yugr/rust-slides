@@ -270,7 +270,8 @@ Some conclusions:
   - 6.5% (963937 / 14852456) of ALL insns and 11% (371158 / 3277100) of ALL blocks are landing pads
   - 13% (1979710 / 14852456) of ALL insns and 23% (742214 / 3277100) of ALL blocks are handling panics OR landing pads
 
-TODO: recollect with `debug-assertions=false`
+TODO:
+  - rebuild rustc w/ `debug-assertions=false` and recollect data
 
 ## Disabling the check
 

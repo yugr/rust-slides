@@ -133,6 +133,8 @@ $ grep -c 'Size after inlining' build_16.log
 2532643
 ```
 
+TODO:
+  - rebuild rustc w/ `debug-assertions=false` and recollect data
 
 ### 8 CGU
 

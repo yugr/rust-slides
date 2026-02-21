@@ -176,6 +176,9 @@ done | awk 'BEGIN{s=0} {s+=$2} END{print s}'
 So just 21% of checks are not super-trivial.
 early-cse<>, gvn<>, adce, bdce, instsimplify, sccp and correlated-propagation are responsible for the rest.
 
+TODO:
+  - rebuild rustc w/ `debug-assertions=false` and recollect data
+
 # Workarounds for overflow checks
 
 Overflow checks are already covered [here](overflow-checks/README.md#solutions).

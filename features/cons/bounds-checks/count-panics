@@ -29,9 +29,10 @@ for f in $(find_elfs "$@"); do
   if grep -q 'core::panicking::panic_bounds_check' $tmp; then
     echo >&2 "warning: compiler-generated bounds checks not removed in $f"
   fi
-  explicit_panics=$(grep -c 'core::panicking::panic\(\|_fmt\|_nounwind\)\>' $tmp)
+  # See analysis.md for explanation
+  explicit_panics=$(grep -c 'core::panicking::panic\(\|_fmt\|_nounwind\|_nounwind_fmt\)\|std::panicking::begin_panic\>' $tmp)
   unwraps=$(grep -c '\(unwrap\|expect\|assert\)_failed' $tmp)
-  codegen_checks=$(grep -c 'core::panicking::panic\(_null_pointer_dereference\|_misaligned_pointer_dereference\|_bounds_check\)\>\|std::panicking::begin_panic\|slice_.*_fail' $tmp)
+  codegen_checks=$(grep -c 'core::panicking::panic\(_null_pointer_dereference\|_misaligned_pointer_dereference\|_bounds_check\)\>\|slice_.*_fail' $tmp)
   total=$((total + explicit_panics + unwraps + codegen_checks))
 done
 
