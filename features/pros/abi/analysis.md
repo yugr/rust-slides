@@ -6,7 +6,7 @@ For x86 with SSE2 enabled and x84\_64 architectures, 128 bit SIMD vectors are pa
 
 # Aggregate type passing ABI
 
-Both [AMD64 abi](https://refspecs.linuxbase.org/elf/x86_64-abi-0.99.pdf) and AArch64 [AAPCS64](https://student.cs.uwaterloo.ca/~cs452/docs/rpi4b/aapcs64.pdf) allow aggregate types which size does not exceed 16 bytes to be passed in two general-purpose registers (also called struct scalarization).
+Both [AMD64 abi](https://refspecs.linuxbase.org/elf/x86_64-abi-0.99.pdf) and AArch64 [AAPCS64](https://student.cs.uwaterloo.ca/~cs452/docs/rpi4b/aapcs64.pdf) allow aggregate types which size does not exceed 16 bytes to be passed (and returned) in two general-purpose registers (also called struct scalarization).
 
 In Rust, structs, tuples (which are just structs with unnamed fields) and enums are treated as aggregate types and are all subject to struct scalarization.
 The possibility of scalarization is special-cased by a separate `BackendRepr` assigned to suitable aggregates - `ScalarPair`.

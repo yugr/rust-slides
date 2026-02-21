@@ -120,7 +120,7 @@ Mandatory:
   - (DONE) cons/stdlib and pros/stdlib (gh-38)
     * classify stdlib asserts (anything besides Unicode ?)
     * benefits in std containers (multiple elements in node in TreeMap, open-addressing in HashMap)
-  - (WIP) pros/abi (gh-31)
+  - (DONE) pros/abi (gh-31)
   - (DONE) pros/copy-elision (gh-32)
   - (DONE) cons/placement-new (gh-37)
     * This could be considered together w/ copy elision
