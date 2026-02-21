@@ -123,47 +123,70 @@ $ sed -i -e 's/^\(strip\|panic\)/#\1/' Cargo.toml
 
 Here is the distribution of panics in rustc compiler (panics caused by bounds checks are marked with `!`):
 ```
-$ objdump -rd build/x86_64-unknown-linux-gnu/stage2/lib/librustc_driver*.so | c++filt | rustfilt > librustc_driver.d
-# Actually a better regex would be: sed -e 's/^[^<]*<//; s/[+@].*//; s/<.*//'
-$ grep 'call.*\(unwrap_failed\|expect_failed\|assert_failed\|slice_.*_fail\|core::panicking\)' librustc_driver.d | sed -e 's/.*<//; s/[+@].*//' | sort | uniq -c | sort -nk1
+$ ./x build -j12 --stage 2 compiler
+$ objdump -rd build/x86_64-unknown-linux-gnu/stage2/lib/librustc_driver*.so | rustfilt > librustc_driver.d
+$ grep 'call.*\(unwrap_failed\|expect_failed\|assert_failed\|slice_.*_fail\|core::panicking\|std::panicking\)' librustc_driver.d | sed -e 's/^[^<]*<//; s/@.*//' | sort | uniq -c | sort -nk1
 ...
-     52 core::panicking::assert_failed::hbeae657127ccdb04
-     54 rustc_data_structures::fingerprint::Fingerprint, rustc_data_structures::fingerprint::Fingerprint>
-     56 &[rustc_errors::SubstitutionPart; 2]>>
-     56 &rustc_errors::SubstitutionPart>>
-     56 (rustc_span::span_encoding::Span, alloc::string::String)>>
-     72 T,A>::insert::assert_failed::hb73c9898ad762f24
-     74 rustc_middle::ty::Ty, rustc_middle::ty::Ty>
-     80 core::panicking::panic_const::panic_const_div_by_zero::hb3b56552275843e1
-     81 rustc_type_ir::DebruijnIndex, rustc_type_ir::DebruijnIndex>
-     87 core::panicking::panic_const::panic_const_rem_by_zero::hff9e8539b36b8d6d
-    119 u128, u128>
-    128 rustc_abi::Size, rustc_abi::Size>
-    149 core::panicking::assert_failed::h85f033378b656379
-    241 bool, bool>
-!   315 core::slice::index::slice_index_order_fail::he688466d0d4f798a
-!   418 core::str::slice_error_fail::hc91fd7c32234f2bf
-    418 hashbrown::control::tag::Tag, hashbrown::control::tag::Tag>
-    434 core::panicking::assert_failed_inner::hb42cf086ef3fa5ea
-!  1101 core::slice::index::slice_start_index_len_fail::h2b0bd6f1ea36895a
-   1483 core::panicking::panic_null_pointer_dereference::h455305b503f39847
-!  2193 core::slice::index::slice_end_index_len_fail::h082810a57bbce7a7
-   3479 core::panicking::panic_misaligned_pointer_dereference::h639314a5907ff82f
-   3686 core::result::unwrap_failed::h1d408d629b4c41f6
-!  9516 core::panicking::panic_bounds_check::he67b256737aac4b7
-  10191 core::panicking::assert_failed::h7dbe1cbed9b3aef1
-  11895 core::option::expect_failed::h35ab5df33563192c
-  11923 core::option::unwrap_failed::h540db45763f4b740
-  30678 core::panicking::panic_cannot_unwind::h03c30cf82c32c9e1
-  30932 core::panicking::panic_fmt::h86f596f4590a5a7b
-  40774 core::panicking::panic::h542f6569b46282bf
- 124049 core::panicking::panic_in_cleanup::h6976e89252f67f6a
- 143106 core::panicking::panic_nounwind::h4f41ec38a26ac6dc
+    119 core::panicking::assert_failed::<u128, u128>
+    128 core::panicking::assert_failed::<rustc_abi::Size, rustc_abi::Size>
+    241 core::panicking::assert_failed::<bool, bool>
+    310 std::panicking::try::cleanup
+!    315 core::slice::index::slice_index_order_fail
+    413 core::panicking::assert_failed::<hashbrown::control::tag::Tag, hashbrown::control::tag::Tag>
+!    418 core::str::slice_error_fail
+    434 core::panicking::assert_failed_inner
+    # Emitted for explicit `panic!` or `assert!`
+    559 std::panicking::begin_panic           # std::panicking is built on top of core::panicking, this is called in std context
+    727 std::panicking::panic_count::is_zero_slow_path
+!   1101 core::slice::index::slice_start_index_len_fail
+   1498 core::panicking::panic_null_pointer_dereference
+!   2193 core::slice::index::slice_end_index_len_fail
+   3479 core::panicking::panic_misaligned_pointer_dereference
+   3686 core::result::unwrap_failed
+!   9516 core::panicking::panic_bounds_check
+  10476 core::panicking::assert_failed        # Emitted for explicit assert_eq!/assert_ne! (in both std and no_std contexts)
+  11880 core::option::expect_failed
+  11927 core::option::unwrap_failed
+  30663 core::panicking::panic_cannot_unwind  # Used for GCC unwinder to mark un-unwindable functions (e.g. `extern "C"`)
+  30943 core::panicking::panic_fmt            # Emitted for explicit panic!/assert! with params in no_std context
+  40774 core::panicking::panic                # Emitted for explicit panic!/assert! w/o params in no_std context
+ 124062 core::panicking::panic_in_cleanup     # Used for GCC unwinder to catch and abort on panics in landing pads
+ 143097 core::panicking::panic_nounwind       # Used by various fatal checks in stdlib which call e.g. assert_unsafe_precondition! from ub_checks.
+                                              # This feature is off by default but can be enabled with -Zub-checks
+                                              # (to become -Cub-checks, similar to -Coverflow-checks) or -Cdebug-assertions.
+                                              # It's enabled in compiler because it's compiled with -Cdebug-assertions by default
+                                              # (that's default from bootstrap.compiler.toml for "compiler" profile).
+```
+Note that `!`-marks above are approximate:
+  - some `core::str::slice_error_fail` are due to char boundary checks
+  - some other asserts mat be due to boundary checks in containers
+
+For rustc without debug-assertions I get more reasonable results:
+```
+    204 core::panicking::assert_failed_inner
+    299 std::panicking::try::cleanup
+    320 core::slice::index::slice_index_order_fail
+    344 core::panicking::panic_cannot_unwind
+    444 core::str::slice_error_fail
+    550 core::panicking::assert_failed
+    556 std::panicking::begin_panic
+    568 std::panicking::panic_count::is_zero_slow_path
+   1134 core::slice::index::slice_start_index_len_fail
+   2300 core::slice::index::slice_end_index_len_fail
+   3651 core::result::unwrap_failed
+   7007 core::panicking::panic_fmt
+   9243 core::panicking::panic_bounds_check
+  11409 core::option::expect_failed
+  11632 core::option::unwrap_failed
+  14865 core::panicking::panic
+ 117973 core::panicking::panic_in_cleanup
 ```
 
-To compare how big are the savings, build compiler as usual
+To compare how big are the savings, build stage2 compiler with
 ```
-$ ./x build -j12 --stage 2 compiler
+[rust]
+debug-assertions = false
+...
 ```
 and run
 ```
@@ -171,8 +194,10 @@ $ count-panics ./build/x86_64-unknown-linux-gnu/stage2/lib/librustc_driver*.so
 ```
 
 Results are
-  - baseline: 440483
-  - bounds: 427842 (-5%)
+  - baseline: 64405
+  - bounds: 51117 (-21%)
+
+TODO: compare for other projects ?
 
 ### Panics in loops
 

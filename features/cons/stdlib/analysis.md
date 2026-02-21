@@ -124,6 +124,11 @@ supposedly high overhead but rare in practice:
   - size/counter overflows: [yugr/stdlib/no-overflow-checks/1](https://github.com/yugr/rust-private/tree/yugr/stdlib/no-overflow-checks/1)
   - char boundary checks: [yugr/stdlib/no-char-checks/1](https://github.com/yugr/rust-private/tree/yugr/stdlib/no-char-checks/1)
 
+TODO:
+  - ensure that `ub_checks::assert_unsafe_precondition!` are disabled
+    (should be no check before call to `fmt` in
+    `<alloc::string::String as core::fmt::Display>::fmt`)
+
 ## Prevalence
 
 We use the same apporoach as in [bound checks](../bounds-checks/analysis.md#prevalence):

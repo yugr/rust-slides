@@ -25,13 +25,14 @@ for f in $(find_elfs "$@"); do
   else
     prefix='\<call'
   fi
-  objdump -rd $f | c++filt > $tmp
-  if grep -q "$prefix"'.*core::panicking::panic_bounds_check' $tmp; then
+  objdump -rd $f | rustfilt | grep "$prefix" > $tmp
+  if grep -q 'core::panicking::panic_bounds_check' $tmp; then
     echo >&2 "warning: compiler-generated bounds checks not removed in $f"
   fi
-  asserts=$(grep -c "$prefix"'.*\(unwrap_failed\|expect_failed\|assert_failed\|slice_.*_fail\)' $tmp || true)
-  panics=$(grep -c "$prefix"'.*\(core::panicking\)' $tmp || true)
-  total=$(( total + asserts + panics ))
+  explicit_panics=$(grep -c 'core::panicking::panic\(\|_fmt\|_nounwind\)\>' $tmp)
+  unwraps=$(grep -c '\(unwrap\|expect\|assert\)_failed' $tmp)
+  codegen_checks=$(grep -c 'core::panicking::panic\(_null_pointer_dereference\|_misaligned_pointer_dereference\|_bounds_check\)\>\|std::panicking::begin_panic\|slice_.*_fail' $tmp)
+  total=$((total + explicit_panics + unwraps + codegen_checks))
 done
 
 echo $total
