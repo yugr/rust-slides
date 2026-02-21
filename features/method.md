@@ -131,7 +131,7 @@ Mandatory:
 
 Important:
   - (DROP) pros/likely (gh-48)
-  - pros/niche (gh-31)
+  - (WIP) pros/niche (gh-57)
   - (DONE) pros/noplt (gh-49)
   - (WIP) pros/static (gh-50)
   - cons/probestack (gh-54)

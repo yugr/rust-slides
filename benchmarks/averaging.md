@@ -35,4 +35,4 @@ It is not clear how stable minimum is more stable than mean across runs though.
 Also this solution won't work if there is some some intrinsic randomization
 in test itself e.g. HashMap randomization in Rust programs (see
 https://internals.rust-lang.org/t/support-turning-off-hashmap-randomness/19234
-fo details).
+for details).
