@@ -115,6 +115,11 @@ if test -n "$CLONE"; then
   mkdir $WORKDIR
 fi
 
+# Ensure that all tools exist
+for t in $TOOLCHAINS; do
+  rustc +$t --version > /dev/null
+done
+
 FAILS=0
 for t in $TOOLCHAINS; do
   mkdir -p results/$t
