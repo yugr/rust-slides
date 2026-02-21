@@ -7,9 +7,6 @@ and run `run.sh`.
 Script assumes that environment was set up according to comments in
 [gh-55](https://github.com/yugr/rust-slides/issues/55).
 
-TODO:
-  - reduce stdev ?
-
 # Configs
 
 Note that `-O3` is forced in some tests.
@@ -84,5 +81,5 @@ CC=$PREFIX/bin/clang CXX=$PREFIX/bin/clang++ CFLAGS='-O2 -DNDEBUG -fpermissive -
 Apache will not work for some configs because luajit dependency ignores CC.
 
 TODO:
-  - Use wrappers for `cc`, `gcc`, etc. ?
+  - Use [wrappers](https://github.com/yugr/cc-wrappers) for `cc`, `gcc`, etc. ?
     This would also allow us to enable crafty and luajit.
