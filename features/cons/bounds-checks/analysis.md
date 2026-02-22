@@ -4,7 +4,7 @@ Assignee: yugr
 
 Parent task: gh-20
 
-Effort: 87h
+Effort: 91h
 
 # Background
 
@@ -323,6 +323,10 @@ Ideally we should be able to count optimization remarks but
 they [do not work](https://github.com/rust-lang/rust/issues/142375)
 and same goes for [compiler stats](https://github.com/rust-lang/rust/issues/142266).
 So below we use `-Cllvm-args=-debug-only=...` instead.
+
+_I think in general comparing compiler stats is useless - obviously default IR
+(with checks) will have more opportunities for optimizations
+(e.g. removal of duplicate checks) and its counts will be higher..._
 
 #### Results for oxipng
 
