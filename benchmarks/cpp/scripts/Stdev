@@ -1,0 +1,23 @@
+#!/bin/sh
+
+set -eu
+
+if test $# = 0; then
+  tmp=$(mktemp)
+  trap "rm -f $tmp" EXIT INT TERM
+  cat > $tmp
+  "$0" $tmp
+  exit $?
+fi
+
+filter() {
+  grep -v '^[ 	]*$'
+}
+
+for f in "$@"; do
+  n=$(cat $f | filter | wc -l)
+  sum=$(cat $f | filter | paste -sd+ | bc -l)
+  mean=$(echo "$sum / $n" | bc -l)
+  ss=$(cat $f | filter | sed -e "s/\(.*\)/(\1-$mean)^2/" | paste -sd+ | bc -l)
+  echo "sqrt($ss / $n)" | bc -l
+done

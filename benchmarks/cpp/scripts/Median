@@ -1,0 +1,26 @@
+#!/bin/sh
+
+set -eu
+
+if test $# = 0; then
+  tmp=$(mktemp)
+  trap "rm -f $tmp" EXIT INT TERM
+  cat > $tmp
+  "$0" $tmp
+  exit $?
+fi
+
+filter() {
+  grep -v '^[ 	]*$'
+}
+
+for f in "$@"; do
+  n=$(cat $f | filter | wc -l)
+  if test $((n % 2)) = 1; then
+    cat $f | filter | sort -g | head -n $((n / 2 + 1)) | tail -n 1
+  else
+    m1=$(cat $f | filter | sort -g | head -n $((n / 2)) | tail -n 1)
+    m2=$(cat $f | filter | sort -g | head -n $((n / 2 + 1)) | tail -n 1)
+    echo "($m1 + $m2) / 2" | bc -l
+  fi
+done
