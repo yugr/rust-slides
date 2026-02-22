@@ -373,7 +373,7 @@ $ cargo clean && cargo +bounds b -j1 --release |& grep -c 'EarlyCSE CSE'
 
 #### Results for rustc
 
-Warning: ~12 hours to build and log file will take several GBs.
+Warning: ~10 hours to build and log file will take several GBs.
 
 Do not forget to add to bootstrap.toml:
 ```
@@ -387,31 +387,33 @@ $ RUSTFLAGS_NOT_BOOTSTRAP='-Cllvm-args=-debug-only=inline,licm,early-cse,gvn,loo
 
 # Baseline
 $ grep -c 'Size after inlining:' build.log
-???
+2052611
 $ grep -c 'LV: Vectorizing' build.log
-549
+2034
+$ grep -c 'SLP: vectorized' build.log
+23570
 $ grep -c 'LICM \(hoist\|sink\)ing' build.log
-2248327
+2795747
 $ grep -c 'GVN removed' build.log
-798577
+757124
 $ grep -c 'EarlyCSE CSE' build.log
-2379907
+2073875
 
 # Bounds
 $ grep -c 'Size after inlining:' build.log
-???
+2043429
 $ grep -c 'LV: Vectorizing' build.log
-537
+2025
+$ grep -c 'SLP: vectorized' build.log
+23832
 $ grep -c 'LICM \(hoist\|sink\)ing' build.log
-2289792
+2825349
 $ grep -c 'GVN removed' build.log
-772504
+704479
 $ grep -c 'EarlyCSE CSE' build.log
-2374779
+2061444
 ```
 (counters are slightly unstable because stdout of different CGU may intermix).
-
-TODO: recollect results
 
 ### Runtime improvements
 
