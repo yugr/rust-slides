@@ -4,7 +4,7 @@ Assignee: yugr
 
 Parent task: gh-20
 
-Effort: 86h
+Effort: 87h
 
 # Background
 
@@ -453,11 +453,11 @@ Performance of hardened C++ has been collected via `benchmarks/cpp/llvm-bench` a
     * 2-3% [Google](https://bughunters.google.com/blog/6368559657254912/llvm-s-rfc-c-buffer-hardening-at-google)
   - `-fsanitize=object-size`:
     * no changes in Clang, ffmpeg
-    * PTS testsuite: bullet -6.5%, coremark -1.2%, simdjson -25%
+    * PTS testsuite: bullet 6.5%, coremark 1.2%, simdjson 25%
   - `-fsanitize=bounds`:
     * no changes Clang
     * 2.3% ffmpeg
-    * PTS testsuite: povray -8.3%
+    * PTS testsuite: povray 8.3%
 
 (note: for PTS we ignored differences <= 1% due to high noise,
 similar to [Exploiting Undefined Behavior in C/C++ Programs for
