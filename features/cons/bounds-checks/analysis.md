@@ -373,7 +373,7 @@ $ cargo clean && cargo +bounds b -j1 --release |& grep -c 'EarlyCSE CSE'
 
 #### Results for rustc
 
-Warning: ~9 hours to build and log file will take several GBs.
+Warning: ~12 hours to build and log file will take several GBs.
 
 Do not forget to add to bootstrap.toml:
 ```
@@ -440,25 +440,28 @@ zed: -0.6%
 
 Performance of hardened C++ has been collected via `benchmarks/cpp/llvm-bench` and
 `benchmarks/cpp/ffmpeg-bench` (for Clang 20):
-  - `-D_FORTIFY_SOURCE=2/3`:
-    * 0% Clang
-    * 0% ffmpeg
-  - STL indexing checks:
-    * 1% Clang
-      + TODO: recollect after fixing flags (`-stdlib=libc++`)
-    * 0% ffmpeg
-    * 2-3% [Google](https://bughunters.google.com/blog/6368559657254912/llvm-s-rfc-c-buffer-hardening-at-google)
-  - `-fsanitize=object-size`:
-    * 0% Clang
-    * 0% ffmpeg
-  - `-fsanitize=bounds`:
-    * 0% Clang
-    * 2.3% ffmpeg
   - Stack Protector
     * 2% Clang
     * 1% ffmpeg
+    * no changes in PTS testsuite
+  - `-D_FORTIFY_SOURCE=2/3`:
+    * no changes in Clang, ffmpeg, PTS testsuite
+  - STL indexing checks:
+    * 0.5% Clang
+    * ffmpeg N/A (no C++ code)
+    * no changes in PTS testsuite
+    * 2-3% [Google](https://bughunters.google.com/blog/6368559657254912/llvm-s-rfc-c-buffer-hardening-at-google)
+  - `-fsanitize=object-size`:
+    * no changes in Clang, ffmpeg
+    * PTS testsuite: bullet -6.5%, coremark -1.2%, simdjson -25%
+  - `-fsanitize=bounds`:
+    * no changes Clang
+    * 2.3% ffmpeg
+    * PTS testsuite: povray -8.3%
+
+(note: for PTS we ignored differences <= 1% due to high noise,
+similar to [Exploiting Undefined Behavior in C/C++ Programs for
+Optimization: A Study on the Performance Impact](https://web.ist.utl.pt/nuno.lopes/pubs/ub-pldi25.pdf)).
 
 [Hardening: current status and trends](https://github.com/yugr/slides/blob/main/CppZeroCost/2025/EN.pdf)
 reports worse numbers because it used old toolchains.
-
-TODO: use Phoronix Test Suite ? (gh-55)

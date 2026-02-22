@@ -338,11 +338,16 @@ zed_0.json: -0.5%
 Integer overflow checks known to have high overheads:
 according to [Hardening: current status and trends](https://github.com/yugr/slides/blob/main/CppZeroCost/2025/EN.pdf)
 similar checks in hardened C++ are
-  - 30% Clang (compiled by Clang 14)
-  - 22% Clang (compiled by Clang 20)
-  - 44% ffmpeg (compiled by Clang 20)
+  - my tests:
+    * 30% Clang (compiled by Clang 14)
+    * 22% Clang (compiled by Clang 20)
+    * 44% ffmpeg (compiled by Clang 20)
+    * PTS testsuite (compiled by Clang 20): botan 55%, coremark 42.5%, gcrypt 8%, povray 55.5%, polybench-c 42.5%, simdjson 48%
   - 2x SPEC
 
+(note: for PTS we ignored differences <= 1% due to high noise,
+similar to [Exploiting Undefined Behavior in C/C++ Programs for
+Optimization: A Study on the Performance Impact](https://web.ist.utl.pt/nuno.lopes/pubs/ub-pldi25.pdf)).
+
 TODO:
-  - use Phoronix Test Suite ? (gh-55)
   - investigate regression in veloren (and zed ?)

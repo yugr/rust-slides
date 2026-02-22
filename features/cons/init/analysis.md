@@ -285,13 +285,17 @@ Other forced initialization overheads:
 
 According to [Hardening: current status and trends](https://github.com/yugr/slides/blob/main/CppZeroCost/2025/EN.pdf)
 similar checks in hardened C++ have on-par overheads:
-  - ~1.5% Clang (compiled by Clang 20)
-  - ~7% ffmpeg (compiled by Clang 20)
+  - my tests (compiled by Clang 20):
+    * ~1.5% Clang
+    * ~7% ffmpeg
+    * PTS testsuite: apache 1.5%, povray -34%
   - 1% (Firefox with lots of tuning)
   - 1-3% Postgres (up to 20% in some scenarios)
   - virtio, Chrome: up to 10% in some scenarios
 
-TODO: use Phoronix Test Suite ? (gh-55)
+(note: for PTS we ignored differences <= 1% due to high noise,
+similar to [Exploiting Undefined Behavior in C/C++ Programs for
+Optimization: A Study on the Performance Impact](https://web.ist.utl.pt/nuno.lopes/pubs/ub-pldi25.pdf)).
 
 To statically check how many stores can't be eliminated, we compare number
 of stores and memsets in loops of Clang compiler.
