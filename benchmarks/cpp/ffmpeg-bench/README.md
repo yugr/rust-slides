@@ -13,5 +13,5 @@ PATH=$INSTALL_DIR:$PATH ./run.sh --ffmpeg path/to/ffmpeg --x264 path/to/x264 con
 
 Data can then be averged via
 ```
-for file in results/*.log; do echo $file; cat $file | sed -ne '/user/{s/user.*//; p}' | paste -sd+  | bc; done
+for file in results/*.log; do echo $file; cat $file | sed -ne '/user/{s/user.*//; p}' | Median; done
 ```

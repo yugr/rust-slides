@@ -20,4 +20,9 @@ Finally build and benchmark stage2 compilers:
 $ PATH=$INSTALL_DIR/bin:$PATH ./run.sh --llvm $LLVM_DIR configs.txt tests.txt
 ```
 
+Data can then be averged via
+```
+for file in results/*/CGBuiltin.ii.log; do echo $file; cat $file | sed -ne '/user/{s/user.*//; p}' | Median; done
+```
+
 TODO: prepare sources in `run.sh` ?
