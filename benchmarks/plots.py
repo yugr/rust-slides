@@ -76,7 +76,7 @@ def collect_results(builds, baseline, tmp_dir):
     for b in builds:
         _, out, _ = run([compare, baseline, b])
 
-        build_name = os.path.basename(b.rstrip('/'))
+        build_name = os.path.basename(b.rstrip("/"))
 
         for line in out.splitlines():
             line = line.strip()
@@ -86,11 +86,11 @@ def collect_results(builds, baseline, tmp_dir):
             # SpacetimeDB_0.json: +0.8%
             # SpacetimeDB_sizes.json rodata: -0.0%
             # SpacetimeDB_sizes.json text: +3.9%
-            m = re.match(r'^(.*)(?:_sizes)?\.json(.*): (.*)%$', line)
+            m = re.match(r"^(.*)(?:_sizes)?\.json(.*): (.*)%$", line)
             error_if(m is None, f"failed to parse compare.py output: {line}")
 
             name = m[1]
-            typ = m[2].strip() or 'perf'
+            typ = m[2].strip() or "perf"
             diff = float(m[3])
 
             results.setdefault(typ, {}).setdefault(build_name, {})[name] = diff
@@ -151,7 +151,9 @@ Examples:
         tmp_dir = tempfile.mkdtemp()
         atexit.register(lambda: shutil.rmtree(tmp_dir))
 
-    baseline = args.baseline or os.path.join(os.path.dirname(args.builds[0]), '..', 'baseline')
+    baseline = args.baseline or os.path.join(
+        os.path.dirname(args.builds[0]), "..", "baseline"
+    )
 
     results = collect_results(args.builds, baseline, tmp_dir)
 
