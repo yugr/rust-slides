@@ -15,8 +15,13 @@ import sys
 import tempfile
 from typing import NoReturn
 
+
+import matplotlib.pyplot as plt
+import pandas as pd
+
 me = os.path.basename(__file__)
 average_mode = "median"
+default_value = -0.1
 
 
 def warn(msg):
@@ -65,6 +70,10 @@ def run(cmd, fatal=True, tee=False, **kwargs):
     return p.returncode, out, err
 
 
+def get_baseline(b):
+    return "Libcxx" if b in ("Libcxx", "HardenedSTL") else "Baseline"
+
+
 def collect_pts_results(builds, pts_dir, tmp_dir):
     all_builds = set(builds)
     all_builds.add("Baseline")
@@ -84,7 +93,7 @@ def collect_pts_results(builds, pts_dir, tmp_dir):
     results = {}
 
     for b in builds:
-        base = os.path.join(tmp_dir, "Libcxx" if b == "HardenedSTL" else "Baseline")
+        base = os.path.join(tmp_dir, get_baseline(b))
         o = os.path.join(tmp_dir, b)
         _, out, _ = run([compare, "--ignore-missing", base, o])
 
@@ -96,29 +105,38 @@ def collect_pts_results(builds, pts_dir, tmp_dir):
             m = re.match(r"^(.*): (.*)%$", line)
             error_if(m is None, f"failed to parse compare.py output: {line}")
             name = re.sub(r"-[0-9.]+(-git)?\.json", "", m[1])
-            results[b][name] = float(m[2])
+            val = float(m[2])
+            # Filter out noise
+            val = default_value if (val > 0 or abs(val) < 1) else val
+            results[b][name] = val
 
     return results
+
+
+def average_times(filename):
+    with open(filename) as f:
+        lines = f.readlines()
+
+    times = []
+    for line in lines:
+        line = line.strip()
+        if not line:
+            continue
+        m = re.match(r"^([0-9.]+)user ", line)
+        if m is None:
+            continue
+        times.append(float(m[1]))
+
+    return statistics.median(times)
 
 
 def collect_ffmpeg_results(builds, ffmpeg_dir, tmp_dir):
     results = {}
 
     for b in builds:
-        with open(os.path.join(ffmpeg_dir, b + ".log")) as f:
-            lines = f.readlines()
-
-        times = []
-        for line in lines:
-            line = line.strip()
-            if not line:
-                continue
-            m = re.match(r"^([0-9.]+)user ", line)
-            if m is None:
-                continue
-            times.append(float(m[1]))
-
-        results[b] = {"ffmpeg": statistics.median(times)}
+        t0 = average_times(os.path.join(ffmpeg_dir, get_baseline(b) + ".log"))
+        t = average_times(os.path.join(ffmpeg_dir, b + ".log"))
+        results[b] = {"ffmpeg": (t0 - t) / t0}
 
     return results
 
@@ -127,20 +145,9 @@ def collect_llvm_results(builds, llvm_dir, tmp_dir):
     results = {}
 
     for b in builds:
-        with open(os.path.join(llvm_dir, b, "CGBuiltin.ii.log")) as f:
-            lines = f.readlines()
-
-        times = []
-        for line in lines:
-            line = line.strip()
-            if not line:
-                continue
-            m = re.match(r"^([0-9.]+)user ", line)
-            if m is None:
-                continue
-            times.append(float(m[1]))
-
-        results[b] = {"Clang": statistics.median(times)}
+        t0 = average_times(os.path.join(llvm_dir, get_baseline(b), "CGBuiltin.ii.log"))
+        t = average_times(os.path.join(llvm_dir, b, "CGBuiltin.ii.log"))
+        results[b] = {"Clang": (t0 - t) / t0}
 
     return results
 
@@ -159,7 +166,26 @@ def merge_results(*args):
 
 
 def generate_plots(results, out_dir):
-    print(results)  # TODO
+    # Convert to pandas format (transpose)
+
+    tests = set()
+    for b, tt in results.items():
+        tests |= tt.keys()
+
+    tests = sorted(tests)
+    builds = sorted(results.keys())
+
+    data = {}
+    for t in tests:
+        data[t] = [-results[b].get(t, default_value) for b in builds]
+
+    df = pd.DataFrame(data, columns=tests, index=builds)
+
+    # Plot
+
+    df.plot.bar(figsize=(10, 10))
+    plt.show()
+    plt.savefig(os.path.join(out_dir, "plot.jpeg"))
 
 
 def main():
