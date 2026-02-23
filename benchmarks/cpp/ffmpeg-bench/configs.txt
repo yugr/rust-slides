@@ -1,4 +1,4 @@
-Default:clang:::
+Baseline:clang:::
 StackProtector:clang:-fstack-protector-strong::
 Fortify2:clang:-D_FORTIFY_SOURCE=2::
 Fortify3:clang:-D_FORTIFY_SOURCE=3::
