@@ -57,6 +57,7 @@ TODO:
   - situation in other langs
   - [Tree Borrows and Stack Borrows](https://internals.rust-lang.org/t/tree-borrows-explained/18587)
     (also [here](https://www.reddit.com/r/rust/comments/124jp5o/tree_borrows_a_new_aliasing_model_for_rust/))
+  - add info from [Horizon paper](https://dl.acm.org/doi/10.1145/3771775.3786270)
 
 # Examples
 
