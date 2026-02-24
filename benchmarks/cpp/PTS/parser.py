@@ -47,6 +47,12 @@ def main():
         help="averaging method",
         default="mean",
     )
+    parser.add_argument(
+        "--std-threshold",
+        help="ignore tests with stdev above this",
+        type=float,
+        default=1,
+    )
     parser.add_argument("-o", "--output", help="where to place jsons", default=".")
     parser.add_argument(
         "-v",
@@ -171,7 +177,7 @@ def main():
         #     Deviation: 0.19%
         std_line = lines.pop()
         m = re.match(r"^ *Deviation: +([0-9.]+)%", std_line)
-        if m is not None and float(m[1]) > 1:
+        if m is not None and float(m[1]) > args.std_threshold:
             warn(f"skipping noisy test case '{test_case}' in '{test}'")
             continue
 

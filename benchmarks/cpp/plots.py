@@ -19,23 +19,22 @@ from typing import NoReturn
 import matplotlib.pyplot as plt
 import pandas as pd
 
-me = os.path.basename(__file__)
-average_mode = "median"
-default_value = -0.1
+ME = os.path.basename(__file__)
+DEFAULT_VALUE = -0.1
 
 
 def warn(msg):
     """
     Print nicely-formatted warning message.
     """
-    sys.stderr.write(f"{me}: warning: {msg}\n")
+    sys.stderr.write(f"{ME}: warning: {msg}\n")
 
 
 def error(msg) -> NoReturn:
     """
     Print nicely-formatted error message and exit.
     """
-    sys.stderr.write(f"{me}: error: {msg}\n")
+    sys.stderr.write(f"{ME}: error: {msg}\n")
     sys.exit(1)
 
 
@@ -55,6 +54,8 @@ def run(cmd, fatal=True, tee=False, **kwargs):
     """
     if isinstance(cmd, str):
         cmd = cmd.split(" ")
+    else:
+        cmd = [str(arg) for arg in cmd]
     # print(cmd)
     p = subprocess.run(
         cmd, stdin=None, stdout=subprocess.PIPE, stderr=subprocess.PIPE, **kwargs
@@ -74,7 +75,7 @@ def get_baseline(b):
     return "Libcxx" if b in ("Libcxx", "HardenedSTL") else "Baseline"
 
 
-def collect_pts_results(builds, pts_dir, tmp_dir):
+def collect_pts_results(builds, pts_dir, tmp_dir, average_mode):
     all_builds = set(builds)
     all_builds.add("Baseline")
     if "HardenedSTL" in builds:
@@ -88,7 +89,9 @@ def collect_pts_results(builds, pts_dir, tmp_dir):
         error_if(not os.path.exists(f), f"PTS result file {f} does not exist")
 
         o = os.path.join(tmp_dir, b)
-        run([parser, "--average-mode", average_mode, "-o", o, f])
+        run(
+            [parser, "--std-threshold", 0.5, "--average-mode", average_mode, "-o", o, f]
+        )
 
     results = {}
 
@@ -107,13 +110,13 @@ def collect_pts_results(builds, pts_dir, tmp_dir):
             name = re.sub(r"-[0-9.]+(-git)?\.json", "", m[1])
             val = float(m[2])
             # Filter out noise
-            val = default_value if (val > 0 or abs(val) < 1) else val
+            val = DEFAULT_VALUE if (val > 0 or abs(val) < 1) else val
             results[b][name] = val
 
     return results
 
 
-def average_times(filename):
+def average_times(filename, average_mode):
     with open(filename) as f:
         lines = f.readlines()
 
@@ -127,27 +130,38 @@ def average_times(filename):
             continue
         times.append(float(m[1]))
 
-    return statistics.median(times)
+    if average_mode == "median":
+        return statistics.median(times)
+    elif average_mode == "mean":
+        return statistics.mean(times)
+    elif average_mode == "min":
+        return min(times)
+
+    assert False
 
 
-def collect_ffmpeg_results(builds, ffmpeg_dir, tmp_dir):
+def collect_ffmpeg_results(builds, ffmpeg_dir, tmp_dir, average_mode):
     results = {}
 
     for b in builds:
-        t0 = average_times(os.path.join(ffmpeg_dir, get_baseline(b) + ".log"))
-        t = average_times(os.path.join(ffmpeg_dir, b + ".log"))
-        results[b] = {"ffmpeg": (t0 - t) / t0}
+        t0 = average_times(
+            os.path.join(ffmpeg_dir, get_baseline(b) + ".log"), average_mode
+        )
+        t = average_times(os.path.join(ffmpeg_dir, b + ".log"), average_mode)
+        results[b] = {"ffmpeg": 100 * (t0 - t) / t0}
 
     return results
 
 
-def collect_llvm_results(builds, llvm_dir, tmp_dir):
+def collect_llvm_results(builds, llvm_dir, tmp_dir, average_mode):
     results = {}
 
     for b in builds:
-        t0 = average_times(os.path.join(llvm_dir, get_baseline(b), "CGBuiltin.ii.log"))
-        t = average_times(os.path.join(llvm_dir, b, "CGBuiltin.ii.log"))
-        results[b] = {"Clang": (t0 - t) / t0}
+        t0 = average_times(
+            os.path.join(llvm_dir, get_baseline(b), "CGBuiltin.ii.log"), average_mode
+        )
+        t = average_times(os.path.join(llvm_dir, b, "CGBuiltin.ii.log"), average_mode)
+        results[b] = {"Clang": 100 * (t0 - t) / t0}
 
     return results
 
@@ -177,13 +191,13 @@ def generate_plots(results, out_dir):
 
     data = {}
     for t in tests:
-        data[t] = [-results[b].get(t, default_value) for b in builds]
+        data[t] = [results[b].get(t, DEFAULT_VALUE) for b in builds]
 
     df = pd.DataFrame(data, columns=tests, index=builds)
 
     # Plot
 
-    df.plot.bar(figsize=(10, 10))
+    df.plot.bar(figsize=(15, 8))
     plt.show()
     plt.savefig(os.path.join(out_dir, "plot.jpeg"))
 
@@ -199,7 +213,7 @@ def main():
         formatter_class=Formatter,
         epilog=f"""\
 Examples:
-  $ {me} --pts-dir tmp/PTS/ --ffmpeg-dir tmp/ffmpeg-bench/results/ --llvm-dir tmp/llvm-bench/results StackProtector Fortify2 Fortify3 Bounds ObjectSize HardenedSTL
+  $ {ME} --pts-dir tmp/PTS/ --ffmpeg-dir tmp/ffmpeg-bench/results/ --llvm-dir tmp/llvm-bench/results StackProtector Fortify2 Fortify3 Bounds ObjectSize HardenedSTL
 """,
     )
     parser.add_argument(
@@ -213,6 +227,12 @@ Examples:
         "-o",
         help="Path to store results",
         default=".",
+    )
+    parser.add_argument(
+        "--average-mode",
+        choices=["median", "mean", "min"],
+        default="median",
+        help="how to average data",
     )
     parser.add_argument(
         "--tmp-dir",
@@ -239,8 +259,8 @@ Examples:
 
     args = parser.parse_args()
 
-    if not all([args.pts_dir, args.ffmpeg_dir, args.llvm_dir]):
-        error("--pts-dir, --ffmpeg-dir and --llvm-dir are mandatory")
+    if not any([args.pts_dir, args.ffmpeg_dir, args.llvm_dir]):
+        error("at least one of --pts-dir, --ffmpeg-dir and --llvm-dir needed")
 
     if args.tmp_dir is not None:
         tmp_dir = args.tmp_dir
@@ -248,17 +268,30 @@ Examples:
         tmp_dir = tempfile.mkdtemp()
         atexit.register(lambda: shutil.rmtree(tmp_dir))
 
-    pts_results = collect_pts_results(
-        args.builds, args.pts_dir, os.path.join(tmp_dir, "PTS")
-    )
-    ffmpeg_results = collect_ffmpeg_results(
-        args.builds, args.ffmpeg_dir, os.path.join(tmp_dir, "ffmpeg")
-    )
-    llvm_results = collect_llvm_results(
-        args.builds, args.llvm_dir, os.path.join(tmp_dir, "llvm")
-    )
+    results = []
 
-    results = merge_results(pts_results, ffmpeg_results, llvm_results)
+    if args.pts_dir is not None:
+        pts_results = collect_pts_results(
+            args.builds, args.pts_dir, os.path.join(tmp_dir, "PTS"), args.average_mode
+        )
+        results.append(pts_results)
+
+    if args.ffmpeg_dir is not None:
+        ffmpeg_results = collect_ffmpeg_results(
+            args.builds,
+            args.ffmpeg_dir,
+            os.path.join(tmp_dir, "ffmpeg"),
+            args.average_mode,
+        )
+        results.append(ffmpeg_results)
+
+    if args.llvm_dir is not None:
+        llvm_results = collect_llvm_results(
+            args.builds, args.llvm_dir, os.path.join(tmp_dir, "llvm"), args.average_mode
+        )
+        results.append(llvm_results)
+
+    results = merge_results(*results)
 
     generate_plots(results, args.o)
 

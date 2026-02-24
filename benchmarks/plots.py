@@ -15,22 +15,25 @@ import sys
 import tempfile
 from typing import NoReturn
 
-me = os.path.basename(__file__)
-average_mode = "median"
+
+import matplotlib.pyplot as plt
+import pandas as pd
+
+ME = os.path.basename(__file__)
 
 
 def warn(msg):
     """
     Print nicely-formatted warning message.
     """
-    sys.stderr.write(f"{me}: warning: {msg}\n")
+    sys.stderr.write(f"{ME}: warning: {msg}\n")
 
 
 def error(msg) -> NoReturn:
     """
     Print nicely-formatted error message and exit.
     """
-    sys.stderr.write(f"{me}: error: {msg}\n")
+    sys.stderr.write(f"{ME}: error: {msg}\n")
     sys.exit(1)
 
 
@@ -99,7 +102,27 @@ def collect_results(builds, baseline, tmp_dir):
 
 
 def generate_plots(results, out_dir):
-    print(results)  # TODO
+    for typ, r in results.items():
+        # Convert to pandas format (transpose)
+
+        tests = set()
+        for b, tt in r.items():
+            tests |= tt.keys()
+
+        tests = sorted(tests)
+        builds = sorted(r.keys())
+
+        data = {}
+        for t in tests:
+            data[t] = [r[b][t] for b in builds]
+
+        df = pd.DataFrame(data, columns=tests, index=builds)
+
+        # Plot
+
+        df.plot.bar(figsize=(15, 8))
+        plt.show()
+        plt.savefig(os.path.join(out_dir, typ + ".jpeg"))
 
 
 def main():
@@ -113,7 +136,7 @@ def main():
         formatter_class=Formatter,
         epilog=f"""\
 Examples:
-  $ {me} path/to/build1 path/to/build2 ...
+  $ {ME} path/to/build1 path/to/build2 ...
 """,
     )
     parser.add_argument(
