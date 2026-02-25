@@ -1,0 +1,112 @@
+diff --git a/llvm/lib/Transforms/Instrumentation/BoundsChecking.cpp b/llvm/lib/Transforms/Instrumentation/BoundsChecking.cpp
+index 14c331b3b748..654195525d79 100644
+--- a/llvm/lib/Transforms/Instrumentation/BoundsChecking.cpp
++++ b/llvm/lib/Transforms/Instrumentation/BoundsChecking.cpp
+@@ -28,6 +28,7 @@
+ #include "llvm/Support/CommandLine.h"
+ #include "llvm/Support/Debug.h"
+ #include "llvm/Support/raw_ostream.h"
++#include <sstream>
+ #include <utility>
+ 
+ using namespace llvm;
+@@ -141,14 +142,14 @@ static CallInst *InsertCall(BuilderTy &IRB, bool MayReturn, StringRef Name) {
+ ///
+ /// \p GetTrapBB is a callable that returns the trap BB to use on failure.
+ template <typename GetTrapBBT>
+-static void insertBoundsCheck(Value *Or, BuilderTy &IRB, GetTrapBBT GetTrapBB) {
++static bool insertBoundsCheck(Value *Or, BuilderTy &IRB, GetTrapBBT GetTrapBB) {
+   // check if the comparison is always false
+   ConstantInt *C = dyn_cast_or_null<ConstantInt>(Or);
+   if (C) {
+     ++ChecksSkipped;
+     // If non-zero, nothing to do.
+     if (!C->getZExtValue())
+-      return;
++      return false;
+   }
+   ++ChecksAdded;
+ 
+@@ -164,11 +165,13 @@ static void insertBoundsCheck(Value *Or, BuilderTy &IRB, GetTrapBBT GetTrapBB) {
+     // FIXME: We should really handle this differently to bypass the splitting
+     // the block.
+     BranchInst::Create(TrapBB, OldBB);
+-    return;
++    return true;
+   }
+ 
+   // Create the conditional branch.
+   BranchInst::Create(TrapBB, Cont, Or, OldBB);
++
++  return true;
+ }
+ 
+ static std::string
+@@ -183,7 +186,10 @@ getRuntimeCallName(const BoundsCheckingPass::Options::Runtime &Opts) {
+ 
+ static bool addBoundsChecking(Function &F, TargetLibraryInfo &TLI,
+                               ScalarEvolution &SE,
+-                              const BoundsCheckingPass::Options &Opts) {
++                              const BoundsCheckingPass::Options &Opts,
++                              int &Total, int &Successes, int &Optims) {
++  Total = Successes = Optims = 0;
++
+   if (F.hasFnAttribute(Attribute::NoSanitizeBounds))
+     return false;
+ 
+@@ -203,21 +209,26 @@ static bool addBoundsChecking(Function &F, TargetLibraryInfo &TLI,
+       if (!LI->isVolatile())
+         Or = getBoundsCheckCond(LI->getPointerOperand(), LI, DL, TLI,
+                                 ObjSizeEval, IRB, SE);
++      ++Total;
+     } else if (StoreInst *SI = dyn_cast<StoreInst>(&I)) {
+       if (!SI->isVolatile())
+         Or = getBoundsCheckCond(SI->getPointerOperand(), SI->getValueOperand(),
+                                 DL, TLI, ObjSizeEval, IRB, SE);
++      ++Total;
+     } else if (AtomicCmpXchgInst *AI = dyn_cast<AtomicCmpXchgInst>(&I)) {
+       if (!AI->isVolatile())
+         Or =
+             getBoundsCheckCond(AI->getPointerOperand(), AI->getCompareOperand(),
+                                DL, TLI, ObjSizeEval, IRB, SE);
++      ++Total;
+     } else if (AtomicRMWInst *AI = dyn_cast<AtomicRMWInst>(&I)) {
+       if (!AI->isVolatile())
+         Or = getBoundsCheckCond(AI->getPointerOperand(), AI->getValOperand(),
+                                 DL, TLI, ObjSizeEval, IRB, SE);
++      ++Total;
+     }
+     if (Or) {
++      ++Successes;
+       if (Opts.GuardKind) {
+         llvm::Value *Allow = IRB.CreateIntrinsic(
+             IRB.getInt1Ty(), Intrinsic::allow_ubsan_check,
+@@ -277,7 +288,8 @@ static bool addBoundsChecking(Function &F, TargetLibraryInfo &TLI,
+   for (const auto &Entry : TrapInfo) {
+     Instruction *Inst = Entry.first;
+     BuilderTy IRB(Inst->getParent(), BasicBlock::iterator(Inst), TargetFolder(DL));
+-    insertBoundsCheck(Entry.second, IRB, GetTrapBB);
++    if (!insertBoundsCheck(Entry.second, IRB, GetTrapBB))
++      ++Optims;
+   }
+ 
+   return !TrapInfo.empty();
+@@ -287,10 +299,15 @@ PreservedAnalyses BoundsCheckingPass::run(Function &F, FunctionAnalysisManager &
+   auto &TLI = AM.getResult<TargetLibraryAnalysis>(F);
+   auto &SE = AM.getResult<ScalarEvolutionAnalysis>(F);
+ 
+-  if (!addBoundsChecking(F, TLI, SE, Opts))
+-    return PreservedAnalyses::all();
++  int Total, Successes, Optims;
++
++  auto Res = addBoundsChecking(F, TLI, SE, Opts, Total, Successes, Optims);
++
++  std::ostringstream OS;
++  OS << "BoundsCheckingPass: " << Successes << " " << Total << " " << Optims << "\n";
++  errs() << OS.str();
+ 
+-  return PreservedAnalyses::none();
++  return Res ? PreservedAnalyses::none() : PreservedAnalyses::all();
+ }
+ 
+ void BoundsCheckingPass::printPipeline(

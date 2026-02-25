@@ -146,6 +146,12 @@ This should not be a surprise - people who practice LeetCode know that
 [Do not waste time with STL vectors](https://lemire.me/blog/2012/06/20/do-not-waste-time-with-stl-vectors/)).
 
 All Linux distros use `_FORTIFY_SOURCE` and some (Fedora, RHEL) also `_GLIBCXX_ASSERTIONS`.
+There are also `-fsanitize=bounds` and `-fsanitize=object-size`.
+Unfortunately these checks are not as efficienty because they can only
+check index access when buffer length is known which is often not the case
+(e.g. when raw pointers are passed to function).
+According to [bounds-test](bounds-test) only 20% of all non-trivial memory accesses
+can be instrumented.
 
 There is also proposal for language dialect to prevent raw pointer arithmetic
 and provide fixits for easier migration
