@@ -15,9 +15,9 @@ import sys
 import tempfile
 from typing import NoReturn
 
-
 import matplotlib.pyplot as plt
-import pandas as pd
+from matplotlib import cm
+import numpy as np
 
 ME = os.path.basename(__file__)
 DEFAULT_VALUE = -0.1
@@ -180,26 +180,35 @@ def merge_results(*args):
 
 
 def generate_plots(results, out_dir):
-    # Convert to pandas format (transpose)
+    x = np.arange(len(results))
+    fig, ax = plt.subplots(figsize=(5 * (len(results) + 1), 8), layout="constrained")
 
-    tests = set()
-    for b, tt in results.items():
-        tests |= tt.keys()
+    colors = {}
+    legend_handles = {}
+    # something like 12 benchmarks should take up 80% of space between groups
+    width = 0.8 / 12
+    build_widths = np.zeros(len(results))
+    for build_index, build_results in enumerate(results.values()):
+        build_widths[build_index] = (len(build_results) - 1) * width
+        for bench_index, (bench_name, value) in enumerate(build_results.items()):
+            color = colors.setdefault(bench_name, cm.tab20(len(colors) / 20))
+            rect = ax.bar(
+                build_index + width * bench_index,
+                value,
+                width,
+                label=bench_name,
+                color=color,
+            )
+            legend_handles.setdefault(bench_name, rect)
+            ax.bar_label(rect, padding=3, fontsize=8)
 
-    tests = sorted(tests)
-    builds = sorted(results.keys())
-
-    data = {}
-    for t in tests:
-        data[t] = [results[b].get(t, DEFAULT_VALUE) for b in builds]
-
-    df = pd.DataFrame(data, columns=tests, index=builds)
-
-    # Plot
-
-    df.plot.bar(figsize=(15, 8))
+    ax.set_ylabel("% change")
+    ax.set_yscale("symlog")
+    ax.set_xticks(x + build_widths / 2, results.keys())
+    ax.set_ylim(-100, 100)
+    ax.legend(ncols=3, handles=legend_handles.values())
     plt.show()
-    plt.savefig(os.path.join(out_dir, "plot.jpeg"))
+    fig.savefig(os.path.join(out_dir, "plot.png"))
 
 
 def main():
