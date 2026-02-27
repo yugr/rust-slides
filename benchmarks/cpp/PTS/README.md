@@ -1,8 +1,14 @@
 Helper scripts for running tests from Phoronix Test Suite.
 
-Install config under `$HOME/.phoronix-test-suite` and
-clone from https://github.com/phoronix-test-suite/phoronix-test-suite
-and run `run.sh`.
+To run Phoronix install
+```
+$ sudo apt install php-cli php-xml
+```
+
+Also install [config](user-config.xml) to `$HOME/.phoronix-test-suite` and
+clone from https://github.com/phoronix-test-suite/phoronix-test-suite.
+
+Then run [benchmark.sh](benchmark.sh) with appropriate flags (see below).
 
 # Configs
 
@@ -73,11 +79,11 @@ Stack Clash (probestack):
 CC=$PREFIX/bin/clang CXX=$PREFIX/bin/clang++ CFLAGS='-O2 -DNDEBUG -fpermissive -fstack-clash-protection' CXXFLAGS="$CFLAGS"
 ```
 
-# gcc14 environment
+# Non-root environments
 
-To run in gcc14 environment, set it up according to comments in
+To run in environment w/o root access, set it up according to comments in
 [gh-55](https://github.com/yugr/rust-slides/issues/55) and run under
-`gcc-14-env` script:
+[gcc14-env](gcc14-env) script:
 ```
 CC=... ./gcc14-env ./benchmark.sh
 ```
