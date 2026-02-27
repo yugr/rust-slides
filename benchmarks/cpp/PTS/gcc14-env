@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Works around issues in environment which I have.
+
+# Artifacts of my PHP setup...
+PREFIX=$HOME/src/php-tree/root
+. $PREFIX/env
+export PHP_INI_SCAN_DIR=$PREFIX/etc/php/8.2/cli/conf.d
+export PHP="php -c $PREFIX/etc/php/8.2/cli"
+
+"$@"

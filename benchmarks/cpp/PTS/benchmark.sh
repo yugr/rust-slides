@@ -1,9 +1,6 @@
 #!/bin/bash
 
 # Script to run interesting tests from Phoronix Test Suite.
-#
-# All weird parts are due to issues with environment which I intend to
-# run them on.
 
 set -eu
 #set -x
@@ -14,15 +11,11 @@ if ! test -t 1 -o -n "${__SED_ENABLED:-}"; then
   exit $?
 fi
 
-# Artifacts of my PHP setup...
-PREFIX=$HOME/src/php-tree/root
-. $PREFIX/env
-export PHP_INI_SCAN_DIR=$PREFIX/etc/php/8.2/cli/conf.d
-PHP="php -c $PREFIX/etc/php/8.2/cli"
-
 PTS_DIR=$HOME/src/phoronix-test-suite
 PTS_LOCAL_DIR=$HOME/.phoronix-test-suite
 CONFIG=$(dirname $0)/config.txt
+
+PHP=${PHP:-php}
 
 export NO_EXTERNAL_DEPENDENCIES=TRUE
 

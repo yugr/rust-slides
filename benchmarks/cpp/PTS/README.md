@@ -4,9 +4,6 @@ Install config under `$HOME/.phoronix-test-suite` and
 clone from https://github.com/phoronix-test-suite/phoronix-test-suite
 and run `run.sh`.
 
-Script assumes that environment was set up according to comments in
-[gh-55](https://github.com/yugr/rust-slides/issues/55).
-
 # Configs
 
 Note that `-O3` is forced in some tests.
@@ -74,6 +71,15 @@ CC=$PREFIX/bin/clang CXX=$PREFIX/bin/clang++ CFLAGS='-O2 -DNDEBUG -fpermissive -
 Stack Clash (probestack):
 ```
 CC=$PREFIX/bin/clang CXX=$PREFIX/bin/clang++ CFLAGS='-O2 -DNDEBUG -fpermissive -fstack-clash-protection' CXXFLAGS="$CFLAGS"
+```
+
+# gcc14 environment
+
+To run in gcc14 environment, set it up according to comments in
+[gh-55](https://github.com/yugr/rust-slides/issues/55) and run under
+`gcc-14-env` script:
+```
+CC=... ./gcc14-env ./benchmark.sh
 ```
 
 # Known issues
