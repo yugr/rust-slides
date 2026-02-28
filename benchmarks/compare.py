@@ -60,8 +60,8 @@ def join(lhs, rhs):
         return 1, pow(10, lhs_deg - rhs_deg)
 
 
-def compare_runtimes(tests, name, lhs, rhs):
-    geomean = 1
+def compare_runtimes(tests, name, lhs, rhs, average_mode):
+    result = 1
 
     for test in tests:
         lhs_value = float(lhs[test]["avg"][0])
@@ -74,30 +74,52 @@ def compare_runtimes(tests, name, lhs, rhs):
         lhs_value *= lhs_mult
         rhs_value *= rhs_mult
 
-        geomean *= rhs_value / lhs_value
+        if average_mode == "geomean":
+            result *= rhs_value / lhs_value
+        elif average_mode == "min":
+            result = min(result, rhs_value / lhs_value)
+        else:
+            assert average_mode == "max"
+            result = max(result, rhs_value / lhs_value)
 
-    geomean = (1 - pow(geomean, 1 / len(tests))) * 100
+    if average_mode == "geomean":
+        result = (1 - pow(result, 1 / len(tests))) * 100
+    else:
+        result = (1 - result) * 100
 
-    print(f"{name}: {geomean:+.1f}%")
+    print(f"{name}: {result:+.1f}%")
 
 
-def compare_sizes(tests, name, lhs, rhs):
-    geomeans = {}
+def compare_sizes(tests, name, lhs, rhs, average_mode):
+    results = {}
 
     for test in tests:
         for typ, lhs_value in sorted(lhs[test].items()):
             rhs_value = rhs[test][typ]
-            if lhs_value != rhs_value:
-                geomeans[typ] = geomeans.get(typ, 1) * rhs_value / lhs_value
+            if lhs_value != rhs_value:  # Handle zeros
+                if average_mode == "geomean":
+                    results[typ] = results.get(typ, 1) * rhs_value / lhs_value
+                elif average_mode == "min":
+                    results[typ] = min(
+                        results.get(typ, sys.float_info.max), rhs_value / lhs_value
+                    )
+                else:
+                    assert average_mode == "max"
+                    results[typ] = max(
+                        results.get(typ, sys.float_info.min), rhs_value / lhs_value
+                    )
             else:
-                geomeans[typ] = geomeans.get(typ, 1)
+                results[typ] = results.get(typ, 1)
 
-    for typ, geomean in sorted(geomeans.items()):
-        geomean = (1 - pow(geomean, 1 / len(tests))) * 100
-        print(f"{name} {typ}: {geomean:+.1f}%")
+    for typ, result in sorted(results.items()):
+        if average_mode == "geomean":
+            result = (1 - pow(result, 1 / len(tests))) * 100
+        else:
+            result = (1 - result) * 100
+        print(f"{name} {typ}: {result:+.1f}%")
 
 
-def compare_jsons(lhs, rhs, ignore_missing):
+def compare_jsons(lhs, rhs, average_mode, ignore_missing):
     """Compares two .json files with benchmark results."""
 
     with open(lhs) as f:
@@ -120,7 +142,7 @@ def compare_jsons(lhs, rhs, ignore_missing):
     if lhs_tests != rhs_tests:
         if not ignore_missing:
             return
-        for name in (lhs_tests ^ rhs_tests):
+        for name in lhs_tests ^ rhs_tests:
             if name in lhs_json:
                 del lhs_json[name]
             if name in rhs_json:
@@ -128,9 +150,9 @@ def compare_jsons(lhs, rhs, ignore_missing):
         lhs_tests = lhs_tests & rhs_tests
 
     if lhs.name.endswith("_sizes.json"):
-        compare_sizes(lhs_tests, lhs.name, lhs_json, rhs_json)
+        compare_sizes(lhs_tests, lhs.name, lhs_json, rhs_json, average_mode)
     else:
-        compare_runtimes(lhs_tests, lhs.name, lhs_json, rhs_json)
+        compare_runtimes(lhs_tests, lhs.name, lhs_json, rhs_json, average_mode)
 
 
 def main():
@@ -147,6 +169,15 @@ def main():
         choices=["avg", "lb", "ub"],
         default="avg",
         help="Which measurement to compare",
+    )
+    parser.add_argument(
+        "--average-mode",
+        # Note that mean and median DO NOT MAKE SENSE for ratios
+        # ("How to not lie with statistics: The correct way to
+        # summarize benchmark results")
+        choices=["min", "max", "geomean"],
+        default="geomean",
+        help="How to average benches within single test",
     )
     parser.add_argument(
         "--ignore-missing",
@@ -192,7 +223,9 @@ def main():
         error(f"no common .json files found")
 
     for json_file in json_files:
-        compare_jsons(lhs / json_file, rhs / json_file, args.ignore_missing)
+        compare_jsons(
+            lhs / json_file, rhs / json_file, args.average_mode, args.ignore_missing
+        )
 
 
 if __name__ == "__main__":
