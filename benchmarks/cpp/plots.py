@@ -110,7 +110,7 @@ def collect_pts_results(builds, pts_dir, tmp_dir, average_mode):
             name = re.sub(r"-[0-9.]+(-git)?\.json", "", m[1])
             val = float(m[2])
             # Filter out noise
-            val = DEFAULT_VALUE if (val > 0 or abs(val) < 1) else val
+            val = DEFAULT_VALUE if abs(val) < 1 else val
             results[b][name] = val
 
     return results
@@ -180,6 +180,9 @@ def merge_results(*args):
 
 
 def generate_plots(results, out_dir):
+    font_size = 20
+    plt.rc('font', size=font_size)
+
     x = np.arange(len(results))
     fig, ax = plt.subplots(figsize=(5 * (len(results) + 1), 8), layout="constrained")
 
@@ -200,7 +203,8 @@ def generate_plots(results, out_dir):
                 color=color,
             )
             legend_handles.setdefault(bench_name, rect)
-            ax.bar_label(rect, padding=3, fontsize=8)
+            if value != DEFAULT_VALUE:
+                ax.bar_label(rect, padding=3, fmt="%.1f")
 
     ax.set_ylabel("% change")
     ax.set_yscale("symlog")

@@ -124,7 +124,7 @@ def generate_plots(results, out_dir):
                     color=color,
                 )
                 legend_handles.setdefault(bench_name, rect)
-                ax.bar_label(rect, padding=3, fontsize=8)
+                ax.bar_label(rect, padding=3, fmt="%.1f")
 
         ax.set_ylabel("% change")
         ax.set_yscale("symlog")
