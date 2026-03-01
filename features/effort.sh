@@ -20,6 +20,9 @@ for a in `find -name analysis.md`; do
   hours=$(echo "$hours + $num" | bc -l)
 done
 
+# Unaccounted time
+hours=$(echo "$hours * 1.1" | bc -l)
+
 weeks=$(echo "$hours / 8 / 5" | bc -l)
 
 echo "$weeks man-weeks"
