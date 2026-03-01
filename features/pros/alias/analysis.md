@@ -4,7 +4,7 @@ Assignee: yugr
 
 Parent task: gh-39
 
-Effort: 24h
+Effort: 29h
 
 # Background
 
@@ -14,11 +14,12 @@ when different pointers/references address same memory location.
 There are two extreme cases in language design:
   - allow this for any pair of pointers
   - completely disallow this
+
 and a lot of intermediate options.
 
 Landi proved that interprocedural AA is undecidable and
 intraprocedural AA is NP-complete
-(Undecidability of static analysis, Landi, 1992).
+([Undecidability of static analysis, Landi, 1992](https://dl.acm.org/doi/abs/10.1145/161494.161501)).
 
 Originally C allowed arbitrary aliasing which was made more strict in C99
 by disallowing aliasing of references of different types
@@ -58,6 +59,7 @@ TODO:
   - [Tree Borrows and Stack Borrows](https://internals.rust-lang.org/t/tree-borrows-explained/18587)
     (also [here](https://www.reddit.com/r/rust/comments/124jp5o/tree_borrows_a_new_aliasing_model_for_rust/))
   - add info from [Horizon paper](https://dl.acm.org/doi/10.1145/3771775.3786270)
+  - ORAQL — Optimistic Responses to Alias Queries in LLVM
 
 # Examples
 
@@ -173,7 +175,7 @@ pub fn bar(a: *mut i32, b: *mut i32) -> i32 {
     let b = unsafe { &mut *b };
     *a = 1;
     *b = 2;
-    return *a;
+    *a
 }
 ```
 we will get a redundant load.
@@ -211,9 +213,6 @@ pub fn foo(a: &mut Vec<i32>, b: &Vec<i32>) {
 }
 ```
 (Vec-code has additional loop versioning due to potential aliasing).
-
-TODO:
-  - ORAQL — Optimistic Responses to Alias Queries in LLVM
 
 # Suggested readings
 
@@ -256,16 +255,13 @@ index 17ff3bd37..b63498a75 100644
 ```
 and then
 ```
-$ ./x build --stage 1 compiler && ./x build -j1 --stage 2 compiler |& tee build.log
+$ ./x build --stage 1 compiler && ./x build -j1 --stage 2 compiler &> build.log
 $ cat build.log | awk 'BEGIN{prec=0; tot=0} /Total Alias Queries/{tot+=$1} /no alias responses|must alias responses/{prec+=$1} END{print prec " " tot}'
 ```
 
 Rust:
-  - baseline: 267950087 / 304403228 = 88%
-  - force-aliasing: 259796295 / 300809438 = 86%
-
-TODO:
-  - rebuild rustc w/ `debug-assertions=false` and recollect data
+  - baseline: 248788062 / 298615090 = 83%
+  - force-aliasing: 244430987 / 301300398 = 81%
 
 Results for other projects can be collected via
 ```
@@ -339,7 +335,8 @@ Rust:
   - baseline: 266298621 / 274619155 == 97%
   - force-aliasing: ???
 
-TODO: recollect results for force-aliasing
+TODO:
+  - rebuild rustc w/ `debug-assertions=false` and recollect data
 
 ## Disabling optimization
 
