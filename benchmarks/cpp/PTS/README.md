@@ -1,82 +1,17 @@
 Helper scripts for running tests from Phoronix Test Suite.
 
-To run Phoronix install
+To run Phoronix, install
 ```
 $ sudo apt install php-cli php-xml
+$ git clone https://github.com/yugr/cc-wrappers
 ```
 
 Also install [config](user-config.xml) to `$HOME/.phoronix-test-suite` and
 clone from https://github.com/phoronix-test-suite/phoronix-test-suite.
 
-Then run [benchmark.sh](benchmark.sh) with appropriate flags (see below).
-
-# Configs
-
-Note that `-O3` is forced in some tests.
-`-fasm` is needed for some tests that use inline asm and `-std=c99`
-(which disables inline asm for Clang but not GCC).
-
-According to manual inspection none of the selected projects
-enables any security features by default
-(except for `-fstack-protector` in botan).
-
-Baseline:
+Then run
 ```
-CC=$PREFIX/bin/clang CXX=$PREFIX/bin/clang++ CFLAGS='-O2 -DNDEBUG -fpermissive' CXXFLAGS="$CFLAGS"
-```
-
-StackProtector:
-```
-CC=$PREFIX/bin/clang CXX=$PREFIX/bin/clang++ CFLAGS='-O2 -DNDEBUG -fpermissive -fstack-protector-strong' CXXFLAGS="$CFLAGS"
-```
-
-Fortify2:
-```
-CC=$PREFIX/bin/clang CXX=$PREFIX/bin/clang++ CFLAGS='-O2 -DNDEBUG -fpermissive -D_FORTIFY_SOURCE=2' CXXFLAGS="$CFLAGS"
-```
-
-Fortify3:
-```
-CC=$PREFIX/bin/clang CXX=$PREFIX/bin/clang++ CFLAGS='-O2 -DNDEBUG -fpermissive -D_FORTIFY_SOURCE=3' CXXFLAGS="$CFLAGS"
-```
-
-Bounds:
-```
-CC=$PREFIX/bin/clang CXX=$PREFIX/bin/clang++ CFLAGS='-O2 -DNDEBUG -fpermissive -fsanitize=bounds -fsanitize-minimal-runtime' CXXFLAGS="$CFLAGS"
-```
-
-ObjectSize:
-```
-CC=$PREFIX/bin/clang CXX=$PREFIX/bin/clang++ CFLAGS='-O2 -DNDEBUG -fpermissive -fsanitize=object-size -fsanitize-minimal-runtime' CXXFLAGS="$CFLAGS"
-```
-
-Libcxx:
-```
-CC=$PREFIX/bin/clang CXX=$PREFIX/bin/clang++ CFLAGS="-O2 -DNDEBUG -fpermissive -stdlib=libc++ -nostdinc++ -isystem $PREFIX/include/c++/v1 -isystem $PREFIX/include/x86_64-unknown-linux-gnu/c++/v1" CXXFLAGS="$CFLAGS"
-```
-(need STL in CFLAGS because nginx sets CXXFLAGS to them).
-
-HardenedSTL:
-```
-CC=$PREFIX/bin/clang CXX=$PREFIX/bin/clang++ CFLAGS="-O2 -DNDEBUG -fpermissive -stdlib=libc++ -nostdinc++ -isystem $PREFIX/include/c++/v1 -isystem $PREFIX/include/x86_64-unknown-linux-gnu/c++/v1 -D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_FAST" CXXFLAGS="$CFLAGS"
-```
-(need STL in CFLAGS because nginx sets CXXFLAGS to them,
-note that HardenedSTL should be compared against Libcxx as other configs use GCC libstdc++).
-
-IOF:
-```
-CC=$PREFIX/bin/clang CXX=$PREFIX/bin/clang++ CFLAGS='-O2 -DNDEBUG -fpermissive -fsanitize=signed-integer-overflow,pointer-overflow -fno-sanitize-recover=signed-integer-overflow,pointer-overflow -fsanitize-minimal-runtime' CXXFLAGS="$CFLAGS"
-```
-(no unsigned-integer-overflow in IOF because some benchmarks use it intentionally).
-
-AutoInit:
-```
-CC=$PREFIX/bin/clang CXX=$PREFIX/bin/clang++ CFLAGS='-O2 -DNDEBUG -fpermissive -ftrivial-auto-var-init=zero' CXXFLAGS="$CFLAGS"
-```
-
-Stack Clash (probestack):
-```
-CC=$PREFIX/bin/clang CXX=$PREFIX/bin/clang++ CFLAGS='-O2 -DNDEBUG -fpermissive -fstack-clash-protection' CXXFLAGS="$CFLAGS"
+$ PATH=path/to/cc-wrappers:$PATH WRAPPER_CC=path/to/clang WRAPPER_CXX=path/to/clang++ ./run.sh
 ```
 
 # Non-root environments
@@ -85,13 +20,20 @@ To run in environment w/o root access, set it up according to comments in
 [gh-55](https://github.com/yugr/rust-slides/issues/55) and run under
 [gcc14-env](gcc14-env) script:
 ```
-CC=... ./gcc14-env ./benchmark.sh
+PATH=... WRAPPER_CC=... WRAPPER_CXX=... ./gcc14-env ./benchmark.sh
 ```
 
-# Known issues
+# Issues with PTS
 
-Apache will not work for some configs because luajit dependency ignores CC.
-
-TODO:
-  - Use [wrappers](https://github.com/yugr/cc-wrappers) for `cc`, `gcc`, etc. ?
-    This would also allow us to enable crafty and luajit.
+Based on commit a5364528:
+  - not all tests respect environment variables (`CC`, `CFLAGS`, etc.)
+    * e.g. luajit ignores `CC`
+  - not all dependencies are handled by install.sh
+    so need root access to use PTS
+    * e.g. MPI in pts/gromacs or gflags/snappy in pts/rocksdb
+  - some tests do not build with clang
+    * e.g. pts/z3
+  - some tests use prebuilt binaries
+    * e.g. pts/blender
+  - XML configs are inconvenient for tools
+    * need command-line flags for all settings

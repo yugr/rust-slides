@@ -1,18 +1,22 @@
 # A list of relevant tests:
 #   - come from popular projects
-#   - compile with Clang
-#   - no external dependencies (I don't have root access on server)
+#   - compile with Clang (e.g. z3 and onnx were removed)
 #   - don't take too much time (e.g. ffmpeg, fftw, redis were removed)
 #   - produce stable results (e.g. all compress/XXX were removed)
-#   - respect CFLAGS/CXXFLAGS
-#     (e.g. mkl-dnn, onednn, etc. reset them and nginx uses CFLAGS for both)
-#   - total runtime of tests under 6 hours
-#     (that's free time on server that I have)
+#   - reasonable runtime (not enough free time on server)
 #
 # Format: CFLAGS:CXXFLAGS:tests
+#
+# TODO: figure out why pts/compress-XXX are so noisy
 
 # Default
-::pts/botan pts/bullet pts/coremark pts/c-ray pts/gcrypt pts/openssl pts/polybench-c pts/povray pts/simdjson
+::pts/botan pts/bullet pts/coremark pts/c-ray pts/gcrypt pts/luajit pts/openssl pts/polybench-c pts/povray pts/simdjson
 
-# Tests that want older C standard
+# Packages that need external dependencies (so require root access)
+#::pts/dav1d pts/lammps pts/opencv pts/rocksdb pts/vpxenc pts/x264 pts/x265
+
+# Tests that want older C standard.
+# -fasm is needed in tests that use inline asm and `-std=c99`
+# (which disables inline asm for Clang but not GCC).
+
 -std=gnu89 -fasm::pts/apache pts/gmpbench pts/nginx

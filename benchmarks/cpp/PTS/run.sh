@@ -1,45 +1,79 @@
 #!/bin/bash
 
 # Script to run interesting tests from Phoronix Test Suite.
+# Uses https://github.com/yugr/cc-wrappers
 
 set -eu
 #set -x
 
-if ! test -t 1 -o -n "${__SED_ENABLED:-}"; then
-  # PTS prints colors to logfiles, fix this
-  __SED_ENABLED=1 "$0" "$@" | sed 's/\x1b\[[0-9;]*m//g'
-  exit $?
-fi
-
 PTS_DIR=$HOME/src/phoronix-test-suite
 PTS_LOCAL_DIR=$HOME/.phoronix-test-suite
-CONFIG=$(dirname $0)/tests.txt
-
 PHP=${PHP:-php}
 
-export NO_EXTERNAL_DEPENDENCIES=TRUE
+OPTS_CONFIG=$(dirname $0)/opts.txt
+TESTS_CONFIG=$(dirname $0)/tests.txt
+
+TIME=time
+#TIME=
+
+#export NO_EXTERNAL_DEPENDENCIES=TRUE
 
 sanitize() {
-  echo "$cfg" | sed -e 's/#.*//; s/^ *//; s/ *$//'
+  echo "$1" | sed -e 's/#.*//; s/^ *//; s/ *$//'
 }
 
-while read cfg; do
-  cfg=$(sanitize "$cfg")
-  test -n "$cfg" || continue
+if ! which gcc | grep -q 'cc-wrappers'; then
+  echo >&2 'You need to add cc-wrappers to PATH'
+  exit 1
+fi
 
-  cflags=$(echo "$cfg" | awk -F: '{print $1}')
-  cxxflags=$(echo "$cfg" | awk -F: '{print $2}')
-  tt=$(echo "$cfg" | awk -F: '{print $3}')
+if test -z "${WRAPPER_CC:-}" -o -z "${WRAPPER_CXX:-}"; then
+  echo >&2 'You need to define WRAPPER_CC and WRAPPER_CXX environment variables'
+  exit 1
+fi
 
-  for t in $tt; do
-    (
-      # Keep default Autoconf flags
-      export CFLAGS="${CFLAGS:--g -O2} $cflags"
-      export CXXFLAGS="${CXXFLAGS:--g -O2} $cxxflags"
-      export LDFLAGS="$CFLAGS"
-      $PHP $PTS_DIR/pts-core/phoronix-test-suite.php batch-install $t
-      setarch -R $PHP $PTS_DIR/pts-core/phoronix-test-suite.php batch-benchmark $t
-    )
-    rm -rf $PTS_LOCAL_DIR/installed-tests/$t*
-  done
-done < "$CONFIG"
+baseflags="-O2 -DNDEBUG -fpermissive -w -Wno-error"
+
+# Disable protections which are often enabled by default (e.g. on Ubuntu)
+# but perhaps it's irrelevant for Clang ?
+baseflags="$baseflags -fno-stack-protector -fno-stack-clash-protection -U_FORTIFY_SOURCE"
+
+prefix=$(dirname $(readlink -f $WRAPPER_CC))/..
+
+while read opts; do
+  opts=$(sanitize "$opts")
+  test -n "$opts" || continue
+
+  name=$(echo "$opts" | awk -F: '{print $1}')
+  rm -f $name.log
+done < "$OPTS_CONFIG"
+
+while read opts; do
+  opts=$(sanitize "$opts")
+  test -n "$opts" || continue
+
+  name=$(echo "$opts" | awk -F: '{print $1}')
+  optflags=$(echo "$opts" | awk -F: '{print $2}' | sed -e "s!PREFIX!$prefix!g")
+
+  echo "Testing $name..."
+
+  while read tests; do
+    tests=$(sanitize "$tests")
+    test -n "$tests" || continue
+
+    cflags=$(echo "$tests" | awk -F: '{print $1}' | sed -e "s!PREFIX!$prefix!g")
+    cxxflags=$(echo "$tests" | awk -F: '{print $2}' | sed -e "s!PREFIX!$prefix!g")
+    tt=$(echo "$tests" | awk -F: '{print $3}')
+
+    for t in $tt; do
+      echo "Running $t..."
+      rm -rf $PTS_LOCAL_DIR/installed-tests/$t*
+      (
+        export WRAPPER_CFLAGS="$baseflags $optflags $cflags"
+        export WRAPPER_CXXFLAGS="$baseflags $optflags $cxxflags"
+        $TIME $PHP $PTS_DIR/pts-core/phoronix-test-suite.php batch-install $t
+        $TIME setarch -R $PHP $PTS_DIR/pts-core/phoronix-test-suite.php batch-benchmark $t
+      ) |& sed 's/\x1b\[[0-9;]*m//g' >> $name.log  # PTS prints colors to logfiles, fix this
+    done
+  done < "$TESTS_CONFIG"
+done < "$OPTS_CONFIG"
