@@ -13,7 +13,7 @@ fi
 
 PTS_DIR=$HOME/src/phoronix-test-suite
 PTS_LOCAL_DIR=$HOME/.phoronix-test-suite
-CONFIG=$(dirname $0)/config.txt
+CONFIG=$(dirname $0)/tests.txt
 
 PHP=${PHP:-php}
 
