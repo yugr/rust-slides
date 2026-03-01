@@ -203,6 +203,8 @@ $ grep -c 'SLP: vectorized' build.log
 So 10% more loops vectorized without overflow checks
 otherwise small and meaningless diffs.
 
+TODO: recollect with `debug-assertions = false`
+
 ### Runtime improvements
 
 TODO:

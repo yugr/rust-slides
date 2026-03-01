@@ -469,7 +469,6 @@ in brotli-decompress (60%). Not reproduced on another machine so likely code ali
 #### Static metrics
 
 ```
-$ ./x setup
 $ ./x build --stage 1 compiler
 $ RUSTFLAGS_NOT_BOOTSTRAP='-Cllvm-args=-debug-only=inline,licm,early-cse,gvn,loop-vectorize,SLP' ./x build -j1 --stage 2 compiler &> build.log
 
@@ -532,6 +531,8 @@ $ grep -c 'EarlyCSE CSE' build.log
 $ grep -c 'SLP: vectorized' build.log
 16857 (0%)
 ```
+
+TODO: recollect with `debug-assertions = false`
 
 ### `panic-immediate-abort` (B)
 
@@ -629,6 +630,8 @@ $ grep -c 'EarlyCSE CSE' build.log
 $ grep -c 'SLP: vectorized' build.log
 16827
 ```
+
+TODO: recollect with `debug-assertions = false`
 
 # HotColdSplitting (C1)
 

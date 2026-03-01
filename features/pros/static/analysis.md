@@ -393,6 +393,8 @@ $ grep -c 'DeadArgumentEliminationPass - Removing \(argument\|return value\)' bu
 
 So it seems there are no obvious benefits from statics ?
 
+TODO: recollect with `debug-assertions = false`
+
 ### Runtime improvements
 
 Clang++ performance compared as in [llvm-bench](../../../benchmarks/cpp/llvm-bench)

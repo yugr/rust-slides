@@ -351,7 +351,6 @@ It
 
 Following instructions for [bounds checks](../../cons/bounds-checks/analysis.md#static-estimates):
 ```
-$ ./x setup
 $ export RUSTFLAGS_NOT_BOOTSTRAP='-Cllvm-args=-debug-only=licm,early-cse,gvn,loop-vectorize,SLP'
 $ ./x build --stage 1 compiler
 $ ./x build -j1 --stage 2 compiler &> build.log
@@ -380,6 +379,8 @@ $ grep -c 'EarlyCSE CSE' build.log
 $ grep -c 'SLP: vectorized' build.log
 25504 (+1%)
 ```
+
+TODO: recollect with `debug-assertions = false`
 
 According to [The Limits of Alias Analysis for Scalar Optimizations](https://www.cs.utexas.edu/~mckinley/papers/alias-cc-2004.pdf)
 AA mainly affects LICM.
