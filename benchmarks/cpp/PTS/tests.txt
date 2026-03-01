@@ -13,7 +13,7 @@
 ::pts/botan pts/bullet pts/coremark pts/c-ray pts/gcrypt pts/luajit pts/openssl pts/polybench-c pts/povray pts/simdjson
 
 # Packages that need external dependencies (so require root access)
-#::pts/dav1d pts/lammps pts/opencv pts/rocksdb pts/vpxenc pts/x264 pts/x265
+::pts/dav1d pts/opencv pts/rocksdb pts/vpxenc pts/x264 pts/x265
 
 # Tests that want older C standard.
 # -fasm is needed in tests that use inline asm and `-std=c99`

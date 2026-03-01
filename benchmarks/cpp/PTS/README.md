@@ -35,5 +35,6 @@ Based on commit a5364528:
     * e.g. pts/z3
   - some tests use prebuilt binaries
     * e.g. pts/blender
+  - some tests take too long (~hours)
   - XML configs are inconvenient for tools
     * need command-line flags for all settings
