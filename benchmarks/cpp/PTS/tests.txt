@@ -9,7 +9,7 @@
 #
 # TODO:
 #   - figure out why pts/compress-XXX are so noisy
-#   - fix pts/apache " unable to connect to 127.0.0.1:8088 Connection refused"
+#   - fix pts/apache "unable to connect to 127.0.0.1:8088 Connection refused"
 
 # Default
 ::pts/botan pts/bullet pts/coremark pts/c-ray pts/gcrypt pts/luajit pts/nginx pts/openssl pts/polybench-c pts/povray pts/simdjson

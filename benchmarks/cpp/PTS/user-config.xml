@@ -32,7 +32,7 @@
       <SaveInstallationLogs>TRUE</SaveInstallationLogs>
       <SaveTestLogs>TRUE</SaveTestLogs>
       <SleepTimeBetweenTests>6</SleepTimeBetweenTests>
-      <RemoveTestInstallOnCompletion>TRUE</RemoveTestInstallOnCompletion>
+      <RemoveTestInstallOnCompletion>FALSE</RemoveTestInstallOnCompletion>
       <ResultsDirectory>~/.phoronix-test-suite/test-results/</ResultsDirectory>
       <AlwaysUploadResultsToOpenBenchmarking>FALSE</AlwaysUploadResultsToOpenBenchmarking>
       <AutoSortRunQueue>TRUE</AutoSortRunQueue>

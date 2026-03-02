@@ -15,6 +15,12 @@ Then run
 $ PATH=path/to/cc-wrappers:$PATH WRAPPER_CC=path/to/clang WRAPPER_CXX=path/to/clang++ ./run.sh
 ```
 
+It's recommended to do
+```
+$ php pts-core/phoronix-test-suite.php make-download-cache
+```
+if you plan to run tests more than once (to save some bandwidth).
+
 # Non-root environments
 
 To run in environment w/o root access, set it up according to comments in
@@ -38,5 +44,5 @@ Based on commit a5364528:
   - some tests use prebuilt binaries
     * e.g. pts/blender
   - some tests take too long (~hours)
-  - XML configs are inconvenient for tools
+  - mix of XML configs and environment variables is inconvenient for tools
     * need command-line flags for all settings

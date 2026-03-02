@@ -63,7 +63,7 @@ for i, (name, value) in enumerate(data.items()):
     ax.bar_label(rect, padding=3, fmt="%.1f")
 
 ax.set_ylabel("% change")
-ax.set_ylim(-50, 0)
+ax.set_ylim(-50, 5)
 ax.legend(ncols=3, handles=legend_handles.values())
 plt.show()
 fig.savefig("plot.png")
