@@ -3,6 +3,7 @@ Helper scripts for running tests from Phoronix Test Suite.
 To run Phoronix, install
 ```
 $ sudo apt install php-cli php-xml
+$ sudo apt install cmake meson nasm libncurses-dev libpng-dev libtiff-dev libgflags-dev libsnappy-dev 7zip
 $ git clone https://github.com/yugr/cc-wrappers
 ```
 
@@ -29,8 +30,9 @@ Based on commit a5364528:
   - not all tests respect environment variables (`CC`, `CFLAGS`, etc.)
     * e.g. luajit ignores `CC`
   - not all dependencies are handled by install.sh
-    so need root access to use PTS
-    * e.g. MPI in pts/gromacs or gflags/snappy in pts/rocksdb
+    * this is inconvenient because user needs root to install them
+    * also these dependencies are not recompiled
+    * e.g. MPI in pts/gromacs, gflags/snappy in pts/rocksdb, libpng/libtiff in pts/povray
   - some tests do not build with clang
     * e.g. pts/z3
   - some tests use prebuilt binaries

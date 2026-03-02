@@ -18,6 +18,9 @@ TIME=time
 
 #export NO_EXTERNAL_DEPENDENCIES=TRUE
 
+# Some files in gcrypt need to be compiled w/ -O0
+export WRAPPER_BLACKLIST='jitterentropy.c\|rndjent.c'
+
 sanitize() {
   echo "$1" | sed -e 's/#.*//; s/^ *//; s/ *$//'
 }

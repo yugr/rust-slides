@@ -7,10 +7,12 @@
 #
 # Format: CFLAGS:CXXFLAGS:tests
 #
-# TODO: figure out why pts/compress-XXX are so noisy
+# TODO:
+#   - figure out why pts/compress-XXX are so noisy
+#   - fix pts/apache " unable to connect to 127.0.0.1:8088 Connection refused"
 
 # Default
-::pts/botan pts/bullet pts/coremark pts/c-ray pts/gcrypt pts/luajit pts/openssl pts/polybench-c pts/povray pts/simdjson
+::pts/botan pts/bullet pts/coremark pts/c-ray pts/gcrypt pts/luajit pts/nginx pts/openssl pts/polybench-c pts/povray pts/simdjson
 
 # Packages that need external dependencies (so require root access)
 ::pts/dav1d pts/opencv pts/rocksdb pts/vpxenc pts/x264 pts/x265
@@ -19,4 +21,4 @@
 # -fasm is needed in tests that use inline asm and `-std=c99`
 # (which disables inline asm for Clang but not GCC).
 
--std=gnu89 -fasm::pts/apache pts/gmpbench pts/nginx
+-std=gnu89 -fasm::pts/gmpbench
