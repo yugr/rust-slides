@@ -2,8 +2,12 @@ Helper scripts for running tests from Phoronix Test Suite.
 
 To run Phoronix, install
 ```
+# Phoronix deps
 $ sudo apt install php-cli php-xml
-$ sudo apt install cmake meson nasm libncurses-dev libpng-dev libtiff-dev libgflags-dev libsnappy-dev 7zip
+
+# Package deps
+$ sudo apt install gcc g++ make cmake ninja-build meson nasm libncurses-dev libpng-dev libtiff-dev libflags-dev libsnappy-dev libglut-dev 7zip
+
 $ git clone https://github.com/yugr/cc-wrappers
 ```
 
