@@ -21,6 +21,9 @@ TIME=time
 # Some files in gcrypt need to be compiled w/ -O0
 export WRAPPER_BLACKLIST='jitterentropy.c\|rndjent.c'
 
+# Sanitized shlibs have undefined symbols
+export WRAPPER_STRIP='-Wl,--no-undefined\|-Wl,-z,defs'
+
 sanitize() {
   echo "$1" | sed -e 's/#.*//; s/^ *//; s/ *$//'
 }
@@ -35,7 +38,8 @@ if test -z "${WRAPPER_CC:-}" -o -z "${WRAPPER_CXX:-}"; then
   exit 1
 fi
 
-baseflags="-O2 -DNDEBUG -fpermissive -w -Wno-error"
+# -Wno-error=narrowing is for bullet
+baseflags="-O2 -DNDEBUG -fpermissive -w -Wno-error -Wno-error=narrowing"
 
 # Disable protections which are often enabled by default (e.g. on Ubuntu)
 # but perhaps it's irrelevant for Clang ?
