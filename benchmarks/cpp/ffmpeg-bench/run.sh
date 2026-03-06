@@ -149,6 +149,7 @@ while read cfg; do
   cxxflags=$(echo "$cflags" | sed -e "s!ORIGIN!$ORIGIN!g; s!PREFIX!$prefix!g")
   ldflags=$(echo "$ldflags" | sed -e "s!ORIGIN!$ORIGIN!g; s!PREFIX!$prefix!g")
 
+  # TODO: disable _FORTIFY_SOURCE and SSP (may be enabled by default)
   baseflags='-O2 -DNDEBUG'
 
   case $cc in

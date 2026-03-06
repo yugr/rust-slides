@@ -167,6 +167,8 @@ while read cfg; do
   ldflags=$(echo "$ldflags" | sed -e "s!ORIGIN!$ORIGIN!g; s!PREFIX!$prefix!g")
   llvmflags=$(echo "$llvmflags" | sed -e "s!ORIGIN!$ORIGIN!; s!PREFIX!$prefix!g")
 
+  # TODO: disable _FORTIFY_SOURCE and SSP (may be enabled by default)
+
   case $cc in
     gcc)
       cxx=g++

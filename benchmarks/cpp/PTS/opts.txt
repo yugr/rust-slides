@@ -1,15 +1,13 @@
-# List of configs to test
-
 Baseline:
 StackProtector:-fstack-protector-strong
 Fortify2:-D_FORTIFY_SOURCE=2
 Fortify3:-D_FORTIFY_SOURCE=3
-Bounds:-fsanitize=bounds -fsanitize-minimal-runtime
-ObjectSize:-fsanitize=object-size -fsanitize-minimal-runtime
+Bounds:-fsanitize=bounds -fno-sanitize-recover -fsanitize-trap=all -fsanitize-minimal-runtime
+ObjectSize:-fsanitize=object-size -fno-sanitize-recover -fsanitize-trap=all -fsanitize-minimal-runtime
 Libcxx:-stdlib=libc++ -nostdinc++ -isystem PREFIX/include/c++/v1 -isystem PREFIX/include/x86_64-unknown-linux-gnu/c++/v1
 # HardenedSTL should be compared against Libcxx (as other configs use GCC libstdc++)
 HardenedSTL:-stdlib=libc++ -nostdinc++ -isystem PREFIX/include/c++/v1 -isystem PREFIX/include/x86_64-unknown-linux-gnu/c++/v1 -D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_FAST
 # No unsigned-integer-overflow in IOF because some benchmarks use it intentionally
-IOF:-fsanitize=signed-integer-overflow,pointer-overflow -fno-sanitize-recover=signed-integer-overflow,pointer-overflow -fsanitize-minimal-runtime
+IOF:-fsanitize=signed-integer-overflow,pointer-overflow -fno-sanitize-recover -fsanitize-trap=all -fsanitize-minimal-runtime
 AutoInit:-ftrivial-auto-var-init=zero
 StackClash:-fstack-clash-protection

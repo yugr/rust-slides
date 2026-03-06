@@ -2,12 +2,12 @@ Baseline:clang:::
 StackProtector:clang:-fstack-protector-strong::
 Fortify2:clang:-D_FORTIFY_SOURCE=2::
 Fortify3:clang:-D_FORTIFY_SOURCE=3::
-Bounds:clang:-fsanitize=bounds -fno-sanitize-recover=bounds -fsanitize-minimal-runtime:-fsanitize-minimal-runtime:
-ObjectSize:clang:-fsanitize=object-size -fno-sanitize-recover=object-size -fsanitize-minimal-runtime:-fsanitize-minimal-runtime:
+Bounds:clang:-fsanitize=bounds -fno-sanitize-recover -fsanitize-trap=all -fsanitize-minimal-runtime:-fsanitize-minimal-runtime:
+ObjectSize:clang:-fsanitize=object-size -fno-sanitize-recover -fsanitize-trap=all -fsanitize-minimal-runtime:-fsanitize-minimal-runtime:
 Libcxx:clang:-stdlib=libc++ -nostdinc++ -isystem PREFIX/include/c++/v1 -isystem PREFIX/include/x86_64-unknown-linux-gnu/c++/v1:-stdlib=libc++ -L PREFIX/lib/x86_64-unknown-linux-gnu -lc++abi -lunwind -Wl,-rpath,PREFIX/lib/x86_64-unknown-linux-gnu:-DLLVM_ENABLE_LIBCXX=ON
 # Note that HardenedSTL should be compared against Libcxx (other configs use GCC libstdc++)
 HardenedSTL:clang:-stdlib=libc++ -D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_FAST -nostdinc++ -isystem PREFIX/include/c++/v1 -isystem PREFIX/include/x86_64-unknown-linux-gnu/c++/v1:-stdlib=libc++ -L PREFIX/lib/x86_64-unknown-linux-gnu -lc++abi -lunwind -Wl,-rpath,PREFIX/lib/x86_64-unknown-linux-gnu:-DLLVM_ENABLE_LIBCXX=ON
 # No unsigned-integer-overflow in IOF because Clang uses it intentionally
-IOF:clang:-fsanitize=signed-integer-overflow,pointer-overflow -fno-sanitize-recover=signed-integer-overflow,pointer-overflow -fsanitize-minimal-runtime:-fsanitize-minimal-runtime:
+IOF:clang:-fsanitize=signed-integer-overflow,pointer-overflow -fno-sanitize-recover -fsanitize-trap=all -fsanitize-minimal-runtime:-fsanitize-minimal-runtime:
 AutoInit:clang:-ftrivial-auto-var-init=zero::
 StackClash:clang:-fstack-clash-protection::
