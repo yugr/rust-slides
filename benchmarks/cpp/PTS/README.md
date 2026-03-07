@@ -50,3 +50,4 @@ Based on commit a5364528:
   - some tests take too long (~hours)
   - mix of XML configs and environment variables is inconvenient for tools
     * need command-line flags for all settings
+  - build errors not always checked (e.g. in pts/arrayfire-XXX/install.sh)

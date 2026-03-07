@@ -31,7 +31,7 @@ Many high-profile coding styles require this e.g.
 [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html#Internal_Linkage),
 [LLVM Coding Standard](https://llvm.org/docs/CodingStandards.html#id59) ("Restrict Visibility"),
 [C++ Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#rs-unnamed2),
-[Chromium C++ Style Guilde](https://chromium.googlesource.com/chromium/src/+/main/styleguide/c++/c++.md#unnamed-namespaces).
+[Chromium C++ Style Guide](https://chromium.googlesource.com/chromium/src/+/main/styleguide/c++/c++.md#unnamed-namespaces).
 One problem in C++ is that there internalization is done at class level so
 there is no way to localize just some methods (esp. `private` methods,
 see some preliminary work [here](https://github.com/yugr/llvm-project/commits/yugr/internal-private/2/))
@@ -68,9 +68,9 @@ pub fn bar() {
     mymod::foo3(3);
 }
 
-$ rustc +baseline test.rs -O --emit=asm --crate-type=rlib -o- | g globl
-        .globl  _ZN5tmp415mymod4foo317he25c12b2983ea8d0E
-        .globl  _ZN5tmp413bar17h1647cdb4897d4b54E
+$ rustc +baseline test.rs -O --emit=asm --crate-type=rlib -o- | rustfilt | grep globl
+        .globl  test::mymod::foo3
+        .globl  test::bar
 ```
 
 C# has `internal` specifier but there is no info if it can improve performance.
@@ -101,12 +101,12 @@ pub fn bar(n: i32, s: &[i32]) -> i32 {
 ```
 compiles to
 ```
-$ rustc +baseline test.rs -O --emit=asm --crate-type=rlib -o-
+$ rustc +baseline test.rs -O --emit=asm --crate-type=rlib -o- | rustfilt
         .file   "tmp39.a753e57b1e183dcd-cgu.0"
         .section        .text._ZN5tmp393foo17h2c99de230f997c95E,"ax",@progbits
         .p2align        6
-        .type   _ZN5tmp393foo17h2c99de230f997c95E,@function
-_ZN5tmp393foo17h2c99de230f997c95E:
+        .type   test::foo,@function
+test::foo:
         .cfi_startproc
         leal    (%rsi,%rdi), %eax
         retq
@@ -200,7 +200,7 @@ TODO: is there an overapproximation because compiler used to merge these functio
 ## Prevalence
 
 Counts for Rust benchmarks were obtained with
-Rust's llvm-project with aboev patch:
+Rust's llvm-project with above patch:
 ```
 $ INTERNAL_STATS=1 ../benchmarks/runall.sh --runner-args "-b -j6 -v" no-static
 $ csplit -z results/no-static/runner.log '/^Building /' '{*}'
@@ -361,39 +361,34 @@ Following instructions for [bounds checks](../../cons/bounds-checks/analysis.md#
 ```
 # Ensure that LLVM is rebuild for both versions (see util/compiler.md for details) !
 
-$ export RUSTFLAGS_NOT_BOOTSTRAP='-Cllvm-args=-debug-only=inline,sccp,argpromition,deadargelim'
+$ export RUSTFLAGS_NOT_BOOTSTRAP='-Cllvm-args=-debug-only=inline,sccp,argpromotion,deadargelim'
 $ ./x build --stage 1 compiler
 $ ./x build -j1 --stage 2 compiler &> build.log
 
 # Baseline
 $ grep -c 'Size after inlining:' build.log
-2533391
+2052333
 $ grep -c 'BasicBlock Dead:' build.log
-625594
+482020
 $ grep -c 'Found that GV .* is constant' build.log
 8
-$ grep -c 'ARG PROMOTION:' build.log
-0
+$ grep -c 'ARG PROMOTION: *Promoting' build.log
+321920
 $ grep -c 'DeadArgumentEliminationPass - Removing \(argument\|return value\)' build.log
-3839
+2575
 
 # No-static
 $ grep -c 'Size after inlining:' build.log
-2654738  # +5% (???)
+2159756   # +5% (?!)
 $ grep -c 'BasicBlock Dead:' build.log
-380500   # -39%
+220474    # -54%
 $ grep -c 'Found that GV .* is constant' build.log
 8
-$ grep -c 'ARG PROMOTION:' build.log
+$ grep -c 'ARG PROMOTION: *Promoting' build.log
 0
 $ grep -c 'DeadArgumentEliminationPass - Removing \(argument\|return value\)' build.log
-0        # -100%
+0
 ```
-(ArgPromotionPass seems off by default ?).
-
-So it seems there are no obvious benefits from statics ?
-
-TODO: recollect with `debug-assertions = false`
 
 ### Runtime improvements
 
