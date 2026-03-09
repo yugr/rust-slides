@@ -20,8 +20,11 @@ Then add to `bootstrap.toml`
 ```
 [rust]
 channel = "nightly"
+debug-assertions = false
 ```
-to build a nightly compiler (some benches use features which are unstable in 1.87 and will not compile with the default `dev` channel).
+to build a nightly compiler (some benches use features which are unstable in 1.87 and
+will not compile with the default `dev` channel)
+and disable debug asserts.
 
 Add
 ```
