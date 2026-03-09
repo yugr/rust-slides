@@ -1,8 +1,8 @@
 A simple benchmark for hardening options which runs Clang on huge slow files.
 
-First clone LLVM, checkout llvmorg-20.1.7 tag and apply patches.
+First clone LLVM, checkout llvmorg-20.1.7 tag.
 
-Then build stage0 compiler:
+Then build stage1 compiler:
 ```
 $ LLVM_DIR=...
 $ BUILD_DIR=...
@@ -20,9 +20,7 @@ Finally build and benchmark stage2 compilers:
 $ PATH=$INSTALL_DIR/bin:$PATH ./run.sh --llvm $LLVM_DIR configs.txt tests.txt
 ```
 
-Data can then be averged via
+Data can then be averaged via
 ```
 for file in results/*/CGBuiltin.ii.log; do echo $file; cat $file | sed -ne '/user/{s/user.*//; p}' | Median; done
 ```
-
-TODO: prepare sources in `run.sh` ?

@@ -6,7 +6,7 @@ set -x
 # llvmorg-20.1.7
 LLVM=.
 B=./build
-J=$((($(nproc) + 1)/ 2))
+J=$(nproc)
 OUT=./results
 REPEAT=20
 V=0
@@ -132,7 +132,7 @@ regenerate_tests() {
     obj=$(echo "$cfg" | awk -F: '{print $2}')
 
     files="$files $B/$name"
-    objs="$files $obj"
+    objs="$objs $obj"
   done < "$TESTS_CONFIG"
 
   cmake --build "$B" -- -j$J $objs
@@ -151,23 +151,25 @@ while read cfg; do
   fi
 done < "$TESTS_CONFIG"
 
+# Disable protections which are often enabled by default (e.g. on Ubuntu)
+# but perhaps it's irrelevant for Clang ?
+baseflags='-fno-stack-protector -fno-stack-clash-protection -U_FORTIFY_SOURCE'
+
 while read cfg; do
   cfg=$(sanitize "$cfg")
   test -n "$cfg" || continue
 
   name=$(echo "$cfg" | awk -F: '{print $1}')
   cc=$(echo "$cfg" | awk -F: '{print $2}')
-  cxxflags=$(echo "$cfg" | awk -F: '{print $3}')
+  optflags=$(echo "$cfg" | awk -F: '{print $3}')
   ldflags=$(echo "$cfg" | awk -F: '{print $4}')
   llvmflags=$(echo "$cfg" | awk -F: '{print $5}')
 
   prefix=$(dirname $(which $cc))/..
 
-  cxxflags=$(echo "$cxxflags" | sed -e "s!ORIGIN!$ORIGIN!g; s!PREFIX!$prefix!g")
+  optflags=$(echo "$optflags" | sed -e "s!ORIGIN!$ORIGIN!g; s!PREFIX!$prefix!g")
   ldflags=$(echo "$ldflags" | sed -e "s!ORIGIN!$ORIGIN!g; s!PREFIX!$prefix!g")
   llvmflags=$(echo "$llvmflags" | sed -e "s!ORIGIN!$ORIGIN!; s!PREFIX!$prefix!g")
-
-  # TODO: disable _FORTIFY_SOURCE and SSP (may be enabled by default)
 
   case $cc in
     gcc)
@@ -196,7 +198,7 @@ while read cfg; do
   #   by default CMAKE_CXX_FLAGS_RELEASE (-O3 -DNDEBUG)
   cmake -G Ninja \
     -DCMAKE_C_COMPILER=$cc -DCMAKE_CXX_COMPILER=$cxx -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_CXX_FLAGS="$cxxflags" -DCMAKE_EXE_LINKER_FLAGS="$ldflags" \
+    -DCMAKE_CXX_FLAGS="$baseflags $optflags" -DCMAKE_EXE_LINKER_FLAGS="$ldflags" \
     $llvmflags \
     -DLLVM_ENABLE_WARNINGS=OFF -DLLVM_ENABLE_LLD=ON -DLLVM_PARALLEL_LINK_JOBS=1 -DLLVM_APPEND_VC_REV=OFF \
     -DLLVM_TARGETS_TO_BUILD=X86 -DLLVM_ENABLE_PROJECTS=clang \

@@ -8,7 +8,7 @@ X264=$HOME/src/x264  # https://code.videolan.org/videolan/x264 0480cb05
 FLV=big_buck_bunny_360p_1mb.flv  # https://zatoichi-engineer.github.io/2017/10/04/stack-smashing-protection.html#performance-cost
 
 B=$PWD/build
-J=$((($(nproc) + 1)/ 2))
+J=$(nproc)
 OUT=$PWD/results
 REPEAT=20
 V=0
@@ -133,6 +133,12 @@ X264=$(readlink -f $X264)
 
 tmp=$(mktemp)
 
+baseflags='-O2 -DNDEBUG'
+
+# Disable protections which are often enabled by default (e.g. on Ubuntu)
+# but perhaps it's irrelevant for Clang ?
+baseflags="$baseflags -fno-stack-protector -fno-stack-clash-protection -U_FORTIFY_SOURCE"
+
 while read cfg; do
   cfg=$(sanitize "$cfg")
   test -n "$cfg" || continue
@@ -146,11 +152,7 @@ while read cfg; do
   prefix=$(dirname $(which $cc))/..
 
   cflags=$(echo "$cflags" | sed -e "s!ORIGIN!$ORIGIN!g; s!PREFIX!$prefix!g")
-  cxxflags=$(echo "$cflags" | sed -e "s!ORIGIN!$ORIGIN!g; s!PREFIX!$prefix!g")
   ldflags=$(echo "$ldflags" | sed -e "s!ORIGIN!$ORIGIN!g; s!PREFIX!$prefix!g")
-
-  # TODO: disable _FORTIFY_SOURCE and SSP (may be enabled by default)
-  baseflags='-O2 -DNDEBUG'
 
   case $cc in
     gcc)
