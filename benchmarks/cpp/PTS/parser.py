@@ -153,6 +153,7 @@ def main():
             or dim.endswith("Per Second")
             or dim.endswith("Score")
             or dim.endswith("flops")
+            or dim == "FPS"
         ):
             # Convert rates to readable times
             if num > 1e8:
@@ -171,8 +172,10 @@ def main():
             data = [N / d for d in data]
         elif dim == "Seconds":
             dim = "s"
+        elif dim in ("ms", "us", "ns", "ps"):
+            pass
         else:
-            error(f"unknown dimension '{dim}'")
+            error(f"unknown dimension '{dim}': {avg_line}")
 
         #     Deviation: 0.19%
         std_line = lines.pop()

@@ -83,15 +83,31 @@ def collect_pts_results(builds, pts_dir, tmp_dir, average_mode):
 
     parser = os.path.join(os.path.dirname(__file__), "PTS", "parser.py")
     compare = os.path.join(os.path.dirname(__file__), "..", "compare.py")
+    combine = os.path.join(os.path.dirname(__file__), "..", "combine.py")
 
     for b in all_builds:
-        f = os.path.join(pts_dir, b + ".log")
-        error_if(not os.path.exists(f), f"PTS result file {f} does not exist")
+        oo = []
+        for i, d in enumerate(pts_dir):
+            f = os.path.join(d, b + ".log")
+            error_if(not os.path.exists(f), f"PTS result file {f} does not exist")
 
-        o = os.path.join(tmp_dir, b)
-        run(
-            [parser, "--std-threshold", 0.5, "--average-mode", average_mode, "-o", o, f]
-        )
+            o = os.path.join(tmp_dir, f"{b}-{i}")
+            oo.append(o)
+
+            run(
+                [
+                    parser,
+                    "--std-threshold",
+                    0.5,
+                    "--average-mode",
+                    average_mode,
+                    "-o",
+                    o,
+                    f,
+                ]
+            )
+
+        run([combine, "--ignore-missing", "-o", os.path.join(tmp_dir, b)] + oo)
 
     results = {}
 
@@ -141,26 +157,46 @@ def average_times(filename, average_mode):
 
 
 def collect_ffmpeg_results(builds, ffmpeg_dir, tmp_dir, average_mode):
-    results = {}
+    all_builds = set(builds)
+    all_builds.add("Baseline")
+    if "HardenedSTL" in builds:
+        all_builds.add("Libcxx")
 
+    times = {}
+    for b in all_builds:
+        tt = []
+        for d in ffmpeg_dir:
+            t = average_times(os.path.join(d, b + ".log"), average_mode)
+            tt.append(t)
+        times[b] = min(tt)  # TODO: other cross-run averaging modes
+
+    results = {}
     for b in builds:
-        t0 = average_times(
-            os.path.join(ffmpeg_dir, get_baseline(b) + ".log"), average_mode
-        )
-        t = average_times(os.path.join(ffmpeg_dir, b + ".log"), average_mode)
+        t0 = times[get_baseline(b)]
+        t = times[b]
         results[b] = {"ffmpeg": 100 * (t0 - t) / t0}
 
     return results
 
 
 def collect_llvm_results(builds, llvm_dir, tmp_dir, average_mode):
-    results = {}
+    all_builds = set(builds)
+    all_builds.add("Baseline")
+    if "HardenedSTL" in builds:
+        all_builds.add("Libcxx")
 
+    times = {}
+    for b in all_builds:
+        tt = []
+        for d in llvm_dir:
+            t = average_times(os.path.join(d, b, "CGBuiltin.ii.log"), average_mode)
+            tt.append(t)
+        times[b] = min(tt)  # TODO: other cross-run averaging modes
+
+    results = {}
     for b in builds:
-        t0 = average_times(
-            os.path.join(llvm_dir, get_baseline(b), "CGBuiltin.ii.log"), average_mode
-        )
-        t = average_times(os.path.join(llvm_dir, b, "CGBuiltin.ii.log"), average_mode)
+        t0 = times[get_baseline(b)]
+        t = times[b]
         results[b] = {"Clang": 100 * (t0 - t) / t0}
 
     return results
@@ -271,18 +307,24 @@ Examples:
     parser.add_argument(
         "--pts-dir",
         help="Path to PTS results",
+        action="append",
+        default=[],
     )
     parser.add_argument(
         "--ffmpeg-dir",
         help="Path to ffmpeg-bench results",
+        action="append",
+        default=[],
     )
     parser.add_argument(
         "--llvm-dir",
         help="Path to llvm-bench results",
+        action="append",
+        default=[],
     )
     parser.add_argument(
         "builds",
-        nargs=argparse.REMAINDER,
+        nargs="+",
         default=[],
         help="List of builds to plot (e.g. StackProtector Fortify2 Fortify3)",
     )
@@ -300,13 +342,13 @@ Examples:
 
     results = []
 
-    if args.pts_dir is not None:
+    if args.pts_dir:
         pts_results = collect_pts_results(
             args.builds, args.pts_dir, os.path.join(tmp_dir, "PTS"), args.average_mode
         )
         results.append(pts_results)
 
-    if args.ffmpeg_dir is not None:
+    if args.ffmpeg_dir:
         ffmpeg_results = collect_ffmpeg_results(
             args.builds,
             args.ffmpeg_dir,
@@ -315,7 +357,7 @@ Examples:
         )
         results.append(ffmpeg_results)
 
-    if args.llvm_dir is not None:
+    if args.llvm_dir:
         llvm_results = collect_llvm_results(
             args.builds, args.llvm_dir, os.path.join(tmp_dir, "llvm"), args.average_mode
         )

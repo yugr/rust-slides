@@ -69,16 +69,29 @@ def run(cmd, fatal=True, tee=False, **kwargs):
     return p.returncode, out, err
 
 
-def collect_results(builds, baseline, tmp_dir):
+def collect_results(builds, paths, baseline, tmp_dir):
     all_builds = set(builds)
     all_builds.add(baseline)
 
     compare = os.path.join(os.path.dirname(__file__), "compare.py")
+    combine = os.path.join(os.path.dirname(__file__), "combine.py")
+
+    out_dir = os.path.join(tmp_dir, "combined")
+
+    for b in all_builds:
+        dd = []
+        for d in paths:
+            if os.path.exists(os.path.join(d, b)):
+                dd.append(os.path.join(d, b))
+
+        run([combine, "--ignore-missing", "-o", os.path.join(out_dir, b)] + dd)
 
     results = {}
 
     for b in builds:
-        _, out, _ = run([compare, baseline, b])
+        _, out, _ = run(
+            [compare, os.path.join(out_dir, baseline), os.path.join(out_dir, b)]
+        )
 
         build_name = os.path.basename(b.rstrip("/"))
 
@@ -105,7 +118,9 @@ def collect_results(builds, baseline, tmp_dir):
 def generate_plots(results, out_dir):
     for typ, typ_results in results.items():
         x = np.arange(len(typ_results))
-        fig, ax = plt.subplots(figsize=(5 * (len(typ_results) + 1), 8), layout="constrained")
+        fig, ax = plt.subplots(
+            figsize=(5 * (len(typ_results) + 1), 8), layout="constrained"
+        )
 
         colors = {}
         legend_handles = {}
@@ -132,7 +147,7 @@ def generate_plots(results, out_dir):
         ax.set_ylim(-100, 100)
         ax.legend(ncols=3, handles=legend_handles.values())
         plt.show()
-        fig.savefig(os.path.join(out_dir, f'{typ}.png'))
+        fig.savefig(os.path.join(out_dir, f"{typ}.png"))
 
 
 def main():
@@ -163,7 +178,15 @@ Examples:
     )
     parser.add_argument(
         "--baseline",
-        help="Path to baseline build to compare against",
+        help="Name of baseline build to compare against",
+        default="baseline",
+    )
+    parser.add_argument(
+        "--path",
+        help="Path to builds",
+        action="append",
+        default=[],
+        required=True,
     )
     parser.add_argument(
         "--tmp-dir",
@@ -173,7 +196,7 @@ Examples:
         "builds",
         nargs=argparse.REMAINDER,
         default=[],
-        help="List of paths to build results to plot",
+        help="List of builds to plot",
     )
 
     args = parser.parse_args()
@@ -184,11 +207,7 @@ Examples:
         tmp_dir = tempfile.mkdtemp()
         atexit.register(lambda: shutil.rmtree(tmp_dir))
 
-    baseline = args.baseline or os.path.join(
-        os.path.dirname(args.builds[0]), "..", "baseline"
-    )
-
-    results = collect_results(args.builds, baseline, tmp_dir)
+    results = collect_results(args.builds, args.path, args.baseline, tmp_dir)
 
     generate_plots(results, args.o)
 
