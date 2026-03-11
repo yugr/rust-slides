@@ -20,7 +20,6 @@ from matplotlib import cm
 import numpy as np
 
 ME = os.path.basename(__file__)
-DEFAULT_VALUE = -0.1
 
 
 def warn(msg):
@@ -126,7 +125,7 @@ def collect_pts_results(builds, pts_dir, tmp_dir, average_mode):
             name = re.sub(r"-[0-9.]+(-git)?\.json", "", m[1])
             val = float(m[2])
             # Filter out noise
-            val = DEFAULT_VALUE if abs(val) < 1 else val
+            val = 0 if abs(val) < 1 else val
             results[b][name] = val
 
     return results
@@ -216,10 +215,6 @@ def merge_results(*args):
 
 
 def generate_plots(results, out_dir):
-    filtered_results = {}
-    for build_name, build_data in results.items():
-        filtered_results[build_name] = {k: v for k, v in build_data.items() if v != DEFAULT_VALUE}
-
     colorscheme = cm.tab20
     num_colors_in_colorscheme = 20
 
@@ -227,20 +222,20 @@ def generate_plots(results, out_dir):
 
     base_horizontal_fig_size = 5
     vertical_fig_size = 8
-    x = np.arange(len(filtered_results))
+    x = np.arange(len(results))
     fig, ax = plt.subplots(
-        figsize=(base_horizontal_fig_size * (len(filtered_results) + 1), vertical_fig_size),
+        figsize=(base_horizontal_fig_size * (len(results) + 1), vertical_fig_size),
         layout="constrained",
     )
 
     colors = {}
     legend_handles = {}
     # something like 12 benchmarks should take up 80% of space between groups
-    max_bench_count = max(len(data) for data in filtered_results.values())
+    max_bench_count = max(len(data) for data in results.values())
     space_per_build = 0.8
     width = space_per_build / max_bench_count
-    build_widths = np.zeros(len(filtered_results))
-    for build_index, build_results in enumerate(filtered_results.values()):
+    build_widths = np.zeros(len(results))
+    for build_index, build_results in enumerate(results.values()):
         build_widths[build_index] = (len(build_results) - 1) * width
         for bench_index, (bench_name, value) in enumerate(build_results.items()):
             color = colors.setdefault(
@@ -256,12 +251,12 @@ def generate_plots(results, out_dir):
             legend_handles.setdefault(bench_name, rect)
             if value != 0:
                 ax.bar_label(rect, padding=3, fmt="%.1f", fontsize=10)
-            else:
-                ax.bar_label(rect, labels=["0.0"], padding=3, fmt="%.1f", fontsize=10)
+#            else:
+#                ax.bar_label(rect, labels=["0.0"], padding=3, fmt="%.1f", fontsize=10)
 
     ax.set_ylabel("% change")
     ax.set_yscale("symlog")
-    ax.set_xticks(x + build_widths / 2, filtered_results.keys())
+    ax.set_xticks(x + build_widths / 2, results.keys())
     ax.set_ylim(-100, 100)
     ax.legend(ncols=3, handles=legend_handles.values())
     plt.show()
