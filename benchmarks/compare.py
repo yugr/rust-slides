@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
 # Comparator of collected benchmark results.
-#
-# TODO: add script to average multiple runs
 
 from __future__ import annotations
 
@@ -36,21 +34,12 @@ def error_if(cond, msg):
 
 
 def join(lhs, rhs):
-    def deg(dim):
-        if dim == "s":
-            return 0
-        elif dim == "ms":
-            return 3
-        elif dim == "us":
-            return 6
-        elif dim == "ns":
-            return 9
-        elif dim == "ps":
-            return 12
-        assert False, f"unknown dimension: {dim}"
+    """Align dimensions."""
 
-    lhs_deg = deg(lhs)
-    rhs_deg = deg(rhs)
+    dim2deg = dict(s=0, ms=3, us=6, ns=9, ps=12)
+
+    lhs_deg = dim2deg[lhs]
+    rhs_deg = dim2deg[rhs]
 
     if lhs_deg == rhs_deg:
         return 1, 1
@@ -128,15 +117,15 @@ def compare_jsons(lhs, rhs, average_mode, ignore_missing):
     with open(rhs) as f:
         rhs_json = json.load(f)
 
-    lhs_tests = set(sorted(lhs_json.keys()))
-    rhs_tests = set(sorted(rhs_json.keys()))
+    lhs_tests = set(lhs_json.keys())
+    rhs_tests = set(rhs_json.keys())
 
     if lhs_tests - rhs_tests:
-        names = ", ".join(f"'{t}'" for t in (lhs_tests - rhs_tests))
+        names = ", ".join(f"'{t}'" for t in sorted(lhs_tests - rhs_tests))
         warn(f"tests {names} are missing in {rhs}")
 
     if rhs_tests - lhs_tests:
-        names = ", ".join(f"'{t}'" for t in (rhs_tests - lhs_tests))
+        names = ", ".join(f"'{t}'" for t in sorted(rhs_tests - lhs_tests))
         warn(f"tests {names} are missing in {lhs}")
 
     if lhs_tests != rhs_tests:
