@@ -214,7 +214,19 @@ def merge_results(*args):
     return results
 
 
-def generate_plots(results, out_dir):
+def generate_plots(results, out_dir, font_size):
+    sym_names = dict(
+        StackProtector="-fstack-protector-strong",
+        Fortify2="-D_FORTIFY_SOURCE=2",
+        Fortify3="-D_FORTIFY_SOURCE=3",
+        Bounds="-fsanitize=bounds",
+        ObjectSize="-fsanitize=object-size",
+        HardenedSTL="Hardened STL",
+        AutoInit="Initialization",
+        IOF="-fsanitize=signed-integer-overflow",
+        StackClash="Stack Clashing",
+    )
+
     colorscheme = cm.tab20
     num_colors_in_colorscheme = 20
 
@@ -250,15 +262,17 @@ def generate_plots(results, out_dir):
             )
             legend_handles.setdefault(bench_name, rect)
             if value != 0:
-                ax.bar_label(rect, padding=3, fmt="%.1f", fontsize=10)
-#            else:
-#                ax.bar_label(rect, labels=["0.0"], padding=3, fmt="%.1f", fontsize=10)
+                ax.bar_label(rect, padding=3, fmt="%.1f", fontsize=font_size)
 
-    ax.set_ylabel("% change")
+    ax.set_ylabel("% change", fontsize=font_size)
     ax.set_yscale("symlog")
-    ax.set_xticks(x + build_widths / 2, results.keys())
+    ax.set_xticks(
+        x + build_widths / 2,
+        [sym_names[build] for build in results.keys()],
+        fontsize=font_size,
+    )
     ax.set_ylim(-100, 100)
-    ax.legend(ncols=3, handles=legend_handles.values())
+    ax.legend(ncols=3, handles=legend_handles.values(), fontsize=font_size)
     plt.show()
     fig.savefig(os.path.join(out_dir, "plot.png"))
 
@@ -318,6 +332,11 @@ Examples:
         default=[],
     )
     parser.add_argument(
+        "--font-size",
+        help="Size of font for plots",
+        default=10,
+    )
+    parser.add_argument(
         "builds",
         nargs="+",
         default=[],
@@ -362,7 +381,7 @@ Examples:
 
     results = merge_results(*results)
 
-    generate_plots(results, args.o)
+    generate_plots(results, args.o, args.font_size)
 
     return 0
 
