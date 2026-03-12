@@ -330,7 +330,9 @@ Examples:
         error("at least one of --pts-dir, --ffmpeg-dir and --llvm-dir needed")
 
     if args.tmp_dir is not None:
-        tmp_dir = args.tmp_dir
+        tmp_dir = os.path.join(args.tmp_dir, "plots")
+        shutil.rmtree(tmp_dir)
+        os.makedirs(tmp_dir, exist_ok=True)
     else:
         tmp_dir = tempfile.mkdtemp()
         atexit.register(lambda: shutil.rmtree(tmp_dir))

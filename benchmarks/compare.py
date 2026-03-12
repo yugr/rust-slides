@@ -138,6 +138,9 @@ def compare_jsons(lhs, rhs, average_mode, ignore_missing):
                 del rhs_json[name]
         lhs_tests = lhs_tests & rhs_tests
 
+    if not lhs_tests:
+        return
+
     if lhs.name.endswith("_sizes.json"):
         compare_sizes(lhs_tests, lhs.name, lhs_json, rhs_json, average_mode)
     else:
