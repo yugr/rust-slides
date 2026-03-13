@@ -194,7 +194,7 @@ class CargoBench(Bench):
             if not any(arg.startswith("-j") for arg in cargo_args):
                 cargo_args.extend(cargo_parallel)
             try:
-                run(cargo_args, tee=(VERBOSE > 0), cwd=str(repo_path))
+                run(cargo_args, tee=(VERBOSE > 0), cwd=str(repo_path), timeout=1800)
             except ExecutionError as e:
                 raise BuildError(*e.args) from None
 
@@ -213,7 +213,7 @@ class CargoBench(Bench):
             cargo_args.extend(cargo_parallel)
             cargo_args.append("--no-run")
             try:
-                run(cargo_args, tee=(VERBOSE > 0), cwd=str(build_path))
+                run(cargo_args, tee=(VERBOSE > 0), cwd=str(build_path), timeout=1800)
             except ExecutionError as e:
                 raise BuildError(*e.args) from None
 
@@ -304,7 +304,7 @@ class UVBench(CriterionBench):
     def build(self, repo_path, clean, jobs):
         venv_path = repo_path / ".venv"
         if not venv_path.exists():
-            run("python3 -m venv .venv", cwd=repo_path)
+            run("python3 -m venv .venv", cwd=repo_path, timeout=1800)
         return super().build(repo_path, clean, jobs)
 
 
@@ -352,9 +352,9 @@ class RegexBench(Bench):
         cargo_args = ["cargo", "build", "--release"]
         if jobs is not None:
             cargo_args.append(f"-j{jobs}")
-        run(cargo_args, tee=(VERBOSE > 0), cwd=str(repo_path))
+        run(cargo_args, tee=(VERBOSE > 0), cwd=str(repo_path), timeout=1800)
 
-        run("target/release/rebar build -e ^rust/regex$", tee=(VERBOSE > 0), cwd=str(repo_path))
+        run("target/release/rebar build -e ^rust/regex$", tee=(VERBOSE > 0), cwd=str(repo_path), timeout=1800)
 
         # TODO: collect sizes
         return {}
@@ -408,7 +408,10 @@ class RustcBench(Bench):
             build_args = ["cargo", "build", "--release"]
             if jobs is not None:
                 build_args.append(f"-j{jobs}")
-            run(build_args, tee=(VERBOSE > 0), cwd=str(subdir))
+            try:
+                run(build_args, tee=(VERBOSE > 0), cwd=str(subdir), timeout=1800)
+            except ExecutionError as e:
+                raise BuildError(*e.args) from None
 
         # Collect sizes
 
