@@ -11,13 +11,6 @@ In this talk we
   - check how bad (or good) they are in practice
   - propose countermeasures / performance best practices
 
-# Conference
-
-- [C++Russia](https://cppconf.ru/en/)
-  * Spring 2026
-- [RustCon](https://rustcon.ru/)
-  * Dec 05 2025
-
 # Name
 
 - C++ vs Rust: low-level performance analysis
