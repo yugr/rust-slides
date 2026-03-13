@@ -25,8 +25,13 @@ Options:
   --verbose, -v     Print diagnostic info (can be specified more than once).
   -x                Enable shell tracing.
 
+Bare Rust repo can be obtained via
+  $ git clone --bare https://github.com/yugr/rust-private
+
+CI LLVM for 1.87 compiler is available in https://github.com/yugr/rustc-builds
+
 Examples:
-  \$ $(basename $0) -f ROOT
+  \$ $(basename $0) -f ~/rust-private ~/ci-llvm
 EOF
   exit
 }
@@ -121,25 +126,12 @@ while read cfg; do
 
   if $GIT worktree list | fgrep -q "[$branch]"; then
     if test -z "$FORCE"; then
-      error "branch $branch already exists in $BARE"
+      error "worktree for $branch already exists in $BARE"
     else
-      wt=$($GIT worktree list | fgrep -q "[$branch]" | awk '{print $1}')
+      wt=$($GIT worktree list | fgrep "[$branch]" | awk '{print $1}')
       $GIT worktree remove -f $wt
-      $GIT branch -D $branch
     fi
   fi
-done < "$CFG"
-
-# Create worktrees
-
-while read cfg; do
-  cfg=$(sanitize "$cfg")
-  test -n "$cfg" || continue
-
-  name=$(echo "$cfg" | awk -F: '{print $1}')
-  branch=$(echo "$cfg" | awk -F: '{print $2}')
-
-  $GIT worktree add $WD/$name $branch
 done < "$CFG"
 
 # Checkout code
@@ -225,8 +217,9 @@ EOF
     fi
 
     rustup toolchain link $name build/host/stage1
-    toolchains="$toolchains $name"
   )
+
+  toolchains="$toolchains $name"
 done < "$CFG"
 
 $RUNALL --clone --runner-args "-j$J -v" $toolchains
