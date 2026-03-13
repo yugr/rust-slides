@@ -403,5 +403,38 @@ $ /usr/bin/time setarch -R ~/src/llvm/llvm-project/build-stage1/bin/clang++ -O2 
 ```
 and ffmpeg as well by 1% (tested as in [ffmpeg-bench](../../../benchmarks/cpp/ffmpeg-bench)).
 
-TODO:
-  - collect Rust runtime perf measurements with disabled internals (and maybe `-mllvm -enable-ipra` ?)
+Rust runtime perf degradations with disabled internals:
+```
+SpacetimeDB_0.json: +1.3%
+nalgebra_0.json: +0.3%
+oxipng_0.json: -0.7%
+rav1e_0.json: -9.6%
+regex_0.json: +0.2%
+ruff_0.json: -4.6%
+rust_serialization_benchmark_0.json: -1.0%
+rustc-runtime-benchmarks_0.json: -7.2%
+tokio_0.json: -0.7%
+uv_0.json: -2.1%
+zed_0.json: -25.4%
+```
+and sizes:
+```
+SpacetimeDB_sizes.json rodata: -7.5%
+SpacetimeDB_sizes.json text: -8.9%
+oxipng_sizes.json rodata: -1.8%
+oxipng_sizes.json text: -7.3%
+rav1e_sizes.json rodata: -10.6%
+rav1e_sizes.json text: -8.6%
+ruff_sizes.json rodata: -8.1%
+ruff_sizes.json text: -12.9%
+rustc-runtime-benchmarks_sizes.json rodata: -2.9%
+rustc-runtime-benchmarks_sizes.json text: -9.0%
+tokio_sizes.json rodata: +3.8%
+tokio_sizes.json text: -4.4%
+uv_sizes.json rodata: +0.1%
+uv_sizes.json text: -3.7%
+zed_sizes.json rodata: -20.0%
+zed_sizes.json text: -9.7%
+```
+
+TODO: test `-mllvm -enable-ipra` ?
