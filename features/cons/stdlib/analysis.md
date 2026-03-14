@@ -121,8 +121,8 @@ N/A
 
 I added branches which disable checks which are
 supposedly high overhead but rare in practice:
-  - size/counter overflows: [yugr/stdlib/no-overflow-checks/1](https://github.com/yugr/rust-private/tree/yugr/stdlib/no-overflow-checks/1)
-  - char boundary checks: [yugr/stdlib/no-char-checks/1](https://github.com/yugr/rust-private/tree/yugr/stdlib/no-char-checks/1)
+  - size/counter overflows: [yugr/stdlib/no-overflow-checks/2](https://github.com/yugr/rust-private/tree/yugr/stdlib/no-overflow-checks/2)
+  - char boundary checks: [yugr/stdlib/no-char-checks/2](https://github.com/yugr/rust-private/tree/yugr/stdlib/no-char-checks/2)
 
 TODO:
   - ensure that `ub_checks::assert_unsafe_precondition!` are disabled

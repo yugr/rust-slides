@@ -182,8 +182,8 @@ TODO:
 ## Disabling the check
 
 Because of issue with relocations we want to compare two variants:
-  - (A) forced PLT ([yugr/plt/1](https://github.com/yugr/rust-private/tree/yugr/plt/1))
-  - (B) GOT + forced relocs ([yugr/noplt-relax/1](https://github.com/yugr/rust-private/tree/yugr/noplt-relax/1))
+  - (A) forced PLT ([yugr/plt/2](https://github.com/yugr/rust-private/tree/yugr/plt/2))
+  - (B) GOT + forced relocs ([yugr/noplt-relax/2](https://github.com/yugr/rust-private/tree/yugr/noplt-relax/2))
 
 ## Measurements
 

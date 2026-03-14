@@ -276,9 +276,9 @@ TODO:
 ## Disabling the check
 
 To compare overhead of exceptions we measure several variants:
-  - (A) forced `-Cpanic=abort` ([yugr/force-panic-abort/1](https://github.com/yugr/rust-private/tree/yugr/force-panic-abort/1) branch)
-  - (B) = (A) + build stdlib with `panic_immediate_abort` ([yugr/force-panic-immediate-abort/1](https://github.com/yugr/rust-private/tree/yugr/force-panic-immediate-abort/1) branch)
-  - (C1) and (C2): A + outlining landing pads (to improve I$ locality) ([yugr/enable-hot-cold-splitting/1](https://github.com/yugr/rust-private/tree/yugr/enable-hot-cold-splitting/1) and [yugr/enable-machine-splitter/1](https://github.com/yugr/rust-private/tree/yugr/enable-machine-splitter/1) branches)
+  - (A) forced `-Cpanic=abort` ([yugr/force-panic-abort/2](https://github.com/yugr/rust-private/tree/yugr/force-panic-abort/2) branch)
+  - (B) = (A) + build stdlib with `panic_immediate_abort` ([yugr/force-panic-immediate-abort/2](https://github.com/yugr/rust-private/tree/yugr/force-panic-immediate-abort/2) branch)
+  - (C1) and (C2): A + outlining landing pads (to improve I$ locality) ([yugr/enable-hot-cold-splitting/2](https://github.com/yugr/rust-private/tree/yugr/enable-hot-cold-splitting/2) and [yugr/enable-machine-splitter/2](https://github.com/yugr/rust-private/tree/yugr/enable-machine-splitter/2) branches)
 
 (A) removes landing pads for non-FFI (Rust) functions.
 

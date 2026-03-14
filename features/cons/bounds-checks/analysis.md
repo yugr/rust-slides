@@ -265,7 +265,7 @@ So stats are
 
 ## Disabling the check
 
-Compiler patch is in branch [yugr/disable-bounds-checks/1](https://github.com/yugr/rust-private/tree/yugr/disable-bounds-checks/1).
+Compiler patch is in branch [yugr/disable-bounds-checks/2](https://github.com/yugr/rust-private/tree/yugr/disable-bounds-checks/2).
 It
   - disables checks in compiler
   - removes relevant `panic!` / `assert!` / etc. in stdlib
