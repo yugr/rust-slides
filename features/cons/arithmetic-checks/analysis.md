@@ -4,7 +4,7 @@ Assignee: yugr
 
 Parent task: gh-28
 
-Effort: 20h (lower bound)
+Effort: 23h (lower bound)
 
 # Background
 
@@ -251,6 +251,9 @@ Results for rustc:
       [rust]
       overflow-checks = true
       ```
+
+TODO:
+  - rebuild rustc w/ `debug-assertions=false` and recollect data
 
 ## Disabling the check
 

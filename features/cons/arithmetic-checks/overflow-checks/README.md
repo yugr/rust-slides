@@ -120,7 +120,7 @@ but unfortunately overflow is defined for them
 (so above loop is significantly slower for `T == unsigned`).
 
 Another example: without UB it would be impossible to replace
-other induction variables:
+induction variable in
 ```
 for (i = lo; i <= hi; i++)
   sum ^= i * 53;
