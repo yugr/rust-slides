@@ -166,7 +166,7 @@ class Bench:
         for bench_patch in sorted((patch_root / self.name).glob("*.patch")):
             run(f"patch -p1 -i {bench_patch}", cwd=str(bench_path))
 
-    def build(self, repo_path, clean, jobs):
+    def build(self, repo_path, clean, jobs, timeout):
         raise NotImplementedError
 
     def run(self, repo_path, run_options):
@@ -181,7 +181,7 @@ class CargoBench(Bench):
         self.build_cmds = build_cmds
         self.bench_cmds = bench_cmds
 
-    def build(self, repo_path, clean, jobs):
+    def build(self, repo_path, clean, jobs, timeout):
         cargo_parallel = [] if jobs is None else [f"-j{jobs}"]
 
         if clean:
@@ -194,7 +194,7 @@ class CargoBench(Bench):
             if not any(arg.startswith("-j") for arg in cargo_args):
                 cargo_args.extend(cargo_parallel)
             try:
-                run(cargo_args, tee=(VERBOSE > 0), cwd=str(repo_path), timeout=1800)
+                run(cargo_args, tee=(VERBOSE > 0), cwd=str(repo_path), timeout=timeout)
             except ExecutionError as e:
                 raise BuildError(*e.args) from None
 
@@ -213,7 +213,7 @@ class CargoBench(Bench):
             cargo_args.extend(cargo_parallel)
             cargo_args.append("--no-run")
             try:
-                run(cargo_args, tee=(VERBOSE > 0), cwd=str(build_path), timeout=1800)
+                run(cargo_args, tee=(VERBOSE > 0), cwd=str(build_path), timeout=timeout)
             except ExecutionError as e:
                 raise BuildError(*e.args) from None
 
@@ -301,10 +301,10 @@ class CriterionBench(CargoBench):
 class UVBench(CriterionBench):
     """UV benchmark class."""
 
-    def build(self, repo_path, clean, jobs):
+    def build(self, repo_path, clean, jobs, timeout):
         venv_path = repo_path / ".venv"
         if not venv_path.exists():
-            run("python3 -m venv .venv", cwd=repo_path, timeout=1800)
+            run("python3 -m venv .venv", cwd=repo_path, timeout=timeout)
         return super().build(repo_path, clean, jobs)
 
 
@@ -343,7 +343,7 @@ class OxipngBench(CargoBench):
 class RegexBench(Bench):
     """Class for BurntSushi regex benchmarks."""
 
-    def build(self, repo_path, clean, jobs):
+    def build(self, repo_path, clean, jobs, timeout):
         if clean:
             run("cargo clean", cwd=str(repo_path))
             engine_path = repo_path / "engines/rust/regex"
@@ -352,9 +352,9 @@ class RegexBench(Bench):
         cargo_args = ["cargo", "build", "--release"]
         if jobs is not None:
             cargo_args.append(f"-j{jobs}")
-        run(cargo_args, tee=(VERBOSE > 0), cwd=str(repo_path), timeout=1800)
+        run(cargo_args, tee=(VERBOSE > 0), cwd=str(repo_path), timeout=timeout)
 
-        run("target/release/rebar build -e ^rust/regex$", tee=(VERBOSE > 0), cwd=str(repo_path), timeout=1800)
+        run("target/release/rebar build -e ^rust/regex$", tee=(VERBOSE > 0), cwd=str(repo_path), timeout=timeout)
 
         # TODO: collect sizes
         return {}
@@ -396,7 +396,7 @@ class RegexBench(Bench):
 
 
 class RustcBench(Bench):
-    def build(self, repo_path, clean, jobs):
+    def build(self, repo_path, clean, jobs, timeout):
         # Build
 
         bench_path = Path(repo_path) / "collector" / "runtime-benchmarks"
@@ -409,7 +409,7 @@ class RustcBench(Bench):
             if jobs is not None:
                 build_args.append(f"-j{jobs}")
             try:
-                run(build_args, tee=(VERBOSE > 0), cwd=str(subdir), timeout=1800)
+                run(build_args, tee=(VERBOSE > 0), cwd=str(subdir), timeout=timeout)
             except ExecutionError as e:
                 raise BuildError(*e.args) from None
 
@@ -577,6 +577,10 @@ def main():
         help="build but do not run benchmarks",
     )
     parser.add_argument(
+        "--build-timeout",
+        help="timeout for building and running each benchmark",
+    )
+    parser.add_argument(
         "-c",
         "--clean",
         dest="clean",
@@ -676,7 +680,7 @@ def main():
         repo_path = base_path / os.path.basename(bench.repo)
         try:
             t1 = time.time()
-            build_times = bench.build(repo_path, args.clean, args.jobs)
+            build_times = bench.build(repo_path, args.clean, args.jobs, args.build_timeout)
             elapsed = time.time() - t1
             with (base_path / f"{bench.name}_sizes.json").open("w") as f:
                 f.write(json.dumps(build_times, indent=4, sort_keys=True))
