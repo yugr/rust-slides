@@ -4,7 +4,7 @@ Assignee: yugr
 
 Parent task: gh-28
 
-Effort: 23h (lower bound)
+Effort: 25h (lower bound)
 
 # Background
 
@@ -136,24 +136,40 @@ TODO:
 To check how many overflow checks are optimized by LLVM
 we count panics in initial IR vs optimized IR.
 
+Relevant panics seem to be
+```
+# Default
+core::slice::index::slice_start_index_overflow_fail
+core::panicking::panic_const::panic_const_div_overflow
+core::slice::index::slice_end_index_overflow_fail
+
+# Forced
+core::panicking::panic_const::panic_const_neg_overflow
+core::panicking::panic_const::panic_const_shr_overflow
+core::panicking::panic_const::panic_const_shl_overflow
+core::panicking::panic_const::panic_const_mul_overflow
+core::panicking::panic_const::panic_const_sub_overflow
+core::panicking::panic_const::panic_const_add_overflow
+```
+
 Checks in unoptimized IR:
 ```
 $ RUSTFLAGS_NOT_BOOTSTRAP='-Csave-temps -Coverflow-checks=on' ./x build --stage 2 compiler
 $ find build/x86_64-unknown-linux-gnu/{stage1-std,stage1-rustc} -name '*.no-opt.bc' \
   | xargs ~/tasks/rust/count-overflow-panics/Count \
   | awk 'BEGIN{s=0} {s+=$2} END{print s}'
-70947
+63802
 ```
 
 Checks in optimized IR:
 ```
-$ for bc in `fn build/x86_64-unknown-linux-gnu/{stage1-std,stage1-rustc} *.no-opt.bc`; do
+$ for bc in `find build/x86_64-unknown-linux-gnu/{stage1-std,stage1-rustc} -name *.no-opt.bc`; do
   /home/yugr/src/rust/rust/build/x86_64-unknown-linux-gnu/ci-llvm/bin/opt -O2 -disable-loop-unrolling -vectorize-loops=false -vectorize-slp=false $bc -o tmp.bc
   ~/tasks/rust/count-overflow-panics/Count tmp.bc
 done | awk 'BEGIN{s=0} {s+=$2} END{print s}'
-38915
+50142
 ```
-So 45% of checks are optimized by LLVM !
+So 21% of arithmetic overflow checks are optimized by LLVM.
 
 Better yet, also remove inline - use
 ```
@@ -162,22 +178,22 @@ $ /home/yugr/src/rust/rust/build/x86_64-unknown-linux-gnu/ci-llvm/bin/opt -O2 -p
 to extract `-O2` pipeline and remove inline, loop-vectorize, slp-vectorize and unroll passes.
 With this, I get
 ```
-44133
-```
-
-But this may be misleading because most checks are trivially optimizable:
-```
-$ for bc in `fn build/x86_64-unknown-linux-gnu/{stage1-std,stage1-rustc} *.no-opt.bc`; do
-  /home/yugr/src/rust/rust/build/x86_64-unknown-linux-gnu/ci-llvm/bin/opt -passes='mem2reg,sroa<preserve-cfg>,instcombine<max-iterations=100>' $bc -o tmp.bc
+$ for bc in `find build/x86_64-unknown-linux-gnu/{stage1-std,stage1-rustc} -name *.no-opt.bc`; do
+  /home/yugr/src/rust/rust/build/x86_64-unknown-linux-gnu/ci-llvm/bin/opt -passes='...' $bc -o tmp.bc
   ~/tasks/rust/count-overflow-panics/Count tmp.bc
 done | awk 'BEGIN{s=0} {s+=$2} END{print s}'
-49354
+45020
 ```
-So just 21% of checks are not super-trivial.
-early-cse<>, gvn<>, adce, bdce, instsimplify, sccp and correlated-propagation are responsible for the rest.
+So more like 30% of arithmetic overflow checks are optimized.
+instcombine, early-cse<>, gvn<>, adce, bdce, instsimplify, sccp and correlated-propagation
+are main optimizations.
 
-TODO:
-  - rebuild rustc w/ `debug-assertions=false` and recollect data
+Let's also find how many checks are trivially optimizable by
+running with `-passes='mem2reg,sroa<preserve-cfg>,instcombine<max-iterations=100>'`:
+```
+43939
+```
+Perhaps `max-iterations=100` produces misleading results...
 
 # Workarounds for overflow checks
 
@@ -224,36 +240,17 @@ Overflow checks hurt performance in three ways:
 
 I used the same approach as outlined in [bounds checking](../bounds-checks/analysis.md#overall-panics).
 
-Relevant panics seem to be
-```
-# Default
-core::slice::index::slice_start_index_overflow_fail
-core::panicking::panic_const::panic_const_div_overflow
-core::slice::index::slice_end_index_overflow_fail
-
-# Forced
-core::panicking::panic_const::panic_const_neg_overflow
-core::panicking::panic_const::panic_const_shr_overflow
-core::panicking::panic_const::panic_const_shl_overflow
-core::panicking::panic_const::panic_const_mul_overflow
-core::panicking::panic_const::panic_const_sub_overflow
-core::panicking::panic_const::panic_const_add_overflow
-```
-
 Results for rustc:
-  - (A) 430214
+  - (A) 183670
   - (A+) not relevant
-  - (B) 429725
-    * not sure how it's smaller than (A)...
-  - (Z) 472510 (+10% compared to default, 9% of panics are overflows)
-    * needed to enable overflow checks explicitly:
+  - (B) 183931
+    * so default checks are very rare at least in rustc
+  - (Z) 249453 (+36% compared to baseline, 33% of panics are integer overflows)
+    * had to enable overflow checks explicitly:
       ```
       [rust]
       overflow-checks = true
       ```
-
-TODO:
-  - rebuild rustc w/ `debug-assertions=false` and recollect data
 
 ## Disabling the check
 
