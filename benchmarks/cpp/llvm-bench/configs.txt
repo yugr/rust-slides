@@ -11,3 +11,4 @@ HardenedSTL:clang:-stdlib=libc++ -D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE
 IOF:clang:-fsanitize=signed-integer-overflow,pointer-overflow -fno-sanitize-recover -fsanitize-trap=all -fsanitize-minimal-runtime:-fsanitize-minimal-runtime:
 AutoInit:clang:-ftrivial-auto-var-init=zero::
 StackClash:clang:-fstack-clash-protection::
+FastMath:clang:-ffast-math::
