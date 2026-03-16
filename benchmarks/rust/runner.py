@@ -10,6 +10,7 @@ import json
 import os
 import os.path
 from pathlib import Path
+import shutil
 import subprocess
 import sys
 import re
@@ -166,6 +167,8 @@ class Bench:
         for bench_patch in sorted((patch_root / self.name).glob("*.patch")):
             run(f"patch -p1 -i {bench_patch}", cwd=str(bench_path))
 
+        shutil.copytree(patch_root / self.name / "locks", bench_path, dirs_exist_ok=True)
+
     def build(self, repo_path, clean, jobs, timeout):
         raise NotImplementedError
 
@@ -193,6 +196,7 @@ class CargoBench(Bench):
             cargo_args = build_cmd.split()
             if not any(arg.startswith("-j") for arg in cargo_args):
                 cargo_args.extend(cargo_parallel)
+            cargo_args.append("--locked")
             try:
                 run(cargo_args, tee=(VERBOSE > 0), cwd=str(repo_path), timeout=timeout)
             except ExecutionError as e:
@@ -211,6 +215,7 @@ class CargoBench(Bench):
 
             cargo_args = params.split()
             cargo_args.extend(cargo_parallel)
+            cargo_args.append("--locked")
             cargo_args.append("--no-run")
             try:
                 run(cargo_args, tee=(VERBOSE > 0), cwd=str(build_path), timeout=timeout)
@@ -349,7 +354,7 @@ class RegexBench(Bench):
             engine_path = repo_path / "engines/rust/regex"
             run("cargo clean", cwd=str(engine_path))
 
-        cargo_args = ["cargo", "build", "--release"]
+        cargo_args = ["cargo", "build", "--release", "--locked"]
         if jobs is not None:
             cargo_args.append(f"-j{jobs}")
         run(cargo_args, tee=(VERBOSE > 0), cwd=str(repo_path), timeout=timeout)
@@ -405,7 +410,7 @@ class RustcBench(Bench):
                 continue
             if clean:
                 run("cargo clean", cwd=str(subdir))
-            build_args = ["cargo", "build", "--release"]
+            build_args = ["cargo", "build", "--release", "--locked"]
             if jobs is not None:
                 build_args.append(f"-j{jobs}")
             try:
