@@ -1,0 +1,214 @@
+diff --git a/Cargo.lock b/Cargo.lock
+old mode 100644
+new mode 100755
+diff --git a/benchmarks/engines.toml b/benchmarks/engines.toml
+index c92291b..ccdcc3e 100644
+--- a/benchmarks/engines.toml
++++ b/benchmarks/engines.toml
+@@ -31,7 +31,7 @@
+     bin = "./target/release/main"
+   [[engine.build]]
+     bin = "cargo"
+-    args = ["build", "--release"]
++    args = ["build", "--release", "--locked"]
+   [[engine.clean]]
+     bin = "cargo"
+     args = ["clean"]
+@@ -48,7 +48,7 @@
+     bin = "./target/release/main"
+   [[engine.build]]
+     bin = "cargo"
+-    args = ["build", "--release"]
++    args = ["build", "--release", "--locked"]
+   [[engine.clean]]
+     bin = "cargo"
+     args = ["clean"]
+@@ -67,7 +67,7 @@
+     bin = "./target/release/main"
+   [[engine.build]]
+     bin = "cargo"
+-    args = ["build", "--release"]
++    args = ["build", "--release", "--locked"]
+   [[engine.clean]]
+     bin = "cargo"
+     args = ["clean"]
+@@ -97,7 +97,7 @@
+     args = ["--libs", "--cflags", "absl_base"]
+   [[engine.build]]
+     bin = "cargo"
+-    args = ["build", "--release"]
++    args = ["build", "--release", "--locked"]
+   [[engine.clean]]
+     bin = "cargo"
+     args = ["clean"]
+@@ -121,7 +121,7 @@
+     args = ["--version"]
+   [[engine.build]]
+     bin = "cargo"
+-    args = ["build", "--release"]
++    args = ["build", "--release", "--locked"]
+   [[engine.clean]]
+     bin = "cargo"
+     args = ["clean"]
+@@ -145,7 +145,7 @@
+     args = ["--version"]
+   [[engine.build]]
+     bin = "cargo"
+-    args = ["build", "--release"]
++    args = ["build", "--release", "--locked"]
+   [[engine.clean]]
+     bin = "cargo"
+     args = ["clean"]
+@@ -265,7 +265,7 @@
+     args = ["--version"]
+   [[engine.build]]
+     bin = "cargo"
+-    args = ["build", "--release"]
++    args = ["build", "--release", "--locked"]
+   [[engine.clean]]
+     bin = "cargo"
+     args = ["clean"]
+@@ -421,7 +421,7 @@
+     regex = '(?m)^\s*-licui18n -licuuc -licudata\b'
+   [[engine.build]]
+     bin = "cargo"
+-    args = ["build", "--release"]
++    args = ["build", "--release", "--locked"]
+   [[engine.clean]]
+     bin = "cargo"
+     args = ["clean"]
+@@ -529,7 +529,7 @@
+     args = ["meta"]
+   [[engine.build]]
+     bin = "cargo"
+-    args = ["build", "--release"]
++    args = ["build", "--release", "--locked"]
+   [[engine.clean]]
+     bin = "cargo"
+     args = ["clean"]
+@@ -547,7 +547,7 @@
+     args = ["dense"]
+   [[engine.build]]
+     bin = "cargo"
+-    args = ["build", "--release"]
++    args = ["build", "--release", "--locked"]
+   [[engine.clean]]
+     bin = "cargo"
+     args = ["clean"]
+@@ -565,7 +565,7 @@
+     args = ["sparse"]
+   [[engine.build]]
+     bin = "cargo"
+-    args = ["build", "--release"]
++    args = ["build", "--release", "--locked"]
+   [[engine.clean]]
+     bin = "cargo"
+     args = ["clean"]
+@@ -586,7 +586,7 @@
+     args = ["hybrid"]
+   [[engine.build]]
+     bin = "cargo"
+-    args = ["build", "--release"]
++    args = ["build", "--release", "--locked"]
+   [[engine.clean]]
+     bin = "cargo"
+     args = ["clean"]
+@@ -610,7 +610,7 @@
+     args = ["onepass"]
+   [[engine.build]]
+     bin = "cargo"
+-    args = ["build", "--release"]
++    args = ["build", "--release", "--locked"]
+   [[engine.clean]]
+     bin = "cargo"
+     args = ["clean"]
+@@ -629,7 +629,7 @@
+     args = ["backtrack"]
+   [[engine.build]]
+     bin = "cargo"
+-    args = ["build", "--release"]
++    args = ["build", "--release", "--locked"]
+   [[engine.clean]]
+     bin = "cargo"
+     args = ["clean"]
+@@ -649,7 +649,7 @@
+     args = ["pikevm"]
+   [[engine.build]]
+     bin = "cargo"
+-    args = ["build", "--release"]
++    args = ["build", "--release", "--locked"]
+   [[engine.clean]]
+     bin = "cargo"
+     args = ["clean"]
+@@ -667,7 +667,7 @@
+     args = ["nfa"]
+   [[engine.build]]
+     bin = "cargo"
+-    args = ["build", "--release"]
++    args = ["build", "--release", "--locked"]
+   [[engine.clean]]
+     bin = "cargo"
+     args = ["clean"]
+@@ -685,7 +685,7 @@
+     args = ["hir"]
+   [[engine.build]]
+     bin = "cargo"
+-    args = ["build", "--release"]
++    args = ["build", "--release", "--locked"]
+   [[engine.clean]]
+     bin = "cargo"
+     args = ["clean"]
+@@ -703,7 +703,7 @@
+     args = ["ast"]
+   [[engine.build]]
+     bin = "cargo"
+-    args = ["build", "--release"]
++    args = ["build", "--release", "--locked"]
+   [[engine.clean]]
+     bin = "cargo"
+     args = ["clean"]
+@@ -722,7 +722,7 @@
+     args = ["dfa"]
+   [[engine.build]]
+     bin = "cargo"
+-    args = ["build", "--release"]
++    args = ["build", "--release", "--locked"]
+   [[engine.clean]]
+     bin = "cargo"
+     args = ["clean"]
+@@ -740,7 +740,7 @@
+     args = ["nfa"]
+   [[engine.build]]
+     bin = "cargo"
+-    args = ["build", "--release"]
++    args = ["build", "--release", "--locked"]
+   [[engine.clean]]
+     bin = "cargo"
+     args = ["clean"]
+@@ -758,7 +758,7 @@
+     args = ["teddy"]
+   [[engine.build]]
+     bin = "cargo"
+-    args = ["build", "--release"]
++    args = ["build", "--release", "--locked"]
+   [[engine.clean]]
+     bin = "cargo"
+     args = ["clean"]
+@@ -776,7 +776,7 @@
+     bin = "./target/release/main"
+   [[engine.build]]
+     bin = "cargo"
+-    args = ["build", "--release"]
++    args = ["build", "--release", "--locked"]
+   [[engine.clean]]
+     bin = "cargo"
+     args = ["clean"]
+@@ -802,7 +802,7 @@
+     bin = "./target/release/main"
+   [[engine.build]]
+     bin = "cargo"
+-    args = ["build", "--release"]
++    args = ["build", "--release", "--locked"]
+   [[engine.clean]]
+     bin = "cargo"
+     args = ["clean"]
