@@ -31,7 +31,7 @@ Bare Rust repo can be obtained via
 CI LLVM for 1.87 compiler is available in https://github.com/yugr/rustc-builds
 
 Examples:
-  \$ $(basename $0) -f ~/rust-private ~/ci-llvm
+  \$ $(basename $0) -f ~/rust-private.git ~/ci-llvm
 EOF
   exit
 }
@@ -97,8 +97,20 @@ CFG=$(dirname $0)/$(basename -s .sh $0).cfg
 
 GIT="git --git-dir=$BARE"
 
-if ! test -d "$BARE"; then
+if ! test -d "$BARE"/hooks; then
   error "$BARE is not a bare repo"
+fi
+
+if ! test -f "$CI_LLVM"/builder-config; then
+  error "$CI_LLVM is not a CI LLVM build"
+fi
+
+if test -d "$WD"/results; then
+  if test -z "$FORCE"; then
+    error "Scared to remove '$WD/results', aborting..."
+  else
+    rm -rf "$WD"/results
+  fi
 fi
 
 sanitize() {
