@@ -134,7 +134,7 @@ for t in $TOOLCHAINS; do
     continue
   fi
   echo "### Comparing $t against $BASELINE:"
-  $D/compare.py results/$BASELINE results/$t
+  $D/../compare.py results/$BASELINE results/$t
 done
 
 exit $FAILS

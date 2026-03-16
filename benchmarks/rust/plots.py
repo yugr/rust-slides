@@ -73,8 +73,8 @@ def collect_results(builds, paths, baseline, tmp_dir):
     all_builds = set(builds)
     all_builds.add(baseline)
 
-    compare = os.path.join(os.path.dirname(__file__), "compare.py")
-    combine = os.path.join(os.path.dirname(__file__), "combine.py")
+    compare = os.path.join(os.path.dirname(__file__), "..", "compare.py")
+    combine = os.path.join(os.path.dirname(__file__), "..", "combine.py")
 
     out_dir = os.path.join(tmp_dir, "combined")
 
