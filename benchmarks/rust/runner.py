@@ -160,12 +160,12 @@ class Bench:
         if bench_path.exists():
             return
 
-        run(f"git clone {self.repo}", cwd=str(base_path))
-        run(f"git checkout {self.commit}", cwd=str(bench_path))
+        run(f"git clone {self.repo}", cwd=base_path)
+        run(f"git checkout {self.commit}", cwd=bench_path)
 
         patch_root = Path(__file__).parent.absolute()
         for bench_patch in sorted((patch_root / self.name).glob("*.patch")):
-            run(f"patch -p1 -i {bench_patch}", cwd=str(bench_path))
+            run(f"patch -p1 -i {bench_patch}", cwd=bench_path)
 
         shutil.copytree(patch_root / self.name / "locks", bench_path, dirs_exist_ok=True)
 
@@ -188,7 +188,7 @@ class CargoBench(Bench):
         cargo_parallel = [] if jobs is None else [f"-j{jobs}"]
 
         if clean:
-            run("cargo clean", cwd=str(repo_path))
+            run("cargo clean", cwd=repo_path)
 
         # Run main build cmd
 
@@ -198,7 +198,7 @@ class CargoBench(Bench):
                 cargo_args.extend(cargo_parallel)
             cargo_args.append("--locked")
             try:
-                run(cargo_args, tee=(VERBOSE > 0), cwd=str(repo_path), timeout=timeout)
+                run(cargo_args, tee=(VERBOSE > 0), cwd=repo_path, timeout=timeout)
             except ExecutionError as e:
                 raise BuildError(*e.args) from None
 
@@ -218,7 +218,7 @@ class CargoBench(Bench):
             cargo_args.append("--locked")
             cargo_args.append("--no-run")
             try:
-                run(cargo_args, tee=(VERBOSE > 0), cwd=str(build_path), timeout=timeout)
+                run(cargo_args, tee=(VERBOSE > 0), cwd=build_path, timeout=timeout)
             except ExecutionError as e:
                 raise BuildError(*e.args) from None
 
@@ -244,7 +244,7 @@ class CargoBench(Bench):
             cargo_args.extend(params.split())
 
             global QUIET
-            _, out, _, _ = run(cargo_args, tee=not QUIET, cwd=str(build_path))
+            _, out, _, _ = run(cargo_args, tee=not QUIET, cwd=build_path)
 
             runtimes.append(self.parse(out))
 
@@ -350,16 +350,16 @@ class RegexBench(Bench):
 
     def build(self, repo_path, clean, jobs, timeout):
         if clean:
-            run("cargo clean", cwd=str(repo_path))
+            run("cargo clean", cwd=repo_path)
             engine_path = repo_path / "engines/rust/regex"
-            run("cargo clean", cwd=str(engine_path))
+            run("cargo clean", cwd=engine_path)
 
         cargo_args = ["cargo", "build", "--release", "--locked"]
         if jobs is not None:
             cargo_args.append(f"-j{jobs}")
-        run(cargo_args, tee=(VERBOSE > 0), cwd=str(repo_path), timeout=timeout)
+        run(cargo_args, tee=(VERBOSE > 0), cwd=repo_path, timeout=timeout)
 
-        run("target/release/rebar build -e ^rust/regex$", tee=(VERBOSE > 0), cwd=str(repo_path), timeout=timeout)
+        run("target/release/rebar build -e ^rust/regex$", tee=(VERBOSE > 0), cwd=repo_path, timeout=timeout)
 
         # TODO: collect sizes
         return {}
@@ -370,7 +370,7 @@ class RegexBench(Bench):
             run_options + " target/release/rebar measure -e ^rust/regex$ -f ^curated",
             tee=(VERBOSE > 0),
             # "target/release/rebar measure -e ^rust/regex$ -f ^unicode/compile/fifty-letters$"
-            cwd=str(repo_path),
+            cwd=repo_path,
         )
 
         lines = out.splitlines()
@@ -409,12 +409,12 @@ class RustcBench(Bench):
             if not subdir.is_dir() or subdir.name == "data":
                 continue
             if clean:
-                run("cargo clean", cwd=str(subdir))
+                run("cargo clean", cwd=subdir)
             build_args = ["cargo", "build", "--release", "--locked"]
             if jobs is not None:
                 build_args.append(f"-j{jobs}")
             try:
-                run(build_args, tee=(VERBOSE > 0), cwd=str(subdir), timeout=timeout)
+                run(build_args, tee=(VERBOSE > 0), cwd=subdir, timeout=timeout)
             except ExecutionError as e:
                 raise BuildError(*e.args) from None
 
@@ -440,7 +440,7 @@ class RustcBench(Bench):
                 continue
             run_args = run_options if run_options else ""
             run_args += f" ./target/release/{subdir.name}-bench run"
-            _, out, _, _ = run(run_args, cwd=str(subdir))
+            _, out, _, _ = run(run_args, cwd=subdir)
 
             for bench_line in out.splitlines():
                 benchmark_data = json.loads(bench_line)["Result"]
