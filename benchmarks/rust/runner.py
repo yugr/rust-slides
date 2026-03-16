@@ -167,7 +167,9 @@ class Bench:
         for bench_patch in sorted((patch_root / self.name).glob("*.patch")):
             run(f"patch -p1 -i {bench_patch}", cwd=bench_path)
 
-        shutil.copytree(patch_root / self.name / "locks", bench_path, dirs_exist_ok=True)
+        shutil.copytree(
+            patch_root / self.name / "locks", bench_path, dirs_exist_ok=True
+        )
 
     def build(self, repo_path, clean, jobs, timeout):
         raise NotImplementedError
@@ -359,7 +361,12 @@ class RegexBench(Bench):
             cargo_args.append(f"-j{jobs}")
         run(cargo_args, tee=(VERBOSE > 0), cwd=repo_path, timeout=timeout)
 
-        run("target/release/rebar build -e ^rust/regex$", tee=(VERBOSE > 0), cwd=repo_path, timeout=timeout)
+        run(
+            "target/release/rebar build -e ^rust/regex$",
+            tee=(VERBOSE > 0),
+            cwd=repo_path,
+            timeout=timeout,
+        )
 
         # TODO: collect sizes
         return {}
@@ -685,7 +692,9 @@ def main():
         repo_path = base_path / os.path.basename(bench.repo)
         try:
             t1 = time.time()
-            build_times = bench.build(repo_path, args.clean, args.jobs, args.build_timeout)
+            build_times = bench.build(
+                repo_path, args.clean, args.jobs, args.build_timeout
+            )
             elapsed = time.time() - t1
             with (base_path / f"{bench.name}_sizes.json").open("w") as f:
                 f.write(json.dumps(build_times, indent=4, sort_keys=True))
