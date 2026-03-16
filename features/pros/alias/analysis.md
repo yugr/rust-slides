@@ -79,7 +79,7 @@ movl    (%rdi), %eax
 retq
 ```
 because compiler has to consider that `a` and `b` point to same location in memory
-(i.e. alias).  It generates expected code if both pointers are marked with `restrict`.
+(i.e. alias). It generates expected code if both pointers are marked with `restrict`.
 
 An equivalent Rust code:
 ```
