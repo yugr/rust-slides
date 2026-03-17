@@ -481,13 +481,13 @@ BENCHES = [
         ["cargo b --profile bench --lib --bins --benches"],
         [("benches", "cargo bench")],
     ),
-    CriterionBench(
-        "meilisearch",
-        "https://github.com/meilisearch/meilisearch",
-        "0fd66a5317da7e1f075058665944cac62e17d446",
-        ["cargo b --profile bench --lib --bins --benches"],
-        [("", "cargo bench")],
-    ),
+#    CriterionBench(
+#        "meilisearch",
+#        "https://github.com/meilisearch/meilisearch",
+#        "0fd66a5317da7e1f075058665944cac62e17d446",
+#        ["cargo b --profile bench --lib --bins --benches"],
+#        [("", "cargo bench")],
+#    ),
     CriterionBench(
         "nalgebra",
         "https://github.com/dimforge/nalgebra",
