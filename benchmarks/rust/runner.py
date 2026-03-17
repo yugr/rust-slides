@@ -312,7 +312,7 @@ class UVBench(CriterionBench):
         venv_path = repo_path / ".venv"
         if not venv_path.exists():
             run("python3 -m venv .venv", cwd=repo_path, timeout=timeout)
-        return super().build(repo_path, clean, jobs)
+        return super().build(repo_path, clean, jobs, timeout)
 
 
 class OxipngBench(CargoBench):
