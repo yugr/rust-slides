@@ -11,6 +11,10 @@ and then run
 # Install dependencies (requires root access)
 $ ./install_deps.sh
 
+# Rustc benchmarks need this
+$ echo 'kernel.perf_event_paranoid = -1' | sudo tee -a /etc/sysctl.conf
+$ sudo sysctl -p
+
 $ ./runall.sh baseline bounds force-aliasing
 ```
 
