@@ -161,42 +161,6 @@ done < "$CFG"
 # Build and install branches
 # TODO: support no-static branch
 
-while read cfg; do
-  cfg=$(sanitize "$cfg")
-  test -n "$cfg" || continue
-
-  name=$(echo "$cfg" | awk -F: '{print $1}')
-  branch=$(echo "$cfg" | awk -F: '{print $2}')
-
-  (
-    cd $WD/$name
-
-    cat <<EOF > bootstrap.toml
-# See bootstrap.example.toml for documentation of available options
-#
-profile = "compiler"  # Includes one of the default files in src/bootstrap/defaults
-change-id = 138986
-
-[rust]
-channel = "nightly"
-debug-assertions = false
-
-[llvm]
-assertions = true
-EOF
-
-    if ! ./x build -j$J library; then
-      # CI LLVM no longer available so need to copy manually
-      cp -r $CI_LLVM build/x86_64-unknown-linux-gnu
-      ./x build -j$J library
-    fi
-
-    rustup toolchain link $name build/host/stage1
-  )
-done < "$CFG"
-
-# Run tests
-
 toolchains=''
 
 while read cfg; do
@@ -224,7 +188,7 @@ EOF
 
     if ! ./x build -j$J library; then
       # CI LLVM no longer available so need to copy manually
-      cp -r $CI_LLVM build/x86_64-unknown-linux-gnu
+      cp -r $CI_LLVM build/x86_64-unknown-linux-gnu/ci-llvm
       ./x build -j$J library
     fi
 
@@ -233,5 +197,7 @@ EOF
 
   toolchains="$toolchains $name"
 done < "$CFG"
+
+# Run tests
 
 $RUNALL --clone --runner-args "-j$J -v" $toolchains
