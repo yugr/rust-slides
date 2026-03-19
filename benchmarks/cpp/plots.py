@@ -83,7 +83,7 @@ def collect_pts_results(builds, pts_dir, tmp_dir, average_mode):
     compare = os.path.join(os.path.dirname(__file__), "..", "compare.py")
     combine = os.path.join(os.path.dirname(__file__), "..", "combine.py")
 
-    for b in all_builds:
+    for b in sorted(all_builds):
         oo = []
         for i, d in enumerate(pts_dir):
             f = os.path.join(d, b + ".log")
@@ -161,7 +161,7 @@ def collect_ffmpeg_results(builds, ffmpeg_dir, tmp_dir, average_mode):
         all_builds.add("Libcxx")
 
     times = {}
-    for b in all_builds:
+    for b in sorted(all_builds):
         tt = []
         for d in ffmpeg_dir:
             t = average_times(os.path.join(d, b + ".log"), average_mode)
@@ -183,7 +183,7 @@ def collect_llvm_results(builds, llvm_dir, tmp_dir, average_mode):
         all_builds.add(get_baseline(b)))
 
     times = {}
-    for b in all_builds:
+    for b in sorted(all_builds):
         tt = []
         for d in llvm_dir:
             t = average_times(os.path.join(d, b, "CGBuiltin.ii.log"), average_mode)
@@ -219,10 +219,11 @@ def generate_plots(results, out_dir, font_size):
         Fortify3="-D_FORTIFY_SOURCE=3",
         Bounds="-fsanitize=bounds",
         ObjectSize="-fsanitize=object-size",
-        HardenedSTL="Hardened STL",
+        HardenedSTL="Hardened STL (libc++)",
         AutoInit="Initialization",
         IOF="-fsanitize=signed-integer-overflow",
         StackClash="Stack Clashing",
+        FastMath="-ffast-math",
     )
 
     colorscheme = cm.tab20
@@ -348,7 +349,8 @@ Examples:
 
     if args.tmp_dir is not None:
         tmp_dir = os.path.join(args.tmp_dir, "plots")
-        shutil.rmtree(tmp_dir)
+        if os.path.exists(tmp_dir):
+            shutil.rmtree(tmp_dir)
         os.makedirs(tmp_dir, exist_ok=True)
     else:
         tmp_dir = tempfile.mkdtemp()

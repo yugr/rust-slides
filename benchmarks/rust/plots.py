@@ -78,7 +78,7 @@ def collect_results(builds, paths, baseline, tmp_dir):
 
     out_dir = os.path.join(tmp_dir, "combined")
 
-    for b in all_builds:
+    for b in sorted(all_builds):
         dd = []
         for d in paths:
             if os.path.exists(os.path.join(d, b)):

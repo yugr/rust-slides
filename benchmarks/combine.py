@@ -68,7 +68,7 @@ def combine_results(dirs, out, average_mode):
         missing = []
         for d in dirs:
             if not (d / json_file).exists():
-                missing.append(d)
+                missing.append(str(d))
         if missing:
             missing = ", ".join(missing)
             warn(f"{json_file} is missing in some directories: {missing}")
@@ -106,10 +106,11 @@ def combine_results(dirs, out, average_mode):
             missing = []
             for filename, r in res:
                 if test not in r:
-                    missing.append(d)
+                    missing.append(str(d))
             if missing:
+                # This may happen if test is noisy in some builds
                 missing = ", ".join(missing)
-                error(
+                warn(
                     f"test {json_file}/{test} is missing in some directories: {missing}"
                 )
 
