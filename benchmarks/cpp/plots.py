@@ -76,9 +76,8 @@ def get_baseline(b):
 
 def collect_pts_results(builds, pts_dir, tmp_dir, average_mode):
     all_builds = set(builds)
-    all_builds.add("Baseline")
-    if "HardenedSTL" in builds:
-        all_builds.add("Libcxx")
+    for b in builds:
+        all_builds.add(get_baseline(b)))
 
     parser = os.path.join(os.path.dirname(__file__), "PTS", "parser.py")
     compare = os.path.join(os.path.dirname(__file__), "..", "compare.py")
@@ -180,9 +179,8 @@ def collect_ffmpeg_results(builds, ffmpeg_dir, tmp_dir, average_mode):
 
 def collect_llvm_results(builds, llvm_dir, tmp_dir, average_mode):
     all_builds = set(builds)
-    all_builds.add("Baseline")
-    if "HardenedSTL" in builds:
-        all_builds.add("Libcxx")
+    for b in builds:
+        all_builds.add(get_baseline(b)))
 
     times = {}
     for b in all_builds:

@@ -24,6 +24,13 @@ $ ./runall.sh --help
 ```
 for more details.
 
+# Plots
+
+Once the data is collected, plots can be built via something like
+```
+$ benchmarks/plots.py --path work/results-20260220 force-overflow-checks
+```
+
 # Automatic benchmarks
 
 All compiler versions can be run via
