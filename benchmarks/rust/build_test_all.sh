@@ -101,8 +101,13 @@ if ! test -d "$BARE"/hooks; then
   error "$BARE is not a bare repo"
 fi
 
-if ! test -f "$CI_LLVM"/builder-config; then
+if ! test -f "$CI_LLVM"/bin/opt; then
   error "$CI_LLVM is not a CI LLVM build"
+fi
+
+ASSERTIONS=false
+if "$CI_LLVM"/bin/opt --version | grep -q assertions; then
+  ASSERTIONS=true
 fi
 
 if test -d "$WD"/results; then
@@ -183,7 +188,7 @@ channel = "nightly"
 debug-assertions = false
 
 [llvm]
-assertions = true
+assertions = $ASSERTIONS
 EOF
 
     if ! ./x build -j$J library; then
