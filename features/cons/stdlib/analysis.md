@@ -45,7 +45,7 @@ Also counter and capacity overflows panic
   - core/src/slice/{index,mod}.rs
   - core/src/str/traits.rs
 
-(counter checks are handled in [dedicated feature](../arithmentic-checks)).
+(counter checks are handled in [dedicated feature](../arithmetic-checks)).
 
 There are also checks for much rarer errors e.g.
   - memory allocation errors panic
@@ -208,8 +208,36 @@ TODO: recollect with `debug-assertions = false`
 
 ### Runtime improvements
 
-TODO:
-  - collect perf measurements for benchmarks:
-    * runtime
-      + large unexpected changes need to be investigated
-    * code size (if applicable)
+With disabled overflow checks:
+```
+SpacetimeDB_0.json: -0.1%
+bevy_0.json: +0.6%
+nalgebra_0.json: +0.2%
+oxipng_0.json: +0.1%
+rav1e_0.json: +0.0%
+regex_0.json: +0.3%
+ruff_0.json: -0.1%
+rust_serialization_benchmark_0.json: +0.0%
+rustc-runtime-benchmarks_0.json: -0.9%
+tokio_0.json: -0.8%
+uv_0.json: -0.3%
+zed_0.json: -2.4%
+```
+
+With disabled UTF-8 checks:
+```
+SpacetimeDB_0.json: +0.2%
+bevy_0.json: +0.2%
+nalgebra_0.json: -0.0%
+oxipng_0.json: +0.2%
+rav1e_0.json: +0.0%
+regex_0.json: +0.6%
+ruff_0.json: +1.9%
+rust_serialization_benchmark_0.json: -0.1%
+rustc-runtime-benchmarks_0.json: +0.9%
+tokio_0.json: +0.0%
+uv_0.json: +0.5%
+zed_0.json: -1.2%
+```
+
+TODO: investigate regressions in zed

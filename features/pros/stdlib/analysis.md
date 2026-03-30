@@ -46,7 +46,7 @@ On the other hand Rust's hash function (SipHash) is slower and more secure.
 
 ## Search tree
 
-Rust `BTreeMap` uses B-tree (rather than RB-tree like `std::map`)
+Rust `BTreeMap` uses B-tree (rather than binary tree like `std::map`)
 so it's more cache friendly and more shallow (so requires less indirections).
 
 # Optimizations

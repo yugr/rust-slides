@@ -122,6 +122,7 @@ done
 
 FAILS=0
 for t in $TOOLCHAINS; do
+  echo "Testing $t..."
   mkdir -p results/$t
   if ! eval "$D/runner.py -p $WORKDIR -t $t $CLONE $RUNNER_ARGS" 2>&1 | tee results/$t/runner.log; then
     FAILS=$((FAILS + 1))
