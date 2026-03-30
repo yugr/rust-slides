@@ -52,6 +52,7 @@ There are also checks for much rarer errors e.g.
     * CWE-770 and children (no KEV and 17 CVEs out of 33K total, out of 4.5K memory errors in 2024):
     * relevant files: alloc/src/alloc.rs
   - UTF-8 invariant checks for `String`s
+    * Rust `String` is just `Vec<u8>` with checks
     * CWE-173 and CWE-838 (no KEVs and just 3 CVEs out of 33K total in 2024).
     * relevant files: `alloc/src/string.rs` and `core/src/str/mod.rs`
     * makes code slower compared to C strings and C++ `std::string`

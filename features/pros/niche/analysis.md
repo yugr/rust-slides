@@ -21,6 +21,7 @@ TODO:
       + e.g. [Rationale for International Standard Programming Languages - C](https://www.open-std.org/jtc1/sc22/wg14/www/C99RationaleV5.10.pdf)
       + mention comparison w/ `std::optional` ([tiny-optional](https://github.com/Sedeniono/tiny-optional?tab=readme-ov-file#use-case-1-wasting-no-memory)
         and [this](https://news.ycombinator.com/item?id=34993661#:~:text=tialaramex%20on%20March%202%2C%202023,if%20the%20commitee%20wants%20to))
+      + mention PointerIntPair in LLVM (and similar tricks in interpreters)
     * situation in other langs:
       + [Java](https://docs.oracle.com/javase/specs/jls/se24/html/),
       + [C#](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/introduction)
