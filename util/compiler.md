@@ -146,3 +146,7 @@ Individual transforms can be disabled via `-Zmir-enable-passes=-PASS_NAME_1,-PAS
 
 To dump _optimized_ LLVM IR use `--emit llvm-ir`.
 To print intermediate IRs use `-Cllvm-args='-print-after-all`.
+
+# Intel syntax
+
+Use `-Cllvm-args=-x86-asm-syntax=intel` for Intel asm syntax.
