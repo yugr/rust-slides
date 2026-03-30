@@ -115,37 +115,53 @@ def collect_results(builds, paths, baseline, tmp_dir):
     return results
 
 
-def generate_plots(results, out_dir):
-    for typ, typ_results in results.items():
-        x = np.arange(len(typ_results))
+def generate_plots(all_results, out_dir, font_size):
+    for typ, results in all_results.items():
+        colorscheme = cm.tab20
+        num_colors_in_colorscheme = 20
+
+        minimal_colorbar_heigth = 0.05
+
+        base_horizontal_fig_size = 5
+        vertical_fig_size = 8
+        x = np.arange(len(results))
         fig, ax = plt.subplots(
-            figsize=(5 * (len(typ_results) + 1), 8), layout="constrained"
+            figsize=(base_horizontal_fig_size * (len(results) + 1), vertical_fig_size),
+            layout="constrained",
         )
 
         colors = {}
         legend_handles = {}
-        # something like 12 benchmarks should take up 80% of space between groups
-        width = 0.8 / 12
-        build_widths = np.zeros(len(typ_results))
-        for build_index, build_results in enumerate(typ_results.values()):
+        max_bench_count = max(len(data) for data in results.values())
+        space_per_build = 0.8
+        width = space_per_build / max_bench_count
+        build_widths = np.zeros(len(results))
+        for build_index, build_results in enumerate(results.values()):
             build_widths[build_index] = (len(build_results) - 1) * width
             for bench_index, (bench_name, value) in enumerate(build_results.items()):
-                color = colors.setdefault(bench_name, cm.tab20(len(colors) / 20))
+                color = colors.setdefault(
+                    bench_name, colorscheme(len(colors) / num_colors_in_colorscheme)
+                )
                 rect = ax.bar(
                     build_index + width * bench_index,
-                    value,
+                    value if abs(value) >= minimal_colorbar_heigth else minimal_colorbar_heigth,
                     width,
                     label=bench_name,
                     color=color,
                 )
                 legend_handles.setdefault(bench_name, rect)
-                ax.bar_label(rect, padding=3, fmt="%.1f")
+                if value != 0:
+                    ax.bar_label(rect, padding=3, fmt="%.1f", fontsize=font_size)
 
-        ax.set_ylabel("% change")
+        ax.set_ylabel("% change", fontsize=font_size)
         ax.set_yscale("symlog")
-        ax.set_xticks(x + build_widths / 2, typ_results.keys())
+        ax.set_xticks(
+            x + build_widths / 2,
+            results.keys(),
+            fontsize=font_size,
+        )
         ax.set_ylim(-100, 100)
-        ax.legend(ncols=3, handles=legend_handles.values())
+        ax.legend(ncols=3, handles=legend_handles.values(), fontsize=font_size)
         plt.show()
         fig.savefig(os.path.join(out_dir, f"{typ}.png"))
 
@@ -174,7 +190,7 @@ Examples:
     parser.add_argument(
         "-o",
         help="Path to store results",
-        default=".",
+        default="."
     )
     parser.add_argument(
         "--baseline",
@@ -198,6 +214,11 @@ Examples:
         default=[],
         help="List of builds to plot",
     )
+    parser.add_argument(
+        "--font-size",
+        help="Size of font for plots",
+        default=10,
+    )
 
     args = parser.parse_args()
 
@@ -211,7 +232,7 @@ Examples:
 
     results = collect_results(args.builds, args.path, args.baseline, tmp_dir)
 
-    generate_plots(results, args.o)
+    generate_plots(results, args.o, args.font_size)
 
     return 0
 
