@@ -444,6 +444,11 @@ zed: -0.6%
 ```
 (noise was <0.5%).
 
+TODO:
+  - currently bounds checks branch also disables few overflow checks;
+    we should re-enable them because they are checked separately
+    in [stdlib feature](../stdlib)
+
 Performance of hardened C++ has been collected via `benchmarks/cpp/llvm-bench` and
 `benchmarks/cpp/ffmpeg-bench` (for Clang 20):
   - Stack Protector
