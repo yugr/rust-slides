@@ -39,10 +39,16 @@ Other languages have different views on fast-math optimizations:
     - [Paper on the issue](https://arxiv.org/abs/cs/0701192) section 6
  - Go prohibits most fast-math optimizations, but allows fusion of floating-point operations if this fusion does not discard explicit rounding
     - [Go specification](https://go.dev/ref/spec#Floating_point_operators)
- - Swift compiler provides support for fast-math optimizations
+ - Swift compiler provides support for fast-math optimizations but default behavior is IEEE-compliant
     - [Godbolt example](https://godbolt.org/z/jqYfWoof5)
  - Fortran explicitly permits deviations from IEEE 754 in favor of performance
-    - [Fortran specification](https://j3-fortran.org/doc/year/24/24-007.pdf) section 17.5
+    - [Fortran specification](https://j3-fortran.org/doc/year/24/24-007.pdf),
+      section 10.1.5.2.4 "Evaluation of numeric intrinsic operations":
+      ```
+      Once the interpretation of a numeric intrinsic operation is established,
+      the processor may evaluate any mathematically equivalent expression,
+      provided that the integrity of parentheses is not violated
+      ```
 
 TODO: mention issues from https://simonbyrne.github.io/notes/fastmath/
 
