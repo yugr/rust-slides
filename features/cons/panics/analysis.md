@@ -87,7 +87,7 @@ and [PR that added panic_immediate_abort](https://github.com/rust-lang/rust/pull
 maybe `-Zbuild-std` is needed too).
 
 In some rare cases exceptions my make code faster by removing error handling code
-(see [README](README.md#advantages-of-panics) for details).
+(see [survey](survey.md#advantages-of-panics) for details).
 
 Error handling approaches in other languages are different.
 Go is similar to Rust: exceptions exist (`panic` + `recover`) but
@@ -217,7 +217,7 @@ TODO:
 
 # Workarounds
 
-Info available in [README](README.md#solutions).
+Info available in [survey](survey.md#solutions).
 
 # Suggested readings
 

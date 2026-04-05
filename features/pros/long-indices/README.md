@@ -1,4 +1,4 @@
-This describes benefits from forced `size_t` indexes in Rust.
+Here we keep info about benefits from forced `size_t` indexes in Rust.
 
 Rust forces programmer to use 64-bit indexes.
 They do not need to be zero-extended so converting `a[i]`'s

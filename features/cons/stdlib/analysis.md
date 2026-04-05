@@ -12,7 +12,7 @@ Rust stdlib tends to be more safe i.e. performs more checks (`assert!`, etc.)
 than that of C/C++. For example Rust default PRNG is of higher quality but slower.
 Also Rust IO is unbuffered (and thus much slower) by default
 and `io::stdout()` is line-buffered even for non-TTY outputs
-(details in [README](README.md)).
+(details in [survey](survey.md)).
 
 There are also many complaints on Rust iterators
 as compiler (often ?) fails to optimize complex adapter combinations

@@ -169,7 +169,7 @@ for `emplace_back`-like functionality (e.g. `Box::new_uninit` or
 Another problem is that optimizations happen only in optimized version
 so debug version of program will segfault due to stack overflow.
 
-More details on placement-new are available [here](../../cons/placement-new/README.md).
+More details on placement-new are available [here](../../cons/placement-new).
 
 # Suggested reading
 

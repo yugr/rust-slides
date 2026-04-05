@@ -8,7 +8,7 @@ Effort: 98h
 
 # Background
 
-See [README](README.md), particularly [C++ status](README.md#c).
+See [survey](survey.md), particularly [C++ status](survey.md#c).
 
 Note that feature consists from
   - compiler part (instrumentation of index accesses)
@@ -90,7 +90,7 @@ TODO:
 
 # Workarounds for bounds checks
 
-See [README](README.md#solutions).
+See [survey](survey.md#solutions).
 
 # Suggested reading
 

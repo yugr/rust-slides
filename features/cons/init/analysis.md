@@ -175,7 +175,7 @@ Irrelevant passes: early-cse, simplifycfg, dce, bdce, adce, mem2reg/sroa, gvn
 
 # Workarounds
 
-[Workarounds](README.md#solutions)) require using
+[Workarounds](survey.md#solutions)) require using
   - `MaybeUninit` types and raw pointers
   - dedicated APIs provided by containers if available
 

@@ -1,4 +1,4 @@
-Rust's visibility defaults may be different from C/C++.
+Rust's ELF visibility defaults may be different from C/C++.
 
 # TODO
 

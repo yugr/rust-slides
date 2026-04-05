@@ -2,6 +2,8 @@
 by the compiler.
 Interesting `std::optional` and `std::expected` do not have this heuristic.
 
+Full analysis [here](analysis.md).
+
 TODO:
   - verify that unlikely blocks are always placed at end
   - hot-cold splitting benefits
