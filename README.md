@@ -20,10 +20,11 @@ In this talk we
 
 # Contents
 
+- Slides: [English](EN.pdf) and [Russian](RU.pdf)
 - [Reading materials](materials)
   * Various posts and papers which served as base for slides
 - [Rust performance features](features)
   * Pros and cons of language from performance standpoint
 - [Benchmarks](benchmarks)
   * Projects used for Rust benchmarking
-- [Script of the planned talk](talk.md)
+- [Script of the planned talk](talk.md) (outdated)
