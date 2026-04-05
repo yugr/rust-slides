@@ -133,10 +133,8 @@ Important:
   - (DROP) pros/likely (gh-48)
   - (WIP) pros/niche (gh-57)
   - (DONE) pros/noplt (gh-49)
-  - (WIP) pros/static (gh-50)
+  - (DONE) pros/static (gh-50)
   - cons/probestack (gh-54)
-  - pros/visibility
-  - cons/tls
 
 Nice:
   - pros/inline
@@ -147,3 +145,5 @@ Nice:
   - pros/long-indices
   - pros/other
   - pros/vtable
+  - pros/visibility
+  - cons/tls
