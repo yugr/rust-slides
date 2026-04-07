@@ -524,6 +524,10 @@ On the other hand, once all materials are analyzed we won't care about this file
   * Status: backlog
 - unity-build: https://github.com/j-jorge/unity-build
   * Status: backlog
+- Rust vs C++: A Performance Comparison: https://medium.com/rustaceans/c-vs-rust-a-performance-comparison-46d1a669beb1
+  * Status: backlog
+- Rust vs C++. A Performance Comparison. Part 2: https://medium.com/rustaceans/rust-vs-c-a-performance-comparison-part-2-646ceeb1fbd4
+  * Status: backlog
 
 # UB in C++
 
