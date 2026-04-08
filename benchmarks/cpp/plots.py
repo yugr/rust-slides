@@ -77,7 +77,7 @@ def get_baseline(b):
 def collect_pts_results(builds, pts_dir, tmp_dir, average_mode):
     all_builds = set(builds)
     for b in builds:
-        all_builds.add(get_baseline(b)))
+        all_builds.add(get_baseline(b))
 
     parser = os.path.join(os.path.dirname(__file__), "PTS", "parser.py")
     compare = os.path.join(os.path.dirname(__file__), "..", "compare.py")
@@ -180,7 +180,7 @@ def collect_ffmpeg_results(builds, ffmpeg_dir, tmp_dir, average_mode):
 def collect_llvm_results(builds, llvm_dir, tmp_dir, average_mode):
     all_builds = set(builds)
     for b in builds:
-        all_builds.add(get_baseline(b)))
+        all_builds.add(get_baseline(b))
 
     times = {}
     for b in sorted(all_builds):
@@ -212,7 +212,7 @@ def merge_results(*args):
     return results
 
 
-def generate_plots(results, out_dir, font_size):
+def generate_plots(results, out_dir, font_size, use_logscale):
     sym_names = dict(
         StackProtector="-fstack-protector-strong",
         Fortify2="-D_FORTIFY_SOURCE=2",
@@ -264,13 +264,14 @@ def generate_plots(results, out_dir, font_size):
                 ax.bar_label(rect, padding=3, fmt="%.1f", fontsize=font_size)
 
     ax.set_ylabel("% change", fontsize=font_size)
-    ax.set_yscale("symlog")
+    if use_logscale:
+        ax.set_yscale("symlog")
     ax.set_xticks(
         x + build_widths / 2,
         [sym_names[build] for build in results.keys()],
         fontsize=font_size,
     )
-    ax.set_ylim(-100, 100)
+    # ax.set_ylim(-100, 100)
     ax.legend(ncols=3, handles=legend_handles.values(), fontsize=font_size)
     plt.show()
     fig.savefig(os.path.join(out_dir, "plot.png"))
@@ -336,6 +337,9 @@ Examples:
         default=10,
     )
     parser.add_argument(
+        "--logscale", "-l", action="store_true", help="Use logscale for y axis"
+    )
+    parser.add_argument(
         "builds",
         nargs="+",
         default=[],
@@ -381,7 +385,7 @@ Examples:
 
     results = merge_results(*results)
 
-    generate_plots(results, args.o, args.font_size)
+    generate_plots(results, args.o, args.font_size, args.logscale)
 
     return 0
 
