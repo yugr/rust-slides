@@ -261,9 +261,15 @@ Disabling default checks is impossible, extraneous checks may be enabled with `-
 
 As discussed we have three variants to test:
   - (A) all arithmetic checks removed ([yugr/no-overflow-checks/2](https://github.com/yugr/rust-private/tree/yugr/no-overflow-checks/2) branch)
-    * note that explicit `checked_add`, etc. were preserved (I removed some from stdlib but probly not all)
-    * `strict_add` family from stdlib wasn't changed either (because they don't seem to be widely used)
-  - (A+) same as (A) but also add nsw markers in LLVM IR (to match C signed overflow semantics, [yugr/no-overflow-checks-nsw/3](https://github.com/yugr/rust-private/tree/yugr/no-overflow-checks-nsw/3) branch)
+    * note that explicit `checked_add`, etc. were preserved
+      (I removed some from stdlib but probly not all)
+    * `strict_add` family from stdlib wasn't changed either
+      (because they don't seem to be widely used)
+  - (A+) same as (A) but also add nsw markers in LLVM IR
+    (to match C signed overflow semantics,
+    [yugr/no-overflow-checks-nsw/3](https://github.com/yugr/rust-private/tree/yugr/no-overflow-checks-nsw/3) branch)
+    * this is done in stdlib (rather than in LLVM IR)
+      because we no longer know signedness at LLVM IR level
   - (B) default ([yugr/baseline](https://github.com/yugr/rust-private/tree/yugr/baseline) branch)
   - (Z) all arithmetic checks enabled ([yugr/force-overflow-checks/2](https://github.com/yugr/rust-private/tree/yugr/force-overflow-checks/2) branch)
 
