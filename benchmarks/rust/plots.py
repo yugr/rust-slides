@@ -115,7 +115,7 @@ def collect_results(builds, paths, baseline, tmp_dir):
     return results
 
 
-def generate_plots(all_results, out_dir, font_size):
+def generate_plots(all_results, out_dir, font_size, use_logscale):
     for typ, results in all_results.items():
         colorscheme = cm.tab20
         num_colors_in_colorscheme = 20
@@ -154,13 +154,13 @@ def generate_plots(all_results, out_dir, font_size):
                     ax.bar_label(rect, padding=3, fmt="%.1f", fontsize=font_size)
 
         ax.set_ylabel("% change", fontsize=font_size)
-        ax.set_yscale("symlog")
+        if use_logscale:
+            ax.set_yscale("symlog")
         ax.set_xticks(
             x + build_widths / 2,
             results.keys(),
             fontsize=font_size,
         )
-        ax.set_ylim(-100, 100)
         ax.legend(ncols=3, handles=legend_handles.values(), fontsize=font_size)
         plt.show()
         fig.savefig(os.path.join(out_dir, f"{typ}.png"))
@@ -219,6 +219,9 @@ Examples:
         help="Size of font for plots",
         default=10,
     )
+    parser.add_argument(
+        "--logscale", "-l", action="store_true", help="Use logscale for y axis"
+    )
 
     args = parser.parse_args()
 
@@ -232,7 +235,7 @@ Examples:
 
     results = collect_results(args.builds, args.path, args.baseline, tmp_dir)
 
-    generate_plots(results, args.o, args.font_size)
+    generate_plots(results, args.o, args.font_size, args.logscale)
 
     return 0
 
