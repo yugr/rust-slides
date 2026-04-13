@@ -137,7 +137,7 @@ Fast math attributes on functions are [in the process of being removed](https://
 
 Algebraic and fast-math optimizations can be enabled on per-operations basis by using `std::intrinsics::XXX_algebraic` and `std::intrinsics::XXX_fast`, however they are not yet stabilized.
 
-Rust has `std::intrinsics::XXX_algebraic` and `std::intrinsics::XXX_fast` intrinsics which allow fast-math optimization for a specific operations, however these intrinsics are currently unstable.
+Rust has `std::intrinsics::XXX_algebraic` and `std::intrinsics::XXX_fast` intrinsics which allow fast-math optimization for a specific operations, however these intrinsics are currently unstable. Also there are [no wrapper types](https://internals.rust-lang.org/t/suggestion-ffastmath-intrinsics-in-stable/14447) so library authors need to implement two versions of their code (fast-math and normal).
 
 # Recommended readings
 
