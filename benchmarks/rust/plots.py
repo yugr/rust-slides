@@ -4,13 +4,11 @@
 
 import argparse
 import atexit
-import multiprocessing
 import os
 import os.path
 import re
 import shutil
 import subprocess
-import statistics
 import sys
 import tempfile
 from typing import NoReturn
@@ -177,7 +175,7 @@ def main():
         formatter_class=Formatter,
         epilog=f"""\
 Examples:
-  $ {ME} path/to/build1 path/to/build2 ...
+  $ {ME} --baseline=baseline build1 build2 ...
 """,
     )
     parser.add_argument(
@@ -227,7 +225,8 @@ Examples:
 
     if args.tmp_dir is not None:
         tmp_dir = os.path.join(args.tmp_dir, "plots")
-        shutil.rmtree(tmp_dir)
+        if os.path.exists(tmp_dir):
+            shutil.rmtree(tmp_dir)
         os.makedirs(tmp_dir, exist_ok=True)
     else:
         tmp_dir = tempfile.mkdtemp()

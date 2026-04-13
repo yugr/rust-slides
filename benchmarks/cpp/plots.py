@@ -4,7 +4,6 @@
 
 import argparse
 import atexit
-import multiprocessing
 import os
 import os.path
 import re
