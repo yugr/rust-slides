@@ -1,7 +1,9 @@
 #!/usr/bin/python3
 
-# Plots histogram of speedups (slowdowns) and computes common stats
-# for Rust benchmarks. This is most likely not statistically correct.
+# Plots histogram and violines of speedups (slowdowns) and
+# computes common stats for Rust benchmarks.
+# 
+# This is most likely not statistically correct.
 
 import argparse
 import atexit
@@ -9,6 +11,7 @@ import glob
 import json
 import os
 import os.path
+import re
 import shutil
 import subprocess
 import sys
@@ -118,7 +121,7 @@ def collect_results(lhs, rhs, paths, tmp_dir):
 
         run([combine, "--ignore-missing", "-o", os.path.join(out_dir, b)] + dd)
 
-    results = []
+    results = {}
 
     # TODO: support sizes too
     rhs_jsons = glob.glob(os.path.join(os.path.join(out_dir, rhs), "*_0.json"))
@@ -129,31 +132,92 @@ def collect_results(lhs, rhs, paths, tmp_dir):
             warn(f"{lhs_json} does not exist")
             continue
 
+        name = re.match(r"^(.*)_0.json", os.path.basename(rhs_json))[1]
+        if name == "oxipng":
+            # Just too noisy
+            continue
+
         with open(lhs_json) as f:
             lhs_json = json.load(f)
 
         with open(rhs_json) as f:
             rhs_json = json.load(f)
 
-        results.extend(compare_jsons(lhs_json, rhs_json))
+        results[name] = compare_jsons(lhs_json, rhs_json)
 
     return results
 
 
-def generate_plots(results, out_dir):
+# Plot flat histogram of all results
+def histogram(all_results, out_dir):
+    # TODO: weight by number of tests in each project ?
+    results = [r for rr in all_results.values() for r in rr]
+
     results = [100 * r for r in results]
 
-    m = np.mean(results)
-    print(f"Average deviation: {m:.1f}%")
+    med = np.median(results)
+    print(f"Median speedup: {med:.1f}%")
 
-    p = np.percentile(results, 95)
-    print(f"p95: {p:.1f}%")
+    m = np.mean(results)
+    print(f"Average speedup: {m:.1f}%")
+
+    gm = (1 - np.exp(np.mean(np.log([1 - r/100 for r in results])))) * 100
+    print(f"Geomean: {m:.1f}%")
+
+    percentile = 95
+
+    p = np.percentile(results, percentile)
+    print(f"p{percentile}: {p:.1f}%")
 
     counts, bins = np.histogram(results, 100)
     fig, ax = plt.subplots()
     plt.stairs(counts, bins)
     plt.xlim(-20, 20)
+
+    plt.axvline(m, color='k', linestyle='dashed', linewidth=1)
+    plt.axvline(p, color='k', linestyle='dashed', linewidth=1)
+
+    min_ylim, max_ylim = plt.ylim()
+    plt.text(m * 1.1, max_ylim * 0.9, f"Mean: {m:.1f}")
+    plt.text(p * 1.1, max_ylim * 0.9, f"P{percentile}: {p:.1f}")
+
     fig.savefig(os.path.join(out_dir, f"hist.png"))
+
+
+# Plot per-project boxplots
+def box(all_results, out_dir):
+    names = []
+    data = []
+    medians = []
+    for name, d in sorted(all_results.items()):
+        names.append(name)
+        d = [100 * r for r in d]
+        data.append(d)
+        medians.append(np.mean(d))
+
+    fig, ax = plt.subplots()
+    ax.boxplot(data, showfliers=False, vert=False, usermedians=medians)
+    ax.set_yticks(np.arange(1, len(names) + 1), labels=names)
+    plt.title("Boxplots (using mean)")
+    fig.savefig(os.path.join(out_dir, f"box.png"))
+
+
+# Plot per-project violin plots
+def violin(all_results, out_dir):
+    names = []
+    data = []
+    quantiles = []
+    for name, d in sorted(all_results.items()):
+        names.append(name)
+        data.append([100 * r for r in d])
+        quantiles.append([0.05, 0.95])
+
+    fig, ax = plt.subplots()
+    ax.violinplot(data, showmeans=True, showmedians=False, showextrema=False, quantiles=quantiles, vert=False)
+    ax.set_yticks(np.arange(1, len(names) + 1), labels=names)
+    plt.xlim(-20, 20)
+    plt.title("Violins (P5, mean, P95)")
+    fig.savefig(os.path.join(out_dir, f"violin.png"))
 
 
 def main():
@@ -210,9 +274,11 @@ Examples:
         tmp_dir = tempfile.mkdtemp()
         atexit.register(lambda: shutil.rmtree(tmp_dir))
 
-    results = collect_results(args.baseline, args.build, args.path, tmp_dir)
+    all_results = collect_results(args.baseline, args.build, args.path, tmp_dir)
 
-    generate_plots(results, args.o)
+    histogram(all_results, args.o)
+    box(all_results, args.o)
+    violin(all_results, args.o)
 
     return 0
 
