@@ -21,7 +21,7 @@ sudo apt install -y libxkbcommon-x11-dev
 sudo apt install -y gcc g++ libasound2-dev libfontconfig-dev libwayland-dev libx11-xcb-dev libxkbcommon-x11-dev libssl-dev libzstd-dev libvulkan1 libgit2-dev make cmake clang jq git curl gettext-base elfutils libsqlite3-dev musl-tools musl-dev build-essential
 
 # Do not generate Criterion reports (optional)
-sudo apt uninstall -y gnuplot
+sudo apt remove -y gnuplot
 
 # For uv
 sudo apt install -y python3-venv
