@@ -13,7 +13,9 @@ $ ./install_deps.sh
 
 # Rustc benchmarks need this
 $ echo 'kernel.perf_event_paranoid = -1' | sudo tee -a /etc/sysctl.conf
+$ echo 'kernel.kptr_restrict = 0' | sudo tee -a /etc/sysctl.conf
 $ sudo sysctl -p
+$ sudo apt install libc6-dbg
 
 $ ./runall.sh baseline bounds force-aliasing
 ```
