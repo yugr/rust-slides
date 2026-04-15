@@ -4,7 +4,7 @@ Assignee: zak
 
 Parent task: gh-57
 
-Effort: 0h
+Effort: 2h
 
 TODO:
   - fix all TODOs that are mentioned in feature's README
