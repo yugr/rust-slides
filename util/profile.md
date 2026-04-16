@@ -69,6 +69,14 @@ rustflags = [
 ```
 to `.cargo/config.toml` to simplify generated code.
 
+# Stabilize code layout effects
+
+Try adding in `.cargo/config.toml`:
+```
+# 32 is typical fetchline size (64 also makes sense)
+"-C", "llvm-args=-align-loops=32",
+```
+
 # Profile
 
 To collect perf profile run
