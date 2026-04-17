@@ -2,8 +2,9 @@ Oxipng [repo](https://github.com/shssoichiro/oxipng)
 
 Build and tested on `788997c437319995e55030a92ed8294dfcd4c87a` commit.
 
-For unclear reasons oxipng is extremely sensitive to code layouts
-(i.e. linker and library versions, etc.).
+Oxipng is extremely sensitive to code layouts
+(i.e. linker and library versions, unrelated opts, etc.),
+likely due to very short hot loops.
 
 # Build
 

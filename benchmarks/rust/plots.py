@@ -108,6 +108,10 @@ def collect_results(builds, paths, baseline, tmp_dir):
             typ = m[2].strip() or "perf"
             diff = float(m[3])
 
+            if "oxipng" in name:
+                # Just too noisy
+                continue
+
             results.setdefault(typ, {}).setdefault(build_name, {})[name] = diff
 
     return results
