@@ -113,6 +113,11 @@ $ rustup default stage1
 
 Just add `--verbose` to cargo args.
 
+Rustc command lines can then be modified by changing `--emit` flag to
+`asm` or `llvm-ir` or adding `-Cllvm-args=-print-after-all`.
+
+You can also remove `--error-format=json --json=...` for more natural errors.
+
 To reproduce `rustc` call locally may need some env. variables
 e.g. for meilisearch I had to
 ```
