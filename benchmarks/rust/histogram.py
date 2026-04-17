@@ -2,7 +2,7 @@
 
 # Plots histogram and violines of speedups (slowdowns) and
 # computes common stats for Rust benchmarks.
-# 
+#
 # This is most likely not statistically correct.
 
 import argparse
@@ -126,6 +126,11 @@ def collect_results(lhs, rhs, paths, tmp_dir):
     # TODO: support sizes too
     rhs_jsons = glob.glob(os.path.join(os.path.join(out_dir, rhs), "*_0.json"))
 
+    renames = {
+        "rust_serialization_benchmark": "serialization",
+        "rustc-runtime-benchmarks": "rustc-runtime",
+    }
+
     for rhs_json in rhs_jsons:
         lhs_json = os.path.join(out_dir, lhs, os.path.basename(rhs_json))
         if not os.path.exists(lhs_json):
@@ -136,6 +141,8 @@ def collect_results(lhs, rhs, paths, tmp_dir):
         if name == "oxipng":
             # Just too noisy
             continue
+
+        name = renames.get(name) or name
 
         with open(lhs_json) as f:
             lhs_json = json.load(f)
@@ -161,7 +168,7 @@ def histogram(all_results, out_dir):
     m = np.mean(results)
     print(f"Average speedup: {m:.1f}%")
 
-    gm = (1 - np.exp(np.mean(np.log([1 - r/100 for r in results])))) * 100
+    gm = (1 - np.exp(np.mean(np.log([1 - r / 100 for r in results])))) * 100
     print(f"Geomean: {m:.1f}%")
 
     percentile = 95
@@ -174,12 +181,14 @@ def histogram(all_results, out_dir):
     plt.stairs(counts, bins)
     plt.xlim(-20, 20)
 
-    plt.axvline(m, color='k', linestyle='dashed', linewidth=1)
-    plt.axvline(p, color='k', linestyle='dashed', linewidth=1)
+    plt.axvline(m, color="k", linestyle="dashed", linewidth=1)
+    plt.axvline(p, color="k", linestyle="dashed", linewidth=1)
 
     min_ylim, max_ylim = plt.ylim()
     plt.text(m * 1.1, max_ylim * 0.9, f"Mean: {m:.1f}")
     plt.text(p * 1.1, max_ylim * 0.9, f"P{percentile}: {p:.1f}")
+
+    ax.set_xlabel("% change")
 
     fig.savefig(os.path.join(out_dir, f"hist.png"))
 
@@ -196,9 +205,11 @@ def box(all_results, out_dir):
         medians.append(np.mean(d))
 
     fig, ax = plt.subplots()
-    ax.boxplot(data, showfliers=False, vert=False, usermedians=medians)
-    ax.set_yticks(np.arange(1, len(names) + 1), labels=names)
+    ax.boxplot(data, showfliers=False, usermedians=medians)
+    ax.set_xticks(np.arange(1, len(names) + 1), labels=names, rotation=45)
+    ax.set_ylabel("% change")
     plt.title("Boxplots (using mean)")
+    plt.tight_layout()
     fig.savefig(os.path.join(out_dir, f"box.png"))
 
 
@@ -213,10 +224,15 @@ def violin(all_results, out_dir):
         quantiles.append([0.05, 0.95])
 
     fig, ax = plt.subplots()
-    ax.violinplot(data, showmeans=True, showmedians=False, showextrema=False, quantiles=quantiles, vert=False)
-    ax.set_yticks(np.arange(1, len(names) + 1), labels=names)
-    plt.xlim(-20, 20)
+    ax.violinplot(
+        data, showmeans=True, showmedians=False, showextrema=False, quantiles=quantiles
+    )
+    ax.set_xticks(np.arange(1, len(names) + 1), labels=names, rotation=45)
+    #    ax.set_xticklabels(names, rotation=45)
+    ax.set_ylabel("% change")
+    plt.ylim(-20, 20)
     plt.title("Violins (P5, mean, P95)")
+    plt.tight_layout()
     fig.savefig(os.path.join(out_dir, f"violin.png"))
 
 
