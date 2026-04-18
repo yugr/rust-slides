@@ -33,6 +33,7 @@ Other languages have different views on fast-math optimizations:
 
  - C/C++ standard prohibits fast-math optimizations, but compilers provide support for these optimizations
     - [C99](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1256.pdf) section 5.1.2.3 Example 5
+      and also Annex F (IEC 60559 floating-point arithmetic) F8.2
  - C# permits performing computations with higher precision than the result type of the operation (most likely for performance on x87 architecture)
     - [C# specification](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/types#837-floating-point-types) section 8.3.7
  - At first Java required strict following of the IEEE 754 standard, but then some deviations were allowed to improve x87 performance
