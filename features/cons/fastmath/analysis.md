@@ -51,7 +51,9 @@ Other languages have different views on fast-math optimizations:
       provided that the integrity of parentheses is not violated
       ```
 
-TODO: mention issues from https://simonbyrne.github.io/notes/fastmath/
+TODO:
+  - mention issues from https://simonbyrne.github.io/notes/fastmath/
+  - add info from [P3715](https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2025/p3715r0.html)
 
 # Example
 
@@ -385,6 +387,3 @@ Fast math disassembly:
        add      $0xfffffffffffffffc,%r11
        jne      150
 ```
-
-
-
