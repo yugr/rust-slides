@@ -267,18 +267,6 @@ public:
   }
 };
 
-void solve(string doms, string exp) {
-  Solution sol;
-  auto ans = sol.pushDominoes(doms);
-
-  cout << doms << ": " << ans;
-
-  if (ans != exp)
-    cout << " (exp " << exp << ")";
-
-  cout << "\n";
-}
-
 int main(int argc, char *argv[]) {
   if (argc != 2) {
     cerr << "Usage: prog.exe ALG_TYPE\n";

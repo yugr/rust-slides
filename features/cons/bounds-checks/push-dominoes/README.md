@@ -1,7 +1,7 @@
 This is a simple solution for https://leetcode.com/problems/push-dominoes/description/
 which illustrates that `resize + []` is significantly faster than `reserve + push_back`.
 
-$ gcc -O2 bench.cpp
+$ g++ -O2 -std=c++17 bench.cpp
 
 $ time ./a 0
 SUCCESS
