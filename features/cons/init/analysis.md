@@ -318,3 +318,5 @@ My results are
 498320 stores, 19362 memsets
 ```
 so +4% stores and 11x (!) memset growth.
+
+TODO: initialize `malloc` data (via `LD_PRELOAD`) to account for heap inits
