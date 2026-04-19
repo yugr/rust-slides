@@ -24,5 +24,9 @@ Conditional branches that have not yet been discovered to be taken are not marke
 These branches are implicitly predicted not-taken.
 ```
 
+[Exploiting Inaccurate Branch History in Side-Channel Attack](https://arxiv.org/pdf/2506.07263v1)
+confirms that never taken ("not recorded") branches are also ignored
+on Cortex cores (A72, A76, A78).
+
 This means that _probably_ Rust's runtime checks should not pollute BP tables
-(at least on modern x86 cores).
+(at least on modern x86/AArch64 cores).
