@@ -39,6 +39,8 @@ that addition of predictable branch in hot loop increases branch mispredicts 2x-
 this is likely due to different codegen.
 [Literature analysis](btb.md) shows that never-taken branches should NOT influence BTB/BHT at all.
 
+TODO: why [push-dominoes](push-dominoes) slow down though ?
+
 # Solutions
 
 Often compiler may remove bounds checks itself
