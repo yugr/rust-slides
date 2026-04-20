@@ -31,9 +31,13 @@ burntsushi [claims](https://news.ycombinator.com/item?id=14903258) that bounds c
 Feedback from Servo devs on bounds checks overhead: https://news.ycombinator.com/item?id=10268151
 
 Note that even though bounds checks are predictable
-they also take some I$ and branch predictor slots.
-E.g. Daniel Lemire [shows](https://lemire.me/blog/2019/11/06/adding-a-predictable-branch-to-existing-code-can-increase-branch-mispredictions/)
-that addition of predictable branch in hot loop increases branch mispredicts 2x-4x.
+they also take some I$ slots.
+
+Branch predictor is less obvious.
+Daniel Lemire [shows](https://lemire.me/blog/2019/11/06/adding-a-predictable-branch-to-existing-code-can-increase-branch-mispredictions/)
+that addition of predictable branch in hot loop increases branch mispredicts 2x-4x but
+this is likely due to different codegen.
+[Literature analysis](btb.md) shows that never-taken branches should NOT influence BTB/BHT at all.
 
 # Solutions
 

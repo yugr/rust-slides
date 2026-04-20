@@ -1,5 +1,8 @@
 Some info on architecture of branch predictors in x86 processors.
 
+First of all, branches for runtime checks are never-taken so
+they never use BTB slots. But do they use BHT (PHT) ?
+
 [Reverse Engineering of Intel’s Branch Prediction](https://www.its.uni-luebeck.de/fileadmin/files/theses/BA_NickMahling_ReverseEngineeringIntelsBranchPrediction.pdf)
 suggests that Intel cores
   - use path-based history (i.e. combination of source/target addresses

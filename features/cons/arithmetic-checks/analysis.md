@@ -232,7 +232,7 @@ also show ~30% overhead in Clang.
 
 Overflow checks hurt performance in three ways:
   - overhead to do the checks
-  - cache pressure (I$, BTB)
+  - cache pressure (I$, but likely [not BTB](../bounds-checks/btb.md))
   - inhibiting other opts (e.g. autovec) due to more complex control flow and
     [broken SCEV analysis](https://kristerw.blogspot.com/2016/02/how-undefined-signed-overflow-enables.html)
 
