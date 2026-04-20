@@ -20,6 +20,19 @@ Iterators are _much_ slower in debug.
 In particular _interior iteration_ (`for_each` w/ lambda, aka "internal iteration"
 or "push iteration) is [known](https://github.com/rust-lang/rust/issues/101814#issuecomment-1247184222)
 to optimize better than traditional for-loops ("external iteration", "pull iteration").
+Per Vognsen [mentions](https://github.com/yugr/rust-slides/issues/59#issue-4290388407):
+> ... my rule of thumb is to use internal iteration
+> when there's chaining involved (perhaps implicitly as in the case of a..=b inclusive ranges).
+> Calling out for_each as special might give the wrong idea;
+> it's really any of the iterator "consumer" methods that bottom out in try_fold,
+> e.g. fold, any, all, find, etc.
+> This helps for iterators that have a custom try_fold implementation
+> (rather than the default next-based implementation),
+> but fortunately almost all of the standard library's iterators have a custom try_fold.
+> The nice thing about internal iteration is that the code is pretty much
+> what you would write by hand, so it's much easier to reason about
+> what the optimizing compiler will do it in complex cases compared to next-based iteration;
+> pretty much all you need is guaranteed inlining to flatten the layers of the iterator stack's methods.
 
 Slice iterators do not require `Copy`able types so work on references.
 As shown in [upstream #106539](https://github.com/rust-lang/rust/issues/106539)
