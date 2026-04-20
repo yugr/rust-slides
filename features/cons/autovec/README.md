@@ -34,6 +34,13 @@ Rust also does not yet support multiversioning.
 There are [proposals](https://rust-lang.github.io/rust-project-goals/2025h1/simd-multiversioning.html)
 but currently people have to do it [by hand](https://tweedegolf.nl/en/blog/153/simd-in-zlib-rs-part-1-autovectorization-and-target-features).
 
+Per Vognsen [mentions](https://github.com/yugr/rust-slides/issues/59#issue-4290388407)
+that explicit chunking is good and reliable way to trigger autovec:
+> explicit chunking (vs explicit vectorization) is usually sufficient
+> to enable auto-vectorization and has some advantages
+> compared to explicit vectorization with something like the (non-stable) std::simd
+> but of course also has disadvantages.
+
 # Remarks
 
 Optimization remarks can be used to diagnose reasons for missing autovec:
