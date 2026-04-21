@@ -227,3 +227,11 @@ Another [good citation](https://www.reddit.com/r/rust/comments/eiwhkn/comment/fc
 > This is a general problem for all state-machine iterators,
 > that is iterators where the implementation of next
 > involves switching on a "state" variable, and thus applies to chain as well. 
+
+Another solution (from [here](https://www.reddit.com/r/rust/comments/15tvuio/comment/jwnumm3/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button))
+is to use internal iteration because many iterators can then
+split iteration into two parts:
+  - normal one
+  - single run for last element
+
+(this causes some code duplication).

@@ -42,9 +42,10 @@ is to forcedly copy elements via `copied()`.
 
 # Solutions
 
-## Using for_each for chained iterators
+## Using internal iteration for chained iterators
 
-Internal iteration is [definitely](https://users.rust-lang.org/t/noob-chaining-efficiency/65355/8)
+Internal iteration (for_each, fold, find, etc.) is
+[definitely](https://users.rust-lang.org/t/noob-chaining-efficiency/65355/8)
 [recommended](https://users.rust-lang.org/t/are-iterators-even-efficient/36050/2)
 for "chained" iterators i.e. combinators that change the control flow
 (`flat_map`, `flatten`, `chain`, [RangeInclusive](https://stackoverflow.com/a/70680224/2170527),
@@ -60,7 +61,21 @@ and some others). The logic is
 > one after the other, so there is no need to check which half you're in for every iteration.
 (i.e. `for_each` has unswitched loops internally).
 
-Unfortunately `for_each` does not allow for complex control flow (`continue`, `break`).
+Also from [here](https://github.com/yugr/rust-slides/issues/59):
+> There's a bigger discussion about external vs internal iteration in Rust
+> and my rule of thumb is to use internal iteration
+> when there's chaining involved (perhaps implicitly as in the case of a..=b inclusive ranges).
+> Calling out for_each as special might give the wrong idea;
+> it's really any of the iterator "consumer" methods that bottom out in try_fold,
+> e.g. fold, any, all, find, etc. This helps for iterators that have a custom try_fold implementation
+> (rather than the default next-based implementation),
+> but fortunately almost all of the standard library's iterators have a custom try_fold.
+> The nice thing about internal iteration is that the code is pretty much what you would write by hand,
+> so it's much easier to reason about what the optimizing compiler will do it in complex cases
+> compared to next-based iteration; pretty much all you need
+> is guaranteed inlining to flatten the layers of the iterator stack's methods.
+
+Unfortunately internal iteration does not allow for complex control flow (`continue`, `break`).
 
 ## Do not use inclusive ranges
 
