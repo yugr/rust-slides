@@ -12,13 +12,13 @@ Memory aliasing is a common concept across programming langs
 when different pointers/references address same memory location.
 
 There are two extreme cases in language design:
-  - allow this for any pair of pointers
-  - completely disallow this
+  - allow this for any pair of pointers (good for programmer, bad for optimizer)
+  - completely disallow this (vice verse)
 
 and a lot of intermediate options.
 
-Landi proved that interprocedural AA is undecidable and
-intraprocedural AA is NP-complete
+Landi proved that intraprocedural AA is NP-complete without dynamic allocations and
+undecidable otherwise
 ([Undecidability of static analysis, Landi, 1992](https://dl.acm.org/doi/abs/10.1145/161494.161501)).
 
 Originally C allowed arbitrary aliasing which was made more strict in C99
@@ -160,6 +160,9 @@ lib/Transforms/ObjCARC/ProvenanceAnalysis.cpp
 lib/Transforms/ObjCARC/ObjCARCOpts.cpp
 lib/Transforms/ObjCARC/ObjCARCContract.cpp
 ```
+
+It's so important that it's even done in HW
+(see [Memory Disambiguation on Skylake](https://github.com/travisdowns/uarch-bench/wiki/Memory-Disambiguation-on-Skylake)).
 
 # Limitations
 
