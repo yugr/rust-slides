@@ -32,6 +32,21 @@ TODO:
   - types of optimizations (niche via fields, niche via ranges, struct reorg)
   - consequences (lack of stable ABI)
 
+TODO:
+  - mention that struct field reorder works only with top-level fields and
+    can neither reorder fields of sub-structs, nor put top-level fields
+    into their paddings (as both would break ABI);
+    [#70230](https://github.com/rust-lang/rust/issues/70230)
+    could be relevant
+  - mention that same nich can be used to store many tags
+    (as e.g. for `Option<Option<bool>>`)
+  - check if several distinct niches can be used to store different tags
+    (as e.g. in `Option<Option<struct {&i32, &bool}>>`
+  - mention that niches can't use padding because that
+    would break getting reference to enum's variants
+    (see e.g. `Option::as_mut`); this also allows to move from
+    enum without resetting tag
+
 # Examples
 
 TODO:
