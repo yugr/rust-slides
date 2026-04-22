@@ -69,12 +69,27 @@ rustflags = [
 ```
 to `.cargo/config.toml` to simplify generated code.
 
-# Stabilize code layout effects
+# Stabilize memory layout effects
 
-Try adding in `.cargo/config.toml`:
+Try adding to `rustflags` in `.cargo/config.toml`:
 ```
 # 32 is typical fetchline size (64 also makes sense)
 "-C", "llvm-args=-align-loops=32",
+```
+
+Also try using GNU linker:
+```
+linker = "ld.bfd"
+```
+
+Finally run with different environment sizes
+(to control stack alignment):
+```
+export X=
+for i in $(seq 128); do
+  ./mybench
+  X="${X}."
+done
 ```
 
 # Profile
