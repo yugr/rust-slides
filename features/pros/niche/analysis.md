@@ -22,6 +22,7 @@ TODO:
       + mention comparison w/ `std::optional` ([tiny-optional](https://github.com/Sedeniono/tiny-optional?tab=readme-ov-file#use-case-1-wasting-no-memory)
         and [this](https://news.ycombinator.com/item?id=34993661#:~:text=tialaramex%20on%20March%202%2C%202023,if%20the%20commitee%20wants%20to))
       + mention PointerIntPair in LLVM (and similar tricks in interpreters)
+      + mention opts from [Implementing Data Layout Optimizations in the LLVM Framework](https://llvm.org/devmtg/2014-10/Slides/Prashanth-DLO.pdf)
     * situation in other langs:
       + [Java](https://docs.oracle.com/javase/specs/jls/se24/html/),
       + [C#](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/introduction)
@@ -104,8 +105,10 @@ TODO:
 Performance of rav1e has (rather unexpectedly) degraded overall.
 
 To understand this, I studied
-  - one heavy regression in `get_weighted_sse/32x8/10` (1.0878 -> 1.3253 us)
-  - one speedup in `forward_transform/TX_16X16_H_ADST` (431.88 -> 393.7 ns)
+  - the most heavy regression in `get_weighted_sse/XXX` family
+    e.g. `get_weighted_sse/32x8/10` (1.0878 -> 1.3253 us)
+  - the largest speedup in `forward_transform/XXX` family
+    e.g. `forward_transform/TX_16X16_H_ADST` (431.88 -> 393.7 ns)
 
 #### get_weighted_sse regression (scalar)
 
@@ -320,9 +323,8 @@ We then get discrepancy at
     * ref: `_ZN4core4iter8adapters3map8map_fold28_$u7b$$u7b$closure$u7d$$u7d$17hd4ad2369c6d1a1a9E`
     * new: `_ZN4core4iter8adapters3map8map_fold28_$u7b$$u7b$closure$u7d$$u7d$17h2dae2b7eb748ae77E`
 
-Intuitively it seems that the reason is differences in InstCombine logic.
-
-TODO
+Intuitively it seems that the reason is differences in InstCombine logic for GEPs.
+Indeed after disabling `shouldMergeGEPs` in LLVM the speedup in `get_weighted_sse/XXX` tests disappears.
 
 # forward_transform improvement
 

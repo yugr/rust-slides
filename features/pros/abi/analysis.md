@@ -4,6 +4,9 @@ SIMD vectors are always passed to functions (non-intrinsics) on stack.
 See [Issue #44367](https://github.com/rust-lang/rust/issues/44367) for SIMD vector ABI problems and [this reply](https://github.com/rust-lang/rust/issues/44367#issuecomment-360323733) for a final decision.
 For x86 with SSE2 enabled and x84\_64 architectures, 128 bit SIMD vectors are passed directly in registers. Less than 128 bit vectors will be able to be passed directly when [cranelift issue](https://github.com/bytecodealliance/wasmtime/issues/10254) is fixed.
 
+TODO:
+  - double-check https://mcyoung.xyz/2024/04/17/calling-convention/
+
 # Aggregate type passing ABI
 
 Both [AMD64 abi](https://refspecs.linuxbase.org/elf/x86_64-abi-0.99.pdf) and AArch64 [AAPCS64](https://student.cs.uwaterloo.ca/~cs452/docs/rpi4b/aapcs64.pdf) allow aggregate types which size does not exceed 16 bytes to be passed (and returned) in two general-purpose registers (also called struct scalarization).
