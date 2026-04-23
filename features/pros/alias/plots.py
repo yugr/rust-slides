@@ -23,21 +23,21 @@ ME = os.path.basename(__file__)
 DEFAULT_VALUE = -0.1
 
 data = {
-    "rustc": 81 - 83,
     "SpacetimeDB": 81 - 83,
     "bevy": 67 - 72,
-    "meilisearch": 41 - 47,
+#    "meilisearch": 41 - 47,
     "nalgebra": 30 - 66,
-    "oxipng": 99 - 99,
+#    "oxipng": 99 - 99,
     "rav1e": 87 - 89,
-#    "rebar": 82 - 88,
+    "regex": 82 - 88,
     "ruff": 76 - 80,
-#    "rust_serialization_benchmark": 75 - 78,
-#    "rustc-perf": 83 - 84,
+    "rust_serialization_benchmark": 75 - 78,
+    "rustc-runtime-benchmarks": 83 - 84,
     "tokio": 82 - 87,
     "uv": 87 - 87,
-    "veloren": 55 - 57,
     "zed": 78 - 79,
+#    "veloren": 55 - 57,
+#    "rustc": 81 - 83,
 }
 
 font_size = 20
@@ -50,7 +50,7 @@ legend_handles = {}
 # something like 12 benchmarks should take up 80% of space between groups
 width = 0.8 / 12
 
-for i, (name, value) in enumerate(data.items()):
+for i, (name, value) in enumerate(sorted(data.items())):
     color = colors.setdefault(name, cm.tab20(len(colors) / 20))
     rect = ax.bar(
         width * i,
