@@ -9,6 +9,7 @@ import argparse
 import atexit
 import glob
 import json
+import math
 import os
 import os.path
 import re
@@ -88,8 +89,32 @@ def join(lhs, rhs):
         return 1, pow(10, lhs_deg - rhs_deg)
 
 
-def compare_jsons(lhs, rhs):
-    results = []
+def compare_jsons(lhs, rhs, json_name, avg):
+    results = {}
+
+    def get_canonical_name(name):
+        if not avg:
+            return name
+
+        # Crude but seems to work (generates roughly similar number of tests
+        # for each project)
+
+        names = name.split("/")
+
+        if "serialization" == json_name:
+            return "/".join(names[0:2])
+
+        while names:
+            if not re.match(r"^.*=[0-9]+$|^[0-9]+", names[-1]):
+                break
+            names.pop()
+
+        name = "/".join(names) or "MAIN"
+        name = re.sub(r"[0-9]+[_xX][0-9]+", "", name)
+        name = re.sub(r"[0-9]+$", "", name)
+        name = re.sub(r"(vec|mat)[0-9]+", r"\1", name)
+
+        return name
 
     for t, rhs_value in sorted(rhs.items()):
         lhs_value = lhs[t]
@@ -102,12 +127,19 @@ def compare_jsons(lhs, rhs):
         lhs_value *= lhs_mult
         rhs_value *= rhs_mult
 
-        results.append(1 - rhs_value / lhs_value)
+        results.setdefault(get_canonical_name(t), []).append(rhs_value / lhs_value)
 
-    return results
+    # Average
+
+    print(sorted(results.keys()))
+    for t in sorted(results.keys()):
+        vals = results[t]
+        results[t] = 1 - pow(math.prod(vals), 1 / len(vals))
+
+    return results.values()
 
 
-def collect_results(lhs, rhs, paths, tmp_dir):
+def collect_results(lhs, rhs, paths, tmp_dir, avg):
     compare = os.path.join(os.path.dirname(__file__), "..", "compare.py")
     combine = os.path.join(os.path.dirname(__file__), "..", "combine.py")
 
@@ -150,7 +182,7 @@ def collect_results(lhs, rhs, paths, tmp_dir):
         with open(rhs_json) as f:
             rhs_json = json.load(f)
 
-        results[name] = compare_jsons(lhs_json, rhs_json)
+        results[name] = compare_jsons(lhs_json, rhs_json, name, avg)
 
     return results
 
@@ -206,6 +238,7 @@ def box(all_results, out_dir):
 
     fig, ax = plt.subplots()
     ax.boxplot(data, showfliers=False, usermedians=medians)
+    ax.hlines([-10, 0, 10], ax.get_xlim()[0], ax.get_xlim()[1], linestyle="--")
     ax.set_xticks(np.arange(1, len(names) + 1), labels=names, rotation=45)
     ax.set_ylabel("% change")
     plt.title("Boxplots (using mean)")
@@ -227,6 +260,7 @@ def violin(all_results, out_dir):
     ax.violinplot(
         data, showmeans=True, showmedians=False, showextrema=False, quantiles=quantiles
     )
+    ax.hlines([-10, 0, 10], ax.get_xlim()[0], ax.get_xlim()[1], linestyle="--")
     ax.set_xticks(np.arange(1, len(names) + 1), labels=names, rotation=45)
     #    ax.set_xticklabels(names, rotation=45)
     ax.set_ylabel("% change")
@@ -275,6 +309,12 @@ Examples:
         help="Path to store temporary files",
     )
     parser.add_argument(
+        "--average-similar-tests",
+        help="Aggregate similar tests with different parameters",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+    )
+    parser.add_argument(
         "build",
         help="Build to compare",
     )
@@ -290,7 +330,9 @@ Examples:
         tmp_dir = tempfile.mkdtemp()
         atexit.register(lambda: shutil.rmtree(tmp_dir))
 
-    all_results = collect_results(args.baseline, args.build, args.path, tmp_dir)
+    all_results = collect_results(
+        args.baseline, args.build, args.path, tmp_dir, args.average_similar_tests
+    )
 
     histogram(all_results, args.o)
     box(all_results, args.o)
