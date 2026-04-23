@@ -245,9 +245,9 @@ def generate_plots(results, out_dir, font_size, use_logscale):
     space_per_build = 0.8
     width = space_per_build / max_bench_count
     build_widths = np.zeros(len(results))
-    for build_index, build_results in enumerate(results.values()):
+    for build_index, (_, build_results) in enumerate(sorted(results.items())):
         build_widths[build_index] = (len(build_results) - 1) * width
-        for bench_index, (bench_name, value) in enumerate(build_results.items()):
+        for bench_index, (bench_name, value) in enumerate(sorted(build_results.items())):
             color = colors.setdefault(
                 bench_name, colorscheme(len(colors) / num_colors_in_colorscheme)
             )
