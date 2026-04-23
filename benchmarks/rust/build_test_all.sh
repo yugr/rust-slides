@@ -164,7 +164,6 @@ while read cfg; do
 done < "$CFG"
 
 # Build and install branches
-# TODO: support no-static branch
 
 toolchains=''
 
@@ -188,14 +187,30 @@ channel = "nightly"
 debug-assertions = false
 
 [llvm]
+EOF
+
+    if test -f llvm.patch; then
+      cat <<EOF >> bootstrap.toml
+download-ci-llvm = false
+link-shared = true
+targets = "X86"
+experimental-targets = ""
+EOF
+
+      git submodule update --depth=1 src/llvm-project
+      patch -d src/llvm-project -p1 < llvm.patch
+    else
+      cat <<EOF >> bootstrap.toml
 assertions = $ASSERTIONS
 EOF
 
-    if ! ./x build -j$J library; then
       # CI LLVM no longer available so need to copy manually
-      cp -r $CI_LLVM build/x86_64-unknown-linux-gnu/ci-llvm
-      ./x build -j$J library
+      if ! ./x build -j$J library; then
+        cp -r $CI_LLVM build/x86_64-unknown-linux-gnu/ci-llvm
+      fi
     fi
+
+    ./x build -j$J library
 
     rustup toolchain link $name build/host/stage1
   )
