@@ -81,8 +81,12 @@ Also try using GNU linker:
 ```
 linker = "ld.bfd"
 ```
+and/or shuffle order of sections via
+```
+-C link-arg=-Wl,--sort-section=name
+```
 
-Finally run with different environment sizes
+Finally try running with different environment sizes
 (to control stack alignment):
 ```
 export X=
