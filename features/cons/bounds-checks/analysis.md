@@ -30,6 +30,10 @@ $ CVE/kev_scanner.py -y 2024 known_exploited_vulnerabilities.json
 [Mitre 2024 top-25 weaknesses rating](https://cwe.mitre.org/top25/archive/2024/2024_cwe_top25.html):
 buffer overflows are still no. 2, 6 and 20.
 
+[70% high/critical errors in Chromium](https://www.chromium.org/Home/chromium-security/memory-safety/)
+and [70% vulns in MS products](https://msrc.microsoft.com/blog/2019/07/a-proactive-approach-to-more-secure-code/)
+are memory errors.
+
 For more information on security vulnerabilities caused by memory errors check
 [Hardening: current status and trends](https://github.com/yugr/slides/blob/main/CppZeroCost/2025/EN.pdf).
 
