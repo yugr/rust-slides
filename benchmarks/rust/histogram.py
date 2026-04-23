@@ -131,7 +131,6 @@ def compare_jsons(lhs, rhs, json_name, avg):
 
     # Average
 
-    print(sorted(results.keys()))
     for t in sorted(results.keys()):
         vals = results[t]
         results[t] = 1 - pow(math.prod(vals), 1 / len(vals))
