@@ -12,6 +12,7 @@ TODO:
 # Background
 
 TODO:
+  - describe both "tag elision" and "discriminant elision"
   - why is this feature needed ?
     * example cases which are optimized by niche and struct reorg
     * benefits (better D$ utilization)
@@ -21,8 +22,8 @@ TODO:
       + e.g. [Rationale for International Standard Programming Languages - C](https://www.open-std.org/jtc1/sc22/wg14/www/C99RationaleV5.10.pdf)
       + mention comparison w/ `std::optional` ([tiny-optional](https://github.com/Sedeniono/tiny-optional?tab=readme-ov-file#use-case-1-wasting-no-memory)
         and [this](https://news.ycombinator.com/item?id=34993661#:~:text=tialaramex%20on%20March%202%2C%202023,if%20the%20commitee%20wants%20to))
+        and [this](https://github.com/foonathan/tiny) for `std::variant`
       + mention PointerIntPair in LLVM (and similar tricks in interpreters)
-      + mention opts from [Implementing Data Layout Optimizations in the LLVM Framework](https://llvm.org/devmtg/2014-10/Slides/Prashanth-DLO.pdf)
     * situation in other langs:
       + [Java](https://docs.oracle.com/javase/specs/jls/se24/html/),
       + [C#](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/introduction)
@@ -33,21 +34,6 @@ TODO:
   - types of optimizations (niche via fields, niche via ranges, struct reorg)
   - consequences (lack of stable ABI)
 
-TODO:
-  - mention that struct field reorder works only with top-level fields and
-    can neither reorder fields of sub-structs, nor put top-level fields
-    into their paddings (as both would break ABI);
-    [#70230](https://github.com/rust-lang/rust/issues/70230)
-    could be relevant
-  - mention that same nich can be used to store many tags
-    (as e.g. for `Option<Option<bool>>`)
-  - check if several distinct niches can be used to store different tags
-    (as e.g. in `Option<Option<struct {&i32, &bool}>>`
-  - mention that niches can't use padding because that
-    would break getting reference to enum's variants
-    (see e.g. `Option::as_mut`); this also allows to move from
-    enum without resetting tag
-
 # Examples
 
 TODO:
@@ -55,10 +41,43 @@ TODO:
 
 # Optimizations
 
+TODO:
+  - mention that struct field reorder works only with top-level fields and
+    can neither reorder fields of sub-structs, nor put top-level fields
+    into their paddings (as both would break ABI);
+    [#70230](https://github.com/rust-lang/rust/issues/70230)
+    could be relevant
+  - mention that same niche can be used to store many tags
+    (as e.g. for `Option<Option<bool>>`)
+  - check if several distinct niches can be used to store different tags
+    (as e.g. in `Option<Option<struct {&i32, &bool}>>`
+  - mention that niches can't use padding because that
+    would break getting reference to enum's variants
+    (see e.g. `Option::as_mut`); this also allows to move from
+    enum without resetting tag
+  - mention that struct reorder (currently, without PGO)
+    may trigger large regressions or improvements
+    due to uncontrolled effects (e.g. fields which are
+    used together become co-located, break of load-store
+    forwarding due to misplaced fields like in example below,
+    etc.); reduced D$ pressure due to padding only gives small
+    benefits acc. to our benchmarks
+  - mention how PGO could be used
+  - mention opts from
+    [Implementing Data Layout Optimizations in the LLVM Framework](https://llvm.org/devmtg/2014-10/Slides/Prashanth-DLO.pdf)
+  - describe how reorder benefits niches (reordering algorithm
+    tries to move niches towards start of object as it increases
+    the chance that it can be used in enum to reuse niches of
+    variants in enum); mention that enum variants may be shifted
+    inside enum to facilitate such niche reuse
+  - bitfield niches can't be used to keep bools or similar small types
+    because then references to them can't be taken
+
 # Workarounds
 
 TODO:
   - info on how developer can disable this optimization
+    (`repr(C)`, anything else ?)
 
 # Suggested reading
 
