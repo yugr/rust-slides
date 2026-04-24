@@ -328,4 +328,15 @@ Indeed after disabling `shouldMergeGEPs` in LLVM the speedup in `get_weighted_ss
 
 # forward_transform improvement
 
-TODO
+Basically compiler inserted:
+```
+mov dword [ptr], ...
+mov dword [ptr + 4], ...
+...
+mov ..., qword[ptr]
+```
+which is likely to [break load-store forwarding](https://easyperf.net/blog/2018/03/09/Store-forwarding).
+
+Speedup disappeared after this fix.
+
+TODO: describe how this was diagnosed
