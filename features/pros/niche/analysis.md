@@ -345,7 +345,7 @@ We then get discrepancy at
 Intuitively it seems that the reason is differences in InstCombine logic for GEPs.
 Indeed after disabling `shouldMergeGEPs` in LLVM the speedup in `get_weighted_sse/XXX` tests disappears.
 
-# forward_transform improvement
+#### forward_transform improvement
 
 Basically compiler inserted:
 ```
@@ -356,6 +356,13 @@ mov ..., qword[ptr]
 ```
 which is likely to [break load-store forwarding](https://easyperf.net/blog/2018/03/09/Store-forwarding).
 
-Speedup disappeared after this fix.
+Speedup disappeared after disabling LSF via `-Cllvm-args=-combiner-store-merging=false`.
 
-TODO: describe how this was diagnosed
+TODO(zak): describe how this was diagnosed
+
+### Analyzing tokio results
+
+After disabling GEP merging and LSF the only noticeable change I get is in tokio.
+Problem is in `notify_one` benches.
+
+TODO: analyze the reason

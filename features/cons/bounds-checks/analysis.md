@@ -31,7 +31,7 @@ $ CVE/kev_scanner.py -y 2024 known_exploited_vulnerabilities.json
 buffer overflows are still no. 2, 6 and 20.
 
 [70% high/critical errors in Chromium](https://www.chromium.org/Home/chromium-security/memory-safety/)
-and [70% vulns in MS products](https://msrc.microsoft.com/blog/2019/07/a-proactive-approach-to-more-secure-code/)
+and [70% vulns in MS products](https://www.microsoft.com/en-us/msrc/blog/2019/07/a-proactive-approach-to-more-secure-code)
 are memory errors.
 
 For more information on security vulnerabilities caused by memory errors check

@@ -42,18 +42,24 @@ of iterations for simpler profiling:
 Some projects strip generated binaries by default.
 
 Make sure that `strip` is not specified in Cargo.toml, .cargo/config.toml or build.rs
-and maybe explicitly set it to
+(for profile.bench or profile.release) and maybe explicitly set it to
 ```
 strip = false
 ```
 for bench/release profiles (this will override settings in dependencies).
+It may also make sense to add
+```
+debug = true
+```
 
 Finally add
 ```
+# Or [build]
 [target.x86_64-unknown-linux-gnu]
 rustflags = ["-Cforce-frame-pointers=yes", "-Cstrip=none"]
 ```
-to .cargo/config.toml and rebuild.
+to .cargo/config.toml and rebuild
+(adding `force-frame-pointers = yes` to Cargo.toml does not seem to work).
 
 # Disable complex optimizations
 
@@ -100,7 +106,10 @@ done
 
 To collect perf profile run
 ```
-$ rm -f perf.data* && perf record -F99 --call-graph fp cmd arg1 ...
+$ rm -f perf.data* && perf record -F99 --call-graph dwarf,16 cmd arg1 ...
 ```
-(omit `--call-graph fp` for flat profile).
-You can also try using `lbr`/`dwarf` for more precise (and slow) tracking.
+(omit `--call-graph dwarf` for flat profile).
+
+You can also use `lbr` but for me this gave less precise results
+because LBR has a limited depth.
+FP profiles (`--call-graph fp`) gave meaningless results.

@@ -99,6 +99,7 @@ Swift does not have any exception-like unwinding,
 just syntax sugared return codes.
 
 TODO:
+  - investigate `-Z trap-unreachable=no`
   - (LOW) check if C++ also has same overhead due to exceptions: https://www.rottedfrog.co.uk/?p=24
     * if not, we need a slide on this...
 
