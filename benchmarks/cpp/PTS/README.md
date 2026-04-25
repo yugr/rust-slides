@@ -51,3 +51,5 @@ Based on commit a5364528:
   - mix of XML configs and environment variables is inconvenient for tools
     * need command-line flags for all settings
   - build errors not always checked (e.g. in pts/arrayfire-XXX/install.sh)
+  - no option to disable automatic test updates
+    * need to specify explicit version for reproducible results
