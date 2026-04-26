@@ -2,23 +2,23 @@
 #   - come from popular projects
 #   - compile with Clang (e.g. z3 and onnx were removed)
 #   - don't take too much time (e.g. ffmpeg, fftw, redis were removed)
-#   - produce stable results (e.g. all compress/XXX and c-ray were removed)
+#   - produce stable results (e.g. all compress/XXX were removed)
 #   - reasonable runtime (not enough free time on server)
 #
 # Format: CFLAGS:CXXFLAGS:tests
 #
 # TODO:
 #   - figure out why pts/compress-XXX are so noisy
-#   - fix pts/apache "unable to connect to 127.0.0.1:8088 Connection refused"
+#   - fix pts/apache " unable to connect to 127.0.0.1:8088 Connection refused"
 
 # Default
-::pts/botan pts/bullet pts/coremark pts/gcrypt pts/luajit pts/nginx pts/openssl pts/polybench-c pts/povray pts/simdjson
+::pts/botan-1.6.0 pts/bullet-1.2.2 pts/coremark-1.0.1 pts/gcrypt-1.2.0 pts/luajit-1.1.0 pts/nginx-3.0.1 pts/openssl-3.6.0 pts/polybench-c-1.2.0 pts/povray-1.2.1 pts/simdjson-2.2.0
 
 # Packages that need external dependencies (so require root access)
-::pts/dav1d pts/opencv pts/rocksdb pts/vpxenc pts/x264 pts/x265
+::pts/dav1d-1.16.0 pts/opencv-1.3.0 pts/rocksdb-1.7.0 pts/vpxenc-3.2.0 pts/x264-2.7.0 pts/x265-1.5.0
 
 # Tests that want older C standard.
 # -fasm is needed in tests that use inline asm and `-std=c99`
 # (which disables inline asm for Clang but not GCC).
 
--std=gnu89 -fasm::pts/gmpbench
+-std=gnu89 -fasm::pts/gmpbench-1.3.0
