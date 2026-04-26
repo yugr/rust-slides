@@ -41,6 +41,12 @@ that explicit chunking is good and reliable way to trigger autovec:
 > compared to explicit vectorization with something like the (non-stable) std::simd
 > but of course also has disadvantages.
 
+Rust stdlib has no stable and portable SIMD intrinsics.
+(std::simd portable API is stuck in nightly).
+So performance-critical Rust either depends on nightly,
+uses third-party crates (packed_simd, wide) or
+hand-codes std::arch with extensive #[cfg(target_arch)] scaffolding.
+
 # Remarks
 
 Optimization remarks can be used to diagnose reasons for missing autovec:

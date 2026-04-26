@@ -130,4 +130,4 @@ Also [this comment](https://github.com/rust-lang/rfcs/pull/560#issuecomment-6938
 Unfortunately for LLVM each panic is an unknown function call with distinct parameters
 so this can not be done at LLVM level and there is not dedicated MIR pass for this.
 
-As a workaround, developers need to use manual `assert!`'s (or `core::hint::unreachable_unchecked`).
+As a workaround, developers need to use manual `assert!`'s (or `std::hint::unreachable_unchecked`).

@@ -113,6 +113,46 @@ $ rustc ... -C overflow-checks=on
 ...
 ```
 
+This C program
+```
+int sum_every_other(const int* data, int n) {
+    int result = 0;
+    for (int i = 0; i < n; i++) {
+        result += data[i];
+    }
+    return result;
+}
+```
+optimizes to
+```
+.L3:
+        addl    (%rdi), %eax
+        addq    $4, %rdi
+        cmpq    %rdx, %rdi
+        jne     .L3
+```
+but equivalent Rust code
+```
+pub fn sum_every_other(data: &[i32]) -> i32 {
+    let mut result = 0i32;
+    for i in 0..data.len() {
+        result += data[i];
+    }
+    result
+}
+```
+to slower sequence:
+```
+.LBB0_2:
+        addl    (%rdi,%rcx,4), %eax
+        incq    %rcx
+        cmpq    %rcx, %rsi
+        jne     .LBB0_2
+```
+(unable to extract induction variable for address).
+
+TODO: analyze this example
+
 # Optimizations
 
 In theory LLVM could still vectorize in presence of overflow checks

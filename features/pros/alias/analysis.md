@@ -217,6 +217,10 @@ pub fn foo(a: &mut Vec<i32>, b: &Vec<i32>) {
 ```
 (Vec-code has additional loop versioning due to potential aliasing).
 
+TODO:
+  - check if aliasing rules help smart pointers (`Box`, `Rc`, `Arc`, etc.)
+    and other basic types (`RefCell`, `Mutex`, etc.)
+
 # Suggested readings
 
 TODO:

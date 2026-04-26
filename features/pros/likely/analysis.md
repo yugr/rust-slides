@@ -24,8 +24,8 @@ It's used in many places in stdlib:
   - expect/unwrap fails in `Option` and `Result`
   - `strict_XXX` APIs
 
-Unstable intrinsics `core::intrinsics::{likely, unlikely, cold_path}`
-are built on top of `#[cold]` (also reexported as `core::hint::{likely, unlikely, cold_path}`).
+Unstable intrinsics `std::intrinsics::{likely, unlikely, cold_path}`
+are built on top of `#[cold]` (also reexported as `std::hint::{likely, unlikely, cold_path}`).
 They are used in some places in stdlib:
   - mark fails (`Rc`)
   - mark overflows (`checked_XXX`, `StepBy` and `Slip` iterators`)
