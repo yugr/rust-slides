@@ -319,4 +319,6 @@ My results are
 ```
 so +4% stores and 11x (!) memset growth.
 
-TODO: initialize `malloc` data (via `LD_PRELOAD`) to account for heap inits
+TODO:
+  - initialize `malloc`-ed data via `LD_PRELOAD` to account for heap inits
+    (see [zeralloc](https://github.com/yugr/zeralloc))
