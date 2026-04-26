@@ -32,7 +32,7 @@ bench() {
 
   echo "=== $B: $F"
 
-  for i in $(seq 1 $REPEAT); do
+  for i in $(seq $REPEAT); do
     /usr/bin/time -o $tmp setarch -R $B/bin/clang -O2 -w -S -o /dev/null $F 2>/dev/null
     cat $tmp
   done

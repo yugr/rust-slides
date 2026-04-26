@@ -36,7 +36,7 @@ To avoid this Rust forces programmer to initialize all variables.
 In C/C++ three types of memory (automatic, heap and static storage)
 are initialized by different means:
   - automatic: by compiler under special flag (optional before C++26)
-  - heap: by hardened allocator (optional)
+  - heap: by hardened allocator
   - global: by OS or startup code (required by the language:
     "all objects with static storage duration shall be initialized
     (set to their initial values) before program startup")
@@ -255,6 +255,9 @@ It's not really possible to disable this check per language rules...
 ## Measurements
 
 Rather than measuring Rust, we compare Clang with and without `-ftrivial-auto-var-init`.
+
+### Runtime tests
+
 In [Hardening: current status and trends](https://github.com/yugr/slides/blob/main/CppZeroCost/2025/EN.pdf)
 the authors reported 4.5% degradation for Clang (compilation of CGBuiltins.ii).
 
@@ -289,6 +292,11 @@ similar checks in hardened C++ have on-par overheads:
     * ~1.5% Clang
     * ~7% ffmpeg
     * PTS testsuite: apache 1.5%, povray -34%
+  - same but with additional heap initialization
+    (via [zeralloc](https://github.com/yugr/zeralloc) heap-zeroing malloc interceptors):
+    * TODO
+    * (this is an upper bound because compiler-based heap-zeroing
+      could be more optimized)
   - 1% (Firefox with lots of tuning)
   - 1-3% Postgres (up to 20% in some scenarios)
   - virtio, Chrome: up to 10% in some scenarios
@@ -296,6 +304,8 @@ similar checks in hardened C++ have on-par overheads:
 (note: for PTS we ignored differences <= 1% due to high noise,
 similar to [Exploiting Undefined Behavior in C/C++ Programs for
 Optimization: A Study on the Performance Impact](https://web.ist.utl.pt/nuno.lopes/pubs/ub-pldi25.pdf)).
+
+### Static tests
 
 To statically check how many stores can't be eliminated, we compare number
 of stores and memsets in loops of Clang compiler.
@@ -318,7 +328,3 @@ My results are
 498320 stores, 19362 memsets
 ```
 so +4% stores and 11x (!) memset growth.
-
-TODO:
-  - initialize `malloc`-ed data via `LD_PRELOAD` to account for heap inits
-    (see [zeralloc](https://github.com/yugr/zeralloc))

@@ -214,7 +214,7 @@ while read cfg; do
 
     file=$(echo "$t" | awk -F: '{print $1}')
 
-    for i in $(seq 1 $REPEAT); do
+    for i in $(seq $REPEAT); do
       /usr/bin/time -ao $OUT/$name/$(basename $file).log setarch -R $B/bin/clang -O2 -w -S -o /dev/null $file
     done
   done < "$TESTS_CONFIG"
