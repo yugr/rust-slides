@@ -73,10 +73,13 @@ def get_baseline(b):
     return "Libcxx" if b in ("Libcxx", "HardenedSTL") else "Baseline"
 
 
-def collect_pts_results(builds, pts_dir, tmp_dir, average_mode):
+def collect_pts_results(builds, pts_dir, tmp_dir, average_mode, baseline):
     all_builds = set(builds)
-    for b in builds:
-        all_builds.add(get_baseline(b))
+    if baseline is None:
+        for b in builds:
+            all_builds.add(get_baseline(b))
+    else:
+        all_builds.add(baseline)
 
     parser = os.path.join(os.path.dirname(__file__), "PTS", "parser.py")
     compare = os.path.join(os.path.dirname(__file__), "..", "compare.py")
@@ -109,7 +112,7 @@ def collect_pts_results(builds, pts_dir, tmp_dir, average_mode):
     results = {}
 
     for b in builds:
-        base = os.path.join(tmp_dir, get_baseline(b))
+        base = os.path.join(tmp_dir, baseline or get_baseline(b))
         o = os.path.join(tmp_dir, b)
         _, out, _ = run([compare, "--ignore-missing", base, o])
 
@@ -153,11 +156,13 @@ def average_times(filename, average_mode):
     assert False
 
 
-def collect_ffmpeg_results(builds, ffmpeg_dir, tmp_dir, average_mode):
+def collect_ffmpeg_results(builds, ffmpeg_dir, tmp_dir, average_mode, baseline):
     all_builds = set(builds)
-    all_builds.add("Baseline")
-    if "HardenedSTL" in builds:
-        all_builds.add("Libcxx")
+    if baseline is None:
+        for b in builds:
+            all_builds.add(get_baseline(b))
+    else:
+        all_builds.add(baseline)
 
     times = {}
     for b in sorted(all_builds):
@@ -169,17 +174,20 @@ def collect_ffmpeg_results(builds, ffmpeg_dir, tmp_dir, average_mode):
 
     results = {}
     for b in builds:
-        t0 = times[get_baseline(b)]
+        t0 = times[baseline or get_baseline(b)]
         t = times[b]
         results[b] = {"ffmpeg": 100 * (t0 - t) / t0}
 
     return results
 
 
-def collect_llvm_results(builds, llvm_dir, tmp_dir, average_mode):
+def collect_llvm_results(builds, llvm_dir, tmp_dir, average_mode, baseline):
     all_builds = set(builds)
-    for b in builds:
-        all_builds.add(get_baseline(b))
+    if baseline is None:
+        for b in builds:
+            all_builds.add(get_baseline(b))
+    else:
+        all_builds.add(baseline)
 
     times = {}
     for b in sorted(all_builds):
@@ -191,7 +199,7 @@ def collect_llvm_results(builds, llvm_dir, tmp_dir, average_mode):
 
     results = {}
     for b in builds:
-        t0 = times[get_baseline(b)]
+        t0 = times[baseline or get_baseline(b)]
         t = times[b]
         results[b] = {"Clang": 100 * (t0 - t) / t0}
 
@@ -219,7 +227,8 @@ def generate_plots(results, out_dir, font_size, use_logscale):
         Bounds="-fsanitize=bounds",
         ObjectSize="-fsanitize=object-size",
         HardenedSTL="Hardened STL (libc++)",
-        AutoInit="Initialization",
+        AutoInit="Initialization (stack)",
+        AutoInitWithHeap="Initialization (stack+heap)",
         IOF="-fsanitize=signed-integer-overflow",
         StackClash="Stack Clashing",
         FastMath="-ffast-math",
@@ -247,7 +256,9 @@ def generate_plots(results, out_dir, font_size, use_logscale):
     build_widths = np.zeros(len(results))
     for build_index, (_, build_results) in enumerate(sorted(results.items())):
         build_widths[build_index] = (len(build_results) - 1) * width
-        for bench_index, (bench_name, value) in enumerate(sorted(build_results.items())):
+        for bench_index, (bench_name, value) in enumerate(
+            sorted(build_results.items())
+        ):
             color = colors.setdefault(
                 bench_name, colorscheme(len(colors) / num_colors_in_colorscheme)
             )
@@ -331,6 +342,10 @@ Examples:
         default=[],
     )
     parser.add_argument(
+        "--baseline",
+        help="Build to compare against",
+    )
+    parser.add_argument(
         "--font-size",
         help="Size of font for plots",
         default=10,
@@ -363,7 +378,11 @@ Examples:
 
     if args.pts_dir:
         pts_results = collect_pts_results(
-            args.builds, args.pts_dir, os.path.join(tmp_dir, "PTS"), args.average_mode
+            args.builds,
+            args.pts_dir,
+            os.path.join(tmp_dir, "PTS"),
+            args.average_mode,
+            args.baseline,
         )
         results.append(pts_results)
 
@@ -373,12 +392,17 @@ Examples:
             args.ffmpeg_dir,
             os.path.join(tmp_dir, "ffmpeg"),
             args.average_mode,
+            args.baseline,
         )
         results.append(ffmpeg_results)
 
     if args.llvm_dir:
         llvm_results = collect_llvm_results(
-            args.builds, args.llvm_dir, os.path.join(tmp_dir, "llvm"), args.average_mode
+            args.builds,
+            args.llvm_dir,
+            os.path.join(tmp_dir, "llvm"),
+            args.average_mode,
+            args.baseline,
         )
         results.append(llvm_results)
 
