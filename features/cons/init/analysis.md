@@ -289,12 +289,13 @@ Other forced initialization overheads:
 According to [Hardening: current status and trends](https://github.com/yugr/slides/blob/main/CppZeroCost/2025/EN.pdf)
 similar checks in hardened C++ have on-par overheads:
   - my tests (compiled by Clang 20):
-    * ~1.5% Clang
+    * ~2.5% Clang
     * ~7% ffmpeg
     * PTS testsuite: apache 1.5%, povray -34%
   - same but with additional heap initialization
     (via [zeralloc](https://github.com/yugr/zeralloc) heap-zeroing malloc interceptors):
-    * TODO
+    * no changes in Clang/ffmpeg
+    * PTS testsuite: 5% OpenCV, 3% nginx, RocksDB 1%, simdjson 1%
     * (this is an upper bound because compiler-based heap-zeroing
       could be more optimized)
   - 1% (Firefox with lots of tuning)
