@@ -66,6 +66,70 @@ Important caveats:
     * even a 1% regression means there's some scenarios with 10-20% degradation
       (e.g. 1% geomean means 10% of benchmarks regressed by 10%)
 
+# Rust primer
+
+Explain similiarity between this Rust code:
+```
+enum Event { Ok, Warn(u32), }
+
+fn check(events: &[Event], threshold: Option<f64>) -> i32 {
+    let limit = threshold.unwrap_or(1.0) as u32;
+    let mut result = 0;
+    for e in events {
+        match e {
+            Event::Warn(c) => if *c > limit { result += 1 },
+            Event::Ok => (),
+        }
+    }
+    result
+}
+
+fn main() {
+    let log = vec![Event::Ok, Event::Warn(404)];
+    let result = check(&log, Some(400.9));
+    println!("{result}");
+}
+```
+and equivalent C++:
+```
+#include <variant>
+#include <optional>
+#include <span>
+#include <memory>
+#include <vector>
+#include <iostream>
+
+struct Ok {};
+struct Warn { uint32_t code; };
+
+using Event = std::variant<Ok, Warn>;
+
+int check(std::span<const Event> events,
+          std::optional<double> threshold) {
+
+  int result = 0;
+  const auto limit =
+    unsigned(threshold.value_or(1.0));
+
+  for (const auto &e : events) {
+    if (const auto *w = std::get_if<Warn>(&e)) {
+      if (w->code > limit) {
+        ++result;
+      }
+    }
+  }
+
+
+  return result;
+}
+
+int main() {
+  std::vector<Event> log = { Ok {}, Warn {404} };
+  auto result = check(log, 400.9);
+  std::cout << result << "\n";
+}
+```
+
 # Rust performance issues
 
 Rust seems to put safety ahead of performance:
