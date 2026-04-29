@@ -70,7 +70,7 @@ def run(cmd, fatal=True, tee=False, **kwargs):
 
 
 def get_baseline(b):
-    return "Libcxx" if b in ("Libcxx", "HardenedSTL") else "Baseline"
+    return "Libcxx" if b in ("Libcxx", "HardenedSTL", "HardenedCpp") else "Baseline"
 
 
 def collect_pts_results(builds, pts_dir, tmp_dir, average_mode, baseline):
@@ -219,7 +219,7 @@ def merge_results(*args):
     return results
 
 
-def generate_plots(results, out_dir, font_size, use_logscale):
+def generate_plots(results, out_dir, font_size, use_logscale, outside_legend):
     sym_names = dict(
         StackProtector="-fstack-protector-strong",
         Fortify2="-D_FORTIFY_SOURCE=2",
@@ -227,6 +227,7 @@ def generate_plots(results, out_dir, font_size, use_logscale):
         Bounds="-fsanitize=bounds",
         ObjectSize="-fsanitize=object-size",
         HardenedSTL="Hardened STL (libc++)",
+        HardenedCpp="Hardened C++ (libc++)",
         AutoInit="Initialization (stack)",
         AutoInitWithHeap="Initialization (stack+heap)",
         IOF="-fsanitize=signed-integer-overflow",
@@ -282,7 +283,14 @@ def generate_plots(results, out_dir, font_size, use_logscale):
         fontsize=font_size,
     )
     # ax.set_ylim(-100, 100)
-    ax.legend(ncols=3, handles=legend_handles.values(), fontsize=font_size)
+    if outside_legend:
+        fig.legend(loc="outside right upper", fontsize=font_size)
+    else:
+        ax.legend(
+            ncols=3,
+            handles=legend_handles.values(),
+            fontsize=font_size,
+        )
     plt.show()
     fig.savefig(os.path.join(out_dir, "plot.png"))
 
@@ -351,7 +359,15 @@ Examples:
         default=10,
     )
     parser.add_argument(
-        "--logscale", "-l", action="store_true", help="Use logscale for y axis"
+        "--logscale",
+        "-l",
+        action="store_true",
+        help="Use logscale for y axis",
+    )
+    parser.add_argument(
+        "--outside-legend",
+        action=argparse.BooleanOptionalAction,
+        help="Put legend to the right of the plot",
     )
     parser.add_argument(
         "builds",
@@ -408,7 +424,7 @@ Examples:
 
     results = merge_results(*results)
 
-    generate_plots(results, args.o, args.font_size, args.logscale)
+    generate_plots(results, args.o, args.font_size, args.logscale, args.outside_legend)
 
     return 0
 

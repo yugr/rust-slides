@@ -117,7 +117,7 @@ def collect_results(builds, paths, baseline, tmp_dir):
     return results
 
 
-def generate_plots(all_results, out_dir, font_size, use_logscale):
+def generate_plots(all_results, out_dir, font_size, use_logscale, outside_legend):
     for typ, results in sorted(all_results.items()):
         colorscheme = cm.tab20
         num_colors_in_colorscheme = 20
@@ -140,13 +140,19 @@ def generate_plots(all_results, out_dir, font_size, use_logscale):
         build_widths = np.zeros(len(results))
         for build_index, (_, build_results) in enumerate(sorted(results.items())):
             build_widths[build_index] = (len(build_results) - 1) * width
-            for bench_index, (bench_name, value) in enumerate(sorted(build_results.items())):
+            for bench_index, (bench_name, value) in enumerate(
+                sorted(build_results.items())
+            ):
                 color = colors.setdefault(
                     bench_name, colorscheme(len(colors) / num_colors_in_colorscheme)
                 )
                 rect = ax.bar(
                     build_index + width * bench_index,
-                    value if abs(value) >= minimal_colorbar_heigth else minimal_colorbar_heigth,
+                    (
+                        value
+                        if abs(value) >= minimal_colorbar_heigth
+                        else minimal_colorbar_heigth
+                    ),
                     width,
                     label=bench_name,
                     color=color,
@@ -163,7 +169,15 @@ def generate_plots(all_results, out_dir, font_size, use_logscale):
             results.keys(),
             fontsize=font_size,
         )
-        ax.legend(ncols=3, handles=legend_handles.values(), fontsize=font_size)
+        if outside_legend:
+            fig.legend(loc="outside right upper", fontsize=font_size)
+        else:
+            ax.legend(
+                ncols=3,
+                handles=legend_handles.values(),
+                fontsize=font_size,
+                loc="outside right upper",
+            )
         plt.show()
         fig.savefig(os.path.join(out_dir, f"{typ}.png"))
 
@@ -189,11 +203,7 @@ Examples:
         action="count",
         default=0,
     )
-    parser.add_argument(
-        "-o",
-        help="Path to store results",
-        default="."
-    )
+    parser.add_argument("-o", help="Path to store results", default=".")
     parser.add_argument(
         "--baseline",
         help="Name of baseline build to compare against",
@@ -224,6 +234,11 @@ Examples:
     parser.add_argument(
         "--logscale", "-l", action="store_true", help="Use logscale for y axis"
     )
+    parser.add_argument(
+        "--outside-legend",
+        action=argparse.BooleanOptionalAction,
+        help="Put legend to the right of the plot",
+    )
 
     args = parser.parse_args()
 
@@ -238,7 +253,7 @@ Examples:
 
     results = collect_results(args.builds, args.path, args.baseline, tmp_dir)
 
-    generate_plots(results, args.o, args.font_size, args.logscale)
+    generate_plots(results, args.o, args.font_size, args.logscale, args.outside_legend)
 
     return 0
 
