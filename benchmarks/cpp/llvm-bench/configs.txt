@@ -6,9 +6,11 @@ Bounds:clang:-fsanitize=bounds -fno-sanitize-recover -fsanitize-trap=all -fsanit
 ObjectSize:clang:-fsanitize=object-size -fno-sanitize-recover -fsanitize-trap=all -fsanitize-minimal-runtime:-fsanitize-minimal-runtime:
 Libcxx:clang:-stdlib=libc++ -nostdinc++ -isystem PREFIX/include/c++/v1 -isystem PREFIX/include/x86_64-unknown-linux-gnu/c++/v1:-stdlib=libc++ -L PREFIX/lib/x86_64-unknown-linux-gnu -lc++abi -lunwind -Wl,-rpath,PREFIX/lib/x86_64-unknown-linux-gnu:-DLLVM_ENABLE_LIBCXX=ON
 # Note that HardenedSTL should be compared against Libcxx (other configs use GCC libstdc++)
-HardenedSTL:clang:-stdlib=libc++ -D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_FAST -nostdinc++ -isystem PREFIX/include/c++/v1 -isystem PREFIX/include/x86_64-unknown-linux-gnu/c++/v1:-stdlib=libc++ -L PREFIX/lib/x86_64-unknown-linux-gnu -lc++abi -lunwind -Wl,-rpath,PREFIX/lib/x86_64-unknown-linux-gnu:-DLLVM_ENABLE_LIBCXX=ON
+HardenedSTL:clang:-stdlib=libc++ -nostdinc++ -isystem PREFIX/include/c++/v1 -isystem PREFIX/include/x86_64-unknown-linux-gnu/c++/v1 -D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_FAST:-stdlib=libc++ -L PREFIX/lib/x86_64-unknown-linux-gnu -lc++abi -lunwind -Wl,-rpath,PREFIX/lib/x86_64-unknown-linux-gnu:-DLLVM_ENABLE_LIBCXX=ON
 # No unsigned-integer-overflow in IOF because Clang uses it intentionally
 IOF:clang:-fsanitize=signed-integer-overflow,pointer-overflow -fno-sanitize-recover -fsanitize-trap=all -fsanitize-minimal-runtime:-fsanitize-minimal-runtime:
 AutoInit:clang:-ftrivial-auto-var-init=zero::
 StackClash:clang:-fstack-clash-protection::
 FastMath:clang:-ffast-math::
+# Hardened C++ = Fortify3 + Bounds + HardenedSTL (no AutoInit because we can't disable it in Rust)
+HardenedCpp:clang:-D_FORTIFY_SOURCE=3 -fsanitize=bounds,object-size -fno-sanitize-recover -fsanitize-trap=all -fsanitize-minimal-runtime -stdlib=libc++ -nostdinc++ -isystem PREFIX/include/c++/v1 -isystem PREFIX/include/x86_64-unknown-linux-gnu/c++/v1 -D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_FAST:-fsanitize-minimal-runtime -stdlib=libc++ -L PREFIX/lib/x86_64-unknown-linux-gnu -lc++abi -lunwind -Wl,-rpath,PREFIX/lib/x86_64-unknown-linux-gnu:-DLLVM_ENABLE_LIBCXX=ON
