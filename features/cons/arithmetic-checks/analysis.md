@@ -169,7 +169,7 @@ Here is a better example (from Sonnet 4.6):
 int sum_strided(const int *arr, int n) {
     int s = 0;
     for (int i = 0; i < n; i++) {
-        s += arr[i * 3];   // compiler rewrites i*3 → j, j+=3
+        s += arr[i * 3];
     }
     return s;
 }
@@ -186,6 +186,39 @@ pub fn sum_strided(arr: &[i32], n: i32) -> i32 {
 ```
 C variant vectorizes fine but Rust does not
 (due to potential overflow).
+
+Why Rust fails to optimize ?
+Here's pre-vectorizer IR for C (in clang-16):
+```
+10:                                               ; preds = %4, %10
+  %11 = phi i64 [ 0, %4 ], [ %17, %10 ]
+  %12 = phi i32 [ 0, %4 ], [ %16, %10 ]
+  %13 = mul nuw nsw i64 %11, 3
+  %14 = getelementptr inbounds i32, ptr %0, i64 %13
+  %15 = load i32, ptr %14, align 4, !tbaa !5
+  %16 = add nsw i32 %15, %12
+  %17 = add nuw nsw i64 %11, 1
+  %18 = icmp eq i64 %17, %5
+  br i1 %18, label %6, label %10, !llvm.loop !9
+```
+and for Rust:
+```
+11:                                               ; preds = %5, %11
+  %12 = phi i64 [ 0, %5 ], [ %14, %11 ]
+  %13 = phi i32 [ 0, %5 ], [ %19, %11 ]
+  %14 = add nuw nsw i64 %12, 1
+  %15 = mul nuw nsw i64 %12, 3
+  %16 = icmp ult i64 %15, %1
+  tail call void @llvm.assume(i1 %16)
+  %17 = getelementptr inbounds nuw i32, ptr %0, i64 %15
+  %18 = load i32, ptr %17, align 4, !noundef !3
+  %19 = add i32 %18, %13
+  %20 = icmp eq i64 %14, %6
+  br i1 %20, label %7, label %11
+```
+So code is actually equivalent and the only problem for vectorizer
+is the nasty `llvm.assume` which has nothing to do with overflow !
+This is also fixed in rustc 1.95.
 
 # Optimizations
 
