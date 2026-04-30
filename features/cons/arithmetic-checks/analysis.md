@@ -113,9 +113,13 @@ $ rustc ... -C overflow-checks=on
 ...
 ```
 
-This C program
+# Lack of UB in Rust
+
+Does lack of UB significantly impact Rust ability to optimize ?
+
+For typical loops like this C program
 ```
-int sum_every_other(const int* data, int n) {
+int sum(const int* data, int n) {
     int result = 0;
     for (int i = 0; i < n; i++) {
         result += data[i];
@@ -123,35 +127,65 @@ int sum_every_other(const int* data, int n) {
     return result;
 }
 ```
-optimizes to
+where UB allows us to extend `n` to long and apply induction variable
+elimination for `&data[i]`, clang generates
 ```
-.L3:
-        addl    (%rdi), %eax
-        addq    $4, %rdi
-        cmpq    %rdx, %rdi
-        jne     .L3
+.LBB0_10:                               # =>This Inner Loop Header: Depth=1
+        movdqu  -16(%rax), %xmm2
+        paddd   %xmm2, %xmm0
+        movdqu  (%rax), %xmm2
+        paddd   %xmm2, %xmm1
+        addq    $32, %rax
+        incq    %rcx
+        jne     .LBB0_10
 ```
-but equivalent Rust code
+Equivalent Rust code:
 ```
-pub fn sum_every_other(data: &[i32]) -> i32 {
+#[no_mangle]
+pub fn sum(data: &[i32], n: i32) -> i32 {
     let mut result = 0i32;
-    for i in 0..data.len() {
-        result += data[i];
+    for i in 0..n {
+        result += unsafe { data.get_unchecked(i as usize) };
     }
     result
 }
 ```
-to slower sequence:
+also compiles to
 ```
-.LBB0_2:
-        addl    (%rdi,%rcx,4), %eax
-        incq    %rcx
-        cmpq    %rcx, %rsi
-        jne     .LBB0_2
+.LBB0_5:
+        movdqu  (%rdi,%rsi), %xmm2
+        paddd   %xmm2, %xmm0
+        movdqu  16(%rdi,%rsi), %xmm2
+        paddd   %xmm2, %xmm1
+        addq    $32, %rsi
+        cmpq    %rsi, %rax
+        jne     .LBB0_5
 ```
-(unable to extract induction variable for address).
+There's extra register but this is likely unrelated to signed overflow treatment
+and also trunk clang and rustc generate same code anyway.
 
-TODO: analyze this example
+Here is a better example (from Sonnet 4.6):
+```
+int sum_strided(const int *arr, int n) {
+    int s = 0;
+    for (int i = 0; i < n; i++) {
+        s += arr[i * 3];   // compiler rewrites i*3 → j, j+=3
+    }
+    return s;
+}
+```
+and
+```
+pub fn sum_strided(arr: &[i32], n: i32) -> i32 {
+    let mut s = 0;
+    for i in 0..n {
+        s += unsafe { *arr.get_unchecked(3*i as usize) };
+    }
+    s
+}
+```
+C variant vectorizes fine but Rust does not
+(due to potential overflow).
 
 # Optimizations
 
