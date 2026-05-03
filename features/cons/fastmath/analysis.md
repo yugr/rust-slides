@@ -56,6 +56,8 @@ Other languages have different views on fast-math optimizations:
 TODO:
   - mention issues from https://simonbyrne.github.io/notes/fastmath/
   - add info from [P3715](https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2025/p3715r0.html)
+  - add details on `-fno-trapping-math`
+  - add details on `-fno-math-errno`
 
 # Example
 
