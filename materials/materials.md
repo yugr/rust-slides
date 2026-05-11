@@ -1461,6 +1461,8 @@ pub fn foo(p: Box<S>) {
     + Use invalid pointer/reference ranges (e.g. addresses in zero memory page)
     + Various invalid OS-specific pointer patterns
   * Closed in favor of [#103724](https://github.com/rust-lang/rust/pull/103724)
+- Optimizing Rust Struct Size: A 6-month Compiler Development Project: https://camlorn.net/posts/April%202017/rust-struct-field-reordering/
+  * Status: backlog
 
 # Data structures performance
 

@@ -33,6 +33,7 @@ TODO:
       + Ada ([RM](http://www.ada-auth.org/standards/22rm/html/RM-TOC.html) and [ARM](http://www.ada-auth.org/standards/22aarm/html/AA-TOC.html))
   - types of optimizations (niche via fields, niche via ranges, struct reorg)
   - consequences (lack of stable ABI)
+  - add relevant info from [Optimizing Rust Struct Size: A 6-month Compiler Development Project](https://camlorn.net/posts/April%202017/rust-struct-field-reordering/)
 
 # Examples
 
